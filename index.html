@@ -1,0 +1,1568 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ShadowXLab · CYBERCORE · Cyber Visual Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cyber-red:#e21b23;--ink:#111;--muted:#5d6670;--line:#d8dadd;--soft:#f6f6f6;
+  --panel:#fff;--dark:#151515;--dark2:#202020;--green:#1e9b63;
+  --mono:"IBM Plex Mono","Courier New",monospace;--sans:Inter,Arial,Helvetica,sans-serif;
+  --cyber-red-dark:#b9151c;--cyber-ink:#151719;--cyber-muted:#687078;--cyber-line:#dfe2e5;
+  --cyber-paper:#ffffff;--cyber-soft:#f6f7f8;--cyber-panel:#111417;--cyber-grid:rgba(226,27,35,.07);
+  --cyber-radius:12px;--cyber-shadow:0 12px 35px rgba(15,18,20,.08);
+  --cc-red:#e21b23;--cc-red-2:#ff3b42;--cc-ink:#0b0d10;--cc-text:#171a1e;
+  --cc-muted:#66717c;--cc-line:#e3e7eb;--cc-soft:#f5f7f9;--cc-panel:#0c0f12;
+  --cc-panel-2:#12161b;--cc-white:#fff;--cc-shadow:0 18px 55px rgba(13,18,24,.08);
+  --cc-shadow-hover:0 24px 70px rgba(13,18,24,.14);
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:var(--sans);
+  color:var(--cc-text)!important;
+  background:
+    radial-gradient(circle at 84% 8%,rgba(226,27,35,.07),transparent 22rem),
+    radial-gradient(circle at 12% 34%,rgba(226,27,35,.035),transparent 25rem),
+    #fafbfc!important;
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.55;
+  background-image:
+    linear-gradient(rgba(15,20,25,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(15,20,25,.028) 1px,transparent 1px);
+  background-size:36px 36px;
+  mask-image:linear-gradient(to bottom,#000,transparent 85%);
+  z-index:-1;
+}
+button{font:inherit} a{color:inherit}
+.top{
+  height:64px!important;
+  padding:0 24px!important;
+  background:rgba(255,255,255,.88)!important;
+  border-bottom:1px solid #dfe3e7!important;
+  box-shadow:0 5px 25px rgba(15,20,25,.055)!important;
+  position:sticky!important;
+  top:0;
+  z-index:50;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  backdrop-filter:blur(10px);
+}
+.brand{
+  font-weight:900!important;
+  letter-spacing:.08em!important;
+  font-size:15px!important;
+  white-space:nowrap;
+}
+.brand span{color:var(--cc-red)!important}
+.top .grow{flex:1}
+.search{
+  height:40px!important;
+  background:#f7f8fa!important;
+  border:1px solid #d9dee3!important;
+  border-radius:10px!important;
+  padding:10px 14px;
+  width:min(320px,32vw);
+  font-size:13px;
+  transition:.2s ease;
+}
+.search:focus{
+  outline:none;
+  border-color:var(--cc-red)!important;
+  box-shadow:0 0 0 4px rgba(226,27,35,.09);
+  background:#fff!important;
+}
+.btn{
+  min-height:40px;
+  border:1px solid #d6dbe0!important;
+  background:#fff;
+  padding:9px 14px;
+  border-radius:10px!important;
+  font-weight:800!important;
+  font-size:13px;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+  white-space:nowrap;
+  text-decoration:none;
+}
+.btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+.btn.red{
+  background:linear-gradient(135deg,var(--cc-red),#c9151d)!important;
+  color:#fff;
+  border-color:var(--cc-red)!important;
+  box-shadow:0 7px 18px rgba(226,27,35,.20);
+}
+.layout{
+  display:grid;
+  grid-template-columns:280px minmax(0,1fr);
+  min-height:calc(100vh - 64px);
+  transition:grid-template-columns .22s ease;
+}
+.layout.collapsed{grid-template-columns:0 minmax(0,1fr)}
+.layout.collapsed aside{padding:0;border-right:0;overflow:hidden}
+#sidebar{
+  background:rgba(255,255,255,.92)!important;
+  border-right:1px solid #e1e5e8!important;
+  box-shadow:8px 0 35px rgba(12,18,24,.035);
+  padding:24px 14px!important;
+  position:sticky!important;
+  top:64px;
+  height:calc(100vh - 64px);
+  overflow:auto;
+}
+.side-k{
+  font:900 10px var(--mono)!important;
+  letter-spacing:.18em!important;
+  color:var(--cc-red)!important;
+  margin:4px 6px;
+}
+.side-k:after{
+  content:"CYBER VISUAL PLATFORM";
+  display:block;
+  margin-top:7px;
+  color:#7a838c;
+  font-size:9px;
+  letter-spacing:.12em;
+}
+.progress{
+  height:5px!important;
+  background:#eceff1!important;
+  margin:12px 6px 18px;
+  border-radius:99px!important;
+  overflow:hidden;
+}
+.progress i{
+  display:block;
+  width:12%;
+  height:100%;
+  background:linear-gradient(90deg,var(--cc-red),var(--cc-red-2))!important;
+  box-shadow:0 0 12px rgba(226,27,35,.45);
+}
+.nav a{
+  position:relative;
+  display:block;
+  text-decoration:none;
+  padding:12px 12px 11px 14px!important;
+  border-radius:10px!important;
+  font-size:13.5px;
+  font-weight:700;
+  margin:3px 0!important;
+  color:#20252a!important;
+  transition:.18s ease;
+}
+.nav a:hover{
+  background:#f5f6f7!important;
+  transform:translateX(2px);
+}
+.nav a.active{
+  background:linear-gradient(90deg,#fff1f2,#f8f9fa)!important;
+  box-shadow:inset 0 0 0 1px #f0d8da;
+}
+.nav a.active:before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:10px;
+  bottom:10px;
+  width:3px;
+  border-radius:4px;
+  background:var(--cc-red);
+}
+.nav a small{
+  display:block;
+  color:#7a838c!important;
+  font-weight:400;
+  margin-top:3px;
+  font-size:11px;
+}
+main{min-width:0!important}
+.hero{
+  min-height:560px;
+  padding:72px clamp(32px,5.5vw,85px) 60px!important;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  position:relative;
+  overflow:hidden;
+  border-bottom:1px solid var(--line);
+}
+.hero:after{
+  content:"CYBERCORE";
+  position:absolute;
+  right:-20px;
+  bottom:-55px;
+  font-size:180px;
+  line-height:1;
+  font-weight:1000;
+  letter-spacing:-.08em;
+  color:rgba(226,27,35,.035);
+  pointer-events:none;
+}
+.kicker{
+  font-family:var(--mono)!important;
+  font-weight:800!important;
+  letter-spacing:.16em!important;
+  font-size:10px!important;
+  color:var(--cc-red)!important;
+  text-transform:uppercase;
+}
+.hero h1{
+  font-size:clamp(52px,6.5vw,100px)!important;
+  line-height:.92!important;
+  letter-spacing:-.065em!important;
+  max-width:920px;
+  margin:16px 0 24px!important;
+  position:relative;
+  z-index:1;
+}
+.hero h1 span{
+  display:inline-block;
+  color:var(--cc-red)!important;
+  position:relative;
+}
+.hero h1 span:after{
+  content:"";
+  display:block;
+  height:5px;
+  width:72%;
+  margin-top:10px;
+  border-radius:10px;
+  background:var(--cc-red);
+}
+.hero .lead{
+  max-width:850px!important;
+  font-size:18px!important;
+  line-height:1.72!important;
+  color:#52606b!important;
+}
+.badges{
+  display:flex!important;
+  flex-wrap:wrap;
+  gap:8px!important;
+  margin-top:22px!important;
+}
+.badge{
+  border:1px solid #d9dee3!important;
+  background:rgba(255,255,255,.82)!important;
+  border-radius:999px!important;
+  padding:7px 11px!important;
+  font-size:10px!important;
+  font-weight:900!important;
+  letter-spacing:.08em;
+  box-shadow:0 4px 12px rgba(0,0,0,.025);
+  font-family:var(--mono);
+}
+.cc-product-strip{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:18px;
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.14em;
+  color:#59636d;
+}
+.cc-product-strip b{color:#101317}
+.cc-product-strip i{
+  width:4px;height:4px;border-radius:50%;
+  background:var(--cc-red);
+  display:inline-block;
+}
+.content{
+  max-width:1500px;
+  margin:0 auto;
+}
+.section{
+  padding:70px clamp(28px,5vw,78px)!important;
+  border-top:1px solid #e3e6e9!important;
+  position:relative;
+}
+.section>h2{
+  font-size:clamp(30px,3.8vw,52px)!important;
+  line-height:1.05!important;
+  letter-spacing:-.05em!important;
+  max-width:1000px;
+  margin:10px 0 24px!important;
+}
+.section>p{max-width:820px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card,.gate,.mission{
+  background:rgba(255,255,255,.94)!important;
+  border:1px solid #dce1e5!important;
+  border-radius:16px!important;
+  box-shadow:var(--cc-shadow)!important;
+  padding:24px!important;
+  position:relative;
+  overflow:hidden;
+}
+.card strong{font-size:18px}
+.card h3{letter-spacing:-.025em!important;margin:8px 0 10px}
+.muted{color:var(--muted);line-height:1.6}
+.visual,.lab,.output,.terminal,.mini-terminal{
+  border-radius:16px!important;
+}
+.visual{
+  border:1px solid #20252a!important;
+  background:
+    radial-gradient(circle at 82% 18%,rgba(226,27,35,.16),transparent 20rem),
+    linear-gradient(135deg,#0b0e11,#12171c)!important;
+  box-shadow:0 25px 65px rgba(0,0,0,.18)!important;
+  color:#fff;
+  padding:22px;
+  overflow:hidden;
+}
+.visual .label{
+  font:700 11px var(--mono);
+  letter-spacing:.16em!important;
+  color:#ff6970!important;
+  margin-bottom:14px;
+}
+.env{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.window{
+  border:1px solid #343b42!important;
+  background:rgba(255,255,255,.025)!important;
+  border-radius:13px!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+  padding:16px;
+  min-height:210px;
+}
+.window h4{margin:0 0 12px;font-size:16px}
+.screen{
+  border-radius:10px!important;
+  background:#090b0d!important;
+  border:1px solid #2c3339!important;
+  font:11px var(--mono);
+  overflow:hidden;
+}
+.screen-top{background:#15191d!important;padding:8px 10px;color:#929ba4!important;letter-spacing:.06em}
+.screen-row{display:grid;grid-template-columns:12px 1fr 1.4fr;gap:7px;padding:8px 10px;border-top:1px solid #272e34;color:#ddd}
+.screen-row .dot{width:7px;height:7px;border-radius:50%;background:var(--cyber-red);margin-top:3px}
+.terminal,.output,.mini-terminal{
+  background:#080a0c!important;
+  border:1px solid #252b31!important;
+  color:#d7dde2!important;
+  box-shadow:inset 0 0 35px rgba(255,255,255,.018);
+  padding:14px;
+  font:13px/1.65 var(--mono);
+  min-height:170px;
+  white-space:pre-wrap;
+}
+.term-ok{color:#6ff0ae!important}
+.term-red{color:#ff626a!important}
+.interface-strip{
+  font:10px var(--mono);
+  background:#191e23!important;
+  border:1px solid #31383f!important;
+  border-radius:6px;
+  padding:7px 10px;
+  margin-top:8px;
+  color:#ddd;
+}
+.conn{
+  margin:14px 0 0;
+  padding:14px;
+  text-align:center;
+  font:11px var(--mono);
+  letter-spacing:.08em;
+  color:#8d98a2!important;
+  border-top:1px solid #2c3339!important;
+}
+.moduleCard{
+  min-height:205px;
+  border-left:3px solid transparent!important;
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease!important;
+  cursor:pointer;
+}
+.moduleCard:hover{
+  border-left-color:var(--cc-red)!important;
+  transform:translateY(-4px)!important;
+  box-shadow:var(--cc-shadow-hover)!important;
+}
+.moduleCard .kicker{margin-bottom:12px}
+.moduleCard h3{font-size:18px!important;line-height:1.25!important}
+.tag{
+  display:inline-block;
+  font-size:10px;
+  padding:4px 8px;
+  background:#f7f8f9!important;
+  border:1px solid #e0e4e7!important;
+  border-radius:999px!important;
+  font-weight:800;
+  color:#60676d;
+  margin:6px 4px 0 0;
+  font-family:var(--mono);
+}
+.flow{
+  display:flex;
+  align-items:stretch;
+  padding:18px;
+  border:1px solid #dfe4e8;
+  background:#fff;
+  border-radius:16px;
+  box-shadow:var(--cc-shadow);
+  gap:10px!important;
+  overflow-x:auto;
+}
+.flow .node{
+  min-height:92px;
+  min-width:165px;
+  border:1px solid #dce1e5!important;
+  border-radius:12px!important;
+  padding:14px;
+  background:#fafbfc!important;
+  cursor:pointer;
+  transition:.18s ease;
+}
+.flow .node:hover,.flow .node.active{
+  border-color:var(--cc-red)!important;
+  background:#fff!important;
+  box-shadow:0 10px 25px rgba(226,27,35,.08);
+  transform:translateY(-2px);
+}
+.flow .node.active b{color:var(--cc-red)}
+.flow .arrow{display:flex;align-items:center;color:var(--cc-red)!important;font-size:22px;font-weight:900;padding:0 8px}
+.explain{
+  display:none;
+  border:1px solid #e0e4e8!important;
+  border-left:4px solid var(--cc-red)!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  padding:15px 18px;
+  margin-top:10px;
+  box-shadow:0 8px 25px rgba(0,0,0,.045);
+}
+.explain.open{display:block}
+.loop{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.lab{background:#111;color:#fff;border-radius:16px;padding:24px}
+.labgrid{display:grid;grid-template-columns:1fr 1.1fr;gap:18px}
+.mission{background:#fff!important;color:#111;border-radius:12px;padding:20px!important}
+.check{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #eee;font-size:13.5px}
+.check input{accent-color:var(--cyber-red);margin-top:3px}
+.cmds{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.cmds button{
+  background:#252525;
+  border:1px solid #555;
+  color:#fff;
+  border-radius:6px;
+  padding:7px 11px;
+  font:12px var(--mono);
+  cursor:pointer;
+  transition:.15s ease;
+}
+.cmds button:hover{border-color:var(--cyber-red);background:#303030}
+.evidence{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.evi{
+  border:1px solid #dce1e5!important;
+  border-radius:14px!important;
+  background:#fff!important;
+  padding:20px!important;
+  box-shadow:0 10px 30px rgba(0,0,0,.05);
+  position:relative;
+}
+.evi:before{
+  content:"";
+  display:block;
+  width:28px;
+  height:3px;
+  border-radius:3px;
+  background:var(--cc-red);
+  margin-bottom:14px;
+}
+.evi b{display:block;margin-bottom:6px;font-size:14px}
+.gate{
+  border-top:3px solid var(--cc-red)!important;
+  padding:26px!important;
+}
+.gate.pass{border-top-color:#1e9b63!important}
+.svgbox{
+  border:1px solid #e0e4e8!important;
+  border-radius:16px!important;
+  background:#fff!important;
+  box-shadow:var(--cc-shadow);
+  padding:16px!important;
+}
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(5,8,11,.75)!important;
+  backdrop-filter:blur(8px);
+  z-index:100;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.modal.show{display:flex}
+.modalBox{
+  width:min(980px,96vw);
+  max-height:90vh;
+  overflow:auto;
+  background:#fff;
+  border:1px solid #d9dee3!important;
+  border-radius:20px!important;
+  padding:30px!important;
+  box-shadow:0 35px 100px rgba(0,0,0,.32)!important;
+}
+.modalHead{display:flex;justify-content:space-between;align-items:flex-start;gap:15px}
+.modalGrid{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;margin:18px 0}
+footer{
+  padding:34px 24px!important;
+  background:#0b0d10!important;
+  color:#8f98a0!important;
+  letter-spacing:.12em!important;
+  font:10px var(--mono)!important;
+  text-align:center;
+}
+/* Visual Atlas */
+.cc-wide{max-width:900px}
+.cc-visual-atlas{background:linear-gradient(180deg,#fff,#f7f8fa)}
+.cc-atlas{
+  display:grid;
+  grid-template-columns:280px minmax(0,1fr);
+  min-height:760px;
+  margin-top:34px;
+  border:1px solid #dce1e5;
+  border-radius:20px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 24px 70px rgba(12,17,22,.09);
+}
+.cc-module-rail{background:#0b0e11;color:#dce3e8;border-right:1px solid #262c32;overflow:auto;max-height:850px}
+.cc-rail-head{padding:22px;border-bottom:1px solid #252b31}
+.cc-rail-head span{display:block;color:#ff555c;font:800 10px/1 var(--mono);letter-spacing:.16em}
+.cc-rail-head small{display:block;margin-top:8px;color:#78838d;font:700 9px/1.4 var(--mono);letter-spacing:.1em}
+.cc-module-item{
+  position:relative;
+  display:grid;
+  grid-template-columns:38px 1fr;
+  gap:10px;
+  width:100%;
+  padding:13px 18px;
+  border:0;
+  border-bottom:1px solid #1e2429;
+  background:transparent;
+  color:#aeb7be;
+  text-align:left;
+  cursor:pointer;
+  transition:.18s ease;
+}
+.cc-module-item:hover{background:#15191e;color:#fff}
+.cc-module-item.active{background:linear-gradient(90deg,#221316,#111417);color:#fff}
+.cc-module-item.active:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:#e21b23}
+.cc-module-num{color:#68737d;font:800 10px/1 var(--mono);padding-top:2px}
+.cc-module-item.active .cc-module-num{color:#ff555c}
+.cc-module-name{font-size:12px;line-height:1.35;font-weight:800}
+.cc-visual-stage{min-width:0;background:#f7f8fa}
+.cc-stage-head{
+  min-height:125px;
+  padding:28px 32px;
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  background:#fff;
+  border-bottom:1px solid #e0e4e7;
+}
+.cc-stage-kicker{color:#e21b23;font:800 10px/1 var(--mono);letter-spacing:.16em}
+.cc-stage-head h3{margin:10px 0 5px;font-size:30px;letter-spacing:-.045em}
+.cc-stage-head p{margin:0;color:#68737d;max-width:720px;font-size:13.5px}
+.cc-stage-meta{display:flex;gap:7px;align-items:flex-start;flex-wrap:wrap;justify-content:flex-end}
+.cc-stage-meta span{border:1px solid #dce1e5;border-radius:999px;padding:7px 9px;background:#fafbfc;color:#69747d;font:800 9px/1 var(--mono)}
+.cc-stage-meta span:first-child{color:#e21b23;border-color:#efc9cb}
+.cc-canvas{
+  min-height:430px;
+  padding:28px;
+  background:radial-gradient(circle at 75% 25%,rgba(226,27,35,.08),transparent 260px),linear-gradient(rgba(17,22,27,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(17,22,27,.035) 1px,transparent 1px),#f5f7f8;
+  background-size:auto,28px 28px,28px 28px;
+  overflow:hidden;
+}
+.cc-diagram{
+  position:relative;
+  width:100%;
+  min-height:375px;
+  border:1px solid #d9dfe4;
+  border-radius:16px;
+  background:rgba(255,255,255,.8);
+  box-shadow:0 14px 40px rgba(12,17,22,.06);
+  overflow:hidden;
+}
+.cc-node{
+  position:absolute;
+  min-width:132px;
+  max-width:190px;
+  padding:13px 15px;
+  border:1px solid #cfd6dc;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 8px 22px rgba(15,20,25,.07);
+  cursor:pointer;
+  text-align:left;
+  transition:.2s ease;
+  z-index:2;
+}
+.cc-node:hover,.cc-node.selected{border-color:#e21b23;box-shadow:0 12px 30px rgba(226,27,35,.15);transform:translateY(-3px)}
+.cc-node b{display:block;font-size:13px;line-height:1.2;color:#14181c}
+.cc-node small{display:block;margin-top:5px;color:#7a858e;font:700 9px/1.35 var(--mono)}
+.cc-node.root{background:#0c1014;border-color:#2b333a}
+.cc-node.root b{color:#fff}.cc-node.root small{color:#9ca7af}
+.cc-node.accent{border-top:3px solid #e21b23}
+.cc-link{position:absolute;height:2px;background:linear-gradient(90deg,#cbd2d8,#e21b23);transform-origin:left center;opacity:.8;z-index:1}
+.cc-link:after{content:"";position:absolute;right:-1px;top:-4px;border-left:7px solid #e21b23;border-top:5px solid transparent;border-bottom:5px solid transparent}
+.cc-flow-label{position:absolute;left:50%;top:12px;transform:translateX(-50%);color:#7b858e;font:800 9px/1 var(--mono);letter-spacing:.14em}
+.cc-learning-panel{padding:25px 32px 30px;background:#fff;border-top:1px solid #dfe4e8}
+.cc-learning-label{color:#e21b23;font:800 9px/1 var(--mono);letter-spacing:.15em}
+.cc-learning-panel h3{margin:9px 0 7px;font-size:24px;letter-spacing:-.035em}
+.cc-learning-panel p{max-width:850px;color:#5f6b75;line-height:1.65;margin:0}
+.cc-facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.cc-fact{padding:8px 10px;border:1px solid #dce1e5;border-radius:8px;background:#f7f8f9;color:#3d474f;font-size:11px;font-weight:800}
+/* Interactive Simulators */
+.cc-canvas-sim{overflow:visible;background:#f5f7f8}
+.sim-badge{display:inline-block;margin-bottom:14px;padding:6px 11px;border:1px solid #efc9cb;border-radius:999px;background:#fff5f5;color:#c4141c;font:800 9px/1 var(--mono);letter-spacing:.14em}
+.sim{width:100%}
+.sim-grid{display:grid;gap:16px}
+.sim-cols-2{grid-template-columns:1fr 1fr}
+.sim-cols-3{grid-template-columns:1fr 1fr 1fr}
+.sim-panel{border:1px solid #d9dfe4;border-radius:14px;background:#fff;padding:18px;box-shadow:0 8px 24px rgba(12,17,22,.05)}
+.sim-panel.dark{background:#0c1014;border-color:#262c32;color:#dce3e8}
+.sim-panel.dark h4{color:#e8edf0}
+.sim-panel h4{margin:0 0 12px;font:800 11px/1 var(--mono);letter-spacing:.1em;color:#3d474f}
+.sim-panel.dark .sim-note{color:#9aa4ac}
+.sim-row{display:flex;align-items:center;gap:10px;margin:9px 0;flex-wrap:wrap}
+.sim-row label{min-width:150px;font-size:12px;font-weight:800;color:#5f6b75}
+.sim-panel.dark .sim-row label{color:#aeb7be}
+.sim-slider{flex:1;min-width:100px;accent-color:#e21b23}
+.sim-val{font:800 12px var(--mono);min-width:34px;text-align:right;color:#e21b23}
+.sim-chip{display:inline-block;padding:7px 11px;margin:2px 4px 2px 0;border:1px solid #d9dfe4;border-radius:999px;background:#fafbfc;color:#69747d;font:800 10px var(--mono);letter-spacing:.04em;cursor:pointer;user-select:none;transition:.15s ease}
+.sim-chip.active{border-color:#e21b23;background:#fdeeee;color:#c4141c}
+.sim-panel.dark .sim-chip{background:#15191e;border-color:#262c32;color:#9aa4ac}
+.sim-panel.dark .sim-chip.active{border-color:#e21b23;background:#2a1517;color:#ff8a8f}
+.sim-note{margin:10px 0 0;color:#7a858e;font-size:12px;line-height:1.55}
+.sim-terminal{background:#080808;border:1px solid #333a41;border-radius:9px;padding:12px 14px;font:12.5px/1.6 var(--mono);color:#e8e8e8;white-space:pre-wrap;overflow:auto;max-height:260px}
+.sim-select{border:1px solid #d9dfe4;border-radius:7px;padding:9px 11px;font-size:13px;background:#fff;color:#14181c;flex:1;min-width:0}
+.sim-panel.dark .sim-select{background:#15191e;border-color:#262c32;color:#e8edf0}
+.sim-btn{border:1px solid #d9dfe4;background:#fff;color:#3d474f;border-radius:7px;padding:9px 14px;font-weight:800;font-size:12px;cursor:pointer;transition:.15s ease}
+.sim-btn:hover{border-color:#e21b23;color:#c4141c}
+.sim-pill{display:inline-block;padding:5px 10px;border-radius:999px;font:800 10px var(--mono);letter-spacing:.04em;color:#fff}
+.pill-low{background:#158a52}.pill-medium{background:#a48a06}.pill-high{background:#c46a14}.pill-critical{background:#c4141c}
+.sim-flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:0}
+.sim-stage{padding:8px 12px;border:1px solid #d9dfe4;border-radius:7px;font:800 10px var(--mono);color:#7a858e;background:#fafbfc;cursor:pointer}
+.sim-panel.dark .sim-stage{border-color:#262c32;background:#15191e}
+.sim-stage.active{border-color:#e21b23;color:#c4141c;background:#fdeeee}
+.sim-stage.done{border-color:#158a52;color:#158a52}
+.sim-arrow-sm{padding:0 6px;color:#c9cccf;font-weight:900}
+.sim-events{max-height:230px;overflow:auto;font:11.5px/1.6 var(--mono)}
+.sim-event{display:grid;grid-template-columns:80px 1fr 70px;gap:8px;padding:6px 8px;border-bottom:1px solid #eef0f2;cursor:pointer}
+.sim-panel.dark .sim-event{border-color:#1c2126;color:#cfd6dc}
+.sim-panel.hot{border-color:#e21b23;box-shadow:0 0 0 2px #fdeeee inset}
+/* Dark Mode */
+body.darkMode{background:#080a0d!important;color:#eef2f5!important}
+body.darkMode:before{background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px)}
+body.darkMode .top,body.darkMode #sidebar{background:rgba(13,16,20,.92)!important;border-color:#292f35!important}
+body.darkMode .nav a{color:#e8edf1!important}
+body.darkMode .nav a:hover{background:#181c21!important}
+body.darkMode .nav a.active{background:#1a1516!important;border-color:#3a292b!important}
+body.darkMode .hero .lead,body.darkMode .muted{color:#a7b0b8!important}
+body.darkMode .card,body.darkMode .gate,body.darkMode .mission,body.darkMode .flow,body.darkMode .flow .node,body.darkMode .explain,body.darkMode .evi,body.darkMode .svgbox,body.darkMode .modalBox{background:#11151a!important;border-color:#2a3138!important;color:#edf1f4!important}
+body.darkMode .search{background:#15191e!important;color:#fff!important;border-color:#333a41!important}
+body.darkMode .badge,body.darkMode .tag{background:#15191e!important;border-color:#343b42!important;color:#c6cdd3!important}
+body.darkMode .btn:not(.red){background:#15191e!important;color:#fff!important;border-color:#333a41!important}
+@media(max-width:1150px){
+  #moduleGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .hero h1{font-size:clamp(48px,7vw,80px)!important}
+}
+@media(max-width:900px){
+  #sidebar{position:relative!important;top:0;width:auto!important;height:auto!important;border-right:0!important;border-bottom:1px solid #e1e5e8!important}
+  .layout{display:block!important}
+  .nav{display:grid!important;grid-template-columns:repeat(3,1fr);gap:4px}
+  .nav a{margin:0!important}
+  .hero{min-height:auto;padding-top:55px!important}
+  .env,.grid2,.sim-cols-2,.sim-cols-3{grid-template-columns:1fr!important}
+  .cc-atlas{grid-template-columns:1fr}
+  .cc-module-rail{max-height:310px}
+  .cc-stage-head{display:block}
+  .cc-stage-meta{justify-content:flex-start;margin-top:15px}
+  .modalGrid{grid-template-columns:1fr}
+  .evidence{grid-template-columns:1fr 1fr}
+  .loop{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+  .top{padding:0 12px!important}
+  .brand{font-size:12px!important}
+  .search{display:none}
+  .hero{padding:45px 18px 40px!important}
+  .hero h1{font-size:42px!important}
+  .section{padding:45px 18px!important}
+  #moduleGrid,.grid3{grid-template-columns:1fr!important}
+  .nav{grid-template-columns:1fr 1fr!important}
+  .cc-module-item{width:100%}
+  .cc-canvas{padding:12px}
+  .cc-stage-head,.cc-learning-panel{padding:18px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">SHADOWX<span>LAB</span> · CYBERCORE</div>
+  <div class="grow"></div>
+  <input id="moduleSearch" class="search" placeholder="Search modules / topics..." oninput="filterModules(this.value)">
+  <a href="module-01.html" class="btn">KALI ONBOARDING LAB →</a>
+  <button class="btn" onclick="toggleTheme()">◐ MODE</button>
+  <button class="btn red" onclick="document.getElementById('visual-atlas').scrollIntoView({behavior:'smooth'})">EXPLORE CYBERCORE →</button>
+</header>
+
+<div class="layout" id="layout">
+<aside id="sidebar">
+  <div class="side-k">SHADOWXLAB · CYBERCORE</div>
+  <h3 style="margin:5px 6px;font-size:21px">CYBER VISUAL PLATFORM</h3>
+  <div style="color:#777;font-size:12px;margin:0 6px 10px">See cybersecurity. Understand cybersecurity.</div>
+  <div class="progress"><i id="progressBar"></i></div>
+  <nav class="nav" id="moduleNav">
+    <a href="#overview" class="active">01 · Overview<small>Mission and architecture</small></a>
+    <a href="#environment">02 · Visual Environment<small>Learning workstation model</small></a>
+    <a href="#modules">03 · CyberCore Modules<small>40 modules / 200+ concepts</small></a>
+    <a href="#visual-atlas">04 · Visual Atlas<small>Interactive visual systems</small></a>
+    <a href="#concepts">05 · Visual Concepts<small>Visual mental models</small></a>
+    <a href="#flows">06 · Learning Flow<small>Concept → understanding</small></a>
+    <a href="#commands">07 · Tool Console<small>Command / meaning model</small></a>
+    <a href="#lab">08 · Practical Mission<small>Concept explorer simulator</small></a>
+    <a href="#evidence">09 · Evidence<small>Knowledge & verification</small></a>
+    <a href="#readiness">10 · Readiness Gate<small>Understand before advance</small></a>
+  </nav>
+</aside>
+
+<main>
+<section class="hero" id="overview">
+  <div class="kicker">SHADOWXLAB · CYBERCORE · CYBER VISUAL PLATFORM</div>
+  <h1>Understand Cybersecurity.<br><span>Visually.</span></h1>
+  <p class="lead">CyberCore transforms cybersecurity concepts into visual, interactive experiences — connecting security fundamentals, systems, networking, cloud, AI, offensive security, defensive security, risk and engineering into one continuous journey.</p>
+  <div class="badges"><span class="badge">40 MODULES</span><span class="badge">200+ CONCEPTS</span><span class="badge">VISUAL</span><span class="badge">CONCEPT-FIRST</span><span class="badge">UNDERSTANDING-DRIVEN</span></div>
+  <div class="cc-product-strip">
+    <span><b>SHADOWXLAB</b></span>
+    <i></i><span>CYBERCORE</span>
+    <i></i><span>CYBER VISUAL PLATFORM</span>
+  </div>
+  <div class="grid3" style="margin-top:28px">
+    <div class="card"><div class="kicker">01 · SEE</div><h3>Visualize the concept</h3><p class="muted">Turn cybersecurity ideas into diagrams, flows, system views and interactive visual models.</p></div>
+    <div class="card"><div class="kicker">02 · UNDERSTAND</div><h3>Build the mental model</h3><p class="muted">Learn what something is, why it exists, how it works and how it connects to the wider security landscape.</p></div>
+    <div class="card"><div class="kicker">03 · EXPLORE</div><h3>Interact with security</h3><p class="muted">Explore scenarios, simulations, examples and knowledge checks without turning the platform into a production console.</p></div>
+  </div>
+</section>
+
+<div class="content">
+<section class="section" id="environment">
+  <div class="kicker">02 · ENVIRONMENT</div>
+  <h2>The CyberCore becomes a visual cybersecurity environment.</h2>
+  <div class="visual">
+    <div class="label">LEARNER → CYBERCORE → LAB → EVIDENCE</div>
+    <div class="env">
+      <div class="window"><h4>LEARNER WORKSPACE</h4>
+        <div class="screen"><div class="screen-top">OBJECTIVE · SCOPE · EXPECTED OUTCOME</div>
+          <div class="screen-row"><span class="dot"></span><b>CONCEPT</b><span>Understand the mechanism</span></div>
+          <div class="screen-row"><span class="dot"></span><b>VISUAL</b><span>See the system behaviour</span></div>
+          <div class="screen-row"><span class="dot"></span><b>SIMULATE</b><span>Change variables safely</span></div>
+          <div class="screen-row"><span class="dot"></span><b>APPLY</b><span>Capture evidence</span></div>
+        </div>
+      </div>
+      <div class="window"><h4>AUTHORIZED TRAINING ENVIRONMENT</h4>
+        <div class="terminal">SIMULATOR > status<br><span class="term-ok">LEARNING ENGINE · READY</span><br>SIMULATOR > scope<br><span class="term-ok">MODULE / SIMULATOR / EVIDENCE</span><br>SIMULATOR > verify<br><span class="term-red">2 OBJECTIVES PENDING</span></div>
+        <div class="interface-strip">BROWSER → SIMULATOR → OBSERVABLE OUTPUT → EXPLANATION</div>
+      </div>
+    </div>
+    <div class="conn">CONCEPT → EXPLANATION → VISUAL → EXAMPLE → SIMULATION → KNOWLEDGE CHECK → MASTERY</div>
+  </div>
+</section>
+
+<section class="section" id="modules">
+  <div class="kicker">03 · CURRICULUM</div>
+  <h2>40 modules using one consistent CyberCore-style module architecture.</h2>
+  <p class="muted">Every module is designed to open into the same experience rather than becoming a different-looking page.</p>
+  <div id="moduleGrid" class="grid3" style="margin-top:24px"></div>
+</section>
+
+<section class="section cc-visual-atlas" id="visual-atlas">
+  <div class="kicker">CYBERCORE · VISUAL ATLAS</div>
+  <h2>Every module becomes a visual system.</h2>
+  <p class="muted cc-wide">Select a module. The canvas changes to show the structure of the concept. Click nodes to reveal relationships, explanations and security meaning.</p>
+  <div class="cc-atlas">
+    <aside class="cc-module-rail">
+      <div class="cc-rail-head"><span>40 MODULES</span><small>SELECT A SYSTEM</small></div>
+      <div id="ccModuleList"></div>
+    </aside>
+    <main class="cc-visual-stage">
+      <header class="cc-stage-head">
+        <div>
+          <div class="cc-stage-kicker" id="ccStageKicker">MODULE 01</div>
+          <h3 id="ccStageTitle">Security Essentials</h3>
+          <p id="ccStageSummary"></p>
+        </div>
+        <div class="cc-stage-meta"><span id="ccVisualType">VISUAL SYSTEM</span><span>INTERACTIVE</span></div>
+      </header>
+      <div class="cc-canvas" id="ccCanvas"></div>
+      <div class="cc-learning-panel">
+        <div class="cc-learning-label">SELECT A NODE</div>
+        <h3 id="ccNodeTitle">Explore the visual</h3>
+        <p id="ccNodeText">Click any node in the diagram to understand what it represents, how it connects to the system and why it matters.</p>
+        <div class="cc-facts" id="ccFacts"></div>
+      </div>
+    </main>
+  </div>
+</section>
+
+<section class="section" id="concepts">
+  <div class="kicker">05 · CONCEPTS</div>
+  <h2>Visualize the mental model before the tool.</h2>
+  <div class="grid3">
+    <div class="card"><div class="kicker">SECURITY</div><h3>Asset → Threat → Vulnerability → Risk</h3><p class="muted">The core reasoning chain connects foundational security concepts to risk management and defensive decisions.</p></div>
+    <div class="card"><div class="kicker">NETWORKING</div><h3>Application → Transport → Network → Link</h3><p class="muted">Protocol behaviour is visualized before command execution or troubleshooting.</p></div>
+    <div class="card"><div class="kicker">SOC</div><h3>Telemetry → Detection → Triage → Response</h3><p class="muted">Security operations are treated as a repeatable decision pipeline.</p></div>
+  </div>
+  <div class="svgbox" style="margin-top:18px">
+    <svg viewBox="0 0 1000 210" role="img" aria-label="CyberCore learning architecture" style="width:100%;height:auto">
+      <rect x="25" y="70" width="155" height="65" rx="10" fill="#fff" stroke="#222" stroke-width="2"/><text x="102" y="98" text-anchor="middle" font-family="Arial" font-weight="700">CONCEPT</text><text x="102" y="118" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">mental model</text>
+      <line x1="180" y1="102" x2="235" y2="102" stroke="#e21b23" stroke-width="4"/><polygon points="235,102 220,94 220,110" fill="#e21b23"/>
+      <rect x="235" y="70" width="155" height="65" rx="10" fill="#fff" stroke="#222" stroke-width="2"/><text x="312" y="98" text-anchor="middle" font-family="Arial" font-weight="700">VISUAL</text><text x="312" y="118" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">diagram / flow</text>
+      <line x1="390" y1="102" x2="445" y2="102" stroke="#e21b23" stroke-width="4"/><polygon points="445,102 430,94 430,110" fill="#e21b23"/>
+      <rect x="445" y="70" width="155" height="65" rx="10" fill="#fff" stroke="#222" stroke-width="2"/><text x="522" y="98" text-anchor="middle" font-family="Arial" font-weight="700">SIMULATOR</text><text x="522" y="118" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">change variables</text>
+      <line x1="600" y1="102" x2="655" y2="102" stroke="#e21b23" stroke-width="4"/><polygon points="655,102 640,94 640,110" fill="#e21b23"/>
+      <rect x="655" y="70" width="155" height="65" rx="10" fill="#fff" stroke="#222" stroke-width="2"/><text x="732" y="98" text-anchor="middle" font-family="Arial" font-weight="700">LAB</text><text x="732" y="118" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">operate in scope</text>
+      <line x1="810" y1="102" x2="865" y2="102" stroke="#e21b23" stroke-width="4"/><polygon points="865,102 850,94 850,110" fill="#e21b23"/>
+      <rect x="865" y="70" width="110" height="65" rx="10" fill="#fff" stroke="#222" stroke-width="2"/><text x="920" y="98" text-anchor="middle" font-family="Arial" font-weight="700">APPLY</text><text x="920" y="118" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">evidence</text>
+    </svg>
+  </div>
+</section>
+
+<section class="section" id="flows">
+  <div class="kicker">06 · LEARNING FLOW</div>
+  <h2>Same interaction grammar as CyberCore.</h2>
+  <div class="flow">
+    <div class="node active" onclick="showFlow('f1',this)"><b>OBJECTIVE</b><small>What must be learned?</small></div><div class="arrow">→</div>
+    <div class="node" onclick="showFlow('f2',this)"><b>CONCEPT</b><small>What is happening?</small></div><div class="arrow">→</div>
+    <div class="node" onclick="showFlow('f3',this)"><b>SIMULATE</b><small>What changes?</small></div><div class="arrow">→</div>
+    <div class="node" onclick="showFlow('f4',this)"><b>LAB</b><small>Can you recognize it?</small></div><div class="arrow">→</div>
+    <div class="node" onclick="showFlow('f5',this)"><b>EVIDENCE</b><small>Can you explain it?</small></div>
+  </div>
+  <div id="f1" class="explain open"><b>OBJECTIVE:</b> Every module begins with scope, outcome and success criteria.</div>
+  <div id="f2" class="explain"><b>CONCEPT:</b> Build the mental model before asking the learner to memorize tool syntax.</div>
+  <div id="f3" class="explain"><b>SIMULATE:</b> Make cause and effect visible through safe interactive controls.</div>
+  <div id="f4" class="explain"><b>LAB:</b> Apply the concept in an authorized, bounded concept exploration.</div>
+  <div id="f5" class="explain"><b>EVIDENCE:</b> Record what happened, what it means and why the conclusion is valid.</div>
+</section>
+
+<section class="section" id="commands">
+  <div class="gate" style="margin-bottom:16px;border-left:4px solid var(--cyber-red)">
+    <div class="kicker">SIMULATION ONLY</div>
+    <h3>No production execution</h3>
+    <p class="muted">CyberCore is a controlled visual learning environment. Tool interactions shown here are simulated and do not instruct learners to execute commands against production systems.</p>
+  </div>
+  
+  <div class="kicker">07 · TOOL CONSOLE</div>
+  <h2>Tool output is part of the learning experience.</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>Tool / Meaning</h3>
+      <div class="terminal" id="consoleOutput">SIMULATOR > inspect --module 11
+<span class="term-ok">NETWORKING FUNDAMENTALS LOADED</span>
+SIMULATOR > explain tcp-handshake
+<span class="term-ok">SYN → SYN/ACK → ACK</span>
+SIMULATOR > evidence --status
+<span class="term-red">2 ITEMS PENDING</span></div>
+      <div class="cmds">
+        <button class="btn" onclick="runConsole('ip addr')">IP address view</button>
+        <button class="btn" onclick="runConsole('ip route')">Route view</button>
+        <button class="btn" onclick="runConsole('ss -tuln')">Socket view</button>
+        <button class="btn" onclick="runConsole('journalctl')">Log view</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Teaching pattern</h3>
+      <p class="muted">Every tool demonstration should explain the command, expected output, why it matters, what can go wrong and what evidence should be captured.</p>
+      <div class="mini-terminal">SIMULATOR > tool-action<br><b>expected output</b><br><span>failure / warning state</span></div>
+      <div style="margin-top:16px">
+        <a href="module-01.html#lab" class="btn red" style="font-size:12px">OPEN FULL KALI TERMINAL SIMULATOR →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="lab">
+  <div class="kicker">08 · CONCEPT EXPLORER</div>
+  <h2>Concept Learning & Explanation</h2>
+  <div class="lab">
+    <div class="labgrid">
+      <div class="mission">
+        <div class="kicker">CONCEPT EXPLORER · CYBERCORE-001</div>
+        <h3>Understanding a Security Environment</h3>
+        <p>This section explains the fundamental relationship between assets, trust boundaries, threats and security observations. No production commands or operational instructions are required.</p>
+        <div class="check"><input type="checkbox" class="labCheck"><label><b>1.</b> What is an asset? Understand its role and value.</label></div>
+        <div class="check"><input type="checkbox" class="labCheck"><label><b>2.</b> What is a trust boundary? Understand where trust changes.</label></div>
+        <div class="check"><input type="checkbox" class="labCheck"><label><b>3.</b> What is a threat? Understand how threats affect assets.</label></div>
+        <div class="check"><input type="checkbox" class="labCheck"><label><b>4.</b> What is evidence? Understand how observations support conclusions.</label></div>
+        <button class="btn red" style="margin-top:14px" onclick="submitMission()">MARK CONCEPTS REVIEWED</button>
+        <p id="missionMsg" class="muted" style="margin-top:10px"></p>
+      </div>
+      <div>
+        <div class="output" id="labOutput">SIMULATOR > concept-explorer --start
+<span class="term-ok">CONCEPT SCOPE: SECURITY-ENVIRONMENT-001</span>
+SIMULATOR > explain asset
+<span class="term-ok">ASSET: TRAINING-WORKSTATION</span>
+SIMULATOR > explain boundary
+<span class="term-ok">Concept: Trust boundary between user and environment</span>
+SIMULATOR > explain threat
+<span class="term-red">Concept: Unauthorized access as a threat</span>
+
+<span class="term-red">CONCEPT REVIEW: IN PROGRESS</span></div>
+        <div class="cmds">
+          <button onclick="labCmd('explain asset')">explain asset</button>
+          <button onclick="labCmd('explain boundary')">explain boundary</button>
+          <button onclick="labCmd('explain threat')">explain threat</button>
+          <button onclick="labCmd('show example')">show example</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="evidence">
+  <div class="kicker">09 · EVIDENCE</div>
+  <h2>Build understanding, not just completion ticks.</h2>
+  <div class="evidence">
+    <div class="evi"><b>OBSERVATION</b><span class="muted">What did the environment show?</span></div>
+    <div class="evi"><b>INTERPRETATION</b><span class="muted">What does the output mean?</span></div>
+    <div class="evi"><b>IMPACT</b><span class="muted">Why does it matter?</span></div>
+    <div class="evi"><b>ACTION</b><span class="muted">What should happen next?</span></div>
+  </div>
+  <div class="gate" style="margin-top:16px">
+    <h3>Evidence Record</h3>
+    <p class="muted">Module evidence should be reusable in a learner portfolio: simulator state or captured observation, interpretation, security significance and remediation/next step.</p>
+  </div>
+</section>
+
+<section class="section" id="readiness">
+  <div class="kicker">10 · READINESS GATE</div>
+  <h2>Understanding before progression.</h2>
+  <div class="gate" id="gate">
+    <h3>CyberCore Module Gate</h3>
+    <p class="muted">Progress when the learner can explain the concept, describe how it works, recognize it in a scenario, and explain its security significance.</p>
+    <div class="grid3">
+      <div><b>CONCEPT</b><p class="muted">Understand</p></div>
+      <div><b>UNDERSTAND</b><p class="muted">Explain</p></div>
+      <div><b>EVIDENCE</b><p class="muted">Prove</p></div>
+    </div>
+    <button class="btn red" onclick="checkReadiness()" style="margin-top:16px">CHECK READINESS →</button>
+    <p id="gateMsg" class="muted" style="margin-top:8px"></p>
+  </div>
+</section>
+</div>
+
+<footer>SHADOWXLAB · CYBERCORE · CYBER VISUAL PLATFORM · 40 MODULES · 200+ CONCEPTS</footer>
+</main>
+</div>
+
+<div id="moduleModal" class="modal" aria-hidden="true">
+  <div class="modalBox">
+    <div class="modalHead"><div><div id="modalKicker" class="kicker"></div><h2 id="modalTitle" style="margin:6px 0"></h2></div><button class="btn" onclick="closeModule()">✕</button></div>
+    <p id="modalIntro" class="muted"></p>
+    <div class="modalGrid">
+      <div class="card"><div class="kicker">TOPIC MAP</div><div id="modalTopics"></div></div>
+      <div class="card"><div class="kicker">MODULE ENGINE</div><div class="check"><b>01</b><span>Concept explanation</span></div><div class="check"><b>02</b><span>Visual model / flow</span></div><div class="check"><b>03</b><span>Interactive simulator</span></div><div class="check"><b>04</b><span>Scenario + practical lab</span></div><div class="check"><b>05</b><span>Evidence + readiness gate</span></div></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn red" onclick="closeModule();document.getElementById('visual-atlas').scrollIntoView({behavior:'smooth'})">OPEN VISUAL ATLAS →</button>
+      <a id="modalDeepLink" href="module-01.html" class="btn">LAUNCH PRACTICAL LAB →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const MODULES = [
+  {"id": 1, "name": "Introduction to CyberCore - Security Essentials", "domain": "FOUNDATION", "topics": ["Cybersecurity mission and scope", "CIA triad and security objectives", "Assets, threats, vulnerabilities and risk", "Security controls and defense layers", "Security mindset and professional ethics"]},
+  {"id": 2, "name": "Anatomy of Cybersecurity", "domain": "FOUNDATION", "topics": ["People, process and technology", "Attack surface and trust boundaries", "Security operations lifecycle", "Identity, data and infrastructure", "How attacks and defenses connect"]},
+  {"id": 3, "name": "Cybersecurity Frameworks and Standards", "domain": "GOVERNANCE", "topics": ["NIST Cybersecurity Framework", "ISO/IEC 27001 concepts", "CIS Controls", "Security policies and control mapping", "Framework selection and implementation"]},
+  {"id": 4, "name": "Cybersecurity Roles", "domain": "CAREER", "topics": ["SOC and security operations roles", "Offensive security roles", "GRC and risk roles", "Security engineering roles", "Responsibilities, escalation and collaboration"]},
+  {"id": 5, "name": "Introduction to General Cybersecurity Skills", "domain": "FOUNDATION", "topics": ["Security terminology", "Analytical thinking", "Documentation and evidence", "Troubleshooting methodology", "Professional security habits"]},
+  {"id": 6, "name": "Linux Basics", "domain": "SYSTEMS", "topics": ["Linux filesystem", "Users, groups and permissions", "Processes and services", "Package and log management", "Shell navigation and administration"]},
+  {"id": 7, "name": "Windows Basics", "domain": "SYSTEMS", "topics": ["Windows architecture", "Users, groups and ACLs", "Processes, services and registry", "Event Viewer and Windows logs", "PowerShell-aware administration"]},
+  {"id": 8, "name": "Data Transformation Fundamentals", "domain": "DATA", "topics": ["Structured vs unstructured data", "Encoding and decoding", "CSV, JSON and XML", "Parsing and normalization", "Data pipelines for security analysis"]},
+  {"id": 9, "name": "Python Scripting Fundamentals", "domain": "SCRIPTING", "topics": ["Python syntax and data types", "Files and parsing", "Functions and modules", "Requests and automation patterns", "Security-focused scripting"]},
+  {"id": 10, "name": "PowerShell Scripting Fundamentals", "domain": "SCRIPTING", "topics": ["PowerShell objects and pipeline", "Cmdlets and providers", "Files, processes and services", "Windows administration automation", "Security investigation scripts"]},
+  {"id": 11, "name": "Networking Fundamentals", "domain": "NETWORKING", "topics": ["OSI and TCP/IP models", "IPv4 addressing and subnetting", "TCP, UDP and ports", "DNS, DHCP and core protocols", "Packet flow and troubleshooting"]},
+  {"id": 12, "name": "Enterprise Network Fundamentals", "domain": "NETWORKING", "topics": ["LAN, WAN and segmentation", "VLANs and routing", "NAT and enterprise edge", "Proxy and load-balancing concepts", "Network monitoring and architecture"]},
+  {"id": 13, "name": "Introduction to Network Firewalls", "domain": "NETWORKING", "topics": ["Firewall purpose and placement", "Stateful filtering", "Rules, zones and objects", "NAT and policy evaluation", "Logging and troubleshooting"]},
+  {"id": 14, "name": "Cloud Computing Fundamentals", "domain": "CLOUD", "topics": ["IaaS, PaaS and SaaS", "Shared responsibility", "Cloud identity and access", "Virtual networks and storage", "Cloud security fundamentals"]},
+  {"id": 15, "name": "Background to Contemporary Generative AI (GenAI)", "domain": "AI SECURITY", "topics": ["GenAI architecture", "Models, prompts and context", "AI security attack surface", "Data leakage and prompt risks", "Responsible AI security use"]},
+  {"id": 16, "name": "Cryptography Fundamentals", "domain": "CRYPTOGRAPHY", "topics": ["Plaintext, ciphertext and keys", "Symmetric cryptography", "Asymmetric cryptography", "Hashing and integrity", "PKI, certificates and TLS"]},
+  {"id": 17, "name": "Introduction to Offensive Cybersecurity Skills", "domain": "OFFENSIVE", "topics": ["Offensive security mindset", "Rules of engagement", "Attack surface discovery", "Validation vs exploitation", "Evidence and responsible testing"]},
+  {"id": 18, "name": "Penetration Testing Process", "domain": "OFFENSIVE", "topics": ["Pre-engagement and scope", "Reconnaissance", "Enumeration and validation", "Exploitation and post-exploitation concepts", "Reporting and retesting"]},
+  {"id": 19, "name": "Information Gathering and Enumeration", "domain": "OFFENSIVE", "topics": ["Passive reconnaissance", "Active reconnaissance", "Service discovery", "Directory and account enumeration", "Attack-surface documentation"]},
+  {"id": 20, "name": "Understanding Web Attacks", "domain": "OFFENSIVE", "topics": ["HTTP request/response model", "Authentication weaknesses", "Injection concepts", "Access-control failures", "Client-side and server-side attack paths"]},
+  {"id": 21, "name": "Attacking Endpoints", "domain": "OFFENSIVE", "topics": ["Endpoint attack surface", "Local privilege concepts", "Credential exposure", "Persistence concepts", "Endpoint evidence and remediation"]},
+  {"id": 22, "name": "Defense Evasion", "domain": "OFFENSIVE", "topics": ["Detection-aware behavior", "Obfuscation concepts", "Living-off-the-land concepts", "Telemetry and visibility", "Blue-team countermeasures"]},
+  {"id": 23, "name": "Offensive Cloud Fundamentals", "domain": "OFFENSIVE", "topics": ["Cloud attack surface", "Identity abuse concepts", "Storage exposure", "Misconfiguration discovery", "Cloud attack-path analysis"]},
+  {"id": 24, "name": "Introduction to Defensive Cybersecurity Skills", "domain": "DEFENSIVE", "topics": ["Defensive security mission", "Telemetry and visibility", "Detection fundamentals", "Triage and investigation", "Response fundamentals"]},
+  {"id": 25, "name": "SOC Management Processes", "domain": "DEFENSIVE", "topics": ["SOC operating model", "L1/L2/L3 workflows", "Alert triage and escalation", "Case management", "SOC metrics and continuous improvement"]},
+  {"id": 26, "name": "Defensive Security Processes", "domain": "DEFENSIVE", "topics": ["Detection lifecycle", "Incident response", "Threat intelligence", "Containment and eradication", "Lessons learned"]},
+  {"id": 27, "name": "Vulnerability Management", "domain": "DEFENSIVE", "topics": ["Asset inventory", "Vulnerability discovery", "Severity and prioritization", "Remediation workflow", "Validation and reporting"]},
+  {"id": 28, "name": "Malware Analysis", "domain": "DEFENSIVE", "topics": ["Malware taxonomy", "Static analysis concepts", "Dynamic analysis concepts", "Indicators of compromise", "Analysis reporting"]},
+  {"id": 29, "name": "Social Engineering and Phishing", "domain": "DEFENSIVE", "topics": ["Social engineering principles", "Phishing anatomy", "Email and URL indicators", "Awareness and controls", "Investigation and response"]},
+  {"id": 30, "name": "Ransomware, DDoS, and Availability", "domain": "DEFENSIVE", "topics": ["Availability threats", "Ransomware lifecycle", "DDoS concepts", "Resilience and recovery", "Business continuity considerations"]},
+  {"id": 31, "name": "Wi-Fi Security", "domain": "DEFENSIVE", "topics": ["802.11 fundamentals", "Authentication and encryption", "Rogue access points", "Wireless attack surface", "Wireless monitoring and hardening"]},
+  {"id": 32, "name": "Security of Embedded Systems", "domain": "DEFENSIVE", "topics": ["Embedded architecture", "Firmware and update security", "Device identity", "Hardware attack surface", "Secure lifecycle practices"]},
+  {"id": 33, "name": "Industrial Control Systems and OT", "domain": "DEFENSIVE", "topics": ["OT architecture", "ICS protocols and zones", "Safety and availability", "IT/OT convergence", "OT monitoring and incident response"]},
+  {"id": 34, "name": "Risk Management in Cybersecurity", "domain": "GRC", "topics": ["Asset and business impact", "Threat and vulnerability analysis", "Likelihood and impact", "Risk treatment", "Risk registers and reporting"]},
+  {"id": 35, "name": "Introduction to Build Skills for Cybersecurity", "domain": "ENGINEERING", "topics": ["Security requirements", "Architecture thinking", "Automation fundamentals", "Operational documentation", "Build-and-verify workflow"]},
+  {"id": 36, "name": "Software Engineering Security", "domain": "ENGINEERING", "topics": ["Secure SDLC", "Threat modeling", "Code review", "Dependency and secret management", "Security testing in CI/CD"]},
+  {"id": 37, "name": "Foundational Input Validation Concepts", "domain": "ENGINEERING", "topics": ["Trust boundaries", "Allowlist vs denylist", "Canonicalization", "Input validation patterns", "Injection prevention"]},
+  {"id": 38, "name": "Cloud Architecture Fundamentals", "domain": "CLOUD", "topics": ["Cloud reference architecture", "Identity boundaries", "Network segmentation", "Resilience and logging", "Secure cloud design"]},
+  {"id": 39, "name": "Introduction to Assurance Testing", "domain": "ASSURANCE", "topics": ["Assurance objectives", "Control testing", "Evidence collection", "Test design and sampling", "Findings and remediation validation"]},
+  {"id": 40, "name": "Starting and Developing a Career in Cybersecurity", "domain": "CAREER", "topics": ["Role selection", "Skills portfolio", "Lab evidence and projects", "Interview readiness", "Continuous professional development"]}
+];
+
+function renderModuleGrid(){
+  const grid = document.getElementById('moduleGrid');
+  if(!grid) return;
+  grid.innerHTML = MODULES.map(m => `
+    <div class="card moduleCard" onclick="openModule(${m.id})">
+      <div class="kicker">MODULE ${String(m.id).padStart(2,'0')} · ${m.domain}</div>
+      <h3>${m.name}</h3>
+      <p class="muted">${m.topics.slice(0,3).join(' · ')}</p>
+      <div>
+        ${m.id === 1 ? '<span class="tag" style="background:#fee2e2!important;border-color:#fca5a5!important;color:#b91c1c!important;font-weight:900">★ COMPLETE LABS &amp; VISUALS</span>' : ''}
+        <span class="tag">CONCEPT</span><span class="tag">VISUAL</span><span class="tag">LAB</span><span class="tag">EVIDENCE</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showFlow(id,el){
+  document.querySelectorAll('.flow .node').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.explain').forEach(x=>x.classList.remove('open'));
+  el.classList.add('active'); document.getElementById(id).classList.add('open');
+}
+function runConsole(cmd){
+  const map={'ip addr':'eth0: inet 192.168.56.20/24','ip route':'default via 192.168.56.1 dev eth0','ss -tuln':'LISTEN 0 128 0.0.0.0:22','journalctl':'security.service: active'};
+  const out=document.getElementById('consoleOutput');
+  out.innerHTML += "\n$ "+cmd+"\n<span class='term-ok'>"+(map[cmd]||'simulated tool response')+"</span>";
+  out.scrollTop = out.scrollHeight;
+}
+function labCmd(cmd){
+  const map={'explain asset':'ASSET: TRAINING-WORKSTATION','explain boundary':'Concept: Trust boundary between user and environment','explain threat':'THREAT: UNAUTHORIZED ACCESS','show example':'Example: Observation → interpretation'};
+  const out=document.getElementById('labOutput');
+  out.innerHTML += "\n$ "+cmd+"\n<span class='term-ok'>"+map[cmd]+"</span>";
+  out.scrollTop = out.scrollHeight;
+}
+function submitMission(){
+  const n=[...document.querySelectorAll('.labCheck:checked')].length;
+  const msg=document.getElementById('missionMsg');
+  const out=document.getElementById('labOutput');
+  if(n===4){ msg.textContent='MISSION PASSED — evidence objectives complete.'; msg.style.color='#1e9b63'; out.innerHTML += "\n\n<span class='term-ok'>CONCEPT REVIEW: COMPLETE</span>"; document.getElementById('progressBar').style.width='100%'; }
+  else { msg.textContent=(4-n)+' concept area(s) remain to review.'; msg.style.color='#e21b23'; }
+}
+function checkReadiness(){
+  const n=[...document.querySelectorAll('.labCheck:checked')].length;
+  const msg=document.getElementById('gateMsg');
+  if(n===4){ document.getElementById('gate').classList.add('pass'); msg.textContent='READY — concept areas reviewed. Module understanding checkpoint unlocked.'; msg.style.color='#1e9b63'; }
+  else { msg.textContent='NOT READY — complete the concept exploration first.'; msg.style.color='#e21b23'; }
+}
+function openModule(id){
+  const m=MODULES[id-1];
+  document.getElementById('modalKicker').textContent='MODULE '+String(id).padStart(2,'0')+' · '+m.domain;
+  document.getElementById('modalTitle').textContent=m.name;
+  document.getElementById('modalIntro').textContent='This module follows the CyberCore design template: objective → concept → visual → simulator → scenario → lab → evidence → readiness.';
+  document.getElementById('modalTopics').innerHTML=m.topics.map((t,i)=>`<div class="check"><b>${String(i+1).padStart(2,'0')}</b><span>${t}</span></div>`).join('');
+  const deepLink = document.getElementById('modalDeepLink');
+  if(deepLink){
+    if(id === 1){
+      deepLink.href = 'module-01.html';
+      deepLink.textContent = 'OPEN COMPLETE MODULE 01 LAB & VISUALS →';
+      deepLink.className = 'btn red';
+    } else {
+      deepLink.href = '#visual-atlas';
+      deepLink.textContent = 'EXPLORE IN VISUAL ATLAS →';
+      deepLink.className = 'btn';
+      deepLink.onclick = () => { closeModule(); ccRender(id - 1); document.getElementById('visual-atlas').scrollIntoView({behavior:'smooth'}); };
+    }
+  }
+  document.getElementById('moduleModal').classList.add('show');
+  document.getElementById('moduleModal').setAttribute('aria-hidden','false');
+}
+function closeModule(){document.getElementById('moduleModal').classList.remove('show');document.getElementById('moduleModal').setAttribute('aria-hidden','true');}
+function filterModules(q){
+  q=q.toLowerCase().trim();
+  document.querySelectorAll('.moduleCard').forEach((card,i)=>{
+    const m=MODULES[i]; const hay=(m.name+' '+m.domain+' '+m.topics.join(' ')).toLowerCase();
+    card.style.display=!q||hay.includes(q)?'block':'none';
+  });
+}
+function toggleTheme(){
+  document.body.classList.toggle('darkMode');
+  localStorage.setItem('cybercoreTheme',document.body.classList.contains('darkMode')?'dark':'light');
+}
+if(localStorage.getItem('cybercoreTheme')==='dark') document.body.classList.add('darkMode');
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModule();});
+document.getElementById('moduleModal').addEventListener('click',e=>{if(e.target.id==='moduleModal')closeModule();});
+function updateScroll(){
+  const max=document.documentElement.scrollHeight-window.innerHeight;
+  const pct=max>0?Math.min(100,(window.scrollY/max)*100):0;
+  document.getElementById('progressBar').style.width=Math.max(12,pct)+'%';
+  const links=[...document.querySelectorAll('#moduleNav a')];
+  const ids=links.map(a=>a.getAttribute('href')).filter(Boolean);
+  let active=ids[0];
+  ids.forEach(id=>{const el=document.querySelector(id);if(el&&window.scrollY+180>=el.offsetTop)active=id;});
+  links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')===active));
+}
+window.addEventListener('scroll',updateScroll); updateScroll();
+
+const CC_MODULES = [
+  {"id": "01", "title": "Security Essentials", "visualTitle": "CIA Triad", "visualType": "risk-chain", "summary": "Security objectives, assets, threats, vulnerabilities and risk"},
+  {"id": "02", "title": "Anatomy of Cybersecurity", "visualTitle": "Security Anatomy", "visualType": "security-anatomy", "summary": "People, process, technology, data and controls"},
+  {"id": "03", "title": "Cybersecurity Frameworks and Standards", "visualTitle": "Framework Map", "visualType": "framework-map", "summary": "Governance, risk, controls and continuous improvement"},
+  {"id": "04", "title": "Cybersecurity Roles", "visualTitle": "Security Roles", "visualType": "role-map", "summary": "SOC, engineering, GRC, offensive and defensive responsibilities"},
+  {"id": "05", "title": "General Cybersecurity Skills", "visualTitle": "Security Thinking", "visualType": "security-thinking", "summary": "Observation, analysis, communication and security decisions"},
+  {"id": "06", "title": "Linux Basics", "visualTitle": "Linux Anatomy", "visualType": "linux-anatomy", "summary": "Users, processes, filesystem, permissions and services"},
+  {"id": "07", "title": "Windows Basics", "visualTitle": "Windows Anatomy", "visualType": "windows-anatomy", "summary": "Processes, registry, services, identity and administration"},
+  {"id": "08", "title": "Data Transformation Fundamentals", "visualTitle": "Data Pipeline", "visualType": "data-pipeline", "summary": "Raw data, encoding, transformation, normalization and analysis"},
+  {"id": "09", "title": "Python Scripting Fundamentals", "visualTitle": "Python Flow", "visualType": "code-flow", "summary": "Variables, logic, functions, data structures and automation"},
+  {"id": "10", "title": "PowerShell Scripting Fundamentals", "visualTitle": "PowerShell Flow", "visualType": "powershell-flow", "summary": "Objects, pipelines, cmdlets, automation and administration"},
+  {"id": "11", "title": "Networking Fundamentals", "visualTitle": "Packet Journey", "visualType": "packet-flow", "summary": "Addresses, protocols, ports, packets, routing and transport"},
+  {"id": "12", "title": "Enterprise Network Fundamentals", "visualTitle": "Enterprise Network", "visualType": "enterprise-network", "summary": "LAN, WAN, segmentation, routing, switching and services"},
+  {"id": "13", "title": "Network Firewalls", "visualTitle": "Firewall Decision", "visualType": "firewall-flow", "summary": "Zones, policies, state, filtering, NAT and traffic decisions"},
+  {"id": "14", "title": "Cloud Computing Fundamentals", "visualTitle": "Cloud Architecture", "visualType": "cloud-architecture", "summary": "Compute, storage, network, identity and shared responsibility"},
+  {"id": "15", "title": "Generative AI", "visualTitle": "AI Pipeline", "visualType": "ai-pipeline", "summary": "Prompt, context, model, tools, data, output and AI attack surface"},
+  {"id": "16", "title": "Cryptography Fundamentals", "visualTitle": "Crypto Lifecycle", "visualType": "crypto-flow", "summary": "Plaintext, keys, algorithms, ciphertext, hashing and trust"},
+  {"id": "17", "title": "Offensive Cybersecurity Skills", "visualTitle": "Attack Surface", "visualType": "attack-surface", "summary": "Discovery, attack paths, exploitation concepts and impact"},
+  {"id": "18", "title": "Penetration Testing Process", "visualTitle": "Assessment Lifecycle", "visualType": "assessment-flow", "summary": "Scope, discovery, validation, analysis, reporting and remediation"},
+  {"id": "19", "title": "Information Gathering and Enumeration", "visualTitle": "Recon Pipeline", "visualType": "recon-flow", "summary": "Discovery, assets, services and attack-surface mapping"},
+  {"id": "20", "title": "Web Attacks", "visualTitle": "Web Request Anatomy", "visualType": "web-flow", "summary": "Browser, web server, application, session, input and data"},
+  {"id": "21", "title": "Attacking Endpoints", "visualTitle": "Endpoint Attack Surface", "visualType": "endpoint-flow", "summary": "Users, processes, services, persistence and endpoint controls"},
+  {"id": "22", "title": "Defense Evasion", "visualTitle": "Detection Blind Spots", "visualType": "evasion-flow", "summary": "Telemetry, detection surfaces and defender visibility"},
+  {"id": "23", "title": "Offensive Cloud Fundamentals", "visualTitle": "Cloud Attack Surface", "visualType": "cloud-attack", "summary": "Identity, storage, compute, network and cloud trust"},
+  {"id": "24", "title": "Defensive Cybersecurity Skills", "visualTitle": "Defense Architecture", "visualType": "defense-architecture", "summary": "Prevent, detect, investigate, respond and recover"},
+  {"id": "25", "title": "SOC Management Processes", "visualTitle": "SOC Lifecycle", "visualType": "soc-flow", "summary": "Telemetry, detection, triage, investigation, response and improvement"},
+  {"id": "26", "title": "Defensive Security Processes", "visualTitle": "Detection Lifecycle", "visualType": "detection-flow", "summary": "Controls, monitoring, analysis, response and improvement"},
+  {"id": "27", "title": "Vulnerability Management", "visualTitle": "Risk-Based Remediation", "visualType": "vuln-flow", "summary": "Asset, weakness, exposure, severity, prioritization and remediation"},
+  {"id": "28", "title": "Malware Analysis", "visualTitle": "Malware Anatomy", "visualType": "malware-flow", "summary": "Sample, behavior, indicators, execution, persistence and analysis"},
+  {"id": "29", "title": "Social Engineering and Phishing", "visualTitle": "Human Attack Path", "visualType": "phishing-flow", "summary": "Lure, delivery, interaction, credential/data impact and defense"},
+  {"id": "30", "title": "Ransomware, DDoS and Availability", "visualTitle": "Availability Impact", "visualType": "availability-flow", "summary": "Resource exhaustion, encryption, disruption and resilience"},
+  {"id": "31", "title": "Wi-Fi Security", "visualTitle": "Wireless Environment", "visualType": "wifi-flow", "summary": "Client, access point, authentication, radio, network and threats"},
+  {"id": "32", "title": "Embedded Systems Security", "visualTitle": "Embedded Anatomy", "visualType": "embedded-flow", "summary": "Device, firmware, interfaces, data, update and trust"},
+  {"id": "33", "title": "Industrial Control Systems and OT", "visualTitle": "OT Architecture", "visualType": "ot-flow", "summary": "Enterprise, DMZ, control, field devices, safety and availability"},
+  {"id": "34", "title": "Risk Management in Cybersecurity", "visualTitle": "Risk Model", "visualType": "risk-model", "summary": "Asset, threat, vulnerability, likelihood, impact and treatment"},
+  {"id": "35", "title": "Build Skills for Cybersecurity", "visualTitle": "Security Builder", "visualType": "builder-flow", "summary": "Requirements, design, implementation, validation and operations"},
+  {"id": "36", "title": "Software Engineering Security", "visualTitle": "Secure SDLC", "visualType": "sdlc-flow", "summary": "Plan, design, code, test, deploy, monitor and improve"},
+  {"id": "37", "title": "Input Validation", "visualTitle": "Input Trust Boundary", "visualType": "validation-flow", "summary": "Input, validation, transformation, application logic and output"},
+  {"id": "38", "title": "Cloud Architecture Fundamentals", "visualTitle": "Cloud Trust Model", "visualType": "cloud-trust", "summary": "Identity, network, workload, data, control plane and trust"},
+  {"id": "39", "title": "Assurance Testing", "visualTitle": "Assurance Lifecycle", "visualType": "assurance-flow", "summary": "Requirement, control, evidence, test, finding and assurance"},
+  {"id": "40", "title": "Cybersecurity Career", "visualTitle": "Career Map", "visualType": "career-flow", "summary": "Roles, skills, evidence, portfolio, interviews and growth"}
+];
+
+const CC_VISUALS = {
+  "risk-chain":{nodes:[["asset","ASSET","Something valuable",8,42],["threat","THREAT","Potential cause of harm",30,18],["vuln","VULNERABILITY","Weakness or exposure",30,66],["risk","RISK","Likelihood × impact",55,42],["control","CONTROL","Reduce likelihood / impact",80,42]],links:[["asset","risk"],["threat","risk"],["vuln","risk"],["risk","control"]],root:"risk",text:{
+  asset:["Asset","An asset has value and therefore requires protection.","value • ownership • criticality"],threat:["Threat","A threat is a potential cause of harm to an asset.","actor • event • capability"],vuln:["Vulnerability","A vulnerability is a weakness that can create exposure.","weakness • exposure • condition"],risk:["Risk","Risk connects likelihood and impact into a security decision signal.","likelihood • impact • uncertainty"],control:["Security Control","A control changes risk by preventing, detecting or responding.","prevent • detect • respond"]}},
+  "packet-flow":{nodes:[["app","APPLICATION","Creates data",7,42],["transport","TRANSPORT","TCP / UDP",27,42],["network","NETWORK","IP routing",48,42],["link","LINK","Local delivery",69,42],["server","DESTINATION","Receives data",89,42]],links:[["app","transport"],["transport","network"],["network","link"],["link","server"]],root:"network",text:{
+  app:["Application","Applications create information that will travel across the network.","HTTP • DNS • application data"],transport:["Transport","Transport protocols organize conversations and delivery semantics.","TCP • UDP • ports"],network:["Network","The network layer provides logical addressing and path selection.","IP • routing • packets"],link:["Link","Local delivery moves frames across a connected network segment.","Ethernet • MAC • frames"],server:["Destination","The destination system receives and processes the traffic.","service • socket • response"]}},
+  "ai-pipeline":{nodes:[["user","USER","Intent / prompt",8,42],["context","CONTEXT","Instructions + data",28,18],["model","MODEL","Inference",50,42],["tools","TOOLS","External capabilities",50,68],["data","DATA","Enterprise information",72,18],["response","RESPONSE","Generated output",90,42]],links:[["user","model"],["context","model"],["data","model"],["tools","model"],["model","response"]],root:"model",text:{
+  user:["User Input","A prompt expresses intent but may also contain sensitive or untrusted content.","intent • prompt • instruction"],context:["Context","Context shapes model behavior and may include instructions or retrieved information.","system • retrieval • conversation"],model:["Model","The model transforms input and context into generated output.","inference • patterns • probabilities"],tools:["Tools","Tools extend an AI system into external actions or data.","API • action • privilege"],data:["Data","Enterprise data may become part of context, retrieval or tool operations.","sensitivity • access • leakage"],response:["Response","Generated output still requires validation and appropriate trust.","accuracy • safety • validation"]}},
+  "soc-flow":{nodes:[["telemetry","TELEMETRY","Logs & signals",7,42],["detect","DETECTION","Rules / analytics",28,42],["triage","TRIAGE","Prioritize",49,42],["investigate","INVESTIGATE","Build context",70,18],["respond","RESPOND","Contain / remediate",70,66],["improve","IMPROVE","Learn & tune",91,42]],links:[["telemetry","detect"],["detect","triage"],["triage","investigate"],["triage","respond"],["investigate","respond"],["respond","improve"]],root:"triage",text:{
+  telemetry:["Telemetry","Security operations depend on observable signals from systems, identities and networks.","logs • events • signals"],detect:["Detection","Detection logic turns telemetry into candidate security events.","rules • analytics • correlation"],triage:["Triage","Triage determines what deserves attention and in what order.","priority • context • severity"],investigate:["Investigation","Investigation connects evidence into a coherent explanation of what happened.","timeline • scope • hypothesis"],respond:["Response","Response coordinates actions that reduce impact and restore control.","contain • eradicate • recover"],improve:["Continuous Improvement","Lessons feed better detections, controls and processes.","feedback • tuning • resilience"]}},
+  "risk-model":{nodes:[["asset","ASSET","Value at risk",8,42],["threat","THREAT","Potential event",28,18],["vuln","VULNERABILITY","Weakness",28,66],["likelihood","LIKELIHOOD","Chance",50,18],["impact","IMPACT","Consequence",50,66],["risk","RISK","Decision signal",73,42],["treat","TREAT","Accept / reduce / transfer / avoid",91,42]],links:[["asset","risk"],["threat","likelihood"],["vuln","likelihood"],["likelihood","risk"],["impact","risk"],["risk","treat"]],root:"risk",text:{
+  asset:["Asset","Risk starts with something that has value or importance.","business value • criticality"],threat:["Threat","A threat represents a possible event or actor that could cause harm.","event • actor • capability"],vuln:["Vulnerability","A weakness creates a condition in which a threat may succeed.","weakness • exposure"],likelihood:["Likelihood","Likelihood represents how plausible the unwanted event is.","probability • exposure • conditions"],impact:["Impact","Impact describes the consequence if the event occurs.","financial • operational • legal"],risk:["Risk","Risk combines likelihood and impact into a decision-making signal.","likelihood × impact"],treat:["Risk Treatment","Treatment determines how the organization handles the risk.","reduce • accept • transfer • avoid"]}},
+  "sdlc-flow":{nodes:[["plan","PLAN","Requirements",7,42],["design","DESIGN","Architecture",25,42],["build","BUILD","Implementation",43,42],["test","TEST","Verification",61,42],["deploy","DEPLOY","Release",79,42],["monitor","MONITOR","Feedback",94,42]],links:[["plan","design"],["design","build"],["build","test"],["test","deploy"],["deploy","monitor"],["monitor","plan"]],root:"design",text:{
+  plan:["Plan","Security begins by understanding requirements, users, data and threats.","requirements • context • risk"],design:["Design","Architecture determines trust boundaries, controls and security properties.","architecture • trust • controls"],build:["Build","Implementation turns design into working software.","code • dependencies • configuration"],test:["Test","Testing evaluates whether expected security properties hold.","verification • abuse cases • findings"],deploy:["Deploy","Release moves software into an operational environment with controlled configuration.","release • change • configuration"],monitor:["Monitor","Operational feedback reveals new risk and informs the next cycle.","telemetry • incidents • improvement"]}}
+};
+
+const GENERIC = {
+  "enterprise-network":["USERS","ACCESS","NETWORK","SERVICES","DATA"],"firewall-flow":["SOURCE","POLICY","STATE","DECISION","DESTINATION"],
+  "cloud-architecture":["IDENTITY","CONTROL PLANE","WORKLOAD","NETWORK","DATA"],"crypto-flow":["PLAINTEXT","KEY","ALGORITHM","CIPHERTEXT","VERIFY"],
+  "attack-surface":["ASSET","ENTRY POINT","WEAKNESS","ATTACK PATH","IMPACT"],"assessment-flow":["SCOPE","DISCOVER","VALIDATE","ANALYZE","REPORT"],
+  "recon-flow":["COLLECT","ENUMERATE","MAP","CORRELATE","ATTACK SURFACE"],"web-flow":["BROWSER","REQUEST","WEB APP","DATA","RESPONSE"],
+  "endpoint-flow":["USER","PROCESS","SERVICE","CONTROL","DATA"],"evasion-flow":["ACTIVITY","TELEMETRY","DETECTION","BLIND SPOT","DEFENDER"],
+  "cloud-attack":["IDENTITY","PERMISSION","RESOURCE","TRUST","IMPACT"],"defense-architecture":["PREVENT","DETECT","INVESTIGATE","RESPOND","RECOVER"],
+  "detection-flow":["SIGNAL","ANALYTIC","ALERT","ANALYST","ACTION"],"vuln-flow":["ASSET","WEAKNESS","EXPOSURE","PRIORITY","REMEDIATION"],
+  "malware-flow":["SAMPLE","EXECUTION","BEHAVIOR","INDICATORS","IMPACT"],"phishing-flow":["LURE","DELIVERY","INTERACTION","COMPROMISE","IMPACT"],
+  "availability-flow":["RESOURCE","EXHAUSTION","DISRUPTION","IMPACT","RESILIENCE"],"wifi-flow":["CLIENT","RADIO","ACCESS POINT","AUTHENTICATION","NETWORK"],
+  "embedded-flow":["DEVICE","FIRMWARE","INTERFACE","UPDATE","TRUST"],"ot-flow":["ENTERPRISE","DMZ","CONTROL","FIELD","SAFETY"],
+  "builder-flow":["REQUIRE","DESIGN","BUILD","VERIFY","OPERATE"],"validation-flow":["INPUT","VALIDATE","NORMALIZE","PROCESS","OUTPUT"],
+  "cloud-trust":["IDENTITY","BOUNDARY","CONTROL PLANE","WORKLOAD","DATA"],"assurance-flow":["REQUIREMENT","CONTROL","EVIDENCE","TEST","FINDING"],
+  "career-flow":["ROLE","SKILLS","EVIDENCE","PORTFOLIO","GROWTH"],"linux-anatomy":["USER","SHELL","PROCESS","FILESYSTEM","SERVICE"],
+  "windows-anatomy":["USER","PROCESS","REGISTRY","SERVICE","IDENTITY"],"data-pipeline":["SOURCE","TRANSFORM","NORMALIZE","ANALYZE","OUTPUT"],
+  "code-flow":["INPUT","VARIABLE","LOGIC","FUNCTION","OUTPUT"],"powershell-flow":["OBJECT","CMDLET","PIPELINE","SCRIPT","OUTPUT"],
+  "security-thinking":["OBSERVE","CONTEXT","HYPOTHESIS","DECISION","ACTION"],"role-map":["ROLE","RESPONSIBILITY","TEAM","ESCALATION","OUTCOME"]
+};
+
+function makeGeneric(type,title){
+  const labels=GENERIC[type]||["CONCEPT","COMPONENT","RELATIONSHIP","SECURITY","OUTCOME"];
+  const nodes=labels.map((x,i)=>["g"+i,x,i===0?"Starting point":i===labels.length-1?"Security outcome":"Core concept",8+i*(84/(labels.length-1)),42+(i%2? -20:0)]);
+  return {nodes,links:nodes.slice(0,-1).map((n,i)=>[n[0],nodes[i+1][0]]),root:nodes[Math.floor(nodes.length/2)][0],
+    text:Object.fromEntries(nodes.map(n=>[n[0],[n[1],`${n[1]} is a key part of ${title}. Explore its relationship with the surrounding components to understand the system as a whole.`,"structure • relationship • security meaning"]]))};
+}
+
+function ccSelect(spec,id){
+  document.querySelectorAll(".cc-node").forEach(n=>n.classList.toggle("selected",n.dataset.node===id));
+  const t=spec.text[id]||[id,"Explore this concept and its relationship to the surrounding system.","concept • relationship • security"];
+  document.getElementById("ccNodeTitle").textContent=t[0];
+  document.getElementById("ccNodeText").textContent=t[1];
+  document.getElementById("ccFacts").innerHTML=t[2].split("•").map(x=>`<span class="cc-fact">${x.trim()}</span>`).join("");
+}
+
+function ccExplain(title,text,facts){
+  const t=document.getElementById("ccNodeTitle"),x=document.getElementById("ccNodeText"),f=document.getElementById("ccFacts");
+  if(t)t.textContent=title; if(x)x.textContent=text;
+  if(f)f.innerHTML=(facts||[]).map(k=>`<span class="cc-fact">${k}</span>`).join("");
+}
+function simEl(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+
+function renderSim01(canvas){
+  const state={
+    assetValue:70,likelihood:55,cWeight:60,iWeight:55,aWeight:70,
+    controls:[
+      {id:"mfa",name:"Multi-factor authentication",effect:22,on:true,affects:["c"]},
+      {id:"backup",name:"Automated backups",effect:20,on:true,affects:["a"]},
+      {id:"encrypt",name:"Encryption at rest",effect:18,on:false,affects:["c"]},
+      {id:"monitor",name:"Continuous monitoring",effect:16,on:false,affects:["c","i","a"]},
+      {id:"patch",name:"Patch management",effect:14,on:false,affects:["i","a"]}
+    ]
+  };
+  canvas.appendChild(simEl("div","sim-badge","SIMULATED ENVIRONMENT · LIVE RISK MODEL"));
+  const wrap=simEl("div","sim");
+  wrap.innerHTML=`
+  <div class="sim-panel">
+    <h4>ASSET PROFILE</h4>
+    <div class="sim-row"><label>Asset value</label><input class="sim-slider" id="rs-av" type="range" min="0" max="100" value="${state.assetValue}"><span class="sim-val" id="rs-avv">${state.assetValue}</span></div>
+    <div class="sim-row"><label>Threat likelihood</label><input class="sim-slider" id="rs-lk" type="range" min="0" max="100" value="${state.likelihood}"><span class="sim-val" id="rs-lkv">${state.likelihood}</span></div>
+    <div class="sim-row"><label>Confidentiality need</label><input class="sim-slider" id="rs-c" type="range" min="0" max="100" value="${state.cWeight}"><span class="sim-val" id="rs-cv">${state.cWeight}</span></div>
+    <div class="sim-row"><label>Integrity need</label><input class="sim-slider" id="rs-i" type="range" min="0" max="100" value="${state.iWeight}"><span class="sim-val" id="rs-iv">${state.iWeight}</span></div>
+    <div class="sim-row"><label>Availability need</label><input class="sim-slider" id="rs-a" type="range" min="0" max="100" value="${state.aWeight}"><span class="sim-val" id="rs-av2">${state.aWeight}</span></div>
+    <p class="sim-note">These describe the asset itself — what it's worth, how likely it is to be targeted, and which CIA pillar matters most for it.</p>
+  </div>
+  <div class="sim-panel" style="margin-top:16px">
+    <h4>CONTROLS — click to enable / disable</h4>
+    <div class="sim-row" id="rs-controls"></div>
+    <p class="sim-note">Each control acts on specific CIA pillars. Toggle them and watch residual risk move in real time.</p>
+  </div>
+  <div class="sim-grid sim-cols-2" style="margin-top:16px">
+    <div class="sim-panel dark">
+      <h4>RISK CHAIN</h4>
+      <div class="sim-flow-row" id="rs-chain"></div>
+      <div class="sim-events" id="rs-cia" style="margin-top:14px"></div>
+    </div>
+    <div class="sim-panel">
+      <h4>RISK MATRIX — inherent (●) vs residual (○)</h4>
+      <div id="rs-matrix"></div>
+      <div class="sim-row" style="margin-top:10px"><label>Inherent risk</label><span class="sim-pill" id="rs-inherent-pill">—</span></div>
+      <div class="sim-row"><label>Residual risk</label><span class="sim-pill" id="rs-residual-pill">—</span></div>
+    </div>
+  </div>`;
+  canvas.appendChild(wrap);
+
+  const controlsEl=wrap.querySelector("#rs-controls");
+  const ciaName={c:"confidentiality",i:"integrity",a:"availability"};
+  function renderControls(){
+    controlsEl.innerHTML=state.controls.map(c=>`<span class="sim-chip ${c.on?"active":""}" data-c="${c.id}">${c.name} · -${c.effect}</span>`).join("");
+    controlsEl.querySelectorAll(".sim-chip").forEach(el=>el.onclick=()=>{
+      const c=state.controls.find(x=>x.id===el.dataset.c);
+      c.on=!c.on; renderControls(); compute();
+      ccExplain(c.name,(c.on?"Enabled":"Disabled")+" — this control primarily protects "+c.affects.map(a=>ciaName[a]).join(", ")+". Enabling it reduces residual risk by shrinking likelihood or impact.",[c.name,c.on?"active":"inactive"]);
+    });
+  }
+
+  function bucketLabel(v){return v<20?"LOW":v<40?"MODERATE":v<60?"ELEVATED":v<80?"HIGH":"CRITICAL";}
+  function pillClass(v){return v<20?"pill-low":v<60?"pill-medium":v<80?"pill-high":"pill-critical";}
+
+  function compute(){
+    const ciaAvg=(state.cWeight+state.iWeight+state.aWeight)/3;
+    const impact=Math.round(ciaAvg*0.5+state.assetValue*0.5);
+    const inherent=Math.round((state.likelihood/100)*impact);
+    const activeControls=state.controls.filter(c=>c.on);
+    const reduction=Math.min(80,activeControls.reduce((s,c)=>s+c.effect,0));
+    const residual=Math.round(inherent*(1-reduction/100));
+
+    const ip=wrap.querySelector("#rs-inherent-pill");
+    ip.textContent=bucketLabel(inherent)+" ("+inherent+")"; ip.className="sim-pill "+pillClass(inherent);
+    const rp=wrap.querySelector("#rs-residual-pill");
+    rp.textContent=bucketLabel(residual)+" ("+residual+")"; rp.className="sim-pill "+pillClass(residual);
+
+    const chain=wrap.querySelector("#rs-chain");
+    const stages=[["ASSET",false],["THREAT / VULN",false],["RISK",true],["CONTROL",activeControls.length>0],["RESIDUAL RISK",false]];
+    chain.innerHTML=stages.map((s,idx)=>`<span class="sim-stage ${s[0]==="RISK"?"active":""} ${s[0]==="CONTROL"&&s[1]?"done":""}">${s[0]}</span>`+(idx<stages.length-1?'<span class="sim-arrow-sm">→</span>':'')).join("");
+
+    const cia=wrap.querySelector("#rs-cia");
+    cia.innerHTML=[["C",state.cWeight,"confidentiality"],["I",state.iWeight,"integrity"],["A",state.aWeight,"availability"]].map(([label,val,name])=>{
+      const covered=activeControls.some(c=>c.affects.includes(label.toLowerCase()));
+      return `<div class="sim-event" style="grid-template-columns:34px 1fr 84px"><b>${label}</b><span>${name} need: ${val}</span><span class="sim-note" style="margin:0">${covered?"protected":"exposed"}</span></div>`;
+    }).join("");
+
+    const lkB=Math.min(4,Math.floor(state.likelihood/20));
+    const impB=Math.min(4,Math.floor(impact/20));
+    const resLkB=Math.min(4,Math.floor((state.likelihood*(1-reduction/200))/20));
+    const resImpB=Math.min(4,Math.floor((impact*(1-reduction/200))/20));
+    let grid="";
+    for(let r=4;r>=0;r--){
+      for(let cIdx=0;cIdx<5;cIdx++){
+        const isInherent=cIdx===lkB&&r===impB;
+        const isResidual=cIdx===resLkB&&r===resImpB;
+        const sev=cIdx+r;
+        const bg=sev<=2?"#158a52":sev<=4?"#a48a06":sev<=6?"#c46a14":"#c4141c";
+        grid+=`<div style="position:relative;background:${bg};opacity:.18;border-radius:4px;height:30px;display:flex;align-items:center;justify-content:center">${isInherent?'<span style="width:10px;height:10px;border-radius:50%;background:#111;position:absolute"></span>':''}${isResidual?'<span style="width:14px;height:14px;border-radius:50%;border:2px solid #111;position:absolute"></span>':''}</div>`;
+      }
+    }
+    wrap.querySelector("#rs-matrix").innerHTML=`<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px">${grid}</div><div class="sim-note" style="margin-top:6px">x-axis: likelihood → &nbsp;·&nbsp; y-axis: impact ↑</div>`;
+  }
+
+  const sliderMap={"rs-av":["assetValue","rs-avv"],"rs-lk":["likelihood","rs-lkv"],"rs-c":["cWeight","rs-cv"],"rs-i":["iWeight","rs-iv"],"rs-a":["aWeight","rs-av2"]};
+  Object.keys(sliderMap).forEach(id=>{
+    wrap.querySelector("#"+id).oninput=e=>{
+      const [key,valId]=sliderMap[id];
+      state[key]=+e.target.value;
+      wrap.querySelector("#"+valId).textContent=e.target.value;
+      compute();
+    };
+  });
+
+  renderControls();
+  compute();
+  ccExplain("Security Essentials — Live Risk Model","Adjust the asset value, threat likelihood, and CIA needs, then toggle controls. Inherent risk is before controls; residual risk is what remains after they are applied.",["asset","threat","vulnerability","risk","control","residual risk"]);
+}
+
+function renderSim02(canvas){
+  const layers=[
+    {id:"people",name:"PEOPLE",desc:"Humans who use, operate, or attack the system",weak:"An employee reuses a password and falls for a phishing email.",strength:60},
+    {id:"process",name:"PROCESS",desc:"The documented, repeatable way work gets done",weak:"No process requires MFA re-verification for password resets.",strength:60},
+    {id:"technology",name:"TECHNOLOGY",desc:"Systems, software and infrastructure enforcing controls",weak:"The identity platform allows resets from any unmanaged device.",strength:60},
+    {id:"data",name:"DATA",desc:"The information ultimately being protected",weak:"Customer PII sits in the mailbox the attacker now controls.",strength:60},
+    {id:"controls",name:"CONTROLS",desc:"Safeguards layered across the other four to reduce risk",weak:"No anomaly detection flags the login from a new country.",strength:60}
+  ];
+  canvas.appendChild(simEl("div","sim-badge","SIMULATED ENVIRONMENT · SECURITY ANATOMY"));
+  const wrap=simEl("div","sim");
+  wrap.innerHTML=`
+  <div class="sim-panel">
+    <h4>THE FIVE LAYERS — click a layer, then weaken or strengthen it</h4>
+    <div class="sim-row" id="an-chips"></div>
+    <p class="sim-note">Security is five layers that all have to hold at once. Drag any layer strength down to see the incident scenario change.</p>
+  </div>
+  <div class="sim-grid sim-cols-2" style="margin-top:16px">
+    <div class="sim-panel" id="an-detail"></div>
+    <div class="sim-panel dark"><h4>INCIDENT SCENARIO — root causes</h4><div class="sim-terminal" id="an-scenario" style="min-height:150px"></div></div>
+  </div>`;
+  canvas.appendChild(wrap);
+  const chips=wrap.querySelector("#an-chips");
+  chips.innerHTML=layers.map(l=>`<span class="sim-chip" data-l="${l.id}">${l.name}</span>`).join("");
+  let cur="people";
+  function render(){
+    chips.querySelectorAll(".sim-chip").forEach(c=>c.classList.toggle("active",c.dataset.l===cur));
+    const l=layers.find(x=>x.id===cur);
+    wrap.querySelector("#an-detail").innerHTML=`<h4>${l.name}</h4><p class="sim-note" style="font-size:13px;color:#3d474f">${l.desc}</p>
+      <div class="sim-row"><label>Layer strength</label><input class="sim-slider" id="an-str" type="range" min="0" max="100" value="${l.strength}"><span class="sim-val" id="an-strv">${l.strength}%</span></div>`;
+    wrap.querySelector("#an-str").oninput=e=>{l.strength=+e.target.value;wrap.querySelector("#an-strv").textContent=l.strength+"%";renderScenario();};
+    renderScenario();
+    ccExplain(l.name+" layer",l.desc+" When this layer is weak, it becomes the exploited path in an incident.",[l.name]);
+  }
+  function renderScenario(){
+    const weakest=layers.reduce((a,b)=>a.strength<b.strength?a:b);
+    const out=wrap.querySelector("#an-scenario");
+    out.innerHTML=`INCIDENT: Attacker gains access to a customer support mailbox.\n\nWEAKEST LAYER: ${weakest.name} (${weakest.strength}%)\nROOT CAUSE: ${weakest.weak}\n\n`+layers.map(l=>`${l.name.padEnd(12)} ${'█'.repeat(Math.round(l.strength/5)).padEnd(20,'░')} ${l.strength}%`).join("\n");
+  }
+  chips.querySelectorAll(".sim-chip").forEach(c=>c.onclick=()=>{cur=c.dataset.l;render();});
+  render();
+}
+
+function renderSim03(canvas){
+  const frameworks={
+    "NIST CSF 2.0":{focus:"Outcome-based risk management",structure:["GOVERN","IDENTIFY","PROTECT","DETECT","RESPOND","RECOVER"],use:"Voluntary risk framework widely used to structure a security program end-to-end."},
+    "ISO/IEC 27001":{focus:"Certifiable ISMS standard",structure:["CONTEXT","LEADERSHIP","PLANNING","SUPPORT","OPERATION","EVALUATION","IMPROVEMENT"],use:"An auditable management-system standard organizations get certified against."},
+    "CIS Controls v8":{focus:"Prioritized technical safeguards",structure:["INVENTORY","PROTECT ASSETS","DEFEND","RESPOND","GOVERN DATA"],use:"A prioritized, practitioner-written list of specific technical safeguards."},
+    "SOC 2":{focus:"Trust-service criteria for service orgs",structure:["SECURITY","AVAILABILITY","PROCESSING INTEGRITY","CONFIDENTIALITY","PRIVACY"],use:"An attestation report proving controls to customers/auditors, common for SaaS."}
+  };
+  const controls=["Multi-factor authentication on all admin accounts","Quarterly vulnerability scanning of internet-facing assets","Documented incident response plan tested annually","Data classification and encryption at rest"];
+  canvas.appendChild(simEl("div","sim-badge","SIMULATED ENVIRONMENT · FRAMEWORK MAPPER"));
+  const wrap=simEl("div","sim");
+  wrap.innerHTML=`
+  <div class="sim-panel"><h4>CHOOSE A FRAMEWORK</h4><div class="sim-row" id="fm-chips"></div></div>
+  <div class="sim-grid sim-cols-2" style="margin-top:16px">
+    <div class="sim-panel dark" id="fm-structure"></div>
+    <div class="sim-panel">
+      <h4>MAP A CONTROL TO THIS FRAMEWORK</h4>
+      <select class="sim-select" id="fm-control" style="width:100%">${controls.map(c=>`<option>${c}</option>`).join("")}</select>
+      <div id="fm-mapping" style="margin-top:14px"></div>
+    </div>
+  </div>`;
+  canvas.appendChild(wrap);
+  const chips=wrap.querySelector("#fm-chips");
+  chips.innerHTML=Object.keys(frameworks).map(f=>`<span class="sim-chip" data-f="${f}">${f}</span>`).join("");
+  let cur="NIST CSF 2.0";
+  const mapLogic={
+    "NIST CSF 2.0":c=>c.includes("Multi-factor")?"PROTECT":c.includes("scanning")?"IDENTIFY":c.includes("incident")?"RESPOND":"PROTECT",
+    "ISO/IEC 27001":c=>c.includes("Multi-factor")?"OPERATION":c.includes("scanning")?"EVALUATION":c.includes("incident")?"OPERATION":"OPERATION",
+    "CIS Controls v8":c=>c.includes("Multi-factor")?"PROTECT ASSETS":c.includes("scanning")?"DEFEND":c.includes("incident")?"RESPOND":"PROTECT ASSETS",
+    "SOC 2":c=>c.includes("Multi-factor")?"SECURITY":c.includes("scanning")?"SECURITY":c.includes("incident")?"AVAILABILITY":"CONFIDENTIALITY"
+  };
+  function render(){
+    chips.querySelectorAll(".sim-chip").forEach(c=>c.classList.toggle("active",c.dataset.f===cur));
+    const f=frameworks[cur];
+    wrap.querySelector("#fm-structure").innerHTML=`<h4>${cur} — STRUCTURE</h4><p class="sim-note">${f.focus}</p><div class="sim-flow-row" style="margin-top:10px">${f.structure.map(s=>`<span class="sim-stage">${s}</span>`).join('<span class="sim-arrow-sm">→</span>')}</div><p class="sim-note" style="margin-top:14px">${f.use}</p>`;
+    renderMapping();
+    ccExplain(cur,f.use,f.structure);
+  }
+  function renderMapping(){
+    const control=wrap.querySelector("#fm-control").value;
+    const dest=mapLogic[cur](control);
+    wrap.querySelector("#fm-mapping").innerHTML=`<div class="sim-panel dark" style="padding:14px"><span class="sim-note" style="color:#9aa4ac">This control satisfies:</span><div style="margin-top:8px"><span class="sim-stage active">${dest}</span></div></div>`;
+  }
+  chips.querySelectorAll(".sim-chip").forEach(c=>c.onclick=()=>{cur=c.dataset.f;render();});
+  wrap.querySelector("#fm-control").onchange=renderMapping;
+  render();
+}
+
+function renderSim04(canvas){
+  const roles=[
+    {id:"soc",name:"SOC ANALYST",owns:"Real-time monitoring and triage",handles:["phishing email reported by a user","spike in failed logins on the VPN"]},
+    {id:"ir",name:"INCIDENT RESPONDER",owns:"Containment and eradication once an incident is confirmed",handles:["confirmed ransomware execution on a server","active attacker session in the network"]},
+    {id:"grc",name:"GRC ANALYST",owns:"Policy, compliance and risk documentation",handles:["upcoming SOC 2 audit evidence request","new regulatory requirement needing a policy update"]},
+    {id:"pentest",name:"PENETRATION TESTER",owns:"Authorized simulated attacks to find exploitable weaknesses",handles:["annual contractual penetration test","validating a fix actually closes an exploit path"]},
+    {id:"secEng",name:"SECURITY ENGINEER",owns:"Building and operating the security tooling/architecture",handles:["deploying a new EDR agent fleet-wide","hardening a cloud account's IAM configuration"]}
+  ];
+  const incidents=["phishing email reported by a user","confirmed ransomware execution on a server","upcoming SOC 2 audit evidence request","annual contractual penetration test","deploying a new EDR agent fleet-wide","spike in failed logins on the VPN","active attacker session in the network","new regulatory requirement needing a policy update","validating a fix actually closes an exploit path","hardening a cloud account's IAM configuration"];
+  canvas.appendChild(simEl("div","sim-badge","SIMULATED ENVIRONMENT · ROLE ROUTER"));
+  const wrap=simEl("div","sim");
+  wrap.innerHTML=`
+  <div class="sim-panel">
+    <h4>PICK A SITUATION — route it to the right role</h4>
+    <select class="sim-select" id="rr-sit" style="width:100%">${incidents.map(i=>`<option>${i}</option>`).join("")}</select>
+    <div id="rr-result" style="margin-top:14px"></div>
+  </div>
+  <div class="sim-grid sim-cols-2" style="margin-top:16px" id="rr-roles"></div>`;
+  canvas.appendChild(wrap);
+  const rolesGrid=wrap.querySelector("#rr-roles");
+  rolesGrid.innerHTML=roles.map(r=>`<div class="sim-panel" data-r="${r.id}" style="cursor:pointer"><h4>${r.name}</h4><p class="sim-note" style="color:#3d474f">${r.owns}</p></div>`).join("");
+  function route(){
+    const sit=wrap.querySelector("#rr-sit").value;
+    const owner=roles.find(r=>r.handles.includes(sit));
+    wrap.querySelector("#rr-result").innerHTML=owner?`<div class="sim-panel dark" style="padding:14px"><span class="sim-note" style="color:#9aa4ac">Routed to:</span><h4 style="margin-top:6px">${owner.name}</h4><p class="sim-note">${owner.owns}</p></div>`:"";
+    rolesGrid.querySelectorAll("[data-r]").forEach(el=>el.classList.toggle("hot",owner&&el.dataset.r===owner.id));
+    if(owner)ccExplain(owner.name,"Handles: \""+sit+"\". "+owner.owns,[owner.name]);
+  }
+  rolesGrid.querySelectorAll("[data-r]").forEach(el=>el.onclick=()=>{
+    const r=roles.find(x=>x.id===el.dataset.r);
+    ccExplain(r.name,r.owns+". Typical work: "+r.handles.join("; ")+".",[r.name]);
+  });
+  wrap.querySelector("#rr-sit").onchange=route;
+  route();
+  ccExplain("Security Roles","Pick a situation to see which role owns it, or click a role card to explore its scope.",roles.map(r=>r.name));
+}
+
+function renderSim05(canvas){
+  const scenario={
+    observe:"A user reports their laptop is 'running slow' and a browser tab keeps opening a login popup for a site they don't recognize.",
+    options:[
+      {id:"a",text:"Close the popup and tell the user to restart their laptop.",correct:false,fb:"This dismisses a symptom without analysis — the popup could be an active credential-phishing attempt, and restarting may lose volatile evidence."},
+      {id:"b",text:"Ask what site the popup references, check if the machine reached it, and isolate the host if suspicious.",correct:true,fb:"Correct path: observe (what/when), analyze (does this match a known attack pattern?), then act (contain) — in that order."},
+      {id:"c",text:"Immediately wipe and reimage the laptop.",correct:false,fb:"Jumping straight to remediation destroys evidence and skips the analysis step that would tell you if this is isolated or part of something larger."}
+    ]
+  };
+  canvas.appendChild(simEl("div","sim-badge","SIMULATED ENVIRONMENT · SECURITY DECISION-MAKING"));
+  const wrap=simEl("div","sim");
+  wrap.innerHTML=`
+  <div class="sim-panel">
+    <h4>OBSERVE</h4>
+    <p class="sim-note" style="font-size:14px;color:#3d474f">${scenario.observe}</p>
+  </div>
+  <div class="sim-panel" style="margin-top:14px">
+    <h4>ANALYZE → WHAT DO YOU DO NEXT?</h4>
+    <div id="ds-opts"></div>
+    <div id="ds-fb" style="margin-top:12px"></div>
+  </div>`;
+  canvas.appendChild(wrap);
+  const opts=wrap.querySelector("#ds-opts");
+  opts.innerHTML=scenario.options.map(o=>`<button class="sim-btn" data-o="${o.id}" style="display:block;width:100%;text-align:left;margin:6px 0">${o.text}</button>`).join("");
+  opts.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    const o=scenario.options.find(x=>x.id===b.dataset.o);
+    opts.querySelectorAll("button").forEach(x=>x.style.borderColor="");
+    b.style.borderColor=o.correct?"#158a52":"#e21b23";
+    wrap.querySelector("#ds-fb").innerHTML=`<div class="sim-panel ${o.correct?"":"dark"}" style="padding:12px"><b style="color:${o.correct?"#158a52":"#ff6a6f"}">${o.correct?"SOUND REASONING":"RISKY PATH"}</b><p class="sim-note" style="margin-top:6px">${o.fb}</p></div>`;
+    ccExplain("Observe → Analyze → Communicate → Act","Security thinking is a discipline: gather what's observable, analyze against known patterns, then choose the appropriate response.",["observe","analyze","communicate","act"]);
+  });
+  ccExplain("Security Decision-Making","Read the scenario, then choose the most defensible response.",["observation","analysis","judgment"]);
+}
+
+const SIMULATORS={"01":renderSim01,"02":renderSim02,"03":renderSim03,"04":renderSim04,"05":renderSim05};
+
+function renderGenericAtlas(spec,m,canvas){
+  const diagram=document.createElement("div");
+  diagram.className="cc-diagram";
+  diagram.innerHTML=`<div class="cc-flow-label">${m.visualTitle.toUpperCase()} · CLICK A NODE</div>`;
+  spec.nodes.forEach(n=>{
+    const el=document.createElement("button");
+    el.className=`cc-node ${n[0]===spec.root?"root ":""}${n[0]==="risk"||n[0]==="security"||n[0]==="model"?"accent":""}`;
+    el.dataset.node=n[0];
+    el.style.left=`calc(${n[3]}% - 65px)`;
+    el.style.top=`calc(${n[4]}% - 20px)`;
+    el.innerHTML=`<b>${n[1]}</b><small>${n[2]}</small>`;
+    el.onclick=()=>ccSelect(spec,n[0]);
+    diagram.appendChild(el);
+  });
+  const pos=Object.fromEntries(spec.nodes.map(n=>[n[0],n]));
+  spec.links.forEach(([a,b])=>{
+    const A=pos[a],B=pos[b]; if(!A||!B)return;
+    const x1=A[3]/100*diagram.clientWidth,y1=A[4]/100*diagram.clientHeight;
+    const x2=B[3]/100*diagram.clientWidth,y2=B[4]/100*diagram.clientHeight;
+    const line=document.createElement("div"),dx=x2-x1,dy=y2-y1;
+    line.className="cc-link"; line.style.left=x1+"px";line.style.top=y1+"px";
+    line.style.width=Math.hypot(dx,dy)+"px";line.style.transform=`rotate(${Math.atan2(dy,dx)}rad)`;
+    diagram.insertBefore(line,diagram.firstChild);
+  });
+  canvas.innerHTML="";canvas.appendChild(diagram);
+  ccSelect(spec,spec.root||spec.nodes[0][0]);
+}
+
+function ccRender(index){
+  const m=CC_MODULES[index];
+  document.getElementById("ccStageKicker").textContent=`MODULE ${m.id}`;
+  document.getElementById("ccStageTitle").textContent=m.title;
+  document.getElementById("ccStageSummary").textContent=m.summary;
+  document.getElementById("ccVisualType").textContent=m.visualTitle.toUpperCase();
+  const canvas=document.getElementById("ccCanvas");
+  canvas.className="cc-canvas";
+  canvas.innerHTML="";
+  if(SIMULATORS[m.id]){
+    canvas.classList.add("cc-canvas-sim");
+    SIMULATORS[m.id](canvas);
+    return;
+  }
+  const spec=CC_VISUALS[m.visualType]||makeGeneric(m.visualType,m.title);
+  renderGenericAtlas(spec,m,canvas);
+}
+
+function ccInit(){
+  renderModuleGrid();
+  const list=document.getElementById("ccModuleList"); if(!list)return;
+  list.innerHTML=CC_MODULES.map((m,i)=>`<button class="cc-module-item ${i===0?"active":""}" data-index="${i}"><span class="cc-module-num">${m.id}</span><span class="cc-module-name">${m.title}</span></button>`).join("");
+  list.querySelectorAll(".cc-module-item").forEach(btn=>btn.onclick=()=>{
+    list.querySelectorAll(".cc-module-item").forEach(x=>x.classList.remove("active"));
+    btn.classList.add("active"); ccRender(Number(btn.dataset.index));
+  });
+  ccRender(0);
+}
+document.addEventListener("DOMContentLoaded",ccInit);
+</script>
+
+</body>
+</html>

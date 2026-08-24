@@ -1,0 +1,1141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ShadowXLab · CyberCore · Module 01: Security Essentials & Workstation Onboarding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cyber-red:#e21b23;--cyber-red-dark:#b9151c;--cyber-red-2:#ff3b42;
+  --ink:#0e1116;--text:#1a1d24;--muted:#5d6774;--line:#dfe3e8;--soft:#f5f7fa;
+  --panel:#ffffff;--panel-2:#fbfcfd;--dark:#0b0e12;--dark2:#14181f;--dark3:#1d222b;
+  --green:#10b981;--green-dim:#10b98118;--green-dark:#059669;
+  --amber:#f59e0b;--amber-dim:#f59e0b18;--blue:#3b82f6;--purple:#8b5cf6;
+  --mono:"IBM Plex Mono",SFMono-Regular,Consolas,monospace;
+  --sans:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --shadow-sm:0 2px 8px rgba(12,18,28,.04);
+  --shadow:0 12px 35px rgba(12,18,28,.07);
+  --shadow-lg:0 20px 60px rgba(12,18,28,.12);
+  --radius:14px;--radius-sm:8px;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:var(--sans);color:var(--text);background:#fafbfc;line-height:1.65;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.55;
+  background-image:
+    linear-gradient(rgba(15,20,25,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(15,20,25,.028) 1px,transparent 1px);
+  background-size:36px 36px;mask-image:linear-gradient(to bottom,#000,transparent 85%);z-index:-1;
+}
+button{font:inherit} a{color:inherit;text-decoration:none}
+code,pre{font-family:var(--mono)}
+
+/* TOP NAVBAR */
+.top{
+  height:64px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;gap:16px;
+  position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);z-index:100;
+  box-shadow:0 4px 20px rgba(0,0,0,.03);
+}
+.brand{font-weight:900;letter-spacing:.08em;font-size:15px;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.brand-badge{background:var(--cyber-red);color:#fff;font-size:10px;padding:2px 7px;border-radius:5px;font-family:var(--mono);font-weight:700}
+.brand span{color:var(--cyber-red)}
+.top .grow{flex:1}
+.top-meta{display:flex;align-items:center;gap:12px;font-size:12px;font-family:var(--mono);color:var(--muted)}
+.btn{
+  border:1px solid #d6dbe0;background:#fff;padding:9px 15px;border-radius:10px;font-weight:800;font-size:13px;
+  cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:all .18s ease;
+  white-space:nowrap;
+}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,0,0,.08);border-color:#bfc5cb}
+.btn.red{
+  background:linear-gradient(135deg,var(--cyber-red),var(--cyber-red-dark));color:#fff;border-color:var(--cyber-red);
+  box-shadow:0 6px 18px rgba(226,27,35,.22);
+}
+.btn.red:hover{background:linear-gradient(135deg,#ed232b,#a61117);box-shadow:0 8px 24px rgba(226,27,35,.32)}
+.btn.sm{padding:6px 11px;font-size:11.5px;border-radius:7px}
+.btn.dark{background:var(--dark2);color:#fff;border-color:#333}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:290px minmax(0,1fr);min-height:calc(100vh - 64px);transition:grid-template-columns .22s ease}
+.layout.collapsed{grid-template-columns:0 minmax(0,1fr)}
+.layout.collapsed aside{padding:0;border-right:0;overflow:hidden}
+aside{
+  border-right:1px solid var(--line);padding:24px 16px;position:sticky;top:64px;height:calc(100vh - 64px);
+  overflow-y:auto;background:rgba(255,255,255,.94);transition:padding .22s ease;
+}
+.side-k{font:900 10px var(--mono);letter-spacing:.18em;color:var(--cyber-red);margin:4px 8px;text-transform:uppercase}
+.side-title{font-size:19px;font-weight:900;margin:6px 8px 2px;letter-spacing:-.03em}
+.side-sub{color:var(--muted);font-size:12px;margin:0 8px 14px}
+.progress-card{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 4px 16px}
+.progress-header{display:flex;justify-content:space-between;font:700 11px var(--mono);margin-bottom:8px}
+.progress-bar-bg{height:6px;background:#e5e9ed;border-radius:99px;overflow:hidden}
+.progress-bar-fill{width:12%;height:100%;background:linear-gradient(90deg,var(--cyber-red),var(--cyber-red-2));border-radius:99px;transition:width .3s ease}
+
+.nav a{
+  display:block;padding:11px 12px;border-radius:9px;font-size:13px;font-weight:700;margin:3px 0;
+  color:#2d3748;transition:all .18s ease;position:relative;
+}
+.nav a:hover{background:#f1f4f8;transform:translateX(2px)}
+.nav a.active{background:linear-gradient(90deg,#fff1f2,#fafbfc);color:var(--cyber-red);border-left:3px solid var(--cyber-red);padding-left:11px}
+.nav small{display:block;color:var(--muted);font-weight:400;margin-top:2px;font-size:11px}
+
+main{min-width:0}
+
+/* HERO SECTION */
+.hero{
+  padding:64px clamp(28px,5vw,75px) 45px;border-bottom:1px solid var(--line);
+  background:
+    radial-gradient(circle at 85% 15%,rgba(226,27,35,.07),transparent 24rem),
+    radial-gradient(circle at 10% 40%,rgba(16,185,129,.04),transparent 20rem),
+    #ffffff;
+  position:relative;overflow:hidden;
+}
+.hero:after{
+  content:"MODULE 01";position:absolute;right:-10px;bottom:-35px;font-size:140px;font-weight:900;
+  letter-spacing:-.06em;color:rgba(0,0,0,.025);pointer-events:none;font-family:var(--mono);
+}
+.kicker{font:800 10.5px var(--mono);letter-spacing:.16em;color:var(--cyber-red);text-transform:uppercase}
+.hero h1{
+  font-size:clamp(40px,5.2vw,72px);line-height:.95;margin:14px 0 18px;letter-spacing:-.05em;font-weight:900;
+}
+.hero h1 span{color:var(--cyber-red);display:inline-block}
+.lead{font-size:17.5px;line-height:1.7;color:#4b5563;max-width:920px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
+.badge{
+  border:1px solid #d9dee3;border-radius:999px;padding:6px 12px;font:800 10.5px var(--mono);
+  background:#fff;letter-spacing:.06em;color:#374151;box-shadow:var(--shadow-sm);display:inline-flex;align-items:center;gap:5px;
+}
+.badge.red{border-color:#fecaca;background:#fef2f2;color:var(--cyber-red)}
+.badge.green{border-color:#bbf7d0;background:#f0fdf4;color:var(--green-dark)}
+
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:28px;max-width:920px}
+.stat-box{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+.stat-box .num{font:900 22px var(--mono);color:var(--cyber-red);line-height:1}
+.stat-box .lbl{font-size:11.5px;font-weight:700;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.05em}
+
+/* CONTENT SECTIONS */
+.content{padding:10px clamp(24px,5vw,72px) 80px;max-width:1420px;margin:0 auto}
+.section{padding:54px 0;border-bottom:1px solid var(--line)}
+.section-head{margin-bottom:28px}
+.section-head h2{font-size:clamp(26px,3.2vw,40px);letter-spacing:-.04em;margin:8px 0 8px;font-weight:800;line-height:1.1}
+.section-head p{color:var(--muted);font-size:15px;max-width:840px;margin:0}
+
+/* CARDS & GRIDS */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.card{
+  border:1px solid var(--line);border-radius:var(--radius);background:#ffffff;padding:24px;
+  box-shadow:var(--shadow);position:relative;overflow:hidden;
+}
+.card.interactive{transition:all .2s ease;cursor:pointer}
+.card.interactive:hover{transform:translateY(-3px);border-color:var(--cyber-red);box-shadow:var(--shadow-lg)}
+.card h3{font-size:17px;font-weight:800;letter-spacing:-.02em;margin:8px 0 8px}
+.card p{font-size:13.5px;color:var(--muted);line-height:1.6;margin:0}
+
+/* SCREENSHOT / GUI WINDOW MOCKUPS */
+.gui-window{
+  border:1px solid #2e3846;border-radius:14px;background:#0d1117;color:#e6edf3;
+  overflow:hidden;box-shadow:0 24px 65px rgba(0,0,0,.22);margin:20px 0;
+}
+.gui-topbar{
+  background:#161b22;padding:10px 16px;display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid #30363d;font:700 11.5px var(--mono);color:#8b949e;
+}
+.gui-dots{display:flex;gap:6px}
+.gui-dot{width:10px;height:10px;border-radius:50%}
+.gui-dot.red{background:#ff5f56}.gui-dot.yellow{background:#ffbd2e}.gui-dot.green{background:#27c93f}
+.gui-title{flex:1;text-align:center;color:#c9d1d9;letter-spacing:.04em}
+.gui-body{padding:20px;font-size:13px}
+
+/* REALISTIC TERMINAL */
+.terminal{
+  background:#090c10;border:1px solid #30363d;border-radius:10px;padding:16px 18px;
+  font:12.5px/1.7 var(--mono);color:#c9d1d9;white-space:pre-wrap;overflow-x:auto;max-height:360px;
+}
+.t-prompt{color:#58a6ff;font-weight:700}
+.t-cmd{color:#f0883e;font-weight:700}
+.t-ok{color:#7ee787}
+.t-err{color:#ff7b72}
+.t-dim{color:#8b949e}
+.t-hi{color:#d2a8ff;font-weight:700}
+
+/* VISUAL STEP CARDS */
+.step-card{
+  display:grid;grid-template-columns:50px 1fr;gap:18px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;padding:22px;margin-bottom:16px;box-shadow:var(--shadow-sm);transition:border-color .2s ease;
+}
+.step-card:hover{border-color:var(--cyber-red)}
+.step-num{
+  width:44px;height:44px;border-radius:10px;background:var(--soft);border:1px solid var(--line);
+  color:var(--cyber-red);font:900 16px var(--mono);display:flex;align-items:center;justify-content:center;
+}
+.step-card.active .step-num{background:var(--cyber-red);color:#fff;border-color:var(--cyber-red)}
+.step-content h4{margin:0 0 6px;font-size:16px;font-weight:800}
+.step-content p{margin:0 0 12px;font-size:13.5px;color:var(--muted)}
+.step-callout{
+  background:#f8fafc;border-left:3px solid var(--cyber-red);padding:10px 14px;border-radius:0 8px 8px 0;
+  font-size:12.5px;color:#334155;margin-top:10px;
+}
+
+/* FLOW DIAGRAMS */
+.flow{
+  display:flex;align-items:stretch;gap:10px;overflow-x:auto;padding:16px;border:1px solid var(--line);
+  background:#fff;border-radius:16px;box-shadow:var(--shadow);
+}
+.node{
+  min-width:160px;border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--soft);
+  cursor:pointer;transition:all .18s ease;
+}
+.node:hover,.node.active{border-color:var(--cyber-red);background:#fff;box-shadow:0 8px 24px rgba(226,27,35,.1);transform:translateY(-2px)}
+.node b{display:block;font-size:13.5px;color:var(--text)}
+.node small{display:block;color:var(--muted);margin-top:5px;font-size:11px}
+.arrow{display:flex;align-items:center;color:var(--cyber-red);font-size:22px;font-weight:900;padding:0 6px}
+.explain{
+  display:none;border-left:4px solid var(--cyber-red);background:#fff;border:1px solid var(--line);
+  border-left:4px solid var(--cyber-red);border-radius:10px;padding:16px 20px;margin-top:12px;box-shadow:var(--shadow-sm);
+}
+.explain.open{display:block}
+
+/* INTERACTIVE LAB CONSOLE */
+.lab-box{background:#0d1117;border:1px solid #30363d;border-radius:16px;padding:24px;color:#fff;box-shadow:var(--shadow-lg)}
+.lab-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.lab-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.lab-tab{
+  background:#161b22;border:1px solid #30363d;color:#8b949e;padding:7px 12px;border-radius:7px;
+  font:700 11.5px var(--mono);cursor:pointer;transition:all .15s ease;
+}
+.lab-tab:hover{color:#fff;border-color:#58a6ff}
+.lab-tab.active{background:#1f6feb;border-color:#58a6ff;color:#fff}
+.lab-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:20px}
+.mission-pane{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:20px}
+.mission-pane h3{margin:0 0 10px;font-size:16px;color:#f0f6fc}
+.mission-pane p{font-size:13px;color:#8b949e;margin:0 0 16px}
+.mission-check{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #21262d;font-size:13px;color:#c9d1d9}
+.mission-check input{accent-color:var(--cyber-red);margin-top:3px}
+
+.term-pane{display:flex;flex-direction:column}
+.term-screen{
+  background:#05070a;border:1px solid #30363d;border-radius:10px;padding:16px;font:12.5px/1.65 var(--mono);
+  color:#c9d1d9;min-height:270px;max-height:360px;overflow-y:auto;white-space:pre-wrap;flex:1;
+}
+.term-input-bar{
+  display:flex;align-items:center;gap:10px;margin-top:12px;background:#161b22;border:1px solid #30363d;
+  border-radius:10px;padding:8px 12px;
+}
+.term-input-bar input{
+  flex:1;background:transparent;border:0;outline:0;color:#fff;font:13px var(--mono);
+}
+
+/* CHECKPOINTS & QUIZZES */
+.cp-card{
+  border:1px solid var(--line);border-radius:14px;background:#ffffff;padding:22px;margin:20px 0;
+  box-shadow:var(--shadow);border-left:4px solid var(--cyber-red);
+}
+.cp-kicker{font:800 10px var(--mono);letter-spacing:.16em;color:var(--cyber-red);text-transform:uppercase}
+.cp-question{font-size:15.5px;font-weight:700;margin:8px 0 16px;line-height:1.5}
+.cp-options{display:grid;gap:8px}
+.cp-btn{
+  text-align:left;border:1px solid #d0d7de;background:#f6f8fa;border-radius:8px;padding:12px 16px;
+  font-size:13.5px;cursor:pointer;transition:all .15s ease;color:#24292f;
+}
+.cp-btn:hover:not(:disabled){background:#ffffff;border-color:var(--cyber-red)}
+.cp-btn:disabled{cursor:default;opacity:.75}
+.cp-btn.correct{background:#dafbe1;border-color:#1a7f37;color:#116329;font-weight:700}
+.cp-btn.incorrect{background:#ffebe9;border-color:#cf222e;color:#82071e;font-weight:700}
+.cp-feedback{display:none;background:#f6f8fa;border-radius:8px;padding:14px 18px;margin-top:14px;font-size:13.5px;border-left:3px solid var(--cyber-red)}
+.cp-feedback.show{display:block}
+.cp-feedback.is-correct{border-left-color:var(--green);background:#f0fdf4}
+
+/* EVIDENCE BUILDER */
+.evi-builder-box{
+  background:var(--dark2);border:1px solid #30363d;border-radius:16px;padding:24px;color:#fff;margin-top:24px;
+}
+.evi-builder-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:20px}
+.evi-field{margin-bottom:14px}
+.evi-field label{display:block;font:700 11px var(--mono);letter-spacing:.08em;color:#8b949e;margin-bottom:6px}
+.evi-field input,.evi-field select,.evi-field textarea{
+  width:100%;background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:10px 12px;
+  color:#f0f6fc;font:13px var(--sans);
+}
+.evi-field textarea{font-family:var(--mono);font-size:12px;min-height:70px;resize:vertical}
+.evi-preview{
+  background:#05070a;border:1px solid #30363d;border-radius:10px;padding:16px;font:12px/1.7 var(--mono);
+  color:#7ee787;min-height:260px;white-space:pre-wrap;
+}
+
+/* READINESS GATE */
+.readiness-gate{
+  background:#fff;border:1px solid var(--line);border-top:4px solid var(--cyber-red);border-radius:16px;
+  padding:30px;box-shadow:var(--shadow);
+}
+.readiness-gate.passed{border-top-color:var(--green);background:#fbfdfc}
+
+/* FOOTER */
+footer{
+  padding:36px 24px;border-top:1px solid var(--line);background:#0b0e12;color:#8b949e;
+  font:11px var(--mono);text-align:center;
+}
+
+@media(max-width:1050px){
+  .grid4{grid-template-columns:repeat(2,1fr)}
+  .lab-grid,.evi-builder-grid{grid-template-columns:1fr}
+}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  aside{position:relative;top:0;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <button class="btn sm" onclick="toggleSidebar()" aria-label="Toggle navigation">☰</button>
+  <div class="brand">
+    <span class="brand-badge">SHADOWXLAB</span>
+    <div>CYBER<span>CORE</span></div>
+  </div>
+  <div class="top-meta">
+    <span>MODULE 01 / 40</span>
+    <span>•</span>
+    <span>SECURITY ESSENTIALS & KALI</span>
+  </div>
+  <div class="grow"></div>
+  <a href="index.html" class="btn sm">← CURRICULUM</a>
+  <button class="btn sm red" onclick="document.getElementById('sec-lab').scrollIntoView({behavior:'smooth'})">HANDS-ON LABS →</button>
+</header>
+
+<div class="layout" id="layout">
+<aside id="sidebar">
+  <div class="side-k">SHADOWXLAB · CYBERCORE</div>
+  <div class="side-title">Module 01</div>
+  <div class="side-sub">Security Essentials & Onboarding</div>
+  
+  <div class="progress-card">
+    <div class="progress-header">
+      <span>MODULE PROGRESS</span>
+      <span id="progPct">15%</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progBar"></div></div>
+  </div>
+
+  <nav class="nav" id="moduleNav">
+    <a href="#sec-overview" class="active">01 · Mission & Scope<small>Rules of engagement</small></a>
+    <a href="#sec-cia">02 · CIA Triad & Beyond<small>Core security objectives</small></a>
+    <a href="#sec-risk">03 · Assets, Threats & Risk<small>Quantitative mental model</small></a>
+    <a href="#sec-defense">04 · Defense in Depth<small>Layered security controls</small></a>
+    <a href="#sec-workstation">05 · Workstation Architecture<small>Host → Hypervisor → Kali</small></a>
+    <a href="#sec-steps">06 · Visual Setup Steps<small>Screenshots & instructions</small></a>
+    <a href="#sec-lab">07 · Interactive Labs<small>Hands-on CLI simulations</small></a>
+    <a href="#sec-checkpoints">08 · Knowledge Checkpoints<small>Scenario assessments</small></a>
+    <a href="#sec-evidence">09 · Evidence Record<small>Defense portfolio proof</small></a>
+    <a href="#sec-readiness">10 · Readiness Gate<small>Unlock Module 02</small></a>
+  </nav>
+</aside>
+
+<main>
+<!-- HERO -->
+<section class="hero" id="sec-overview">
+  <div class="kicker">SHADOWXLAB CYBERCORE · FOUNDATION TRACK · MODULE 01</div>
+  <h1>Introduction to CyberCore:<br><span>Security Essentials & Onboarding</span></h1>
+  <p class="lead">Master the foundational mental models of cybersecurity: the CIA triad, risk equations, trust boundaries, defense in depth, and the anatomy of a controlled Kali Linux operator workstation before executing technical tasks.</p>
+  
+  <div class="badges">
+    <span class="badge red">FOUNDATION 01</span>
+    <span class="badge">CIA TRIAD</span>
+    <span class="badge">RISK EQUATION</span>
+    <span class="badge">KALI ONBOARDING</span>
+    <span class="badge green">LAB READY</span>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-box"><div class="num">06</div><div class="lbl">Interactive Labs</div></div>
+    <div class="stat-box"><div class="num">08</div><div class="lbl">Visual Steps</div></div>
+    <div class="stat-box"><div class="num">05</div><div class="lbl">Checkpoints</div></div>
+    <div class="stat-box"><div class="num">100%</div><div class="lbl">Hands-On Proof</div></div>
+  </div>
+</section>
+
+<div class="content">
+
+<!-- SECTION 1: MISSION & SCOPE -->
+<section class="section" id="sec-mission">
+  <div class="section-head">
+    <div class="kicker">01 · OPERATIONAL GOVERNANCE</div>
+    <h2>The Cybersecurity Mission & Scope Boundaries</h2>
+    <p>Security testing is defined by legal, technical, and ethical authorization. A technical action without authorized scope is an attack; the same action within defined scope is assurance.</p>
+  </div>
+
+  <div class="grid3">
+    <div class="card">
+      <div class="kicker" style="color:var(--blue)">01 · AUTHORIZATION</div>
+      <h3>Rules of Engagement (RoE)</h3>
+      <p>Explicit written authorization detailing IP ranges, test timeframes, out-of-scope targets (e.g. production DBs, 3rd-party SaaS), and emergency contacts.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--amber)">02 · TRUST BOUNDARIES</div>
+      <h3>Defining the Perimeter</h3>
+      <p>A trust boundary is where data transitions between different trust levels (e.g., untrusted Internet to DMZ, or student host to training lab).</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--green)">03 · EVIDENCE INTEGRITY</div>
+      <h3>Defensible Observations</h3>
+      <p>Every observation must be timestamped, reproducible, and clearly separated into raw data, technical interpretation, and business impact.</p>
+    </div>
+  </div>
+
+  <div class="gui-window" style="margin-top:24px">
+    <div class="gui-topbar">
+      <div class="gui-dots"><span class="gui-dot red"></span><span class="gui-dot yellow"></span><span class="gui-dot green"></span></div>
+      <div class="gui-title">SCOPE DECISION MATRIX — TRAINING VS PRODUCTION</div>
+    </div>
+    <div class="gui-body">
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead>
+          <tr style="border-bottom:1px solid #30363d;color:#8b949e;text-align:left">
+            <th style="padding:10px">Target System</th>
+            <th style="padding:10px">IP / Domain Scope</th>
+            <th style="padding:10px">Authorization State</th>
+            <th style="padding:10px">Permitted Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #21262d">
+            <td style="padding:10px"><b>Authorized Lab Target</b></td>
+            <td style="padding:10px"><code>10.10.14.0/24</code> via <code>tun0</code></td>
+            <td style="padding:10px"><span style="color:#7ee787">✓ IN SCOPE</span></td>
+            <td style="padding:10px">Port scan, service enum, vulnerability assessment</td>
+          </tr>
+          <tr style="border-bottom:1px solid #21262d">
+            <td style="padding:10px"><b>Student Host OS (Windows)</b></td>
+            <td style="padding:10px"><code>192.168.1.0/24</code> on <code>eth0</code></td>
+            <td style="padding:10px"><span style="color:#ff7b72">✗ OUT OF SCOPE</span></td>
+            <td style="padding:10px">Do NOT probe host or home network devices</td>
+          </tr>
+          <tr>
+            <td style="padding:10px"><b>Public Internet & Gateway</b></td>
+            <td style="padding:10px"><code>0.0.0.0/0</code> (Public WAN)</td>
+            <td style="padding:10px"><span style="color:#ff7b72">✗ OUT OF SCOPE</span></td>
+            <td style="padding:10px">No unauthorized external traffic or automated scans</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2: CIA TRIAD & BEYOND -->
+<section class="section" id="sec-cia">
+  <div class="section-head">
+    <div class="kicker">02 · CORE SECURITY OBJECTIVES</div>
+    <h2>The CIA Triad & Extended Security Pillars</h2>
+    <p>Every security control, incident, policy, and tool ultimately protects or restores one or more of these core pillars.</p>
+  </div>
+
+  <div class="grid3">
+    <div class="card interactive" onclick="showCiaInfo('c')">
+      <div class="kicker">CONFIDENTIALITY</div>
+      <h3>Protecting Secrecy</h3>
+      <p>Ensuring data is accessible ONLY to authorized entities. Breached by unauthorized disclosure, sniffing, or credential theft.</p>
+      <div style="margin-top:14px"><span class="badge">Controls: TLS, AES-256, ACLs, MFA</span></div>
+    </div>
+    <div class="card interactive" onclick="showCiaInfo('i')">
+      <div class="kicker">INTEGRITY</div>
+      <h3>Protecting Accuracy</h3>
+      <p>Ensuring information and systems are authentic, complete, and uncorrupted. Breached by tampering, MITM, or unauthorized changes.</p>
+      <div style="margin-top:14px"><span class="badge">Controls: SHA-256, Digital Signatures, WORM</span></div>
+    </div>
+    <div class="card interactive" onclick="showCiaInfo('a')">
+      <div class="kicker">AVAILABILITY</div>
+      <h3>Protecting Access</h3>
+      <p>Ensuring systems, networks, and applications are reliably accessible when needed. Breached by DDoS, ransomware, or hardware failure.</p>
+      <div style="margin-top:14px"><span class="badge">Controls: Redundancy, Backups, Load Balancers</span></div>
+    </div>
+  </div>
+
+  <!-- Interactive CIA Scenario Visualizer -->
+  <div class="card" style="margin-top:20px;background:#f8fafc">
+    <h3>Interactive Threat Impact Inspector</h3>
+    <p class="muted">Click an attack scenario below to see which CIA pillar is directly violated and how defenders respond:</p>
+    <div class="cmds" style="margin:14px 0">
+      <button class="btn sm" onclick="inspectCia('ransomware')">Ransomware Attack</button>
+      <button class="btn sm" onclick="inspectCia('mitm')">Man-in-the-Middle (MITM)</button>
+      <button class="btn sm" onclick="inspectCia('sqli')">SQL Injection Exfiltration</button>
+      <button class="btn sm" onclick="inspectCia('ddos')">SYN Flood DDoS</button>
+      <button class="btn sm" onclick="inspectCia('phish')">Credential Phishing</button>
+    </div>
+    <div id="ciaInspectorResult" class="step-callout" style="display:none"></div>
+  </div>
+</section>
+
+<!-- SECTION 3: ASSETS, THREATS & RISK -->
+<section class="section" id="sec-risk">
+  <div class="section-head">
+    <div class="kicker">03 · QUANTITATIVE REASONING</div>
+    <h2>Assets, Threats, Vulnerabilities & Risk</h2>
+    <p>Risk does not exist in isolation. It is the calculated likelihood and impact of a threat exploiting a vulnerability on an asset.</p>
+  </div>
+
+  <div class="flow">
+    <div class="node active" onclick="showRiskFlow('r1',this)"><b>01 · ASSET</b><small>High business value</small></div><div class="arrow">×</div>
+    <div class="node" onclick="showRiskFlow('r2',this)"><b>02 · THREAT</b><small>Actor with intent/capability</small></div><div class="arrow">×</div>
+    <div class="node" onclick="showRiskFlow('r3',this)"><b>03 · VULNERABILITY</b><small>Exploitable flaw</small></div><div class="arrow">÷</div>
+    <div class="node" onclick="showRiskFlow('r4',this)"><b>04 · CONTROLS</b><small>Safeguards & mitigation</small></div><div class="arrow">=</div>
+    <div class="node" onclick="showRiskFlow('r5',this)"><b>05 · RESIDUAL RISK</b><small>Decision signal</small></div>
+  </div>
+
+  <div id="r1" class="explain open"><b>ASSET:</b> What we are protecting (e.g. Customer database, API keys, Domain Controllers). Value dictates the maximum potential loss.</div>
+  <div id="r2" class="explain"><b>THREAT:</b> Any entity or event with potential to cause harm (e.g. Nation-state APT, insider, script kiddie, hardware outage).</div>
+  <div id="r3" class="explain"><b>VULNERABILITY:</b> A weakness in software, hardware, configuration, or human process (e.g. unpatched CVE-2024-XXXX, default password).</div>
+  <div id="r4" class="explain"><b>CONTROLS:</b> Layered countermeasures that reduce likelihood or impact (e.g. MFA, WAF, network segmentation, immutable backups).</div>
+  <div id="r5" class="explain"><b>RESIDUAL RISK:</b> The remaining risk after controls are applied: <code>Inherent Risk - Control Effectiveness = Residual Risk</code>.</div>
+</section>
+
+<!-- SECTION 4: DEFENSE IN DEPTH -->
+<section class="section" id="sec-defense">
+  <div class="section-head">
+    <div class="kicker">04 · ARCHITECTURAL STRATEGY</div>
+    <h2>Defense in Depth & Layered Countermeasures</h2>
+    <p>No single security control is infallible. Defense in depth ensures that if one layer fails, subsequent layers prevent catastrophic compromise.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>The Concentric Onion Model</h3>
+      <div style="font:12.5px/1.8 var(--mono);background:var(--soft);padding:14px;border-radius:10px;border:1px solid var(--line)">
+        [1] Physical Layer    → Badges, CCTV, biometric locks<br>
+        [2] Perimeter Layer   → Next-Gen Firewalls, DDoS shielding<br>
+        [3] Network Layer     → VLANs, 802.1X, Micro-segmentation<br>
+        [4] Host/Endpoint     → EDR, AppLocker, Disk Encryption<br>
+        [5] Application Layer → Input sanitization, WAF, CSP<br>
+        [6] Data Layer        → AES-GCM encryption, DLP, RBAC
+      </div>
+    </div>
+    <div class="card">
+      <h3>Control Categories</h3>
+      <ul style="font-size:13.5px;color:var(--muted);padding-left:20px;margin:8px 0">
+        <li><b>Preventative:</b> Stops an incident before it occurs (e.g., Firewall rule, password policy).</li>
+        <li><b>Detective:</b> Identifies and alerts on an ongoing event (e.g., SIEM alert, IDS signature).</li>
+        <li><b>Corrective:</b> Restores normal state after compromise (e.g., Re-imaging host, backup restore).</li>
+        <li><b>Compensating:</b> Alternative control when primary cannot be applied (e.g., Network isolation for legacy OS).</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5: WORKSTATION ARCHITECTURE -->
+<section class="section" id="sec-workstation">
+  <div class="section-head">
+    <div class="kicker">05 · OPERATOR ENVIRONMENT</div>
+    <h2>Workstation Architecture: Host → Hypervisor → Kali → Lab</h2>
+    <p>Understanding how your attacking machine connects to the network is critical to avoiding unintended leakages or scanning wrong targets.</p>
+  </div>
+
+  <div class="gui-window">
+    <div class="gui-topbar">
+      <div class="gui-dots"><span class="gui-dot red"></span><span class="gui-dot yellow"></span><span class="gui-dot green"></span></div>
+      <div class="gui-title">VIRTUALIZED LAB ENVIRONMENT SCHEMATIC</div>
+    </div>
+    <div class="gui-body">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;text-align:center">
+        <div style="background:#161b22;padding:16px;border-radius:10px;border:1px solid #30363d">
+          <div style="font:800 11px var(--mono);color:#58a6ff">PHYSICAL HOST</div>
+          <div style="font-size:14px;font-weight:700;margin:6px 0">Windows / macOS</div>
+          <div style="font-size:11px;color:#8b949e">Browser & Course UI</div>
+        </div>
+        <div style="background:#161b22;padding:16px;border-radius:10px;border:1px solid #30363d">
+          <div style="font:800 11px var(--mono);color:#d2a8ff">HYPERVISOR</div>
+          <div style="font-size:14px;font-weight:700;margin:6px 0">VirtualBox / VMware</div>
+          <div style="font-size:11px;color:#8b949e">NAT Network / Host-Only</div>
+        </div>
+        <div style="background:#161b22;padding:16px;border-radius:10px;border:1px solid #30363d">
+          <div style="font:800 11px var(--mono);color:#7ee787">KALI LINUX VM</div>
+          <div style="font-size:14px;font-weight:700;margin:6px 0">Attacking Guest OS</div>
+          <div style="font-size:11px;color:#8b949e"><code>eth0</code>: 192.168.56.20</div>
+        </div>
+        <div style="background:#161b22;padding:16px;border-radius:10px;border:1px solid #30363d">
+          <div style="font:800 11px var(--mono);color:#ff7b72">VPN TUNNEL (tun0)</div>
+          <div style="font-size:14px;font-weight:700;margin:6px 0">Authorized Lab</div>
+          <div style="font-size:11px;color:#8b949e"><code>tun0</code>: 10.10.14.8</div>
+        </div>
+      </div>
+      <div style="margin-top:16px;background:#05070a;padding:12px;border-radius:8px;font:11.5px var(--mono);color:#8b949e;text-align:center">
+        TRAFFIC FLOW: Operator Shell → <code>tun0</code> Point-to-Point Tunnel → Encrypted VPN Gateway → <code>10.10.14.0/24</code> Training Subnet
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: VISUAL SETUP STEPS WITH SCREENSHOTS -->
+<section class="section" id="sec-steps">
+  <div class="section-head">
+    <div class="kicker">06 · STEP-BY-STEP VISUAL WALKTHROUGH</div>
+    <h2>Step-by-Step Operator Setup & Verification</h2>
+    <p>Follow these 6 core visual setup steps to baseline your Kali workstation and verify authorized connectivity.</p>
+  </div>
+
+  <!-- Step 1 -->
+  <div class="step-card active">
+    <div class="step-num">01</div>
+    <div class="step-content">
+      <h4>Step 1: Verify Hypervisor Network Adapters & Isolation</h4>
+      <p>Ensure your Kali VM has two network interfaces configured: Adapter 1 for Host/NAT communications, and Adapter 2 or VPN client for lab isolation.</p>
+      <div class="terminal">
+<span class="t-prompt">student@kali:~$</span> <span class="t-cmd">ip link show</span>
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UP mode DEFAULT
+    link/ether 08:00:27:5a:32:bc brd ff:ff:ff:ff:ff:ff
+      </div>
+      <div class="step-callout">
+        <b>Key Takeaway:</b> <code>eth0</code> is your primary virtual ethernet adapter. Its state must be <code>UP</code> with a valid MAC address.
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="step-card">
+    <div class="step-num">02</div>
+    <div class="step-content">
+      <h4>Step 2: Operator Identity & Privilege Baseline</h4>
+      <p>Confirm user context before executing tasks. Normal tasks run under unprivileged <code>kali</code> / <code>student</code>; root privileges are used strictly when binding low ports or performing raw socket captures.</p>
+      <div class="terminal">
+<span class="t-prompt">student@kali:~$</span> <span class="t-cmd">whoami &amp;&amp; id</span>
+student
+uid=1000(student) gid=1000(student) groups=1000(student),27(sudo),100(users)
+<span class="t-prompt">student@kali:~$</span> <span class="t-cmd">uname -a</span>
+Linux kali-operator 6.6.9-kali1-amd64 #1 SMP PREEMPT_DYNAMIC Kali 6.6.9-1 (2024-01-08) x86_64 GNU/Linux
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="step-card">
+    <div class="step-num">03</div>
+    <div class="step-content">
+      <h4>Step 3: Network Addressing & CIDR Subnet Verification</h4>
+      <p>Inspect IP addresses and subnets on all active interfaces.</p>
+      <div class="terminal">
+<span class="t-prompt">student@kali:~$</span> <span class="t-cmd">ip -4 addr show</span>
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; inet 127.0.0.1/8 scope host lo
+2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; inet 192.168.56.20/24 brd 192.168.56.255 scope global eth0
+      </div>
+      <div class="step-callout">
+        <b>CIDR Explanation:</b> <code>192.168.56.20/24</code> means 24 network bits (Subnet Mask: <code>255.255.255.0</code>), allowing 254 usable hosts (<code>.1</code> to <code>.254</code>).
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="step-card">
+    <div class="step-num">04</div>
+    <div class="step-content">
+      <h4>Step 4: Inspect the Kernel Routing Table</h4>
+      <p>Understand which interface traffic takes when reaching destinations.</p>
+      <div class="terminal">
+<span class="t-prompt">student@kali:~$</span> <span class="t-cmd">ip route show</span>
+default via 192.168.56.1 dev eth0 proto dhcp src 192.168.56.20 metric 100
+192.168.56.0/24 dev eth0 proto kernel scope link src 192.168.56.20 metric 100
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 5 -->
+  <div class="step-card">
+    <div class="step-num">05</div>
+    <div class="step-content">
+      <h4>Step 5: Connect Authorized Lab Tunnel (tun0)</h4>
+      <p>Establish the encrypted training tunnel. Once connected, <code>tun0</code> appears with a <code>10.10.x.x</code> address.</p>
+      <div class="terminal">
+<span class="t-prompt">student@kali:~$</span> <span class="t-cmd">ip addr show tun0</span>
+3: tun0: &lt;POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UNKNOWN
+    inet <span class="t-ok">10.10.14.8/24</span> scope global tun0
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 6 -->
+  <div class="step-card">
+    <div class="step-num">06</div>
+    <div class="step-content">
+      <h4>Step 6: Reachability Probe & ICMP Response Interpretation</h4>
+      <p>Verify network layer connectivity to the authorized target.</p>
+      <div class="terminal">
+<span class="t-prompt">student@kali:~$</span> <span class="t-cmd">ping -c 3 10.10.14.1</span>
+PING 10.10.14.1 (10.10.14.1) 56(84) bytes of data.
+64 bytes from 10.10.14.1: icmp_seq=1 ttl=63 time=24.1 ms
+64 bytes from 10.10.14.1: icmp_seq=2 ttl=63 time=23.8 ms
+64 bytes from 10.10.14.1: icmp_seq=3 ttl=63 time=24.0 ms
+
+--- 10.10.14.1 ping statistics ---
+3 packets transmitted, 3 received, <span class="t-ok">0% packet loss</span>, time 2003ms
+rtt min/avg/max/mdev = 23.812/23.971/24.102/0.120 ms
+      </div>
+      <div class="step-callout">
+        <b>Limitation:</b> ICMP replies prove IP routing works. It does NOT prove application-layer services (HTTP/SSH) are open or accessible.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 7: INTERACTIVE HANDS-ON LAB -->
+<section class="section" id="sec-lab">
+  <div class="section-head">
+    <div class="kicker">07 · PRACTICAL SIMULATION LAB</div>
+    <h2>Interactive Kali Terminal & Mission Checklist</h2>
+    <p>Complete the 5 checklist objectives below using the interactive Kali terminal simulator.</p>
+  </div>
+
+  <div class="lab-box">
+    <div class="lab-header">
+      <div class="lab-tabs">
+        <button class="lab-tab active" onclick="switchLabTab('term')">● LIVE TERMINAL</button>
+        <button class="lab-tab" onclick="switchLabTab('telemetry')">TELEMETRY & LOGS</button>
+        <button class="lab-tab" onclick="switchLabTab('network')">TOPOLOGY MAP</button>
+      </div>
+      <div style="font:700 11px var(--mono);color:#7ee787">SESSION: OPERATOR-01-ACTIVE</div>
+    </div>
+
+    <div class="lab-grid">
+      <!-- Mission Checklist -->
+      <div class="mission-pane">
+        <h3>Mission Brief: Station Baseline</h3>
+        <p>Run the inspection commands to complete all verification items.</p>
+        
+        <div class="mission-check">
+          <input type="checkbox" id="chk1" onchange="evalProgress()">
+          <label for="chk1"><b>1. Identity:</b> Confirm user & system identity (<code>whoami</code>, <code>hostname</code>)</label>
+        </div>
+        <div class="mission-check">
+          <input type="checkbox" id="chk2" onchange="evalProgress()">
+          <label for="chk2"><b>2. Interfaces:</b> Inspect <code>eth0</code> and <code>tun0</code> (<code>ip addr</code>)</label>
+        </div>
+        <div class="mission-check">
+          <input type="checkbox" id="chk3" onchange="evalProgress()">
+          <label for="chk3"><b>3. Routing:</b> Verify default gateway & lab route (<code>ip route</code>)</label>
+        </div>
+        <div class="mission-check">
+          <input type="checkbox" id="chk4" onchange="evalProgress()">
+          <label for="chk4"><b>4. Reachability:</b> Ping authorized gateway (<code>ping -c 3 10.10.14.1</code>)</label>
+        </div>
+        <div class="mission-check">
+          <input type="checkbox" id="chk5" onchange="evalProgress()">
+          <label for="chk5"><b>5. Sockets:</b> Inspect listening ports (<code>ss -tuln</code>)</label>
+        </div>
+
+        <div style="margin-top:16px">
+          <button class="btn sm red" onclick="autoRunLab()">AUTO-SOLVE LAB</button>
+          <button class="btn sm dark" onclick="clearLabTerm()">CLEAR TERMINAL</button>
+        </div>
+        <p id="labStatusMsg" style="margin-top:12px;font:700 12px var(--mono);color:#f59e0b">5 OBJECTIVES PENDING</p>
+      </div>
+
+      <!-- Terminal Screen -->
+      <div class="term-pane">
+        <div class="term-screen" id="labScreen">student@kali:~$ # Welcome to the ShadowXLab Kali Environment Simulator
+student@kali:~$ # Type commands below or click quick-run buttons
+</div>
+        <div class="cmds" style="margin:8px 0">
+          <button class="btn sm dark" onclick="execCmd('whoami')">whoami</button>
+          <button class="btn sm dark" onclick="execCmd('hostname')">hostname</button>
+          <button class="btn sm dark" onclick="execCmd('ip addr')">ip addr</button>
+          <button class="btn sm dark" onclick="execCmd('ip route')">ip route</button>
+          <button class="btn sm dark" onclick="execCmd('ping -c 3 10.10.14.1')">ping target</button>
+          <button class="btn sm dark" onclick="execCmd('ss -tuln')">ss -tuln</button>
+        </div>
+        <div class="term-input-bar">
+          <span style="color:#58a6ff;font:700 13px var(--mono)">student@kali:~$</span>
+          <input id="labCliInput" placeholder="Type command here (e.g. ip addr)..." autocomplete="off">
+          <button class="btn sm red" onclick="submitCli()">ENTER</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 8: KNOWLEDGE CHECKPOINTS -->
+<section class="section" id="sec-checkpoints">
+  <div class="section-head">
+    <div class="kicker">08 · CONCEPTUAL VALIDATION</div>
+    <h2>Knowledge Checkpoints & Scenario Assessments</h2>
+    <p>Test your understanding of security essentials and operational fundamentals before proceeding.</p>
+  </div>
+
+  <!-- Quiz 1 -->
+  <div class="cp-card" data-ans="b">
+    <div class="cp-kicker">CHECKPOINT 01 · THREAT MODELING</div>
+    <div class="cp-question">An attacker alters a financial record in a SQL database without authorization. Which core CIA pillar is directly violated?</div>
+    <div class="cp-options">
+      <button class="cp-btn" onclick="evalQuiz(this,'a')">A) Confidentiality</button>
+      <button class="cp-btn" onclick="evalQuiz(this,'b')">B) Integrity</button>
+      <button class="cp-btn" onclick="evalQuiz(this,'c')">C) Availability</button>
+      <button class="cp-btn" onclick="evalQuiz(this,'d')">D) Non-Repudiation</button>
+    </div>
+    <div class="cp-feedback">
+      <b>Explanation:</b> Unauthorized modification of data is an <b>Integrity</b> violation. Confidentiality is about viewing/disclosure, and Availability is about access.
+    </div>
+  </div>
+
+  <!-- Quiz 2 -->
+  <div class="cp-card" data-ans="c">
+    <div class="cp-kicker">CHECKPOINT 02 · NETWORK ONBOARDING</div>
+    <div class="cp-question">You run <code>ip addr</code> on Kali and see <code>eth0: 192.168.56.20/24</code>, but no <code>tun0</code> interface exists. What is the operational situation?</div>
+    <div class="cp-options">
+      <button class="cp-btn" onclick="evalQuiz(this,'a')">A) The target host has crashed</button>
+      <button class="cp-btn" onclick="evalQuiz(this,'b')">B) Default gateway DNS is blocked</button>
+      <button class="cp-btn" onclick="evalQuiz(this,'c')">C) The authorized training VPN tunnel has not been started</button>
+      <button class="cp-btn" onclick="evalQuiz(this,'d')">D) Kali Linux needs to be re-installed</button>
+    </div>
+    <div class="cp-feedback">
+      <b>Explanation:</b> <code>tun0</code> is created dynamically when OpenVPN or WireGuard connects. If it's missing, the VPN tunnel has not been established yet.
+    </div>
+  </div>
+
+  <!-- Quiz 3 -->
+  <div class="cp-card" data-ans="a">
+    <div class="cp-kicker">CHECKPOINT 03 · COMMAND REASONING</div>
+    <div class="cp-question">A <code>ping -c 3 10.10.14.1</code> test receives 3 ICMP replies with 0% packet loss. What can you definitively conclude?</div>
+    <div class="cp-options">
+      <button class="cp-btn" onclick="evalQuiz(this,'a')">A) Network-layer IP routing to the host is functioning; application services are still unproven</button>
+      <button class="cp-btn" onclick="evalQuiz(this,'b')">B) The web server on port 80 is fully operational</button>
+      <button class="cp-btn" onclick="evalQuiz(this,'c')">C) The machine has no firewall enabled</button>
+      <button class="cp-btn" onclick="evalQuiz(this,'d')">D) Penetration testing is complete</button>
+    </div>
+    <div class="cp-feedback">
+      <b>Explanation:</b> ICMP echoes prove Layer 3 (IP) reachability only. Web (HTTP 80) or SSH (22) services operate at Layer 7 and require separate port probes.
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 9: EVIDENCE RECORD BUILDER -->
+<section class="section" id="sec-evidence">
+  <div class="section-head">
+    <div class="kicker">09 · PROFESSIONAL DOCUMENTATION</div>
+    <h2>Defense Evidence Record Builder</h2>
+    <p>Generate clean, defensible evidence blocks suitable for client deliverables or portfolio submissions.</p>
+  </div>
+
+  <div class="evi-builder-box">
+    <div class="evi-builder-grid">
+      <div>
+        <div class="evi-field">
+          <label>TOOL / COMMAND EXECUTED</label>
+          <select id="evToolSelect" onchange="autoFillEv()">
+            <option value="whoami">whoami - Confirm Operator Context</option>
+            <option value="ip addr">ip addr - Interface & CIDR Baseline</option>
+            <option value="ip route">ip route - Gateway Path Verification</option>
+            <option value="ping -c 3 10.10.14.1">ping - ICMP Reachability Check</option>
+            <option value="ss -tuln">ss -tuln - Open Sockets & Listening Ports</option>
+          </select>
+        </div>
+        <div class="evi-field">
+          <label>OBSERVED OUTPUT (RAW DATA)</label>
+          <textarea id="evObsData">3: tun0: inet 10.10.14.8/24 scope global tun0</textarea>
+        </div>
+        <div class="evi-field">
+          <label>TECHNICAL INTERPRETATION</label>
+          <textarea id="evInterpData">Tunnel interface is established with assigned IP 10.10.14.8 in the authorized training subnet.</textarea>
+        </div>
+        <div class="evi-field">
+          <label>LIMITATION & SCOPE BOUNDARY</label>
+          <textarea id="evLimitData">Confirms tunnel presence only; does not prove target services are open or unpatched.</textarea>
+        </div>
+        <button class="btn sm red" onclick="generateEvRecord()">GENERATE EVIDENCE RECORD</button>
+      </div>
+
+      <div>
+        <div class="evi-field">
+          <label>DEFENSIBLE RECORD PREVIEW</label>
+          <div class="evi-preview" id="evPreview">Click "Generate Evidence Record" to build formatted markdown...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 10: READINESS GATE -->
+<section class="section" id="sec-readiness">
+  <div class="section-head">
+    <div class="kicker">10 · COMPLETION MILESTONE</div>
+    <h2>Module 01 Readiness Gate & Progression</h2>
+    <p>Confirm that you have achieved all core competencies before advancing to Module 02: Anatomy of Cybersecurity.</p>
+  </div>
+
+  <div class="readiness-gate" id="gateCard">
+    <h3>Module 01 Competency Verification</h3>
+    <div class="grid2" style="margin:20px 0">
+      <div>
+        <h4 style="margin:0 0 10px;font-size:14px;color:var(--cyber-red)">Technical Proficiency</h4>
+        <ul style="font-size:13px;color:var(--muted);padding-left:18px;line-height:1.8">
+          <li>Can configure & baseline a Kali Linux workstation</li>
+          <li>Can inspect interfaces, CIDR subnets, and routing tables</li>
+          <li>Can verify VPN tunnel connectivity via <code>tun0</code></li>
+          <li>Can differentiate Layer 3 ping reachability from Layer 7 services</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="margin:0 0 10px;font-size:14px;color:var(--cyber-red)">Governance & Security Judgment</h4>
+        <ul style="font-size:13px;color:var(--muted);padding-left:18px;line-height:1.8">
+          <li>Understands Rules of Engagement & Scope boundaries</li>
+          <li>Can apply CIA Triad to prioritize security incidents</li>
+          <li>Understands Inherent vs Residual Risk calculations</li>
+          <li>Generates structured, defensible technical evidence</li>
+        </ul>
+      </div>
+    </div>
+
+    <button class="btn red" id="gateBtn" onclick="passReadiness()">RUN READINESS CHECK →</button>
+    <p id="gateFeedback" style="margin-top:12px;font:700 13px var(--mono);color:var(--muted)"></p>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  SHADOWXLAB CYBERCORE · MODULE 01: SECURITY ESSENTIALS & ONBOARDING · 40 MODULES TOTAL
+</footer>
+</main>
+</div>
+
+<script>
+/* Sidebar toggle */
+function toggleSidebar(){
+  document.getElementById('layout').classList.toggle('collapsed');
+}
+
+/* CIA info helper */
+const CIA_MAP = {
+  'ransomware': {
+    title: 'Ransomware Attack',
+    impact: 'Directly violates <b>AVAILABILITY</b> (and often Confidentiality via double-extortion).',
+    defense: 'Immutable air-gapped backups, EDR heuristic blocking, principle of least privilege.'
+  },
+  'mitm': {
+    title: 'Man-in-the-Middle (MITM)',
+    impact: 'Violates <b>INTEGRITY</b> and <b>CONFIDENTIALITY</b> by intercepting and modifying in-transit packets.',
+    defense: 'Enforced TLS 1.3 with certificate pinning, HSTS, 802.1X network authentication.'
+  },
+  'sqli': {
+    title: 'SQL Injection Exfiltration',
+    impact: 'Violates <b>CONFIDENTIALITY</b> by dumping private database tables, and potentially <b>INTEGRITY</b> if queries UPDATE records.',
+    defense: 'Parameterized queries / prepared statements, ORM layer abstraction, WAF inspection.'
+  },
+  'ddos': {
+    title: 'SYN Flood DDoS',
+    impact: 'Directly violates <b>AVAILABILITY</b> by exhausting TCP connection state tables.',
+    defense: 'SYN cookies, Anycast traffic scrubbing, Cloud DDoS protection (Cloudflare/Akamai).'
+  },
+  'phish': {
+    title: 'Credential Phishing',
+    impact: 'Violates <b>CONFIDENTIALITY</b> and <b>AUTHENTICATION</b> by hijacking user credentials.',
+    defense: 'FIDO2 / WebAuthn phishing-resistant hardware MFA, DMARC/DKIM/SPF email filtering.'
+  }
+};
+
+function inspectCia(key){
+  const d = CIA_MAP[key];
+  if(!d) return;
+  const res = document.getElementById('ciaInspectorResult');
+  res.style.display = 'block';
+  res.innerHTML = `<h4>Scenario: ${d.title}</h4><p style="margin:4px 0">${d.impact}</p><p style="margin:4px 0;color:var(--green-dark)"><b>Recommended Defensive Controls:</b> ${d.defense}</p>`;
+}
+
+function showCiaInfo(pillar){
+  const el = document.getElementById('ciaInspectorResult');
+  el.style.display = 'block';
+  if(pillar === 'c') el.innerHTML = '<b>Confidentiality:</b> Preserving authorized restrictions on information access and disclosure.';
+  if(pillar === 'i') el.innerHTML = '<b>Integrity:</b> Guarding against improper information modification or destruction.';
+  if(pillar === 'a') el.innerHTML = '<b>Availability:</b> Ensuring timely and reliable access to and use of information.';
+}
+
+/* Risk Flow helper */
+function showRiskFlow(id, el){
+  document.querySelectorAll('.flow .node').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.explain').forEach(x => x.classList.remove('open'));
+  el.classList.add('active');
+  const target = document.getElementById(id);
+  if(target) target.classList.add('open');
+}
+
+/* CLI Simulation Engine */
+const CLI_DB = {
+  'whoami': 'student',
+  'hostname': 'kali-operator-01',
+  'id': 'uid=1000(student) gid=1000(student) groups=1000(student),27(sudo)',
+  'uname -a': 'Linux kali-operator 6.6.9-kali1-amd64 #1 SMP PREEMPT_DYNAMIC Kali 6.6.9-1 x86_64 GNU/Linux',
+  'ip addr': '1: lo: <LOOPBACK,UP,LOWER_UP> inet 127.0.0.1/8 scope host lo\n2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> inet 192.168.56.20/24 brd 192.168.56.255 scope global eth0\n3: tun0: <POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP> inet 10.10.14.8/24 scope global tun0',
+  'ip route': 'default via 192.168.56.1 dev eth0 proto dhcp\n10.10.14.0/24 dev tun0 proto kernel scope link src 10.10.14.8\n192.168.56.0/24 dev eth0 proto kernel scope link src 192.168.56.20',
+  'ping -c 3 10.10.14.1': 'PING 10.10.14.1 (10.10.14.1) 56(84) bytes of data.\n64 bytes from 10.10.14.1: icmp_seq=1 ttl=63 time=23.4 ms\n64 bytes from 10.10.14.1: icmp_seq=2 ttl=63 time=23.1 ms\n64 bytes from 10.10.14.1: icmp_seq=3 ttl=63 time=23.6 ms\n\n--- 10.10.14.1 ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2004ms',
+  'ss -tuln': 'Netid State  Recv-Q Send-Q Local Address:Port  Peer Address:Port Process\ntcp   LISTEN 0      128          0.0.0.0:22         0.0.0.0:*        \ntcp   LISTEN 0      128        127.0.0.1:3306       0.0.0.0:*        \nudp   UNCONN 0      0            0.0.0.0:68         0.0.0.0:*        '
+};
+
+function appendLab(text){
+  const scr = document.getElementById('labScreen');
+  scr.textContent += text + '\n';
+  scr.scrollTop = scr.scrollHeight;
+}
+
+function clearLabTerm(){
+  document.getElementById('labScreen').textContent = 'student@kali:~$ ';
+}
+
+function execCmd(cmd){
+  appendLab('student@kali:~$ ' + cmd);
+  const out = CLI_DB[cmd] || `[executed: ${cmd}] - Status: OK (0)`;
+  appendLab(out);
+  
+  if(cmd === 'whoami' || cmd === 'hostname') document.getElementById('chk1').checked = true;
+  if(cmd === 'ip addr') document.getElementById('chk2').checked = true;
+  if(cmd === 'ip route') document.getElementById('chk3').checked = true;
+  if(cmd.includes('ping')) document.getElementById('chk4').checked = true;
+  if(cmd === 'ss -tuln') document.getElementById('chk5').checked = true;
+  evalProgress();
+}
+
+function submitCli(){
+  const inp = document.getElementById('labCliInput');
+  const val = inp.value.trim();
+  if(!val) return;
+  execCmd(val);
+  inp.value = '';
+}
+
+document.getElementById('labCliInput').addEventListener('keydown', e => {
+  if(e.key === 'Enter'){ e.preventDefault(); submitCli(); }
+});
+
+function autoRunLab(){
+  ['whoami', 'ip addr', 'ip route', 'ping -c 3 10.10.14.1', 'ss -tuln'].forEach(c => execCmd(c));
+}
+
+function evalProgress(){
+  const chks = [1,2,3,4,5].map(i => document.getElementById('chk'+i).checked);
+  const done = chks.filter(Boolean).length;
+  const msg = document.getElementById('labStatusMsg');
+  const pct = Math.round((done / 5) * 100);
+  document.getElementById('progPct').textContent = Math.max(15, pct) + '%';
+  document.getElementById('progBar').style.width = Math.max(15, pct) + '%';
+  
+  if(done === 5){
+    msg.textContent = '✓ ALL 5 OBJECTIVES VERIFIED — READY FOR EVIDENCE RECORD';
+    msg.style.color = '#10b981';
+  } else {
+    msg.textContent = (5 - done) + ' OBJECTIVE(S) PENDING';
+    msg.style.color = '#f59e0b';
+  }
+}
+
+/* Quiz Evaluation */
+function evalQuiz(btn, choice){
+  const card = btn.closest('.cp-card');
+  const correctAns = card.dataset.ans;
+  const allBtns = card.querySelectorAll('.cp-btn');
+  allBtns.forEach(b => b.disabled = true);
+  
+  const fb = card.querySelector('.cp-feedback');
+  fb.classList.add('show');
+  
+  if(choice === correctAns){
+    btn.classList.add('correct');
+    fb.classList.add('is-correct');
+  } else {
+    btn.classList.add('incorrect');
+    const rightBtn = card.querySelector(`.cp-btn[onclick*="'${correctAns}'"]`);
+    if(rightBtn) rightBtn.classList.add('correct');
+  }
+}
+
+/* Evidence Builder */
+const EV_PRESETS = {
+  'whoami': {
+    obs: 'student (uid=1000, gid=1000)',
+    interp: 'Confirmed unprivileged operator context on attacking machine prior to engagement.',
+    limit: 'Identifies local user only; does not reflect target host identity.'
+  },
+  'ip addr': {
+    obs: 'eth0: 192.168.56.20/24, tun0: 10.10.14.8/24',
+    interp: 'Local subnet is 192.168.56.0/24; authorized lab tunnel is active on tun0 (10.10.14.8).',
+    limit: 'Shows local adapter configuration at timestamp; does not guarantee external connectivity.'
+  },
+  'ip route': {
+    obs: 'default via 192.168.56.1 dev eth0; 10.10.14.0/24 dev tun0',
+    interp: 'Kernel routing table correctly forwards 10.10.14.0/24 traffic through the VPN interface.',
+    limit: 'Reflects intended packet path; does not confirm intermediate router availability.'
+  },
+  'ping -c 3 10.10.14.1': {
+    obs: '3 packets transmitted, 3 received, 0% packet loss, rtt avg 23.9ms',
+    interp: 'Layer 3 network reachability to authorized target gateway confirmed.',
+    limit: 'Proves ICMP echo only; does NOT prove Layer 7 application availability.'
+  },
+  'ss -tuln': {
+    obs: 'tcp LISTEN 0.0.0.0:22, tcp LISTEN 127.0.0.1:3306',
+    interp: 'Local Kali workstation is listening on port 22 (SSH) and 3306 (MySQL local only).',
+    limit: 'Inspects local operator sockets only; target port states require authorized scan.'
+  }
+};
+
+function autoFillEv(){
+  const tool = document.getElementById('evToolSelect').value;
+  const p = EV_PRESETS[tool] || {obs:'', interp:'', limit:''};
+  document.getElementById('evObsData').value = p.obs;
+  document.getElementById('evInterpData').value = p.interp;
+  document.getElementById('evLimitData').value = p.limit;
+}
+
+function generateEvRecord(){
+  const tool = document.getElementById('evToolSelect').value;
+  const obs = document.getElementById('evObsData').value.trim();
+  const interp = document.getElementById('evInterpData').value.trim();
+  const limit = document.getElementById('evLimitData').value.trim();
+  const ts = new Date().toISOString();
+  
+  const md = `### [DEFENSE EVIDENCE RECORD]
+- **Target / Asset**: Authorized Training Workstation & Gateway
+- **Timestamp (UTC)**: ${ts}
+- **Tool / Command**: \`${tool}\`
+- **Observed Telemetry**:
+\`\`\`
+${obs}
+\`\`\`
+- **Technical Interpretation**: ${interp}
+- **Limitation & Scope Boundary**: ${limit}
+- **Integrity Status**: VERIFIED & REPRODUCIBLE`;
+
+  document.getElementById('evPreview').textContent = md;
+}
+
+/* Readiness Gate */
+function passReadiness(){
+  const g = document.getElementById('gateCard');
+  const msg = document.getElementById('gateFeedback');
+  g.classList.add('passed');
+  msg.textContent = '✓ READINESS REVIEW COMPLETE — ALL OBJECTIVES ACHIEVED! Progression to Module 02 unlocked.';
+  msg.style.color = '#10b981';
+  document.getElementById('progPct').textContent = '100%';
+  document.getElementById('progBar').style.width = '100%';
+}
+
+/* Scroll spy */
+(function(){
+  const sections = document.querySelectorAll('main section[id]');
+  const links = document.querySelectorAll('#moduleNav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if(window.scrollY >= s.offsetTop - 120) current = s.getAttribute('id');
+    });
+    links.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+})();
+</script>
+</body>
+</html>

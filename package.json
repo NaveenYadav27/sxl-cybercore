@@ -1,0 +1,19 @@
+{
+  "name": "shadowxlab-cybercore",
+  "version": "1.0.0",
+  "description": "ShadowXLab CyberCore - Cyber Visual Platform",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve . -l 3000",
+    "dev": "npx serve . -l 3000",
+    "deploy": "wrangler pages deploy ."
+  },
+  "keywords": [
+    "cybersecurity",
+    "cybercore",
+    "visual-platform",
+    "shadowxlab"
+  ],
+  "author": "ShadowXLab",
+  "license": "MIT"
+}
