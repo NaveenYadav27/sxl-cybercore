@@ -722,7 +722,10 @@ body.darkMode .btn:not(.red){background:#15191e!important;color:#fff!important;b
 <body>
 
 <header class="top">
-  <div class="brand">SHADOWX<span>LAB</span> · CYBERCORE</div>
+  <a href="index.html" class="brand" style="display:flex;align-items:center;gap:12px;text-decoration:none">
+    <img src="assets/logo.png" alt="ShadowXLab Logo" style="height:36px;object-fit:contain">
+    <div style="font-size:14px;font-weight:900;letter-spacing:.08em;color:var(--text);border-left:1.5px solid var(--line);padding-left:10px">CYBER<span style="color:var(--cyber-red)">CORE</span></div>
+  </a>
   <div class="grow"></div>
   <input id="moduleSearch" class="search" placeholder="Search modules / topics..." oninput="filterModules(this.value)">
   <a href="module-00.html" class="btn" style="border-color:#fca5a5;background:#fef2f2;color:#b91c1c">MODULE 00: SETUP →</a>
@@ -733,8 +736,11 @@ body.darkMode .btn:not(.red){background:#15191e!important;color:#fff!important;b
 
 <div class="layout" id="layout">
 <aside id="sidebar">
+  <div style="padding:4px 6px 12px">
+    <img src="assets/logo.png" alt="ShadowXLab" style="height:32px;max-width:100%;object-fit:contain">
+  </div>
   <div class="side-k">SHADOWXLAB · CYBERCORE</div>
-  <h3 style="margin:5px 6px;font-size:21px">CYBER VISUAL PLATFORM</h3>
+  <h3 style="margin:2px 6px 5px;font-size:20px">CYBER VISUAL PLATFORM</h3>
   <div style="color:#777;font-size:12px;margin:0 6px 10px">See cybersecurity. Understand cybersecurity.</div>
   <div class="progress"><i id="progressBar"></i></div>
   <nav class="nav" id="moduleNav">
