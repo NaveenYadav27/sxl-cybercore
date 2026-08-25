@@ -1,0 +1,991 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ShadowXLab · CyberCore · Module 00: Hardware & Software Prerequisites</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cyber-red:#e21b23;--cyber-red-dark:#b9151c;--cyber-red-2:#ff3b42;
+  --ink:#0e1116;--text:#1a1d24;--muted:#5d6774;--line:#dfe3e8;--soft:#f5f7fa;
+  --panel:#ffffff;--panel-2:#fbfcfd;--dark:#0b0e12;--dark2:#14181f;--dark3:#1d222b;
+  --green:#10b981;--green-dim:#10b98118;--green-dark:#059669;
+  --amber:#f59e0b;--amber-dim:#f59e0b18;--blue:#3b82f6;--purple:#8b5cf6;
+  --mono:"IBM Plex Mono",SFMono-Regular,Consolas,monospace;
+  --sans:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --shadow-sm:0 2px 8px rgba(12,18,28,.04);
+  --shadow:0 12px 35px rgba(12,18,28,.07);
+  --shadow-lg:0 20px 60px rgba(12,18,28,.12);
+  --radius:14px;--radius-sm:8px;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:var(--sans);color:var(--text);background:#fafbfc;line-height:1.65;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.55;
+  background-image:
+    linear-gradient(rgba(15,20,25,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(15,20,25,.028) 1px,transparent 1px);
+  background-size:36px 36px;mask-image:linear-gradient(to bottom,#000,transparent 85%);z-index:-1;
+}
+button{font:inherit} a{color:inherit;text-decoration:none}
+code,pre{font-family:var(--mono)}
+
+/* TOP NAVBAR */
+.top{
+  height:64px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;gap:16px;
+  position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);z-index:100;
+  box-shadow:0 4px 20px rgba(0,0,0,.03);
+}
+.brand{font-weight:900;letter-spacing:.08em;font-size:15px;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.brand-badge{background:var(--cyber-red);color:#fff;font-size:10px;padding:2px 7px;border-radius:5px;font-family:var(--mono);font-weight:700}
+.brand span{color:var(--cyber-red)}
+.top .grow{flex:1}
+.top-meta{display:flex;align-items:center;gap:12px;font-size:12px;font-family:var(--mono);color:var(--muted)}
+.btn{
+  border:1px solid #d6dbe0;background:#fff;padding:9px 15px;border-radius:10px;font-weight:800;font-size:13px;
+  cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:all .18s ease;
+  white-space:nowrap;
+}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,0,0,.08);border-color:#bfc5cb}
+.btn.red{
+  background:linear-gradient(135deg,var(--cyber-red),var(--cyber-red-dark));color:#fff;border-color:var(--cyber-red);
+  box-shadow:0 6px 18px rgba(226,27,35,.22);
+}
+.btn.red:hover{background:linear-gradient(135deg,#ed232b,#a61117);box-shadow:0 8px 24px rgba(226,27,35,.32)}
+.btn.sm{padding:6px 11px;font-size:11.5px;border-radius:7px}
+.btn.dark{background:var(--dark2);color:#fff;border-color:#333}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:290px minmax(0,1fr);min-height:calc(100vh - 64px);transition:grid-template-columns .22s ease}
+.layout.collapsed{grid-template-columns:0 minmax(0,1fr)}
+.layout.collapsed aside{padding:0;border-right:0;overflow:hidden}
+aside{
+  border-right:1px solid var(--line);padding:24px 16px;position:sticky;top:64px;height:calc(100vh - 64px);
+  overflow-y:auto;background:rgba(255,255,255,.94);transition:padding .22s ease;
+}
+.side-k{font:900 10px var(--mono);letter-spacing:.18em;color:var(--cyber-red);margin:4px 8px;text-transform:uppercase}
+.side-title{font-size:19px;font-weight:900;margin:6px 8px 2px;letter-spacing:-.03em}
+.side-sub{color:var(--muted);font-size:12px;margin:0 8px 14px}
+.progress-card{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 4px 16px}
+.progress-header{display:flex;justify-content:space-between;font:700 11px var(--mono);margin-bottom:8px}
+.progress-bar-bg{height:6px;background:#e5e9ed;border-radius:99px;overflow:hidden}
+.progress-bar-fill{width:20%;height:100%;background:linear-gradient(90deg,var(--cyber-red),var(--cyber-red-2));border-radius:99px;transition:width .3s ease}
+
+.nav a{
+  display:block;padding:11px 12px;border-radius:9px;font-size:13px;font-weight:700;margin:3px 0;
+  color:#2d3748;transition:all .18s ease;position:relative;
+}
+.nav a:hover{background:#f1f4f8;transform:translateX(2px)}
+.nav a.active{background:linear-gradient(90deg,#fff1f2,#fafbfc);color:var(--cyber-red);border-left:3px solid var(--cyber-red);padding-left:11px}
+.nav small{display:block;color:var(--muted);font-weight:400;margin-top:2px;font-size:11px}
+
+main{min-width:0}
+
+/* HERO SECTION */
+.hero{
+  padding:64px clamp(28px,5vw,75px) 45px;border-bottom:1px solid var(--line);
+  background:
+    radial-gradient(circle at 85% 15%,rgba(226,27,35,.08),transparent 24rem),
+    radial-gradient(circle at 10% 40%,rgba(59,130,246,.05),transparent 20rem),
+    #ffffff;
+  position:relative;overflow:hidden;
+}
+.hero:after{
+  content:"MODULE 00";position:absolute;right:-10px;bottom:-35px;font-size:140px;font-weight:900;
+  letter-spacing:-.06em;color:rgba(0,0,0,.025);pointer-events:none;font-family:var(--mono);
+}
+.kicker{font:800 10.5px var(--mono);letter-spacing:.16em;color:var(--cyber-red);text-transform:uppercase}
+.hero h1{
+  font-size:clamp(38px,5vw,68px);line-height:.95;margin:14px 0 18px;letter-spacing:-.05em;font-weight:900;
+}
+.hero h1 span{color:var(--cyber-red);display:inline-block}
+.lead{font-size:17.5px;line-height:1.7;color:#4b5563;max-width:920px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
+.badge{
+  border:1px solid #d9dee3;border-radius:999px;padding:6px 12px;font:800 10.5px var(--mono);
+  background:#fff;letter-spacing:.06em;color:#374151;box-shadow:var(--shadow-sm);display:inline-flex;align-items:center;gap:5px;
+}
+.badge.red{border-color:#fecaca;background:#fef2f2;color:var(--cyber-red)}
+.badge.green{border-color:#bbf7d0;background:#f0fdf4;color:var(--green-dark)}
+.badge.blue{border-color:#bfdbfe;background:#eff6ff;color:#1d4ed8}
+
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:28px;max-width:920px}
+.stat-box{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+.stat-box .num{font:900 22px var(--mono);color:var(--cyber-red);line-height:1}
+.stat-box .lbl{font-size:11.5px;font-weight:700;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.05em}
+
+/* CONTENT SECTIONS */
+.content{padding:10px clamp(24px,5vw,72px) 80px;max-width:1420px;margin:0 auto}
+.section{padding:54px 0;border-bottom:1px solid var(--line)}
+.section-head{margin-bottom:28px}
+.section-head h2{font-size:clamp(26px,3.2vw,40px);letter-spacing:-.04em;margin:8px 0 8px;font-weight:800;line-height:1.1}
+.section-head p{color:var(--muted);font-size:15px;max-width:840px;margin:0}
+
+/* CARDS & GRIDS */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.card{
+  border:1px solid var(--line);border-radius:var(--radius);background:#ffffff;padding:24px;
+  box-shadow:var(--shadow);position:relative;overflow:hidden;
+}
+.card.interactive{transition:all .2s ease;cursor:pointer}
+.card.interactive:hover{transform:translateY(-3px);border-color:var(--cyber-red);box-shadow:var(--shadow-lg)}
+.card h3{font-size:17px;font-weight:800;letter-spacing:-.02em;margin:8px 0 8px}
+.card p{font-size:13.5px;color:var(--muted);line-height:1.6;margin:0}
+
+/* GUI WINDOW MOCKUPS */
+.gui-window{
+  border:1px solid #2e3846;border-radius:14px;background:#0d1117;color:#e6edf3;
+  overflow:hidden;box-shadow:0 24px 65px rgba(0,0,0,.22);margin:20px 0;
+}
+.gui-topbar{
+  background:#161b22;padding:10px 16px;display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid #30363d;font:700 11.5px var(--mono);color:#8b949e;
+}
+.gui-dots{display:flex;gap:6px}
+.gui-dot{width:10px;height:10px;border-radius:50%}
+.gui-dot.red{background:#ff5f56}.gui-dot.yellow{background:#ffbd2e}.gui-dot.green{background:#27c93f}
+.gui-title{flex:1;text-align:center;color:#c9d1d9;letter-spacing:.04em}
+.gui-body{padding:20px;font-size:13px}
+
+/* REALISTIC TERMINAL */
+.terminal{
+  background:#090c10;border:1px solid #30363d;border-radius:10px;padding:16px 18px;
+  font:12.5px/1.7 var(--mono);color:#c9d1d9;white-space:pre-wrap;overflow-x:auto;max-height:360px;
+}
+.t-prompt{color:#58a6ff;font-weight:700}
+.t-cmd{color:#f0883e;font-weight:700}
+.t-ok{color:#7ee787}
+.t-err{color:#ff7b72}
+.t-dim{color:#8b949e}
+.t-hi{color:#d2a8ff;font-weight:700}
+
+/* STEP CARDS */
+.step-card{
+  display:grid;grid-template-columns:50px 1fr;gap:18px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:var(--shadow-sm);transition:border-color .2s ease;
+}
+.step-card:hover{border-color:var(--cyber-red)}
+.step-num{
+  width:44px;height:44px;border-radius:10px;background:var(--soft);border:1px solid var(--line);
+  color:var(--cyber-red);font:900 16px var(--mono);display:flex;align-items:center;justify-content:center;
+}
+.step-card.active .step-num{background:var(--cyber-red);color:#fff;border-color:var(--cyber-red)}
+.step-content h4{margin:0 0 6px;font-size:16px;font-weight:800}
+.step-content p{margin:0 0 12px;font-size:13.5px;color:var(--muted)}
+.step-callout{
+  background:#f8fafc;border-left:3px solid var(--cyber-red);padding:12px 16px;border-radius:0 8px 8px 0;
+  font-size:13px;color:#334155;margin-top:12px;
+}
+.step-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+/* LINK CARDS */
+.link-box{
+  display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:var(--soft);
+  border:1px solid var(--line);border-radius:10px;margin-top:10px;transition:all .15s ease;
+}
+.link-box:hover{background:#fff;border-color:var(--cyber-red);box-shadow:var(--shadow-sm)}
+.link-info b{display:block;font-size:14px;color:var(--text)}
+.link-info span{font-size:12px;color:var(--muted);font-family:var(--mono)}
+
+/* COMPARISON TABLE */
+.matrix-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px}
+.matrix-table th{background:#f1f4f8;padding:12px 14px;border:1px solid var(--line);text-align:left;font-family:var(--mono);font-size:11.5px;color:#475569}
+.matrix-table td{padding:12px 14px;border:1px solid var(--line);vertical-align:top}
+.matrix-table tr:hover{background:#fafbfc}
+
+/* CALCULATOR WIDGET */
+.calc-box{background:var(--dark2);border:1px solid #30363d;border-radius:16px;padding:24px;color:#fff;margin-top:20px}
+.calc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.calc-field label{display:block;font:700 11px var(--mono);color:#8b949e;margin-bottom:6px;letter-spacing:.08em}
+.calc-field select{width:100%;background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:10px;color:#fff;font-size:13px}
+.calc-result{background:#05070a;border:1px solid #30363d;border-radius:12px;padding:18px;margin-top:18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+/* CHECKPOINTS */
+.cp-card{
+  border:1px solid var(--line);border-radius:14px;background:#ffffff;padding:22px;margin:20px 0;
+  box-shadow:var(--shadow);border-left:4px solid var(--cyber-red);
+}
+.cp-kicker{font:800 10px var(--mono);letter-spacing:.16em;color:var(--cyber-red);text-transform:uppercase}
+.cp-question{font-size:15.5px;font-weight:700;margin:8px 0 16px;line-height:1.5}
+.cp-options{display:grid;gap:8px}
+.cp-btn{
+  text-align:left;border:1px solid #d0d7de;background:#f6f8fa;border-radius:8px;padding:12px 16px;
+  font-size:13.5px;cursor:pointer;transition:all .15s ease;color:#24292f;
+}
+.cp-btn:hover:not(:disabled){background:#ffffff;border-color:var(--cyber-red)}
+.cp-btn:disabled{cursor:default;opacity:.75}
+.cp-btn.correct{background:#dafbe1;border-color:#1a7f37;color:#116329;font-weight:700}
+.cp-btn.incorrect{background:#ffebe9;border-color:#cf222e;color:#82071e;font-weight:700}
+.cp-feedback{display:none;background:#f6f8fa;border-radius:8px;padding:14px 18px;margin-top:14px;font-size:13.5px;border-left:3px solid var(--cyber-red)}
+.cp-feedback.show{display:block}
+.cp-feedback.is-correct{border-left-color:var(--green);background:#f0fdf4}
+
+/* READINESS GATE */
+.readiness-gate{
+  background:#fff;border:1px solid var(--line);border-top:4px solid var(--cyber-red);border-radius:16px;
+  padding:30px;box-shadow:var(--shadow);
+}
+.readiness-gate.passed{border-top-color:var(--green);background:#fbfdfc}
+
+footer{
+  padding:36px 24px;border-top:1px solid var(--line);background:#0b0e12;color:#8b949e;
+  font:11px var(--mono);text-align:center;
+}
+
+@media(max-width:1050px){
+  .grid4,.calc-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  aside{position:relative;top:0;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .grid2,.grid3,.stats-grid{grid-template-columns:1fr}
+  .calc-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <button class="btn sm" onclick="toggleSidebar()" aria-label="Toggle navigation">☰</button>
+  <div class="brand">
+    <span class="brand-badge">SHADOWXLAB</span>
+    <div>CYBER<span>CORE</span></div>
+  </div>
+  <div class="top-meta">
+    <span>MODULE 00 / 40</span>
+    <span>•</span>
+    <span>HARDWARE, SOFTWARE &amp; LAB PREREQUISITES</span>
+  </div>
+  <div class="grow"></div>
+  <a href="index.html" class="btn sm">← CURRICULUM</a>
+  <a href="module-01.html" class="btn sm red">MODULE 01: ONBOARDING →</a>
+</header>
+
+<div class="layout" id="layout">
+<aside id="sidebar">
+  <div class="side-k">SHADOWXLAB · CYBERCORE</div>
+  <div class="side-title">Module 00</div>
+  <div class="side-sub">Lab Setup &amp; Prerequisites</div>
+  
+  <div class="progress-card">
+    <div class="progress-header">
+      <span>PREREQUISITE CHECK</span>
+      <span id="progPct">20%</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progBar"></div></div>
+  </div>
+
+  <nav class="nav" id="moduleNav">
+    <a href="#sec-overview" class="active">01 · Overview &amp; Specs<small>Hardware &amp; OS baseline</small></a>
+    <a href="#sec-bios">02 · BIOS Virtualization<small>VT-x / AMD-V enable</small></a>
+    <a href="#sec-software">03 · Host Software Stack<small>Essential host tools</small></a>
+    <a href="#sec-netacad">04 · Cisco NetAcad<small>Registration &amp; profile</small></a>
+    <a href="#sec-packet-tracer">05 · Cisco Packet Tracer<small>Download &amp; install</small></a>
+    <a href="#sec-virtualbox">06 · Oracle VirtualBox 7.x<small>Hypervisor &amp; ext pack</small></a>
+    <a href="#sec-vms">07 · Security Lab VMs<small>Kali &amp; Essentials VM</small></a>
+    <a href="#sec-network-modes">08 · VirtualBox Networks<small>NAT vs Host-Only vs Internal</small></a>
+    <a href="#sec-checkpoints">09 · Checkpoints<small>Prerequisite quizzes</small></a>
+    <a href="#sec-references">10 · Official References<small>Verified download links</small></a>
+    <a href="#sec-readiness">11 · Readiness Gate<small>Unlock Module 01</small></a>
+  </nav>
+</aside>
+
+<main>
+<!-- HERO -->
+<section class="hero" id="sec-overview">
+  <div class="kicker">SHADOWXLAB CYBERCORE · ZERO-TRUST ONBOARDING · MODULE 00</div>
+  <h1>Hardware, Software &amp; Lab<br><span>Prerequisites Setup</span></h1>
+  <p class="lead">Prepare your complete cybersecurity workstation from scratch: verify CPU hardware virtualization, configure your host operating system, register with Cisco NetAcad, install Cisco Packet Tracer, deploy Oracle VirtualBox 7.x, and import pre-configured Security &amp; Kali VMs for safe lab isolation.</p>
+  
+  <div class="badges">
+    <span class="badge red">PREREQUISITE TRACK</span>
+    <span class="badge">HARDWARE SPECS</span>
+    <span class="badge blue">CISCO NETACAD</span>
+    <span class="badge">PACKET TRACER 8.2+</span>
+    <span class="badge">ORACLE VIRTUALBOX 7.X</span>
+    <span class="badge green">LAB READY</span>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-box"><div class="num">08</div><div class="lbl">Core Setup Steps</div></div>
+    <div class="stat-box"><div class="num">16 GB</div><div class="lbl">Recommended RAM</div></div>
+    <div class="stat-box"><div class="num">06</div><div class="lbl">Pre-Configured Tools</div></div>
+    <div class="stat-box"><div class="num">100%</div><div class="lbl">Free / Educational</div></div>
+  </div>
+</section>
+
+<div class="content">
+
+<!-- SECTION 1: HARDWARE SPECS & SIZING -->
+<section class="section" id="sec-specs">
+  <div class="section-head">
+    <div class="kicker">01 · PHYSICAL SYSTEM SIZING</div>
+    <h2>Hardware Requirements &amp; Host Recommendations</h2>
+    <p>Cybersecurity training requires running multiple virtual machines concurrently (e.g., Kali Linux operator VM + Target Windows/Linux VM). Verify that your host meets the operational requirements.</p>
+  </div>
+
+  <table class="matrix-table">
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>Minimum Baseline</th>
+        <th>Recommended Spec</th>
+        <th>Ideal Enterprise Lab</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Processor (CPU)</b></td>
+        <td>Intel Core i5 / AMD Ryzen 5 (4 Cores, 2.0 GHz+) with VT-x / AMD-V</td>
+        <td>Intel Core i7 / AMD Ryzen 7 (6-8 Cores, 3.2 GHz+)</td>
+        <td>Intel Core i9 / AMD Ryzen 9 / Apple M-series (8-16 Cores)</td>
+      </tr>
+      <tr>
+        <td><b>Memory (RAM)</b></td>
+        <td>8 GB DDR4 (Allows 1 VM with 3-4 GB allocated)</td>
+        <td>16 GB DDR4/DDR5 (Allows 2-3 simultaneous VMs)</td>
+        <td>32 GB+ DDR5 (Full multi-target Active Directory lab)</td>
+      </tr>
+      <tr>
+        <td><b>Storage Disk</b></td>
+        <td>120 GB Free Disk Space (HDD or SATA SSD)</td>
+        <td>250 GB+ Free NVMe M.2 SSD (Crucial for VM I/O speed)</td>
+        <td>500 GB - 1 TB Dedicated NVMe SSD</td>
+      </tr>
+      <tr>
+        <td><b>Host Operating System</b></td>
+        <td>Windows 10 64-bit (21H2+) / macOS 11+ / Ubuntu 22.04 LTS</td>
+        <td>Windows 11 64-bit Pro / Enterprise (WSL2 + VirtualBox)</td>
+        <td>Windows 11 Pro or Dual-Boot Ubuntu 24.04 LTS</td>
+      </tr>
+      <tr>
+        <td><b>Display &amp; Network</b></td>
+        <td>1080p Display, 25 Mbps Stable Internet</td>
+        <td>Dual Monitors (1080p/1440p) for Side-by-Side Lab Docs</td>
+        <td>Dual 4K / Ultrawide Displays, Gigabit Ethernet</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Interactive Sizing Widget -->
+  <div class="calc-box">
+    <div class="kicker" style="color:var(--cyber-red-2)">INTERACTIVE LAB ALLOCATION CALCULATOR</div>
+    <h3 style="margin:6px 0 14px">Calculate Optimal VM RAM &amp; Core Allocations</h3>
+    <div class="calc-grid">
+      <div class="calc-field">
+        <label>TOTAL HOST RAM</label>
+        <select id="calcRam" onchange="runCalc()">
+          <option value="8">8 GB RAM</option>
+          <option value="16" selected>16 GB RAM (Standard)</option>
+          <option value="32">32 GB RAM (Recommended)</option>
+          <option value="64">64 GB RAM (Pro Lab)</option>
+        </select>
+      </div>
+      <div class="calc-field">
+        <label>HOST CPU PHYSICAL CORES</label>
+        <select id="calcCpu" onchange="runCalc()">
+          <option value="4">4 Physical Cores (8 Threads)</option>
+          <option value="6">6 Physical Cores (12 Threads)</option>
+          <option value="8" selected>8 Physical Cores (16 Threads)</option>
+          <option value="16">16 Physical Cores (32 Threads)</option>
+        </select>
+      </div>
+      <div class="calc-field">
+        <label>STORAGE TYPE</label>
+        <select id="calcStorage" onchange="runCalc()">
+          <option value="ssd" selected>NVMe SSD (Fastest)</option>
+          <option value="sata">SATA SSD (Standard)</option>
+          <option value="hdd">Mechanical HDD (Slow)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="calc-result" id="calcOutput">
+      <div>
+        <div style="font:800 11px var(--mono);color:#58a6ff">RECOMMENDED LAB CONCURRENCY</div>
+        <div style="font-size:16px;font-weight:800;margin-top:2px" id="calcVmSummary">Up to 2 Concurrent VMs (Kali Linux + 1 Target VM)</div>
+      </div>
+      <div style="font:700 12px var(--mono);color:#7ee787" id="calcAllocation">Kali: 4GB RAM / 2 Cores | Target: 4GB RAM / 2 Cores | Host Reserved: 8GB</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2: BIOS / UEFI VIRTUALIZATION -->
+<section class="section" id="sec-bios">
+  <div class="section-head">
+    <div class="kicker">02 · HARDWARE ACCELERATION</div>
+    <h2>Enabling CPU Virtualization (Intel VT-x / AMD-V)</h2>
+    <p>Hardware virtualization allows your host processor to execute guest operating system instructions directly at native hardware speeds. Without it, 64-bit VMs will fail to start.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="step-card active">
+      <div class="step-num">01</div>
+      <div class="step-content">
+        <h4>Check Virtualization Status in Windows</h4>
+        <p>Press <kbd style="background:#e2e8f0;padding:2px 6px;border-radius:4px;font-family:var(--mono)">Ctrl + Shift + Esc</kbd> to open Task Manager. Go to <b>Performance</b> tab &gt; <b>CPU</b>. Look for <b>Virtualization: Enabled</b>.</p>
+        <div class="terminal">
+<span class="t-prompt">PS C:\&gt;</span> <span class="t-cmd">Get-CimInstance -ClassName Win32_Processor | Select-Object Name, VirtualizationFirmwareEnabled</span>
+
+Name                                      VirtualizationFirmwareEnabled
+----                                      -----------------------------
+Intel(R) Core(TM) i7-13700H CPU @ 2.40GHz <span class="t-ok">True</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div class="step-content">
+        <h4>If Disabled: Enable in BIOS/UEFI Settings</h4>
+        <p>Reboot your computer and enter BIOS setup by repeatedly pressing the manufacturer key:</p>
+        <ul style="font-size:13px;color:var(--muted);padding-left:18px;margin:6px 0 10px">
+          <li><b>Dell / Alienware:</b> Press <kbd>F2</kbd> or <kbd>F12</kbd></li>
+          <li><b>HP:</b> Press <kbd>F10</kbd> or <kbd>Esc</kbd></li>
+          <li><b>Lenovo / ThinkPad:</b> Press <kbd>F1</kbd> or <kbd>Enter</kbd></li>
+          <li><b>ASUS / MSI / Gigabyte:</b> Press <kbd>Del</kbd> or <kbd>F2</kbd></li>
+        </ul>
+        <div class="step-callout">
+          <b>Navigate to:</b> <code>Advanced CPU Configuration</code> &gt; Enable <b>Intel Virtualization Technology (VT-x)</b> or <b>SVM Mode (AMD-V)</b> &gt; Save &amp; Exit (<kbd>F10</kbd>).
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: HOST SOFTWARE STACK -->
+<section class="section" id="sec-software">
+  <div class="section-head">
+    <div class="kicker">03 · HOST UTILITIES</div>
+    <h2>Essential Host Tools &amp; Utilities</h2>
+    <p>Install these host utilities to manage archive extractions, configuration files, and network captures.</p>
+  </div>
+
+  <div class="grid3">
+    <div class="card">
+      <div class="kicker" style="color:var(--blue)">ARCHIVE EXTRACTOR</div>
+      <h3>7-Zip (64-bit)</h3>
+      <p>Required to decompress multi-part `.7z`, `.tar.gz`, and `.zip` compressed virtual appliances without corruption.</p>
+      <div class="link-box">
+        <div class="link-info"><b>7-Zip Official</b><span>7-zip.org</span></div>
+        <a href="https://www.7-zip.org/download.html" target="_blank" rel="noopener" class="btn sm red">DOWNLOAD ↗</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="kicker" style="color:var(--purple)">CODE &amp; CONFIG EDITOR</div>
+      <h3>Visual Studio Code</h3>
+      <p>Industry-standard code and configuration editor with syntax highlighting for Python, Bash, JSON, and YAML.</p>
+      <div class="link-box">
+        <div class="link-info"><b>VS Code</b><span>code.visualstudio.com</span></div>
+        <a href="https://code.visualstudio.com/Download" target="_blank" rel="noopener" class="btn sm red">DOWNLOAD ↗</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="kicker" style="color:var(--green)">PACKET ANALYZER</div>
+      <h3>Wireshark (Host Engine)</h3>
+      <p>Deep packet inspection tool to capture and analyze network traffic on physical and virtual host adapters.</p>
+      <div class="link-box">
+        <div class="link-info"><b>Wireshark</b><span>wireshark.org</span></div>
+        <a href="https://www.wireshark.org/download.html" target="_blank" rel="noopener" class="btn sm red">DOWNLOAD ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4: CISCO NETACAD REGISTRATION -->
+<section class="section" id="sec-netacad">
+  <div class="section-head">
+    <div class="kicker">04 · OFFICIAL ACADEMY ENROLLMENT</div>
+    <h2>Cisco Networking Academy (NetAcad) Registration</h2>
+    <p>Cisco NetAcad and Skills for All provide free official foundational courses, digital badges, and the official download license for Cisco Packet Tracer.</p>
+  </div>
+
+  <div class="step-card active">
+    <div class="step-num">01</div>
+    <div class="step-content">
+      <h4>Step 1: Create a Free Cisco NetAcad / Skills for All Account</h4>
+      <p>Navigate to Cisco NetAcad or Cisco Skills for All portal to register a student profile with your email address.</p>
+      
+      <div class="link-box" style="margin:14px 0">
+        <div class="link-info">
+          <b>Cisco Networking Academy Portal</b>
+          <span>https://www.netacad.com</span>
+        </div>
+        <a href="https://www.netacad.com" target="_blank" rel="noopener" class="btn sm red">VISIT NETACAD ↗</a>
+      </div>
+
+      <div class="link-box" style="margin:8px 0">
+        <div class="link-info">
+          <b>Cisco Skills for All (Self-Paced Learning)</b>
+          <span>https://skillsforall.com</span>
+        </div>
+        <a href="https://skillsforall.com" target="_blank" rel="noopener" class="btn sm red">VISIT SKILLS FOR ALL ↗</a>
+      </div>
+
+      <div class="step-callout">
+        <b>Recommended Free Courses to Enroll:</b>
+        <ul style="margin:4px 0 0;padding-left:18px">
+          <li><b>Introduction to Packet Tracer</b> (10 Hours — Essential for Packet Tracer download license)</li>
+          <li><b>Networking Basics</b> (25 Hours — Aligned with CyberCore Networking Track)</li>
+          <li><b>Cybersecurity Essentials</b> (30 Hours — Industry standard foundation badge)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5: CISCO PACKET TRACER INSTALLATION -->
+<section class="section" id="sec-packet-tracer">
+  <div class="section-head">
+    <div class="kicker">05 · NETWORK SIMULATION SOFTWARE</div>
+    <h2>Cisco Packet Tracer Download &amp; Installation</h2>
+    <p>Packet Tracer simulates enterprise switches, routers, firewalls, and endpoints with real-time protocol simulation and packet-level inspection.</p>
+  </div>
+
+  <div class="step-card active">
+    <div class="step-num">01</div>
+    <div class="step-content">
+      <h4>Step 1: Download Cisco Packet Tracer (Latest v8.2+)</h4>
+      <p>Log in to NetAcad, navigate to <b>Resources &gt; Download Packet Tracer</b> or access the direct course download page.</p>
+      
+      <div class="link-box" style="margin:12px 0">
+        <div class="link-info">
+          <b>Direct Packet Tracer Download Hub</b>
+          <span>NetAcad Login Required</span>
+        </div>
+        <a href="https://www.netacad.com/portal/resources/packet-tracer" target="_blank" rel="noopener" class="btn sm red">DOWNLOAD PACKET TRACER ↗</a>
+      </div>
+
+      <div class="matrix-table" style="margin-top:14px">
+        <table style="width:100%">
+          <tr>
+            <th>Operating System</th>
+            <th>Installer Package</th>
+            <th>Notes</th>
+          </tr>
+          <tr>
+            <td><b>Windows 10 / 11 64-bit</b></td>
+            <td><code>CiscoPacketTracer_822_Windows_64bit.exe</code></td>
+            <td>Run as Administrator; accepts standard wizard defaults</td>
+          </tr>
+          <tr>
+            <td><b>Ubuntu / Debian Linux</b></td>
+            <td><code>CiscoPacketTracer_822_Ubuntu_64bit.deb</code></td>
+            <td>Install via <code>sudo dpkg -i package.deb &amp;&amp; sudo apt install -f</code></td>
+          </tr>
+          <tr>
+            <td><b>macOS (Intel &amp; Apple Silicon)</b></td>
+            <td><code>CiscoPacketTracer_822_macOS.dmg</code></td>
+            <td>Requires Rosetta 2 on M1/M2/M3 chips</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-num">02</div>
+    <div class="step-content">
+      <h4>Step 2: First-Time Launch &amp; Authentication</h4>
+      <p>When launching Packet Tracer, choose <b>Cisco Networking Academy</b> or <b>Skills for All</b> login. Check <i>"Keep me logged in (3 months)"</i> to avoid repeat prompts.</p>
+      
+      <div class="gui-window">
+        <div class="gui-topbar">
+          <div class="gui-dots"><span class="gui-dot red"></span><span class="gui-dot yellow"></span><span class="gui-dot green"></span></div>
+          <div class="gui-title">CISCO PACKET TRACER 8.2 — WORKSPACE VERIFICATION</div>
+        </div>
+        <div class="gui-body">
+          <div style="background:#161b22;padding:14px;border-radius:8px;font:12px var(--mono);color:#c9d1d9">
+            [TOP BAR]: Logical / Physical Workspace | Realtime / Simulation Mode Toggle<br>
+            [BOTTOM BAR]: Network Devices (Routers 2911, Switches 2960, Firewalls 5506-X) | End Devices (PC, Laptop, Server)<br>
+            [STATUS]: <span style="color:#7ee787">✓ PACKET TRACER ENGINE ACTIVE &amp; AUTHENTICATED</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: ORACLE VIRTUALBOX 7.X INSTALLATION -->
+<section class="section" id="sec-virtualbox">
+  <div class="section-head">
+    <div class="kicker">06 · TYPE-2 HYPERVISOR</div>
+    <h2>Oracle VM VirtualBox 7.x &amp; Extension Pack Setup</h2>
+    <p>VirtualBox is a free, cross-platform open-source Type-2 hypervisor used to run isolated guest virtual machines.</p>
+  </div>
+
+  <div class="step-card active">
+    <div class="step-num">01</div>
+    <div class="step-content">
+      <h4>Step 1: Download VirtualBox 7.x Base &amp; Extension Pack</h4>
+      <p>Always download both the base platform installer and the matching Extension Pack version for USB 3.0 controller support, NVMe virtualization, and RDP forwarding.</p>
+      
+      <div class="link-box" style="margin:12px 0">
+        <div class="link-info">
+          <b>Oracle VM VirtualBox Official Download</b>
+          <span>virtualbox.org/wiki/Downloads</span>
+        </div>
+        <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank" rel="noopener" class="btn sm red">DOWNLOAD VIRTUALBOX ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-num">02</div>
+    <div class="step-content">
+      <h4>Step 2: Install VirtualBox &amp; Extension Pack</h4>
+      <p>Run the installer. During installation, your network connection may briefly reset as the VirtualBox virtual network adapter is created.</p>
+      <div class="terminal">
+<span class="t-dim"># After base installation, double-click or install extension pack via command line:</span>
+<span class="t-prompt">C:\Program Files\Oracle\VirtualBox&gt;</span> <span class="t-cmd">VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-7.0.x.vbox-extpack</span>
+0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+Successfully installed "Oracle VM VirtualBox Extension Pack".
+      </div>
+      <div class="step-callout">
+        <b>VirtualBox SSD Optimization Tip:</b> Go to <b>File &gt; Preferences &gt; General &gt; Default Machine Folder</b> and point it to a folder on your fastest SSD (e.g. <code>D:\VMs\</code> or <code>C:\VirtualMachines\</code>).
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 7: SECURITY LAB VMS -->
+<section class="section" id="sec-vms">
+  <div class="section-head">
+    <div class="kicker">07 · VIRTUAL APPLIANCES</div>
+    <h2>Cybersecurity Essentials &amp; Kali Linux VM Import</h2>
+    <p>Deploy the pre-built Kali Linux virtual machine and training appliances used throughout the 40 modules.</p>
+  </div>
+
+  <div class="grid2">
+    <!-- Kali Linux Card -->
+    <div class="card">
+      <div class="kicker" style="color:var(--cyber-red)">OPERATOR ATTACKING VM</div>
+      <h3>Kali Linux 2024.x (VirtualBox Image)</h3>
+      <p>Pre-configured with all offensive, analysis, and network tools (Nmap, Wireshark, Burp Suite, Metasploit, Python 3).</p>
+      <div class="link-box" style="margin-top:14px">
+        <div class="link-info"><b>Official Kali Images</b><span>kali.org/get-kali/</span></div>
+        <a href="https://www.kali.org/get-kali/#kali-virtual-machines" target="_blank" rel="noopener" class="btn sm red">DOWNLOAD KALI VM ↗</a>
+      </div>
+      <div style="margin-top:12px;font:11.5px var(--mono);background:var(--soft);padding:10px;border-radius:6px">
+        Default Credentials:<br>
+        Username: <b style="color:var(--cyber-red)">kali</b> | Password: <b style="color:var(--cyber-red)">kali</b>
+      </div>
+    </div>
+
+    <!-- Target VM Card -->
+    <div class="card">
+      <div class="kicker" style="color:var(--blue)">DEFENSIVE &amp; TARGET LABS</div>
+      <h3>Ubuntu Server / Metasploitable Target</h3>
+      <p>Vulnerable training targets used for reconnaissance, port scanning, network defense, and log analysis labs.</p>
+      <div class="link-box" style="margin-top:14px">
+        <div class="link-info"><b>Ubuntu Server ISO</b><span>ubuntu.com/download/server</span></div>
+        <a href="https://ubuntu.com/download/server" target="_blank" rel="noopener" class="btn sm">DOWNLOAD UBUNTU ↗</a>
+      </div>
+      <div style="margin-top:12px;font:11.5px var(--mono);background:var(--soft);padding:10px;border-radius:6px">
+        Metasploitable 2/3 Lab Image:<br>
+        Default Login: <b style="color:var(--blue)">msfadmin</b> | Password: <b style="color:var(--blue)">msfadmin</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-card" style="margin-top:20px">
+    <div class="step-num">★</div>
+    <div class="step-content">
+      <h4>Crucial Step: Take a Clean Baseline VM Snapshot</h4>
+      <p>Before running any lab exercises or modifying configurations, always take a snapshot in VirtualBox:</p>
+      <div class="step-callout">
+        In VirtualBox Manager &gt; Select VM &gt; Click <b>Snapshots</b> &gt; Click <b>Take</b> &gt; Name it <code>00-Clean-Base-State</code>. If a lab misconfigures the system, you can instantly restore to this point in 2 seconds.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 8: VIRTUALBOX NETWORK MODES -->
+<section class="section" id="sec-network-modes">
+  <div class="section-head">
+    <div class="kicker">08 · LAB ISOLATION ARCHITECTURE</div>
+    <h2>Understanding VirtualBox Network Modes</h2>
+    <p>Configuring the right network adapter mode prevents accidental scanning of your home WiFi while ensuring lab connectivity.</p>
+  </div>
+
+  <table class="matrix-table">
+    <thead>
+      <tr>
+        <th>Network Mode</th>
+        <th>VM Can Access Internet?</th>
+        <th>VM Can Access Host?</th>
+        <th>Other VMs Can Access?</th>
+        <th>Primary Use Case</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>NAT (Default)</b></td>
+        <td><span style="color:var(--green)">✓ Yes</span></td>
+        <td><span style="color:#ef4444">✗ Isolated</span></td>
+        <td><span style="color:#ef4444">✗ Isolated</span></td>
+        <td>Single VM browsing and package updates (<code>apt update</code>)</td>
+      </tr>
+      <tr>
+        <td><b>NAT Network</b></td>
+        <td><span style="color:var(--green)">✓ Yes</span></td>
+        <td><span style="color:#ef4444">✗ Isolated</span></td>
+        <td><span style="color:var(--green)">✓ Yes (Shared LAN)</span></td>
+        <td>Multi-VM training labs where VMs must talk to each other</td>
+      </tr>
+      <tr>
+        <td><b>Host-Only Adapter</b></td>
+        <td><span style="color:#ef4444">✗ No</span></td>
+        <td><span style="color:var(--green)">✓ Yes (Virtual Interface)</span></td>
+        <td><span style="color:var(--green)">✓ Yes (Host-only subnet)</span></td>
+        <td>Isolated malware analysis and local SSH management</td>
+      </tr>
+      <tr>
+        <td><b>Bridged Adapter</b></td>
+        <td><span style="color:var(--green)">✓ Yes</span></td>
+        <td><span style="color:var(--green)">✓ Full Access</span></td>
+        <td><span style="color:var(--green)">✓ Visible on Home LAN</span></td>
+        <td><span style="color:#ef4444">⚠ CAUTION:</span> VM appears directly on your physical home router</td>
+      </tr>
+      <tr>
+        <td><b>Internal Network</b></td>
+        <td><span style="color:#ef4444">✗ No</span></td>
+        <td><span style="color:#ef4444">✗ No</span></td>
+        <td><span style="color:var(--green)">✓ VMs on same internal net</span></td>
+        <td>100% air-gapped exploit validation and testing</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- SECTION 9: CHECKPOINTS -->
+<section class="section" id="sec-checkpoints">
+  <div class="section-head">
+    <div class="kicker">09 · PREREQUISITE ASSESSMENTS</div>
+    <h2>Knowledge Checkpoints: Prerequisite Validation</h2>
+    <p>Confirm your understanding of the lab architecture before advancing.</p>
+  </div>
+
+  <!-- Quiz 1 -->
+  <div class="cp-card" data-ans="b">
+    <div class="cp-kicker">CHECKPOINT 01 · VIRTUALIZATION</div>
+    <div class="cp-question">When attempting to start a 64-bit Kali VM in VirtualBox, you receive an error: <i>"VT-x/AMD-V hardware acceleration is not available"</i>. What is the required resolution?</div>
+    <div class="cp-options">
+      <button class="cp-btn" onclick="evalQuiz(this,'a')">A) Re-install Windows 11</button>
+      <button class="cp-btn" onclick="evalQuiz(this,'b')">B) Enter BIOS/UEFI settings and enable Intel Virtualization Technology (VT-x) or SVM Mode (AMD-V)</button>
+      <button class="cp-btn" onclick="evalQuiz(this,'c')">C) Allocate more hard disk space</button>
+      <button class="cp-btn" onclick="evalQuiz(this,'d')">D) Disable WiFi</button>
+    </div>
+    <div class="cp-feedback">
+      <b>Explanation:</b> 64-bit guest operating systems require CPU hardware virtualization extensions (VT-x/AMD-V) to be toggled to <b>Enabled</b> in the motherboard BIOS/UEFI.
+    </div>
+  </div>
+
+  <!-- Quiz 2 -->
+  <div class="cp-card" data-ans="c">
+    <div class="cp-kicker">CHECKPOINT 02 · NETWORK ISOLATION</div>
+    <div class="cp-question">Which VirtualBox network mode creates an isolated virtual subnet where guest VMs can communicate with each other AND reach the Internet, without exposing ports to your physical home WiFi network?</div>
+    <div class="cp-options">
+      <button class="cp-btn" onclick="evalQuiz(this,'a')">A) Bridged Adapter</button>
+      <button class="cp-btn" onclick="evalQuiz(this,'b')">B) Internal Network</button>
+      <button class="cp-btn" onclick="evalQuiz(this,'c')">C) NAT Network</button>
+      <button class="cp-btn" onclick="evalQuiz(this,'d')">D) Generic Driver</button>
+    </div>
+    <div class="cp-feedback">
+      <b>Explanation:</b> <b>NAT Network</b> provides an isolated virtual router that lets VMs talk to each other on a private subnet while sharing outbound NAT internet access without exposing VMs to the physical LAN.
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 10: OFFICIAL REFERENCES -->
+<section class="section" id="sec-references">
+  <div class="section-head">
+    <div class="kicker">10 · VERIFIED OFFICIAL RESOURCES</div>
+    <h2>Official Download Links &amp; Documentation Directory</h2>
+    <p>Always verify download URLs to prevent downloading trojanized hypervisors or malicious ISO images from third-party sites.</p>
+  </div>
+
+  <table class="matrix-table">
+    <thead>
+      <tr>
+        <th>Resource</th>
+        <th>Publisher</th>
+        <th>Official Verified Link</th>
+        <th>License</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Cisco Networking Academy</b></td>
+        <td>Cisco Systems</td>
+        <td><a href="https://www.netacad.com" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700">netacad.com ↗</a></td>
+        <td>Free Educational Account</td>
+      </tr>
+      <tr>
+        <td><b>Cisco Packet Tracer 8.2+</b></td>
+        <td>Cisco Systems</td>
+        <td><a href="https://www.netacad.com/portal/resources/packet-tracer" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700">netacad.com/.../packet-tracer ↗</a></td>
+        <td>Free Student License</td>
+      </tr>
+      <tr>
+        <td><b>Oracle VM VirtualBox 7.x</b></td>
+        <td>Oracle Corporation</td>
+        <td><a href="https://www.virtualbox.org/wiki/Downloads" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700">virtualbox.org/wiki/Downloads ↗</a></td>
+        <td>GPLv2 / Free PUEL</td>
+      </tr>
+      <tr>
+        <td><b>Kali Linux (VirtualBox Image)</b></td>
+        <td>OffSec (Offensive Security)</td>
+        <td><a href="https://www.kali.org/get-kali/#kali-virtual-machines" target="_blank" rel="noopener" style="color:var(--cyber-red);font-weight:700">kali.org/get-kali ↗</a></td>
+        <td>Open Source (GPL)</td>
+      </tr>
+      <tr>
+        <td><b>Visual Studio Code</b></td>
+        <td>Microsoft</td>
+        <td><a href="https://code.visualstudio.com" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700">code.visualstudio.com ↗</a></td>
+        <td>MIT License</td>
+      </tr>
+      <tr>
+        <td><b>Wireshark Network Analyzer</b></td>
+        <td>Wireshark Foundation</td>
+        <td><a href="https://www.wireshark.org" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700">wireshark.org ↗</a></td>
+        <td>GPLv2</td>
+      </tr>
+      <tr>
+        <td><b>7-Zip 64-bit</b></td>
+        <td>Igor Pavlov</td>
+        <td><a href="https://www.7-zip.org" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700">7-zip.org ↗</a></td>
+        <td>GNU LGPL</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- SECTION 11: READINESS GATE -->
+<section class="section" id="sec-readiness">
+  <div class="section-head">
+    <div class="kicker">11 · ONBOARDING COMPLETION</div>
+    <h2>Module 00 Readiness Gate</h2>
+    <p>Complete the prerequisite readiness check to verify your workstation is primed for Module 01.</p>
+  </div>
+
+  <div class="readiness-gate" id="gateCard">
+    <h3>Workstation Readiness Verification</h3>
+    <div class="grid2" style="margin:20px 0">
+      <div>
+        <h4 style="margin:0 0 10px;font-size:14px;color:var(--cyber-red)">Hardware &amp; System Validation</h4>
+        <ul style="font-size:13px;color:var(--muted);padding-left:18px;line-height:1.8">
+          <li>CPU Virtualization (VT-x / AMD-V) enabled in BIOS</li>
+          <li>At least 16 GB RAM &amp; 100 GB+ SSD free space verified</li>
+          <li>7-Zip &amp; VS Code installed on Host OS</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="margin:0 0 10px;font-size:14px;color:var(--cyber-red)">Academy &amp; Hypervisor Validation</h4>
+        <ul style="font-size:13px;color:var(--muted);padding-left:18px;line-height:1.8">
+          <li>Cisco NetAcad profile created &amp; active</li>
+          <li>Cisco Packet Tracer installed and logged in</li>
+          <li>Oracle VirtualBox 7.x &amp; Extension Pack installed</li>
+          <li>Kali Linux VM imported with a clean snapshot taken</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <button class="btn red" id="gateBtn" onclick="passReadiness()">COMPLETE PREREQUISITE CHECK →</button>
+      <a href="module-01.html" class="btn dark" id="mod1Link" style="display:none">PROCEED TO MODULE 01 (SECURITY ESSENTIALS) →</a>
+    </div>
+    <p id="gateFeedback" style="margin-top:12px;font:700 13px var(--mono);color:var(--muted)"></p>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  SHADOWXLAB CYBERCORE · MODULE 00: HARDWARE &amp; SOFTWARE PREREQUISITES · 40 MODULES TOTAL
+</footer>
+</main>
+</div>
+
+<script>
+function toggleSidebar(){
+  document.getElementById('layout').classList.toggle('collapsed');
+}
+
+function runCalc(){
+  const ram = parseInt(document.getElementById('calcRam').value);
+  const cpu = parseInt(document.getElementById('calcCpu').value);
+  const storage = document.getElementById('calcStorage').value;
+  
+  let vmCount = 'Up to 2 Concurrent VMs (Kali + 1 Target)';
+  let alloc = `Kali: 4GB RAM / 2 Cores | Target: 4GB RAM / 2 Cores | Host: ${ram - 8}GB Reserved`;
+  
+  if(ram >= 32 && cpu >= 8){
+    vmCount = 'Up to 4-5 Concurrent Enterprise Lab VMs (Full Active Directory Domain)';
+    alloc = `Kali: 6GB RAM / 3 Cores | Domain Controller: 6GB RAM | Target 1: 4GB | Target 2: 4GB | Host: 12GB Reserved`;
+  } else if(ram === 8){
+    vmCount = '1 VM at a time (Run Kali Linux alone or Target alone)';
+    alloc = `Active VM: 4GB RAM / 2 Cores | Host Reserved: 4GB RAM (Close heavy host apps)`;
+  }
+  
+  document.getElementById('calcVmSummary').textContent = vmCount;
+  document.getElementById('calcAllocation').textContent = alloc;
+}
+
+function evalQuiz(btn, choice){
+  const card = btn.closest('.cp-card');
+  const correctAns = card.dataset.ans;
+  const allBtns = card.querySelectorAll('.cp-btn');
+  allBtns.forEach(b => b.disabled = true);
+  
+  const fb = card.querySelector('.cp-feedback');
+  fb.classList.add('show');
+  
+  if(choice === correctAns){
+    btn.classList.add('correct');
+    fb.classList.add('is-correct');
+  } else {
+    btn.classList.add('incorrect');
+    const rightBtn = card.querySelector(`.cp-btn[onclick*="'${correctAns}'"]`);
+    if(rightBtn) rightBtn.classList.add('correct');
+  }
+}
+
+function passReadiness(){
+  const g = document.getElementById('gateCard');
+  const msg = document.getElementById('gateFeedback');
+  const link = document.getElementById('mod1Link');
+  g.classList.add('passed');
+  msg.textContent = '✓ PREREQUISITES VERIFIED! Workstation is 100% configured. You are ready to start Module 01.';
+  msg.style.color = '#10b981';
+  link.style.display = 'inline-flex';
+  document.getElementById('progPct').textContent = '100%';
+  document.getElementById('progBar').style.width = '100%';
+}
+
+/* Scroll spy */
+(function(){
+  const sections = document.querySelectorAll('main section[id]');
+  const links = document.querySelectorAll('#moduleNav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if(window.scrollY >= s.offsetTop - 120) current = s.getAttribute('id');
+    });
+    links.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+})();
+</script>
+</body>
+</html>

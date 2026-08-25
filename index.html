@@ -725,6 +725,7 @@ body.darkMode .btn:not(.red){background:#15191e!important;color:#fff!important;b
   <div class="brand">SHADOWX<span>LAB</span> · CYBERCORE</div>
   <div class="grow"></div>
   <input id="moduleSearch" class="search" placeholder="Search modules / topics..." oninput="filterModules(this.value)">
+  <a href="module-00.html" class="btn" style="border-color:#fca5a5;background:#fef2f2;color:#b91c1c">MODULE 00: SETUP →</a>
   <a href="module-01.html" class="btn">KALI ONBOARDING LAB →</a>
   <button class="btn" onclick="toggleTheme()">◐ MODE</button>
   <button class="btn red" onclick="document.getElementById('visual-atlas').scrollIntoView({behavior:'smooth'})">EXPLORE CYBERCORE →</button>
@@ -737,6 +738,7 @@ body.darkMode .btn:not(.red){background:#15191e!important;color:#fff!important;b
   <div style="color:#777;font-size:12px;margin:0 6px 10px">See cybersecurity. Understand cybersecurity.</div>
   <div class="progress"><i id="progressBar"></i></div>
   <nav class="nav" id="moduleNav">
+    <a href="module-00.html" style="background:#fee2e2;color:#b91c1c;font-weight:800;border-left:3px solid #b91c1c;margin-bottom:8px">00 · Prerequisites Setup<small>Hardware, Packet Tracer &amp; VMs</small></a>
     <a href="#overview" class="active">01 · Overview<small>Mission and architecture</small></a>
     <a href="#environment">02 · Visual Environment<small>Learning workstation model</small></a>
     <a href="#modules">03 · CyberCore Modules<small>40 modules / 200+ concepts</small></a>
@@ -995,6 +997,7 @@ SIMULATOR > explain threat
 
 <script>
 const MODULES = [
+  {"id": 0, "name": "Hardware, Software & Lab Prerequisites", "domain": "PREREQUISITES", "topics": ["Hardware requirements & BIOS virtualization (VT-x/AMD-V)", "Cisco NetAcad registration & profile setup", "Cisco Packet Tracer 8.2+ download & install", "Oracle VirtualBox 7.x & Extension Pack", "Cybersecurity Essentials & Kali Linux VM setup"]},
   {"id": 1, "name": "Introduction to CyberCore - Security Essentials", "domain": "FOUNDATION", "topics": ["Cybersecurity mission and scope", "CIA triad and security objectives", "Assets, threats, vulnerabilities and risk", "Security controls and defense layers", "Security mindset and professional ethics"]},
   {"id": 2, "name": "Anatomy of Cybersecurity", "domain": "FOUNDATION", "topics": ["People, process and technology", "Attack surface and trust boundaries", "Security operations lifecycle", "Identity, data and infrastructure", "How attacks and defenses connect"]},
   {"id": 3, "name": "Cybersecurity Frameworks and Standards", "domain": "GOVERNANCE", "topics": ["NIST Cybersecurity Framework", "ISO/IEC 27001 concepts", "CIS Controls", "Security policies and control mapping", "Framework selection and implementation"]},
@@ -1041,11 +1044,12 @@ function renderModuleGrid(){
   const grid = document.getElementById('moduleGrid');
   if(!grid) return;
   grid.innerHTML = MODULES.map(m => `
-    <div class="card moduleCard" onclick="openModule(${m.id})">
-      <div class="kicker">MODULE ${String(m.id).padStart(2,'0')} · ${m.domain}</div>
+    <div class="card moduleCard" onclick="openModule(${m.id})" style="${m.id === 0 ? 'border:2px solid #fca5a5;background:#fffaf9' : ''}">
+      <div class="kicker" style="${m.id === 0 ? 'color:#b91c1c' : ''}">MODULE ${String(m.id).padStart(2,'0')} · ${m.domain}</div>
       <h3>${m.name}</h3>
       <p class="muted">${m.topics.slice(0,3).join(' · ')}</p>
       <div>
+        ${m.id === 0 ? '<span class="tag" style="background:#fee2e2!important;border-color:#fca5a5!important;color:#b91c1c!important;font-weight:900">★ START HERE · PREREQUISITES</span>' : ''}
         ${m.id === 1 ? '<span class="tag" style="background:#fee2e2!important;border-color:#fca5a5!important;color:#b91c1c!important;font-weight:900">★ COMPLETE LABS &amp; VISUALS</span>' : ''}
         <span class="tag">CONCEPT</span><span class="tag">VISUAL</span><span class="tag">LAB</span><span class="tag">EVIDENCE</span>
       </div>
@@ -1084,22 +1088,28 @@ function checkReadiness(){
   else { msg.textContent='NOT READY — complete the concept exploration first.'; msg.style.color='#e21b23'; }
 }
 function openModule(id){
-  const m=MODULES[id-1];
+  const m=MODULES.find(x => x.id === id) || MODULES[0];
   document.getElementById('modalKicker').textContent='MODULE '+String(id).padStart(2,'0')+' · '+m.domain;
   document.getElementById('modalTitle').textContent=m.name;
   document.getElementById('modalIntro').textContent='This module follows the CyberCore design template: objective → concept → visual → simulator → scenario → lab → evidence → readiness.';
   document.getElementById('modalTopics').innerHTML=m.topics.map((t,i)=>`<div class="check"><b>${String(i+1).padStart(2,'0')}</b><span>${t}</span></div>`).join('');
   const deepLink = document.getElementById('modalDeepLink');
   if(deepLink){
-    if(id === 1){
+    if(id === 0){
+      deepLink.href = 'module-00.html';
+      deepLink.textContent = 'OPEN COMPLETE MODULE 00 SETUP & PREREQUISITES →';
+      deepLink.className = 'btn red';
+      deepLink.onclick = null;
+    } else if(id === 1){
       deepLink.href = 'module-01.html';
       deepLink.textContent = 'OPEN COMPLETE MODULE 01 LAB & VISUALS →';
       deepLink.className = 'btn red';
+      deepLink.onclick = null;
     } else {
       deepLink.href = '#visual-atlas';
       deepLink.textContent = 'EXPLORE IN VISUAL ATLAS →';
       deepLink.className = 'btn';
-      deepLink.onclick = () => { closeModule(); ccRender(id - 1); document.getElementById('visual-atlas').scrollIntoView({behavior:'smooth'}); };
+      deepLink.onclick = () => { closeModule(); ccRender(Math.max(0, id - 1)); document.getElementById('visual-atlas').scrollIntoView({behavior:'smooth'}); };
     }
   }
   document.getElementById('moduleModal').classList.add('show');
@@ -1133,6 +1143,7 @@ function updateScroll(){
 window.addEventListener('scroll',updateScroll); updateScroll();
 
 const CC_MODULES = [
+  {"id": "00", "title": "Prerequisites & Setup", "visualTitle": "Workstation Setup", "visualType": "builder-flow", "summary": "Host specs, NetAcad, Packet Tracer, VirtualBox, and Kali VM import"},
   {"id": "01", "title": "Security Essentials", "visualTitle": "CIA Triad", "visualType": "risk-chain", "summary": "Security objectives, assets, threats, vulnerabilities and risk"},
   {"id": "02", "title": "Anatomy of Cybersecurity", "visualTitle": "Security Anatomy", "visualType": "security-anatomy", "summary": "People, process, technology, data and controls"},
   {"id": "03", "title": "Cybersecurity Frameworks and Standards", "visualTitle": "Framework Map", "visualType": "framework-map", "summary": "Governance, risk, controls and continuous improvement"},
