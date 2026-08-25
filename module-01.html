@@ -297,11 +297,11 @@ footer{
 <body>
 
 <header class="top">
-  <button class="btn sm" onclick="toggleSidebar()" aria-label="Toggle navigation">☰</button>
-  <a href="index.html" class="brand" style="display:flex;align-items:center;gap:12px;text-decoration:none">
-    <img src="assets/logo.png" alt="ShadowXLab Logo" style="height:36px;object-fit:contain">
+  <a href="index.html" class="brand" title="ShadowXLab Home" style="display:flex;align-items:center;gap:12px;text-decoration:none;cursor:pointer">
+    <img src="assets/logo.png" alt="ShadowXLab Logo" style="height:38px;object-fit:contain">
     <div style="font-size:14px;font-weight:900;letter-spacing:.08em;color:var(--text);border-left:1.5px solid var(--line);padding-left:10px">CYBER<span style="color:var(--cyber-red)">CORE</span></div>
   </a>
+  <button class="btn sm" onclick="toggleSidebar()" aria-label="Toggle navigation" style="margin-left:4px">☰ MENU</button>
   <div class="top-meta">
     <span>MODULE 01 / 40</span>
     <span>•</span>
@@ -309,15 +309,15 @@ footer{
   </div>
   <div class="grow"></div>
   <a href="module-00.html" class="btn sm" style="border-color:#fca5a5;background:#fef2f2;color:#b91c1c">← MODULE 00: PREREQUISITES</a>
-  <a href="index.html" class="btn sm">CURRICULUM</a>
+  <a href="index.html" class="btn sm">HOME</a>
   <button class="btn sm red" onclick="document.getElementById('sec-lab').scrollIntoView({behavior:'smooth'})">HANDS-ON LABS →</button>
 </header>
 
 <div class="layout" id="layout">
 <aside id="sidebar">
-  <div style="padding:4px 6px 12px">
+  <a href="index.html" style="display:block;padding:4px 6px 12px" title="Return to CyberCore Home">
     <img src="assets/logo.png" alt="ShadowXLab" style="height:32px;max-width:100%;object-fit:contain">
-  </div>
+  </a>
   <div class="side-k">SHADOWXLAB · CYBERCORE</div>
   <div class="side-title">Module 01</div>
   <div class="side-sub">Security Essentials & Onboarding</div>

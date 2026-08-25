@@ -365,26 +365,26 @@ footer{
 <body>
 
 <header class="top">
-  <button class="btn sm" onclick="toggleSidebar()" aria-label="Toggle navigation">☰</button>
-  <a href="index.html" class="brand" style="display:flex;align-items:center;gap:12px;text-decoration:none">
-    <img src="assets/logo.png" alt="ShadowXLab Logo" style="height:36px;object-fit:contain">
+  <a href="index.html" class="brand" title="ShadowXLab Home" style="display:flex;align-items:center;gap:12px;text-decoration:none;cursor:pointer">
+    <img src="assets/logo.png" alt="ShadowXLab Logo" style="height:38px;object-fit:contain">
     <div style="font-size:14px;font-weight:900;letter-spacing:.08em;color:var(--text);border-left:1.5px solid var(--line);padding-left:10px">CYBER<span style="color:var(--cyber-red)">CORE</span></div>
   </a>
+  <button class="btn sm" onclick="toggleSidebar()" aria-label="Toggle navigation" style="margin-left:4px">☰ MENU</button>
   <div class="top-meta">
     <span>MODULE 00 / 40</span>
     <span>•</span>
     <span>LAB FOUNDATION &amp; WORKSTATION COCKPIT</span>
   </div>
   <div class="grow"></div>
-  <a href="index.html" class="btn sm">← CURRICULUM</a>
+  <a href="index.html" class="btn sm">← HOME / CURRICULUM</a>
   <a href="module-01.html" class="btn sm red">MODULE 01: ONBOARDING →</a>
 </header>
 
 <div class="layout" id="layout">
 <aside id="sidebar">
-  <div style="padding:4px 6px 12px">
+  <a href="index.html" style="display:block;padding:4px 6px 12px" title="Return to CyberCore Home">
     <img src="assets/logo.png" alt="ShadowXLab" style="height:32px;max-width:100%;object-fit:contain">
-  </div>
+  </a>
   <div class="side-k">SHADOWXLAB · CYBERCORE</div>
   <div class="side-title">Module 00</div>
   <div class="side-sub">Lab Setup Cockpit</div>
