@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ShadowXLab · CyberCore · Module 00: Hardware & Software Prerequisites</title>
+<title>ShadowXLab · CyberCore · Module 00: Lab Foundation &amp; Workstation Cockpit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -74,7 +74,7 @@ aside{
 .progress-card{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 4px 16px}
 .progress-header{display:flex;justify-content:space-between;font:700 11px var(--mono);margin-bottom:8px}
 .progress-bar-bg{height:6px;background:#e5e9ed;border-radius:99px;overflow:hidden}
-.progress-bar-fill{width:20%;height:100%;background:linear-gradient(90deg,var(--cyber-red),var(--cyber-red-2));border-radius:99px;transition:width .3s ease}
+.progress-bar-fill{width:82%;height:100%;background:linear-gradient(90deg,var(--cyber-red),var(--cyber-red-2));border-radius:99px;transition:width .3s ease}
 
 .nav a{
   display:block;padding:11px 12px;border-radius:9px;font-size:13px;font-weight:700;margin:3px 0;
@@ -96,7 +96,7 @@ main{min-width:0}
   position:relative;overflow:hidden;
 }
 .hero:after{
-  content:"MODULE 00";position:absolute;right:-10px;bottom:-35px;font-size:140px;font-weight:900;
+  content:"FOUNDATION";position:absolute;right:-10px;bottom:-35px;font-size:140px;font-weight:900;
   letter-spacing:-.06em;color:rgba(0,0,0,.025);pointer-events:none;font-family:var(--mono);
 }
 .kicker{font:800 10.5px var(--mono);letter-spacing:.16em;color:var(--cyber-red);text-transform:uppercase}
@@ -114,11 +114,6 @@ main{min-width:0}
 .badge.green{border-color:#bbf7d0;background:#f0fdf4;color:var(--green-dark)}
 .badge.blue{border-color:#bfdbfe;background:#eff6ff;color:#1d4ed8}
 
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:28px;max-width:920px}
-.stat-box{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
-.stat-box .num{font:900 22px var(--mono);color:var(--cyber-red);line-height:1}
-.stat-box .lbl{font-size:11.5px;font-weight:700;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.05em}
-
 /* CONTENT SECTIONS */
 .content{padding:10px clamp(24px,5vw,72px) 80px;max-width:1420px;margin:0 auto}
 .section{padding:54px 0;border-bottom:1px solid var(--line)}
@@ -126,86 +121,148 @@ main{min-width:0}
 .section-head h2{font-size:clamp(26px,3.2vw,40px);letter-spacing:-.04em;margin:8px 0 8px;font-weight:800;line-height:1.1}
 .section-head p{color:var(--muted);font-size:15px;max-width:840px;margin:0}
 
-/* CARDS & GRIDS */
-.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
-.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.card{
-  border:1px solid var(--line);border-radius:var(--radius);background:#ffffff;padding:24px;
-  box-shadow:var(--shadow);position:relative;overflow:hidden;
+/* READINESS COCKPIT (1) */
+.cockpit-box{
+  background:linear-gradient(135deg,#0c0f14,#141922);border:1px solid #28313e;border-radius:18px;
+  padding:26px;color:#fff;box-shadow:var(--shadow-lg);margin:24px 0 34px;position:relative;overflow:hidden;
 }
-.card.interactive{transition:all .2s ease;cursor:pointer}
-.card.interactive:hover{transform:translateY(-3px);border-color:var(--cyber-red);box-shadow:var(--shadow-lg)}
-.card h3{font-size:17px;font-weight:800;letter-spacing:-.02em;margin:8px 0 8px}
-.card p{font-size:13.5px;color:var(--muted);line-height:1.6;margin:0}
+.cockpit-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;border-bottom:1px solid #232b36;padding-bottom:18px;margin-bottom:20px}
+.cockpit-title{font:900 12px var(--mono);letter-spacing:.16em;color:var(--cyber-red-2)}
+.cockpit-gauge{display:flex;align-items:center;gap:14px}
+.cockpit-pct{font:900 28px var(--mono);color:#7ee787;line-height:1}
+.cockpit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.cockpit-item{
+  background:rgba(255,255,255,.03);border:1px solid #232a34;border-radius:10px;padding:12px 14px;
+  display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all .15s ease;
+}
+.cockpit-item:hover{background:rgba(255,255,255,.06);border-color:#3d4856}
+.cockpit-item.ok{border-left:3px solid var(--green)}
+.cockpit-item.warn{border-left:3px solid var(--amber)}
+.cockpit-item.bad{border-left:3px solid var(--cyber-red)}
+.cockpit-item .k{font:700 11px var(--mono);color:#8b949e}
+.cockpit-item .v{font:800 12px var(--mono)}
+.cockpit-item .v.ok{color:#7ee787}
+.cockpit-item .v.warn{color:#f59e0b}
 
-/* GUI WINDOW MOCKUPS */
-.gui-window{
-  border:1px solid #2e3846;border-radius:14px;background:#0d1117;color:#e6edf3;
-  overflow:hidden;box-shadow:0 24px 65px rgba(0,0,0,.22);margin:20px 0;
+/* HARDWARE BLUEPRINT (2) */
+.blueprint-card{
+  background:#090c10;border:1px solid #2d3644;border-radius:16px;padding:26px;color:#fff;box-shadow:var(--shadow-lg);
 }
-.gui-topbar{
-  background:#161b22;padding:10px 16px;display:flex;align-items:center;gap:12px;
-  border-bottom:1px solid #30363d;font:700 11.5px var(--mono);color:#8b949e;
+.blueprint-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.bar-track{height:10px;background:#1b222d;border-radius:99px;overflow:hidden;margin:6px 0 12px}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--cyber-red),var(--cyber-red-2));border-radius:99px;transition:width .3s ease}
+.bar-fill.blue{background:linear-gradient(90deg,#3b82f6,#60a5fa)}
+.bar-fill.green{background:linear-gradient(90deg,#10b981,#34d399)}
+.alloc-card{
+  background:#141922;border:1px solid #26303d;border-radius:12px;padding:18px;display:flex;flex-direction:column;justify-content:space-between;
 }
-.gui-dots{display:flex;gap:6px}
-.gui-dot{width:10px;height:10px;border-radius:50%}
-.gui-dot.red{background:#ff5f56}.gui-dot.yellow{background:#ffbd2e}.gui-dot.green{background:#27c93f}
-.gui-title{flex:1;text-align:center;color:#c9d1d9;letter-spacing:.04em}
-.gui-body{padding:20px;font-size:13px}
 
-/* REALISTIC TERMINAL */
-.terminal{
-  background:#090c10;border:1px solid #30363d;border-radius:10px;padding:16px 18px;
-  font:12.5px/1.7 var(--mono);color:#c9d1d9;white-space:pre-wrap;overflow-x:auto;max-height:360px;
+/* VIRTUALIZATION VT-X VISUALIZER (3) */
+.vtx-card{
+  background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px;box-shadow:var(--shadow);
 }
-.t-prompt{color:#58a6ff;font-weight:700}
-.t-cmd{color:#f0883e;font-weight:700}
-.t-ok{color:#7ee787}
-.t-err{color:#ff7b72}
-.t-dim{color:#8b949e}
-.t-hi{color:#d2a8ff;font-weight:700}
+.vtx-toggle-row{display:flex;align-items:center;justify-content:space-between;background:var(--soft);padding:14px 20px;border-radius:12px;margin-bottom:20px}
+.switch-btn{
+  background:#0e1116;color:#fff;border:1px solid #333;padding:8px 18px;border-radius:99px;font:800 12px var(--mono);cursor:pointer;transition:all .18s ease;
+}
+.switch-btn.active-on{background:var(--green);border-color:var(--green)}
+.switch-btn.active-off{background:var(--cyber-red);border-color:var(--cyber-red)}
+.vtx-pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;text-align:center;margin:18px 0}
+.vtx-node{
+  background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:14px 10px;font:700 11px var(--mono);
+}
+.vtx-node.ok{border-color:var(--green);background:#f0fdf4;color:#166534}
+.vtx-node.err{border-color:var(--cyber-red);background:#fef2f2;color:#991b1b}
 
-/* STEP CARDS */
-.step-card{
-  display:grid;grid-template-columns:50px 1fr;gap:18px;background:#fff;border:1px solid var(--line);
-  border-radius:14px;padding:22px;margin-bottom:18px;box-shadow:var(--shadow-sm);transition:border-color .2s ease;
+/* LAB STACK (4) */
+.stack-box{
+  display:grid;grid-template-columns:1.2fr 1fr;gap:24px;background:#fff;border:1px solid var(--line);
+  border-radius:18px;padding:26px;box-shadow:var(--shadow);
 }
-.step-card:hover{border-color:var(--cyber-red)}
-.step-num{
-  width:44px;height:44px;border-radius:10px;background:var(--soft);border:1px solid var(--line);
-  color:var(--cyber-red);font:900 16px var(--mono);display:flex;align-items:center;justify-content:center;
+.stack-layers{display:flex;flex-direction:column;gap:8px}
+.stack-tier{
+  padding:14px 18px;border:1px solid #d0d7de;border-radius:10px;background:#f6f8fa;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;transition:all .18s ease;
 }
-.step-card.active .step-num{background:var(--cyber-red);color:#fff;border-color:var(--cyber-red)}
-.step-content h4{margin:0 0 6px;font-size:16px;font-weight:800}
-.step-content p{margin:0 0 12px;font-size:13.5px;color:var(--muted)}
-.step-callout{
-  background:#f8fafc;border-left:3px solid var(--cyber-red);padding:12px 16px;border-radius:0 8px 8px 0;
-  font-size:13px;color:#334155;margin-top:12px;
+.stack-tier:hover,.stack-tier.active{
+  border-color:var(--cyber-red);background:#fff;box-shadow:0 8px 20px rgba(226,27,35,.12);transform:translateX(4px);
 }
-.step-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.stack-tier.active{border-left:4px solid var(--cyber-red)}
+.stack-tier b{font-size:13.5px;color:var(--text)}
+.stack-tier span{font:700 10.5px var(--mono);color:var(--muted)}
+.stack-detail-pane{
+  background:var(--dark2);border:1px solid #2b3340;border-radius:14px;padding:22px;color:#fff;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
 
-/* LINK CARDS */
-.link-box{
-  display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:var(--soft);
-  border:1px solid var(--line);border-radius:10px;margin-top:10px;transition:all .15s ease;
+/* NETWORK MODE VISUALIZER (5) */
+.net-visualizer{
+  background:#090c10;border:1px solid #2c3542;border-radius:18px;padding:26px;color:#fff;box-shadow:var(--shadow-lg);margin-top:20px;
 }
-.link-box:hover{background:#fff;border-color:var(--cyber-red);box-shadow:var(--shadow-sm)}
-.link-info b{display:block;font-size:14px;color:var(--text)}
-.link-info span{font-size:12px;color:var(--muted);font-family:var(--mono)}
+.net-mode-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.net-pill{
+  background:#161c24;border:1px solid #303a48;color:#8b949e;padding:8px 16px;border-radius:99px;
+  font:800 11.5px var(--mono);cursor:pointer;transition:all .15s ease;
+}
+.net-pill:hover{color:#fff;border-color:#58a6ff}
+.net-pill.active{background:var(--cyber-red);border-color:var(--cyber-red);color:#fff;box-shadow:0 0 15px rgba(226,27,35,.4)}
+.net-canvas{
+  background:#05070a;border:1px solid #1f2732;border-radius:14px;padding:22px;position:relative;min-height:300px;
+  display:flex;align-items:center;justify-content:space-around;overflow:hidden;
+}
+.net-device{
+  background:#141a23;border:1px solid #2d3848;border-radius:12px;padding:16px 14px;text-align:center;min-width:120px;
+  position:relative;z-index:2;box-shadow:0 6px 16px rgba(0,0,0,.4);transition:all .2s ease;
+}
+.net-device.active-node{border-color:var(--green);box-shadow:0 0 20px rgba(16,185,129,.3)}
+.net-device.blocked-node{border-color:#ef4444;opacity:.5}
+.net-badge-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+.net-badge-box{
+  background:#141a23;border:1px solid #232b36;border-radius:8px;padding:10px;text-align:center;
+}
+.net-badge-box .lbl{font:700 10px var(--mono);color:#8b949e;margin-bottom:3px}
+.net-badge-box .val{font:800 12px var(--mono)}
 
-/* COMPARISON TABLE */
+/* PACKET TRACER MINI WORKSPACE (6) */
+.pt-sim-box{
+  background:#0c0f14;border:1px solid #2d3644;border-radius:16px;padding:24px;color:#fff;box-shadow:var(--shadow-lg);margin-top:20px;
+}
+.pt-stage{
+  background:#06080b;border:1px solid #1b222d;border-radius:12px;padding:24px;min-height:220px;position:relative;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.pt-packet-dot{
+  width:16px;height:16px;border-radius:50%;background:var(--cyber-red);position:absolute;top:calc(50% - 8px);
+  left:80px;box-shadow:0 0 12px var(--cyber-red);transition:left .6s cubic-bezier(.4,0,.2,1);z-index:10;
+}
+.pt-wire{
+  position:absolute;left:90px;right:90px;top:50%;height:2px;background:#253040;z-index:1;
+}
+
+/* SNAPSHOT WORKFLOW (7) */
+.snap-workflow{
+  background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px;box-shadow:var(--shadow);
+}
+.snap-step-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}
+.snap-box{
+  background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:16px;text-align:center;position:relative;
+}
+.snap-box.clean{border-top:3px solid var(--green)}
+.snap-box.dirty{border-top:3px solid var(--cyber-red)}
+
+/* TOOLCHAIN (8) */
+.toolchain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.tool-card{
+  background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;cursor:pointer;
+  transition:all .18s ease;box-shadow:var(--shadow-sm);
+}
+.tool-card:hover,.tool-card.active{border-color:var(--cyber-red);transform:translateY(-2px);box-shadow:var(--shadow)}
+
+/* MATRIX TABLE */
 .matrix-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px}
 .matrix-table th{background:#f1f4f8;padding:12px 14px;border:1px solid var(--line);text-align:left;font-family:var(--mono);font-size:11.5px;color:#475569}
 .matrix-table td{padding:12px 14px;border:1px solid var(--line);vertical-align:top}
 .matrix-table tr:hover{background:#fafbfc}
-
-/* CALCULATOR WIDGET */
-.calc-box{background:var(--dark2);border:1px solid #30363d;border-radius:16px;padding:24px;color:#fff;margin-top:20px}
-.calc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.calc-field label{display:block;font:700 11px var(--mono);color:#8b949e;margin-bottom:6px;letter-spacing:.08em}
-.calc-field select{width:100%;background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:10px;color:#fff;font-size:13px}
-.calc-result{background:#05070a;border:1px solid #30363d;border-radius:12px;padding:18px;margin-top:18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
 
 /* CHECKPOINTS */
 .cp-card{
@@ -240,13 +297,16 @@ footer{
 }
 
 @media(max-width:1050px){
-  .grid4,.calc-grid{grid-template-columns:repeat(2,1fr)}
+  .cockpit-grid,.snap-step-grid{grid-template-columns:repeat(2,1fr)}
+  .blueprint-grid,.stack-box{grid-template-columns:1fr}
 }
 @media(max-width:900px){
   .layout{grid-template-columns:1fr}
   aside{position:relative;top:0;height:auto;border-right:0;border-bottom:1px solid var(--line)}
-  .grid2,.grid3,.stats-grid{grid-template-columns:1fr}
-  .calc-grid{grid-template-columns:1fr}
+  .toolchain-grid,.net-badge-row{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .cockpit-grid,.toolchain-grid,.net-badge-row,.snap-step-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -261,7 +321,7 @@ footer{
   <div class="top-meta">
     <span>MODULE 00 / 40</span>
     <span>•</span>
-    <span>HARDWARE, SOFTWARE &amp; LAB PREREQUISITES</span>
+    <span>LAB FOUNDATION &amp; WORKSTATION COCKPIT</span>
   </div>
   <div class="grow"></div>
   <a href="index.html" class="btn sm">← CURRICULUM</a>
@@ -272,27 +332,27 @@ footer{
 <aside id="sidebar">
   <div class="side-k">SHADOWXLAB · CYBERCORE</div>
   <div class="side-title">Module 00</div>
-  <div class="side-sub">Lab Setup &amp; Prerequisites</div>
+  <div class="side-sub">Lab Setup Cockpit</div>
   
   <div class="progress-card">
     <div class="progress-header">
-      <span>PREREQUISITE CHECK</span>
-      <span id="progPct">20%</span>
+      <span>WORKSTATION READINESS</span>
+      <span id="progPct">82%</span>
     </div>
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="progBar"></div></div>
   </div>
 
   <nav class="nav" id="moduleNav">
-    <a href="#sec-overview" class="active">01 · Overview &amp; Specs<small>Hardware &amp; OS baseline</small></a>
-    <a href="#sec-bios">02 · BIOS Virtualization<small>VT-x / AMD-V enable</small></a>
-    <a href="#sec-software">03 · Host Software Stack<small>Essential host tools</small></a>
-    <a href="#sec-netacad">04 · Cisco NetAcad<small>Registration &amp; profile</small></a>
-    <a href="#sec-packet-tracer">05 · Cisco Packet Tracer<small>Download &amp; install</small></a>
-    <a href="#sec-virtualbox">06 · Oracle VirtualBox 7.x<small>Hypervisor &amp; ext pack</small></a>
-    <a href="#sec-vms">07 · Security Lab VMs<small>Kali &amp; Essentials VM</small></a>
-    <a href="#sec-network-modes">08 · VirtualBox Networks<small>NAT vs Host-Only vs Internal</small></a>
-    <a href="#sec-checkpoints">09 · Checkpoints<small>Prerequisite quizzes</small></a>
-    <a href="#sec-references">10 · Official References<small>Verified download links</small></a>
+    <a href="#sec-overview" class="active">01 · Lab Foundation<small>Setup cockpit &amp; status</small></a>
+    <a href="#sec-hardware">02 · Hardware Blueprint<small>Interactive resource model</small></a>
+    <a href="#sec-virtualization">03 · Virtualization Engine<small>VT-x / AMD-V pipeline</small></a>
+    <a href="#sec-stack">04 · CyberCore Lab Stack<small>Host → Hypervisor → VM</small></a>
+    <a href="#sec-network">05 · Network Visualizer<small>NAT vs Host-Only vs Bridged</small></a>
+    <a href="#sec-packet-tracer">06 · Packet Tracer Lab<small>Simulated network canvas</small></a>
+    <a href="#sec-toolchain">07 · Toolchain Map<small>Integrated software suite</small></a>
+    <a href="#sec-snapshots">08 · Snapshot Lifecycle<small>Clean baseline recovery</small></a>
+    <a href="#sec-checkpoints">09 · Knowledge Checkpoints<small>Prerequisite assessments</small></a>
+    <a href="#sec-references">10 · Verified References<small>Official download URLs</small></a>
     <a href="#sec-readiness">11 · Readiness Gate<small>Unlock Module 01</small></a>
   </nav>
 </aside>
@@ -300,474 +360,459 @@ footer{
 <main>
 <!-- HERO -->
 <section class="hero" id="sec-overview">
-  <div class="kicker">SHADOWXLAB CYBERCORE · ZERO-TRUST ONBOARDING · MODULE 00</div>
-  <h1>Hardware, Software &amp; Lab<br><span>Prerequisites Setup</span></h1>
-  <p class="lead">Prepare your complete cybersecurity workstation from scratch: verify CPU hardware virtualization, configure your host operating system, register with Cisco NetAcad, install Cisco Packet Tracer, deploy Oracle VirtualBox 7.x, and import pre-configured Security &amp; Kali VMs for safe lab isolation.</p>
+  <div class="kicker">SHADOWXLAB CYBERCORE · ZERO-TRUST LAB FOUNDATION · MODULE 00</div>
+  <h1>CyberCore Lab Foundation:<br><span>Workstation Setup Cockpit</span></h1>
+  <p class="lead">You are building the machine on which the entire CyberCore journey will run. Assemble your host hardware allocations, verify CPU virtualization pipelines, configure hypervisor isolation boundaries, and initialize your clean baseline testing environment.</p>
   
   <div class="badges">
-    <span class="badge red">PREREQUISITE TRACK</span>
-    <span class="badge">HARDWARE SPECS</span>
-    <span class="badge blue">CISCO NETACAD</span>
-    <span class="badge">PACKET TRACER 8.2+</span>
-    <span class="badge">ORACLE VIRTUALBOX 7.X</span>
+    <span class="badge red">MODULE 00 / 40</span>
+    <span class="badge">WORKSTATION COCKPIT</span>
+    <span class="badge blue">HARDWARE BLUEPRINT</span>
     <span class="badge green">LAB READY</span>
   </div>
 
-  <div class="stats-grid">
-    <div class="stat-box"><div class="num">08</div><div class="lbl">Core Setup Steps</div></div>
-    <div class="stat-box"><div class="num">16 GB</div><div class="lbl">Recommended RAM</div></div>
-    <div class="stat-box"><div class="num">06</div><div class="lbl">Pre-Configured Tools</div></div>
-    <div class="stat-box"><div class="num">100%</div><div class="lbl">Free / Educational</div></div>
+  <!-- 1. WORKSTATION READINESS COCKPIT -->
+  <div class="cockpit-box">
+    <div class="cockpit-header">
+      <div>
+        <div class="cockpit-title">CYBERCORE WORKSTATION READINESS COCKPIT</div>
+        <div style="font-size:12px;color:#8b949e;margin-top:2px">Click any parameter below to toggle and test your lab readiness state</div>
+      </div>
+      <div class="cockpit-gauge">
+        <span class="cockpit-pct" id="cockpitPct">82%</span>
+        <span style="font:800 11px var(--mono);color:#7ee787;letter-spacing:.08em" id="cockpitStatus">LAB READY</span>
+      </div>
+    </div>
+
+    <div class="cockpit-grid">
+      <div class="cockpit-item ok" id="ck-cpu" onclick="toggleCockpitItem('cpu')">
+        <span class="k">CPU CORES</span>
+        <span class="v ok" id="val-cpu">8 CORES ✓</span>
+      </div>
+      <div class="cockpit-item ok" id="ck-ram" onclick="toggleCockpitItem('ram')">
+        <span class="k">RAM SIZING</span>
+        <span class="v ok" id="val-ram">16 GB ✓</span>
+      </div>
+      <div class="cockpit-item ok" id="ck-vtx" onclick="toggleCockpitItem('vtx')">
+        <span class="k">VIRTUALIZATION</span>
+        <span class="v ok" id="val-vtx">VT-x ON ✓</span>
+      </div>
+      <div class="cockpit-item ok" id="ck-disk" onclick="toggleCockpitItem('disk')">
+        <span class="k">FREE STORAGE</span>
+        <span class="v ok" id="val-disk">180 GB SSD ✓</span>
+      </div>
+      <div class="cockpit-item ok" id="ck-vbox" onclick="toggleCockpitItem('vbox')">
+        <span class="k">HYPERVISOR</span>
+        <span class="v ok" id="val-vbox">VIRTUALBOX 7.X ✓</span>
+      </div>
+      <div class="cockpit-item ok" id="ck-pt" onclick="toggleCockpitItem('pt')">
+        <span class="k">PACKET TRACER</span>
+        <span class="v ok" id="val-pt">INSTALLED ✓</span>
+      </div>
+      <div class="cockpit-item ok" id="ck-kali" onclick="toggleCockpitItem('kali')">
+        <span class="k">KALI LINUX VM</span>
+        <span class="v ok" id="val-kali">IMPORTED ✓</span>
+      </div>
+      <div class="cockpit-item warn" id="ck-net" onclick="toggleCockpitItem('net')">
+        <span class="k">NET ISOLATION</span>
+        <span class="v warn" id="val-net">NAT NETWORK ⚠</span>
+      </div>
+    </div>
   </div>
 </section>
 
 <div class="content">
 
-<!-- SECTION 1: HARDWARE SPECS & SIZING -->
-<section class="section" id="sec-specs">
+<!-- 2. INTERACTIVE HARDWARE MODEL -->
+<section class="section" id="sec-hardware">
   <div class="section-head">
-    <div class="kicker">01 · PHYSICAL SYSTEM SIZING</div>
-    <h2>Hardware Requirements &amp; Host Recommendations</h2>
-    <p>Cybersecurity training requires running multiple virtual machines concurrently (e.g., Kali Linux operator VM + Target Windows/Linux VM). Verify that your host meets the operational requirements.</p>
+    <div class="kicker">02 · INTERACTIVE HARDWARE MODEL</div>
+    <h2>Hardware Allocation &amp; Virtual Machine Sizing</h2>
+    <p>Change your host hardware parameters below to see real-time VM allocation capacity and concurrent lab scaling.</p>
   </div>
 
-  <table class="matrix-table">
-    <thead>
-      <tr>
-        <th>Component</th>
-        <th>Minimum Baseline</th>
-        <th>Recommended Spec</th>
-        <th>Ideal Enterprise Lab</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><b>Processor (CPU)</b></td>
-        <td>Intel Core i5 / AMD Ryzen 5 (4 Cores, 2.0 GHz+) with VT-x / AMD-V</td>
-        <td>Intel Core i7 / AMD Ryzen 7 (6-8 Cores, 3.2 GHz+)</td>
-        <td>Intel Core i9 / AMD Ryzen 9 / Apple M-series (8-16 Cores)</td>
-      </tr>
-      <tr>
-        <td><b>Memory (RAM)</b></td>
-        <td>8 GB DDR4 (Allows 1 VM with 3-4 GB allocated)</td>
-        <td>16 GB DDR4/DDR5 (Allows 2-3 simultaneous VMs)</td>
-        <td>32 GB+ DDR5 (Full multi-target Active Directory lab)</td>
-      </tr>
-      <tr>
-        <td><b>Storage Disk</b></td>
-        <td>120 GB Free Disk Space (HDD or SATA SSD)</td>
-        <td>250 GB+ Free NVMe M.2 SSD (Crucial for VM I/O speed)</td>
-        <td>500 GB - 1 TB Dedicated NVMe SSD</td>
-      </tr>
-      <tr>
-        <td><b>Host Operating System</b></td>
-        <td>Windows 10 64-bit (21H2+) / macOS 11+ / Ubuntu 22.04 LTS</td>
-        <td>Windows 11 64-bit Pro / Enterprise (WSL2 + VirtualBox)</td>
-        <td>Windows 11 Pro or Dual-Boot Ubuntu 24.04 LTS</td>
-      </tr>
-      <tr>
-        <td><b>Display &amp; Network</b></td>
-        <td>1080p Display, 25 Mbps Stable Internet</td>
-        <td>Dual Monitors (1080p/1440p) for Side-by-Side Lab Docs</td>
-        <td>Dual 4K / Ultrawide Displays, Gigabit Ethernet</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Interactive Sizing Widget -->
-  <div class="calc-box">
-    <div class="kicker" style="color:var(--cyber-red-2)">INTERACTIVE LAB ALLOCATION CALCULATOR</div>
-    <h3 style="margin:6px 0 14px">Calculate Optimal VM RAM &amp; Core Allocations</h3>
-    <div class="calc-grid">
-      <div class="calc-field">
-        <label>TOTAL HOST RAM</label>
-        <select id="calcRam" onchange="runCalc()">
-          <option value="8">8 GB RAM</option>
-          <option value="16" selected>16 GB RAM (Standard)</option>
-          <option value="32">32 GB RAM (Recommended)</option>
-          <option value="64">64 GB RAM (Pro Lab)</option>
-        </select>
-      </div>
-      <div class="calc-field">
-        <label>HOST CPU PHYSICAL CORES</label>
-        <select id="calcCpu" onchange="runCalc()">
-          <option value="4">4 Physical Cores (8 Threads)</option>
-          <option value="6">6 Physical Cores (12 Threads)</option>
-          <option value="8" selected>8 Physical Cores (16 Threads)</option>
-          <option value="16">16 Physical Cores (32 Threads)</option>
-        </select>
-      </div>
-      <div class="calc-field">
-        <label>STORAGE TYPE</label>
-        <select id="calcStorage" onchange="runCalc()">
-          <option value="ssd" selected>NVMe SSD (Fastest)</option>
-          <option value="sata">SATA SSD (Standard)</option>
-          <option value="hdd">Mechanical HDD (Slow)</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="calc-result" id="calcOutput">
+  <div class="blueprint-card">
+    <div class="blueprint-grid">
+      <!-- Left: Interactive Host Sliders -->
       <div>
-        <div style="font:800 11px var(--mono);color:#58a6ff">RECOMMENDED LAB CONCURRENCY</div>
-        <div style="font-size:16px;font-weight:800;margin-top:2px" id="calcVmSummary">Up to 2 Concurrent VMs (Kali Linux + 1 Target VM)</div>
-      </div>
-      <div style="font:700 12px var(--mono);color:#7ee787" id="calcAllocation">Kali: 4GB RAM / 2 Cores | Target: 4GB RAM / 2 Cores | Host Reserved: 8GB</div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 2: BIOS / UEFI VIRTUALIZATION -->
-<section class="section" id="sec-bios">
-  <div class="section-head">
-    <div class="kicker">02 · HARDWARE ACCELERATION</div>
-    <h2>Enabling CPU Virtualization (Intel VT-x / AMD-V)</h2>
-    <p>Hardware virtualization allows your host processor to execute guest operating system instructions directly at native hardware speeds. Without it, 64-bit VMs will fail to start.</p>
-  </div>
-
-  <div class="grid2">
-    <div class="step-card active">
-      <div class="step-num">01</div>
-      <div class="step-content">
-        <h4>Check Virtualization Status in Windows</h4>
-        <p>Press <kbd style="background:#e2e8f0;padding:2px 6px;border-radius:4px;font-family:var(--mono)">Ctrl + Shift + Esc</kbd> to open Task Manager. Go to <b>Performance</b> tab &gt; <b>CPU</b>. Look for <b>Virtualization: Enabled</b>.</p>
-        <div class="terminal">
-<span class="t-prompt">PS C:\&gt;</span> <span class="t-cmd">Get-CimInstance -ClassName Win32_Processor | Select-Object Name, VirtualizationFirmwareEnabled</span>
-
-Name                                      VirtualizationFirmwareEnabled
-----                                      -----------------------------
-Intel(R) Core(TM) i7-13700H CPU @ 2.40GHz <span class="t-ok">True</span>
+        <div style="font:800 11.5px var(--mono);color:#58a6ff;letter-spacing:.1em;margin-bottom:14px">HOST SYSTEM PARAMETERS</div>
+        
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;font:700 12px var(--mono)">
+            <span>HOST MEMORY (RAM)</span>
+            <span style="color:var(--cyber-red-2)" id="hwRamVal">16 GB</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" id="hwRamBar" style="width:50%"></div></div>
+          <div style="display:flex;gap:6px">
+            <button class="btn sm dark" onclick="setHwRam(8)">8 GB</button>
+            <button class="btn sm dark" style="border-color:var(--cyber-red)" onclick="setHwRam(16)">16 GB (Standard)</button>
+            <button class="btn sm dark" onclick="setHwRam(32)">32 GB (Pro)</button>
+            <button class="btn sm dark" onclick="setHwRam(64)">64 GB (Enterprise)</button>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <div class="step-card">
-      <div class="step-num">02</div>
-      <div class="step-content">
-        <h4>If Disabled: Enable in BIOS/UEFI Settings</h4>
-        <p>Reboot your computer and enter BIOS setup by repeatedly pressing the manufacturer key:</p>
-        <ul style="font-size:13px;color:var(--muted);padding-left:18px;margin:6px 0 10px">
-          <li><b>Dell / Alienware:</b> Press <kbd>F2</kbd> or <kbd>F12</kbd></li>
-          <li><b>HP:</b> Press <kbd>F10</kbd> or <kbd>Esc</kbd></li>
-          <li><b>Lenovo / ThinkPad:</b> Press <kbd>F1</kbd> or <kbd>Enter</kbd></li>
-          <li><b>ASUS / MSI / Gigabyte:</b> Press <kbd>Del</kbd> or <kbd>F2</kbd></li>
-        </ul>
-        <div class="step-callout">
-          <b>Navigate to:</b> <code>Advanced CPU Configuration</code> &gt; Enable <b>Intel Virtualization Technology (VT-x)</b> or <b>SVM Mode (AMD-V)</b> &gt; Save &amp; Exit (<kbd>F10</kbd>).
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;font:700 12px var(--mono)">
+            <span>PHYSICAL CPU CORES</span>
+            <span style="color:#60a5fa" id="hwCpuVal">8 Cores (16 Threads)</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill blue" id="hwCpuBar" style="width:50%"></div></div>
+          <div style="display:flex;gap:6px">
+            <button class="btn sm dark" onclick="setHwCpu(4)">4 Cores</button>
+            <button class="btn sm dark" style="border-color:var(--blue)" onclick="setHwCpu(8)">8 Cores</button>
+            <button class="btn sm dark" onclick="setHwCpu(16)">16 Cores</button>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- SECTION 3: HOST SOFTWARE STACK -->
-<section class="section" id="sec-software">
-  <div class="section-head">
-    <div class="kicker">03 · HOST UTILITIES</div>
-    <h2>Essential Host Tools &amp; Utilities</h2>
-    <p>Install these host utilities to manage archive extractions, configuration files, and network captures.</p>
-  </div>
-
-  <div class="grid3">
-    <div class="card">
-      <div class="kicker" style="color:var(--blue)">ARCHIVE EXTRACTOR</div>
-      <h3>7-Zip (64-bit)</h3>
-      <p>Required to decompress multi-part `.7z`, `.tar.gz`, and `.zip` compressed virtual appliances without corruption.</p>
-      <div class="link-box">
-        <div class="link-info"><b>7-Zip Official</b><span>7-zip.org</span></div>
-        <a href="https://www.7-zip.org/download.html" target="_blank" rel="noopener" class="btn sm red">DOWNLOAD ↗</a>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="kicker" style="color:var(--purple)">CODE &amp; CONFIG EDITOR</div>
-      <h3>Visual Studio Code</h3>
-      <p>Industry-standard code and configuration editor with syntax highlighting for Python, Bash, JSON, and YAML.</p>
-      <div class="link-box">
-        <div class="link-info"><b>VS Code</b><span>code.visualstudio.com</span></div>
-        <a href="https://code.visualstudio.com/Download" target="_blank" rel="noopener" class="btn sm red">DOWNLOAD ↗</a>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="kicker" style="color:var(--green)">PACKET ANALYZER</div>
-      <h3>Wireshark (Host Engine)</h3>
-      <p>Deep packet inspection tool to capture and analyze network traffic on physical and virtual host adapters.</p>
-      <div class="link-box">
-        <div class="link-info"><b>Wireshark</b><span>wireshark.org</span></div>
-        <a href="https://www.wireshark.org/download.html" target="_blank" rel="noopener" class="btn sm red">DOWNLOAD ↗</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 4: CISCO NETACAD REGISTRATION -->
-<section class="section" id="sec-netacad">
-  <div class="section-head">
-    <div class="kicker">04 · OFFICIAL ACADEMY ENROLLMENT</div>
-    <h2>Cisco Networking Academy (NetAcad) Registration</h2>
-    <p>Cisco NetAcad and Skills for All provide free official foundational courses, digital badges, and the official download license for Cisco Packet Tracer.</p>
-  </div>
-
-  <div class="step-card active">
-    <div class="step-num">01</div>
-    <div class="step-content">
-      <h4>Step 1: Create a Free Cisco NetAcad / Skills for All Account</h4>
-      <p>Navigate to Cisco NetAcad or Cisco Skills for All portal to register a student profile with your email address.</p>
-      
-      <div class="link-box" style="margin:14px 0">
-        <div class="link-info">
-          <b>Cisco Networking Academy Portal</b>
-          <span>https://www.netacad.com</span>
-        </div>
-        <a href="https://www.netacad.com" target="_blank" rel="noopener" class="btn sm red">VISIT NETACAD ↗</a>
-      </div>
-
-      <div class="link-box" style="margin:8px 0">
-        <div class="link-info">
-          <b>Cisco Skills for All (Self-Paced Learning)</b>
-          <span>https://skillsforall.com</span>
-        </div>
-        <a href="https://skillsforall.com" target="_blank" rel="noopener" class="btn sm red">VISIT SKILLS FOR ALL ↗</a>
-      </div>
-
-      <div class="step-callout">
-        <b>Recommended Free Courses to Enroll:</b>
-        <ul style="margin:4px 0 0;padding-left:18px">
-          <li><b>Introduction to Packet Tracer</b> (10 Hours — Essential for Packet Tracer download license)</li>
-          <li><b>Networking Basics</b> (25 Hours — Aligned with CyberCore Networking Track)</li>
-          <li><b>Cybersecurity Essentials</b> (30 Hours — Industry standard foundation badge)</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 5: CISCO PACKET TRACER INSTALLATION -->
-<section class="section" id="sec-packet-tracer">
-  <div class="section-head">
-    <div class="kicker">05 · NETWORK SIMULATION SOFTWARE</div>
-    <h2>Cisco Packet Tracer Download &amp; Installation</h2>
-    <p>Packet Tracer simulates enterprise switches, routers, firewalls, and endpoints with real-time protocol simulation and packet-level inspection.</p>
-  </div>
-
-  <div class="step-card active">
-    <div class="step-num">01</div>
-    <div class="step-content">
-      <h4>Step 1: Download Cisco Packet Tracer (Latest v8.2+)</h4>
-      <p>Log in to NetAcad, navigate to <b>Resources &gt; Download Packet Tracer</b> or access the direct course download page.</p>
-      
-      <div class="link-box" style="margin:12px 0">
-        <div class="link-info">
-          <b>Direct Packet Tracer Download Hub</b>
-          <span>NetAcad Login Required</span>
-        </div>
-        <a href="https://www.netacad.com/portal/resources/packet-tracer" target="_blank" rel="noopener" class="btn sm red">DOWNLOAD PACKET TRACER ↗</a>
-      </div>
-
-      <div class="matrix-table" style="margin-top:14px">
-        <table style="width:100%">
-          <tr>
-            <th>Operating System</th>
-            <th>Installer Package</th>
-            <th>Notes</th>
-          </tr>
-          <tr>
-            <td><b>Windows 10 / 11 64-bit</b></td>
-            <td><code>CiscoPacketTracer_822_Windows_64bit.exe</code></td>
-            <td>Run as Administrator; accepts standard wizard defaults</td>
-          </tr>
-          <tr>
-            <td><b>Ubuntu / Debian Linux</b></td>
-            <td><code>CiscoPacketTracer_822_Ubuntu_64bit.deb</code></td>
-            <td>Install via <code>sudo dpkg -i package.deb &amp;&amp; sudo apt install -f</code></td>
-          </tr>
-          <tr>
-            <td><b>macOS (Intel &amp; Apple Silicon)</b></td>
-            <td><code>CiscoPacketTracer_822_macOS.dmg</code></td>
-            <td>Requires Rosetta 2 on M1/M2/M3 chips</td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div class="step-card">
-    <div class="step-num">02</div>
-    <div class="step-content">
-      <h4>Step 2: First-Time Launch &amp; Authentication</h4>
-      <p>When launching Packet Tracer, choose <b>Cisco Networking Academy</b> or <b>Skills for All</b> login. Check <i>"Keep me logged in (3 months)"</i> to avoid repeat prompts.</p>
-      
-      <div class="gui-window">
-        <div class="gui-topbar">
-          <div class="gui-dots"><span class="gui-dot red"></span><span class="gui-dot yellow"></span><span class="gui-dot green"></span></div>
-          <div class="gui-title">CISCO PACKET TRACER 8.2 — WORKSPACE VERIFICATION</div>
-        </div>
-        <div class="gui-body">
-          <div style="background:#161b22;padding:14px;border-radius:8px;font:12px var(--mono);color:#c9d1d9">
-            [TOP BAR]: Logical / Physical Workspace | Realtime / Simulation Mode Toggle<br>
-            [BOTTOM BAR]: Network Devices (Routers 2911, Switches 2960, Firewalls 5506-X) | End Devices (PC, Laptop, Server)<br>
-            [STATUS]: <span style="color:#7ee787">✓ PACKET TRACER ENGINE ACTIVE &amp; AUTHENTICATED</span>
+        <div>
+          <div style="display:flex;justify-content:space-between;font:700 12px var(--mono)">
+            <span>STORAGE DRIVE SPEED</span>
+            <span style="color:#34d399" id="hwDiskVal">NVMe M.2 SSD (3,500 MB/s)</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill green" id="hwDiskBar" style="width:90%"></div></div>
+          <div style="display:flex;gap:6px">
+            <button class="btn sm dark" onclick="setHwDisk('hdd')">HDD (120 MB/s)</button>
+            <button class="btn sm dark" onclick="setHwDisk('sata')">SATA SSD (550 MB/s)</button>
+            <button class="btn sm dark" style="border-color:var(--green)" onclick="setHwDisk('nvme')">NVMe SSD (3500 MB/s)</button>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
 
-<!-- SECTION 6: ORACLE VIRTUALBOX 7.X INSTALLATION -->
-<section class="section" id="sec-virtualbox">
-  <div class="section-head">
-    <div class="kicker">06 · TYPE-2 HYPERVISOR</div>
-    <h2>Oracle VM VirtualBox 7.x &amp; Extension Pack Setup</h2>
-    <p>VirtualBox is a free, cross-platform open-source Type-2 hypervisor used to run isolated guest virtual machines.</p>
-  </div>
-
-  <div class="step-card active">
-    <div class="step-num">01</div>
-    <div class="step-content">
-      <h4>Step 1: Download VirtualBox 7.x Base &amp; Extension Pack</h4>
-      <p>Always download both the base platform installer and the matching Extension Pack version for USB 3.0 controller support, NVMe virtualization, and RDP forwarding.</p>
-      
-      <div class="link-box" style="margin:12px 0">
-        <div class="link-info">
-          <b>Oracle VM VirtualBox Official Download</b>
-          <span>virtualbox.org/wiki/Downloads</span>
+      <!-- Right: Real-time Concurrency Blueprint -->
+      <div class="alloc-card">
+        <div>
+          <div style="font:800 11px var(--mono);color:#7ee787;letter-spacing:.1em">LAB CAPACITY &amp; CONCURRENCY BLUEPRINT</div>
+          <div style="font-size:20px;font-weight:900;margin:6px 0 10px" id="hwCapacityTitle">2–3 Virtual Machines Simultaneously</div>
+          <p style="font-size:13px;color:#8b949e;margin:0 0 16px" id="hwCapacityDesc">
+            16 GB allows running your Kali Linux operator VM (4 GB) alongside an isolated Target Ubuntu/Windows Server VM (4 GB) while preserving 8 GB for your host OS, browser, and course notes.
+          </p>
         </div>
-        <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank" rel="noopener" class="btn sm red">DOWNLOAD VIRTUALBOX ↗</a>
-      </div>
-    </div>
-  </div>
 
-  <div class="step-card">
-    <div class="step-num">02</div>
-    <div class="step-content">
-      <h4>Step 2: Install VirtualBox &amp; Extension Pack</h4>
-      <p>Run the installer. During installation, your network connection may briefly reset as the VirtualBox virtual network adapter is created.</p>
-      <div class="terminal">
-<span class="t-dim"># After base installation, double-click or install extension pack via command line:</span>
-<span class="t-prompt">C:\Program Files\Oracle\VirtualBox&gt;</span> <span class="t-cmd">VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-7.0.x.vbox-extpack</span>
-0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
-Successfully installed "Oracle VM VirtualBox Extension Pack".
-      </div>
-      <div class="step-callout">
-        <b>VirtualBox SSD Optimization Tip:</b> Go to <b>File &gt; Preferences &gt; General &gt; Default Machine Folder</b> and point it to a folder on your fastest SSD (e.g. <code>D:\VMs\</code> or <code>C:\VirtualMachines\</code>).
+        <div style="background:#05070a;border:1px solid #1f2733;border-radius:10px;padding:14px;font:11.5px/1.8 var(--mono)">
+          <div style="color:#58a6ff" id="allocHost">HOST RESERVED: 8 GB RAM / 4 CPU Cores</div>
+          <div style="color:var(--cyber-red-2)" id="allocKali">KALI LINUX VM: 4 GB RAM / 2 CPU Cores</div>
+          <div style="color:#7ee787" id="allocTarget">TARGET LAB VM: 4 GB RAM / 2 CPU Cores</div>
+          <div style="color:#8b949e" id="allocStatus">DISK I/O LATENCY: Ultra Low (&lt;1.2s VM Boot)</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SECTION 7: SECURITY LAB VMS -->
-<section class="section" id="sec-vms">
+<!-- 3. VIRTUALIZATION ENGINE (VT-x / AMD-V) -->
+<section class="section" id="sec-virtualization">
   <div class="section-head">
-    <div class="kicker">07 · VIRTUAL APPLIANCES</div>
-    <h2>Cybersecurity Essentials &amp; Kali Linux VM Import</h2>
-    <p>Deploy the pre-built Kali Linux virtual machine and training appliances used throughout the 40 modules.</p>
+    <div class="kicker">03 · HARDWARE VIRTUALIZATION ENGINE</div>
+    <h2>CPU Virtualization Pipeline (VT-x &amp; AMD-V)</h2>
+    <p>Toggle the hardware virtualization switch below to see how guest operating system instructions are processed with and without CPU hardware acceleration.</p>
   </div>
 
-  <div class="grid2">
-    <!-- Kali Linux Card -->
-    <div class="card">
-      <div class="kicker" style="color:var(--cyber-red)">OPERATOR ATTACKING VM</div>
-      <h3>Kali Linux 2024.x (VirtualBox Image)</h3>
-      <p>Pre-configured with all offensive, analysis, and network tools (Nmap, Wireshark, Burp Suite, Metasploit, Python 3).</p>
-      <div class="link-box" style="margin-top:14px">
-        <div class="link-info"><b>Official Kali Images</b><span>kali.org/get-kali/</span></div>
-        <a href="https://www.kali.org/get-kali/#kali-virtual-machines" target="_blank" rel="noopener" class="btn sm red">DOWNLOAD KALI VM ↗</a>
+  <div class="vtx-card">
+    <div class="vtx-toggle-row">
+      <div>
+        <div style="font:900 12px var(--mono);color:var(--cyber-red)">CPU HARDWARE VIRTUALIZATION SWITCH</div>
+        <div style="font-size:13px;color:var(--muted)">Simulate toggling Intel VT-x / AMD SVM Mode in BIOS</div>
       </div>
-      <div style="margin-top:12px;font:11.5px var(--mono);background:var(--soft);padding:10px;border-radius:6px">
-        Default Credentials:<br>
-        Username: <b style="color:var(--cyber-red)">kali</b> | Password: <b style="color:var(--cyber-red)">kali</b>
+      <div style="display:flex;gap:8px">
+        <button class="switch-btn" id="vtxBtnOff" onclick="setVtx(false)">OFF (Disabled)</button>
+        <button class="switch-btn active-on" id="vtxBtnOn" onclick="setVtx(true)">ON (Enabled ✓)</button>
       </div>
     </div>
 
-    <!-- Target VM Card -->
-    <div class="card">
-      <div class="kicker" style="color:var(--blue)">DEFENSIVE &amp; TARGET LABS</div>
-      <h3>Ubuntu Server / Metasploitable Target</h3>
-      <p>Vulnerable training targets used for reconnaissance, port scanning, network defense, and log analysis labs.</p>
-      <div class="link-box" style="margin-top:14px">
-        <div class="link-info"><b>Ubuntu Server ISO</b><span>ubuntu.com/download/server</span></div>
-        <a href="https://ubuntu.com/download/server" target="_blank" rel="noopener" class="btn sm">DOWNLOAD UBUNTU ↗</a>
-      </div>
-      <div style="margin-top:12px;font:11.5px var(--mono);background:var(--soft);padding:10px;border-radius:6px">
-        Metasploitable 2/3 Lab Image:<br>
-        Default Login: <b style="color:var(--blue)">msfadmin</b> | Password: <b style="color:var(--blue)">msfadmin</b>
-      </div>
+    <!-- Pipeline Visual -->
+    <div class="vtx-pipeline">
+      <div class="vtx-node" id="vtx-n1"><b>01 · KALI VM</b><small>Guest 64-bit OS</small></div>
+      <div class="vtx-node" id="vtx-n2"><b>02 · VIRTUALBOX</b><small>Type-2 Hypervisor</small></div>
+      <div class="vtx-node ok" id="vtx-n3"><b>03 · VT-x / AMD-V</b><small>Hardware Ring -1</small></div>
+      <div class="vtx-node ok" id="vtx-n4"><b>04 · PHYSICAL CPU</b><small>Native Execution</small></div>
+      <div class="vtx-node ok" id="vtx-n5"><b>05 · STATUS</b><small>VM READY ✓</small></div>
     </div>
-  </div>
 
-  <div class="step-card" style="margin-top:20px">
-    <div class="step-num">★</div>
-    <div class="step-content">
-      <h4>Crucial Step: Take a Clean Baseline VM Snapshot</h4>
-      <p>Before running any lab exercises or modifying configurations, always take a snapshot in VirtualBox:</p>
-      <div class="step-callout">
-        In VirtualBox Manager &gt; Select VM &gt; Click <b>Snapshots</b> &gt; Click <b>Take</b> &gt; Name it <code>00-Clean-Base-State</code>. If a lab misconfigures the system, you can instantly restore to this point in 2 seconds.
-      </div>
+    <div id="vtxExplain" class="step-callout" style="background:#f0fdf4;border-left-color:var(--green)">
+      <b>WITH VT-x / AMD-V ENABLED:</b> VirtualBox directly passes guest Ring 0 instructions to the physical CPU via hardware virtualization extensions (VMX Root/Non-Root operation). 64-bit Kali Linux boots at native hardware speeds with full memory paging isolation.
     </div>
   </div>
 </section>
 
-<!-- SECTION 8: VIRTUALBOX NETWORK MODES -->
-<section class="section" id="sec-network-modes">
+<!-- 4. CYBERCORE LAB STACK -->
+<section class="section" id="sec-stack">
   <div class="section-head">
-    <div class="kicker">08 · LAB ISOLATION ARCHITECTURE</div>
-    <h2>Understanding VirtualBox Network Modes</h2>
-    <p>Configuring the right network adapter mode prevents accidental scanning of your home WiFi while ensuring lab connectivity.</p>
+    <div class="kicker">04 · ARCHITECTURAL STACK</div>
+    <h2>The CyberCore Workstation Stack</h2>
+    <p>Click any layer in the architecture stack below to explore what it is, why it exists, and how it connects into the complete learning system.</p>
   </div>
 
-  <table class="matrix-table">
-    <thead>
-      <tr>
-        <th>Network Mode</th>
-        <th>VM Can Access Internet?</th>
-        <th>VM Can Access Host?</th>
-        <th>Other VMs Can Access?</th>
-        <th>Primary Use Case</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><b>NAT (Default)</b></td>
-        <td><span style="color:var(--green)">✓ Yes</span></td>
-        <td><span style="color:#ef4444">✗ Isolated</span></td>
-        <td><span style="color:#ef4444">✗ Isolated</span></td>
-        <td>Single VM browsing and package updates (<code>apt update</code>)</td>
-      </tr>
-      <tr>
-        <td><b>NAT Network</b></td>
-        <td><span style="color:var(--green)">✓ Yes</span></td>
-        <td><span style="color:#ef4444">✗ Isolated</span></td>
-        <td><span style="color:var(--green)">✓ Yes (Shared LAN)</span></td>
-        <td>Multi-VM training labs where VMs must talk to each other</td>
-      </tr>
-      <tr>
-        <td><b>Host-Only Adapter</b></td>
-        <td><span style="color:#ef4444">✗ No</span></td>
-        <td><span style="color:var(--green)">✓ Yes (Virtual Interface)</span></td>
-        <td><span style="color:var(--green)">✓ Yes (Host-only subnet)</span></td>
-        <td>Isolated malware analysis and local SSH management</td>
-      </tr>
-      <tr>
-        <td><b>Bridged Adapter</b></td>
-        <td><span style="color:var(--green)">✓ Yes</span></td>
-        <td><span style="color:var(--green)">✓ Full Access</span></td>
-        <td><span style="color:var(--green)">✓ Visible on Home LAN</span></td>
-        <td><span style="color:#ef4444">⚠ CAUTION:</span> VM appears directly on your physical home router</td>
-      </tr>
-      <tr>
-        <td><b>Internal Network</b></td>
-        <td><span style="color:#ef4444">✗ No</span></td>
-        <td><span style="color:#ef4444">✗ No</span></td>
-        <td><span style="color:var(--green)">✓ VMs on same internal net</span></td>
-        <td>100% air-gapped exploit validation and testing</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="stack-box">
+    <!-- Stack Tiers -->
+    <div class="stack-layers">
+      <div class="stack-tier active" onclick="inspectStack(6,this)">
+        <b>[L6] CyberCore Missions &amp; Evidence</b>
+        <span>LAB WORKSPACE</span>
+      </div>
+      <div class="stack-tier" onclick="inspectStack(5,this)">
+        <b>[L5] Guest VMs (Kali Operator + Targets)</b>
+        <span>64-BIT APPLIANCES</span>
+      </div>
+      <div class="stack-tier" onclick="inspectStack(4,this)">
+        <b>[L4] Virtual Network Isolation Layer</b>
+        <span>NAT NETWORK / HOST-ONLY</span>
+      </div>
+      <div class="stack-tier" onclick="inspectStack(3,this)">
+        <b>[L3] Oracle VirtualBox 7.x + Ext Pack</b>
+        <span>TYPE-2 HYPERVISOR</span>
+      </div>
+      <div class="stack-tier" onclick="inspectStack(2,this)">
+        <b>[L2] Host OS (Windows 11 / macOS / Ubuntu)</b>
+        <span>BASE OPERATING SYSTEM</span>
+      </div>
+      <div class="stack-tier" onclick="inspectStack(1,this)">
+        <b>[L1] Physical Bare Metal Hardware</b>
+        <span>CPU VT-x / RAM / SSD</span>
+      </div>
+    </div>
+
+    <!-- Inspector Pane -->
+    <div class="stack-detail-pane" id="stackPane">
+      <div>
+        <div style="font:800 11px var(--mono);color:var(--cyber-red-2)" id="stackLayerTag">LAYER 06 · TOP TIER</div>
+        <h3 style="margin:6px 0 10px;font-size:20px" id="stackLayerTitle">CyberCore Missions &amp; Evidence Records</h3>
+        <p style="font-size:13px;color:#8b949e;line-height:1.7" id="stackLayerDesc">
+          The practical scenarios, capture-the-flag challenges, port inspections, and evidence documentation records that validate your cybersecurity competencies.
+        </p>
+      </div>
+
+      <div style="background:#05070a;border:1px solid #1c232c;border-radius:10px;padding:12px;font:11.5px var(--mono);color:#7ee787" id="stackLayerRole">
+        ROLE: Demonstrates real-world technical execution inside an authorized scope.
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- SECTION 9: CHECKPOINTS -->
+<!-- 5. NETWORK MODE VISUALIZER -->
+<section class="section" id="sec-network">
+  <div class="section-head">
+    <div class="kicker">05 · PRIMARY NETWORK SIMULATOR</div>
+    <h2>VirtualBox Network Mode Visualizer</h2>
+    <p>Select a network adapter mode below to see the routing path, active packet flows, and isolation boundaries change in real time.</p>
+  </div>
+
+  <div class="net-visualizer">
+    <!-- Mode Pills -->
+    <div class="net-mode-pills">
+      <button class="net-pill" onclick="setNetMode('nat')">NAT (Default)</button>
+      <button class="net-pill active" onclick="setNetMode('natnet')">NAT Network (Recommended ★)</button>
+      <button class="net-pill" onclick="setNetMode('hostonly')">Host-Only Adapter</button>
+      <button class="net-pill" onclick="setNetMode('bridged')">Bridged Adapter (Caution ⚠)</button>
+      <button class="net-pill" onclick="setNetMode('internal')">Internal Network (Air-Gapped)</button>
+    </div>
+
+    <!-- Interactive Topology Canvas -->
+    <div class="net-canvas" id="netCanvas">
+      <div class="net-device active-node" id="nd-kali">
+        <div style="font:800 10px var(--mono);color:var(--cyber-red-2)">OPERATOR VM</div>
+        <div style="font-weight:800;font-size:13px;margin:3px 0">Kali Linux</div>
+        <div style="font-size:10px;color:#8b949e" id="ip-kali">10.0.2.15</div>
+      </div>
+
+      <div class="net-device active-node" id="nd-switch">
+        <div style="font:800 10px var(--mono);color:#58a6ff">VIRTUAL ROUTER</div>
+        <div style="font-weight:800;font-size:13px;margin:3px 0" id="name-switch">NAT Network Engine</div>
+        <div style="font-size:10px;color:#8b949e" id="ip-switch">10.0.2.1/24</div>
+      </div>
+
+      <div class="net-device active-node" id="nd-target">
+        <div style="font:800 10px var(--mono);color:#7ee787">TARGET LAB VM</div>
+        <div style="font-weight:800;font-size:13px;margin:3px 0">Ubuntu Server</div>
+        <div style="font-size:10px;color:#8b949e" id="ip-target">10.0.2.20</div>
+      </div>
+
+      <div class="net-device" id="nd-host">
+        <div style="font:800 10px var(--mono);color:#a78bfa">PHYSICAL HOST</div>
+        <div style="font-weight:800;font-size:13px;margin:3px 0">Windows / macOS</div>
+        <div style="font-size:10px;color:#8b949e">192.168.1.50</div>
+      </div>
+
+      <div class="net-device active-node" id="nd-inet">
+        <div style="font:800 10px var(--mono);color:#34d399">PUBLIC WAN</div>
+        <div style="font-weight:800;font-size:13px;margin:3px 0">Internet / NetAcad</div>
+        <div style="font-size:10px;color:#8b949e">0.0.0.0/0</div>
+      </div>
+    </div>
+
+    <!-- Mode Badges -->
+    <div class="net-badge-row">
+      <div class="net-badge-box">
+        <div class="lbl">INTERNET ACCESS</div>
+        <div class="val" style="color:#7ee787" id="nb-inet">✓ YES (Outbound NAT)</div>
+      </div>
+      <div class="net-badge-box">
+        <div class="lbl">HOST OS ISOLATION</div>
+        <div class="val" style="color:#7ee787" id="nb-host">✓ SAFE (Host Isolated)</div>
+      </div>
+      <div class="net-badge-box">
+        <div class="lbl">INTER-VM COMMS</div>
+        <div class="val" style="color:#7ee787" id="nb-intervm">✓ YES (Shared Private Subnet)</div>
+      </div>
+      <div class="net-badge-box">
+        <div class="lbl">HOME LAN EXPOSURE</div>
+        <div class="val" style="color:#7ee787" id="nb-lan">✓ 0% EXPOSURE (Hidden)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. PACKET TRACER MINI WORKSPACE -->
+<section class="section" id="sec-packet-tracer">
+  <div class="section-head">
+    <div class="kicker">06 · SIMULATED PACKET ENGINE</div>
+    <h2>Cisco Packet Tracer Mini Workspace</h2>
+    <p>Experience how Packet Tracer routes Layer 3 packets hop-by-hop across simulated network devices.</p>
+  </div>
+
+  <div class="pt-sim-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <div>
+        <div style="font:800 11px var(--mono);color:#58a6ff">EDUCATIONAL TOPOLOGY: 2-HOP ROUTING</div>
+        <div style="font-size:12px;color:#8b949e">Source: Student PC (192.168.1.10) ➔ Destination: NetAcad Lab Server (10.10.14.1)</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn sm red" onclick="sendPtPacket()">SEND ICMP PING →</button>
+        <button class="btn sm dark" onclick="resetPtPacket()">RESET</button>
+      </div>
+    </div>
+
+    <!-- Packet Simulation Stage -->
+    <div class="pt-stage">
+      <div class="pt-wire"></div>
+      <div class="pt-packet-dot" id="ptDot" style="display:none"></div>
+
+      <!-- Device 1: PC -->
+      <div style="background:#161c24;border:1px solid #303a48;border-radius:10px;padding:12px;text-align:center;width:110px;z-index:2">
+        <div style="font:800 9.5px var(--mono);color:#58a6ff">PC-01</div>
+        <div style="font-size:12px;font-weight:700">Student PC</div>
+        <div style="font-size:9.5px;color:#8b949e">192.168.1.10</div>
+      </div>
+
+      <!-- Device 2: Switch -->
+      <div style="background:#161c24;border:1px solid #303a48;border-radius:10px;padding:12px;text-align:center;width:110px;z-index:2">
+        <div style="font:800 9.5px var(--mono);color:#a78bfa">SWITCH-2960</div>
+        <div style="font-size:12px;font-weight:700">Access Switch</div>
+        <div style="font-size:9.5px;color:#8b949e">VLAN 1 Default</div>
+      </div>
+
+      <!-- Device 3: Router -->
+      <div style="background:#161c24;border:1px solid #303a48;border-radius:10px;padding:12px;text-align:center;width:110px;z-index:2">
+        <div style="font:800 9.5px var(--mono);color:var(--cyber-red-2)">ROUTER-2911</div>
+        <div style="font-size:12px;font-weight:700">Lab Gateway</div>
+        <div style="font-size:9.5px;color:#8b949e">NAT &amp; Routing</div>
+      </div>
+
+      <!-- Device 4: Server -->
+      <div style="background:#161c24;border:1px solid #303a48;border-radius:10px;padding:12px;text-align:center;width:110px;z-index:2">
+        <div style="font:800 9.5px var(--mono);color:#7ee787">SERVER-01</div>
+        <div style="font-size:12px;font-weight:700">Lab Target</div>
+        <div style="font-size:9.5px;color:#8b949e">10.10.14.1</div>
+      </div>
+    </div>
+
+    <!-- Packet Inspector Log -->
+    <div style="margin-top:16px;background:#05070a;border:1px solid #1c232c;border-radius:10px;padding:14px;font:11.5px/1.7 var(--mono)" id="ptLog">
+      SIMULATION STATE: IDLE. Click "SEND ICMP PING" to trigger packet transmission.
+    </div>
+  </div>
+</section>
+
+<!-- 7. TOOLCHAIN VISUALIZER -->
+<section class="section" id="sec-toolchain">
+  <div class="section-head">
+    <div class="kicker">07 · CONNECTED HOST TOOLCHAIN</div>
+    <h2>Integrated Software Toolchain</h2>
+    <p>Click any tool in the pipeline to see where it fits into your workflow and why CyberCore utilizes it.</p>
+  </div>
+
+  <div class="toolchain-grid">
+    <div class="tool-card active" onclick="showToolInfo('vbox',this)">
+      <div class="kicker" style="color:var(--cyber-red)">VIRTUALIZATION</div>
+      <h3 style="margin:4px 0">Oracle VirtualBox 7.x</h3>
+      <p style="font-size:12.5px;color:var(--muted)">Cross-platform Type-2 hypervisor for guest OS isolation.</p>
+    </div>
+
+    <div class="tool-card" onclick="showToolInfo('pt',this)">
+      <div class="kicker" style="color:var(--blue)">NETWORK SIMULATION</div>
+      <h3 style="margin:4px 0">Cisco Packet Tracer</h3>
+      <p style="font-size:12.5px;color:var(--muted)">Layer 2-4 enterprise topology simulation and protocol analysis.</p>
+    </div>
+
+    <div class="tool-card" onclick="showToolInfo('kali',this)">
+      <div class="kicker" style="color:var(--cyber-red-2)">OPERATOR WORKSTATION</div>
+      <h3 style="margin:4px 0">Kali Linux 2024.x</h3>
+      <p style="font-size:12.5px;color:var(--muted)">Pre-packaged security appliance with hundreds of testing utilities.</p>
+    </div>
+
+    <div class="tool-card" onclick="showToolInfo('wireshark',this)">
+      <div class="kicker" style="color:var(--green)">PACKET TELEMETRY</div>
+      <h3 style="margin:4px 0">Wireshark</h3>
+      <p style="font-size:12.5px;color:var(--muted)">Deep packet inspection and pcap capture analysis.</p>
+    </div>
+
+    <div class="tool-card" onclick="showToolInfo('vscode',this)">
+      <div class="kicker" style="color:var(--purple)">CODE &amp; CONFIG</div>
+      <h3 style="margin:4px 0">VS Code</h3>
+      <p style="font-size:12.5px;color:var(--muted)">Configuration editor for Python scripts, Bash, and JSON telemetry.</p>
+    </div>
+
+    <div class="tool-card" onclick="showToolInfo('sevenzip',this)">
+      <div class="kicker" style="color:#f59e0b">ARCHIVE UTILITY</div>
+      <h3 style="margin:4px 0">7-Zip 64-bit</h3>
+      <p style="font-size:12.5px;color:var(--muted)">Multi-part OVA and 7z appliance decompression engine.</p>
+    </div>
+  </div>
+
+  <div class="step-callout" id="toolInfoBox" style="margin-top:20px">
+    <b>Oracle VirtualBox 7.x:</b> The core foundation of your local testing lab. Runs isolated Kali Linux and Target virtual machines without modifying host system files or registry.
+  </div>
+</section>
+
+<!-- 8. SNAPSHOT VISUALIZER -->
+<section class="section" id="sec-snapshots">
+  <div class="section-head">
+    <div class="kicker">08 · LAB HYGIENE &amp; RECOVERY</div>
+    <h2>Virtual Machine Snapshot Lifecycle</h2>
+    <p>Never run experiments without a clean baseline snapshot. Test the snapshot state machine below.</p>
+  </div>
+
+  <div class="snap-workflow">
+    <div class="snap-step-grid">
+      <div class="snap-box clean" id="sb-1">
+        <div style="font:800 10px var(--mono);color:var(--green)">01 · CLEAN STATE</div>
+        <div style="font-weight:800;font-size:13px;margin:4px 0">Fresh Kali Import</div>
+        <div style="font-size:11px;color:var(--muted)">Base OS + Default tools</div>
+      </div>
+      <div class="snap-box clean" id="sb-2">
+        <div style="font:800 10px var(--mono);color:var(--green)">02 · SNAPSHOT TAKEN</div>
+        <div style="font-weight:800;font-size:13px;margin:4px 0">00-Clean-Base-State</div>
+        <div style="font-size:11px;color:var(--muted)">Saved read-only delta</div>
+      </div>
+      <div class="snap-box" id="sb-3">
+        <div style="font:800 10px var(--mono);color:var(--amber)" id="sb3-title">03 · EXPERIMENT</div>
+        <div style="font-weight:800;font-size:13px;margin:4px 0" id="sb3-state">Scripts / Tools Run</div>
+        <div style="font-size:11px;color:var(--muted)" id="sb3-desc">State modified during labs</div>
+      </div>
+      <div class="snap-box clean" id="sb-4">
+        <div style="font:800 10px var(--mono);color:var(--green)">04 · INSTANT ROLLBACK</div>
+        <div style="font-weight:800;font-size:13px;margin:4px 0">Restore Snapshot</div>
+        <div style="font-size:11px;color:var(--muted)">100% Clean in 2 seconds</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:20px">
+      <button class="btn sm red" onclick="simulateCorruptVm()">SIMULATE LAB ERROR / SYSTEM CORRUPTION ⚠</button>
+      <button class="btn sm dark" onclick="simulateRestoreVm()">CLICK [ RESTORE SNAPSHOT ] ✓</button>
+    </div>
+  </div>
+</section>
+
+<!-- 9. KNOWLEDGE CHECKPOINTS -->
 <section class="section" id="sec-checkpoints">
   <div class="section-head">
     <div class="kicker">09 · PREREQUISITE ASSESSMENTS</div>
@@ -775,7 +820,6 @@ Successfully installed "Oracle VM VirtualBox Extension Pack".
     <p>Confirm your understanding of the lab architecture before advancing.</p>
   </div>
 
-  <!-- Quiz 1 -->
   <div class="cp-card" data-ans="b">
     <div class="cp-kicker">CHECKPOINT 01 · VIRTUALIZATION</div>
     <div class="cp-question">When attempting to start a 64-bit Kali VM in VirtualBox, you receive an error: <i>"VT-x/AMD-V hardware acceleration is not available"</i>. What is the required resolution?</div>
@@ -790,7 +834,6 @@ Successfully installed "Oracle VM VirtualBox Extension Pack".
     </div>
   </div>
 
-  <!-- Quiz 2 -->
   <div class="cp-card" data-ans="c">
     <div class="cp-kicker">CHECKPOINT 02 · NETWORK ISOLATION</div>
     <div class="cp-question">Which VirtualBox network mode creates an isolated virtual subnet where guest VMs can communicate with each other AND reach the Internet, without exposing ports to your physical home WiFi network?</div>
@@ -806,7 +849,7 @@ Successfully installed "Oracle VM VirtualBox Extension Pack".
   </div>
 </section>
 
-<!-- SECTION 10: OFFICIAL REFERENCES -->
+<!-- 10. OFFICIAL REFERENCES -->
 <section class="section" id="sec-references">
   <div class="section-head">
     <div class="kicker">10 · VERIFIED OFFICIAL RESOURCES</div>
@@ -870,7 +913,7 @@ Successfully installed "Oracle VM VirtualBox Extension Pack".
   </table>
 </section>
 
-<!-- SECTION 11: READINESS GATE -->
+<!-- 11. READINESS GATE -->
 <section class="section" id="sec-readiness">
   <div class="section-head">
     <div class="kicker">11 · ONBOARDING COMPLETION</div>
@@ -895,7 +938,7 @@ Successfully installed "Oracle VM VirtualBox Extension Pack".
           <li>Cisco NetAcad profile created &amp; active</li>
           <li>Cisco Packet Tracer installed and logged in</li>
           <li>Oracle VirtualBox 7.x &amp; Extension Pack installed</li>
-          <li>Kali Linux VM imported with a clean snapshot taken</li>
+          <li>Kali Linux VM imported with clean snapshot taken</li>
         </ul>
       </div>
     </div>
@@ -911,7 +954,7 @@ Successfully installed "Oracle VM VirtualBox Extension Pack".
 </div>
 
 <footer>
-  SHADOWXLAB CYBERCORE · MODULE 00: HARDWARE &amp; SOFTWARE PREREQUISITES · 40 MODULES TOTAL
+  SHADOWXLAB CYBERCORE · MODULE 00: LAB FOUNDATION &amp; WORKSTATION COCKPIT · 40 MODULES TOTAL
 </footer>
 </main>
 </div>
@@ -921,26 +964,335 @@ function toggleSidebar(){
   document.getElementById('layout').classList.toggle('collapsed');
 }
 
-function runCalc(){
-  const ram = parseInt(document.getElementById('calcRam').value);
-  const cpu = parseInt(document.getElementById('calcCpu').value);
-  const storage = document.getElementById('calcStorage').value;
+/* 1. Cockpit Interactive Toggle */
+const COCKPIT_STATE = {
+  cpu: true, ram: true, vtx: true, disk: true, vbox: true, pt: true, kali: true, net: false
+};
+
+function toggleCockpitItem(k){
+  COCKPIT_STATE[k] = !COCKPIT_STATE[k];
+  const el = document.getElementById('ck-' + k);
+  const val = document.getElementById('val-' + k);
   
-  let vmCount = 'Up to 2 Concurrent VMs (Kali + 1 Target)';
-  let alloc = `Kali: 4GB RAM / 2 Cores | Target: 4GB RAM / 2 Cores | Host: ${ram - 8}GB Reserved`;
-  
-  if(ram >= 32 && cpu >= 8){
-    vmCount = 'Up to 4-5 Concurrent Enterprise Lab VMs (Full Active Directory Domain)';
-    alloc = `Kali: 6GB RAM / 3 Cores | Domain Controller: 6GB RAM | Target 1: 4GB | Target 2: 4GB | Host: 12GB Reserved`;
-  } else if(ram === 8){
-    vmCount = '1 VM at a time (Run Kali Linux alone or Target alone)';
-    alloc = `Active VM: 4GB RAM / 2 Cores | Host Reserved: 4GB RAM (Close heavy host apps)`;
+  if(COCKPIT_STATE[k]){
+    el.className = 'cockpit-item ok';
+    val.className = 'v ok';
+    val.textContent = val.textContent.replace('✗', '✓').replace('⚠', '✓');
+    if(!val.textContent.includes('✓')) val.textContent += ' ✓';
+  } else {
+    el.className = 'cockpit-item bad';
+    val.className = 'v bad';
+    val.textContent = val.textContent.replace('✓', '✗').replace('⚠', '✗');
+    if(!val.textContent.includes('✗')) val.textContent += ' ✗';
   }
   
-  document.getElementById('calcVmSummary').textContent = vmCount;
-  document.getElementById('calcAllocation').textContent = alloc;
+  updateCockpitScore();
 }
 
+function updateCockpitScore(){
+  const total = Object.keys(COCKPIT_STATE).length;
+  const ok = Object.values(COCKPIT_STATE).filter(Boolean).length;
+  const pct = Math.round((ok / total) * 100);
+  
+  document.getElementById('cockpitPct').textContent = pct + '%';
+  document.getElementById('progPct').textContent = pct + '%';
+  document.getElementById('progBar').style.width = pct + '%';
+  
+  const statusEl = document.getElementById('cockpitStatus');
+  if(pct >= 85){
+    statusEl.textContent = 'LAB READY ✓';
+    statusEl.style.color = '#7ee787';
+  } else {
+    statusEl.textContent = 'CHECK REQUIRED ⚠';
+    statusEl.style.color = '#f59e0b';
+  }
+}
+
+/* 2. Hardware Model */
+function setHwRam(gb){
+  document.getElementById('hwRamVal').textContent = gb + ' GB';
+  const pct = gb === 8 ? 25 : gb === 16 ? 50 : gb === 32 ? 75 : 100;
+  document.getElementById('hwRamBar').style.width = pct + '%';
+  
+  const title = document.getElementById('hwCapacityTitle');
+  const desc = document.getElementById('hwCapacityDesc');
+  const host = document.getElementById('allocHost');
+  const kali = document.getElementById('allocKali');
+  const target = document.getElementById('allocTarget');
+  
+  if(gb === 8){
+    title.textContent = '1 Virtual Machine Comfortably';
+    desc.textContent = '8 GB RAM supports running Kali Linux (3-4 GB) alone. Close host memory-heavy apps.';
+    host.textContent = 'HOST RESERVED: 4 GB RAM';
+    kali.textContent = 'KALI LINUX VM: 4 GB RAM';
+    target.textContent = 'TARGET LAB VM: INACTIVE (Run sequentially)';
+  } else if(gb === 16){
+    title.textContent = '2–3 Virtual Machines Simultaneously';
+    desc.textContent = '16 GB is the ideal standard. Supports Kali (4 GB) + Target VM (4 GB) + Host (8 GB).';
+    host.textContent = 'HOST RESERVED: 8 GB RAM';
+    kali.textContent = 'KALI LINUX VM: 4 GB RAM';
+    target.textContent = 'TARGET LAB VM: 4 GB RAM';
+  } else {
+    title.textContent = '4–5 Multi-Target Enterprise Lab';
+    desc.textContent = `${gb} GB supports running full Active Directory domains, SIEM servers, and multiple targets concurrently.`;
+    host.textContent = `HOST RESERVED: ${gb - 16} GB RAM`;
+    kali.textContent = 'KALI LINUX VM: 6 GB RAM';
+    target.textContent = 'MULTI-TARGET VMS: 10 GB RAM (Domain Controller + Web Target)';
+  }
+}
+
+function setHwCpu(cores){
+  document.getElementById('hwCpuVal').textContent = `${cores} Cores (${cores * 2} Threads)`;
+  document.getElementById('hwCpuBar').style.width = (cores / 16 * 100) + '%';
+}
+
+function setHwDisk(type){
+  const bar = document.getElementById('hwDiskBar');
+  const val = document.getElementById('hwDiskVal');
+  const status = document.getElementById('allocStatus');
+  
+  if(type === 'hdd'){
+    val.textContent = 'Mechanical HDD (120 MB/s)';
+    bar.style.width = '25%';
+    status.textContent = 'DISK I/O LATENCY: High (>45s VM Boot, High Disk Queue)';
+  } else if(type === 'sata'){
+    val.textContent = 'SATA SSD (550 MB/s)';
+    bar.style.width = '60%';
+    status.textContent = 'DISK I/O LATENCY: Moderate (6-8s VM Boot)';
+  } else {
+    val.textContent = 'NVMe M.2 SSD (3,500 MB/s)';
+    bar.style.width = '95%';
+    status.textContent = 'DISK I/O LATENCY: Ultra Low (<1.2s VM Boot, Instant Snapshots)';
+  }
+}
+
+/* 3. VT-x Visualizer */
+function setVtx(enabled){
+  const btnOn = document.getElementById('vtxBtnOn');
+  const btnOff = document.getElementById('vtxBtnOff');
+  const n3 = document.getElementById('vtx-n3');
+  const n4 = document.getElementById('vtx-n4');
+  const n5 = document.getElementById('vtx-n5');
+  const exp = document.getElementById('vtxExplain');
+  
+  if(enabled){
+    btnOn.className = 'switch-btn active-on';
+    btnOff.className = 'switch-btn';
+    n3.className = 'vtx-node ok'; n3.innerHTML = '<b>03 · VT-x / AMD-V</b><small>Hardware Ring -1</small>';
+    n4.className = 'vtx-node ok';
+    n5.className = 'vtx-node ok'; n5.innerHTML = '<b>05 · STATUS</b><small>VM READY ✓</small>';
+    exp.style.background = '#f0fdf4';
+    exp.style.borderLeftColor = 'var(--green)';
+    exp.innerHTML = '<b>WITH VT-x / AMD-V ENABLED:</b> VirtualBox directly passes guest Ring 0 instructions to the physical CPU via hardware virtualization extensions (VMX Root/Non-Root operation). 64-bit Kali Linux boots at native hardware speeds.';
+  } else {
+    btnOff.className = 'switch-btn active-off';
+    btnOn.className = 'switch-btn';
+    n3.className = 'vtx-node err'; n3.innerHTML = '<b>03 · EMULATION</b><small>Trap-and-Emulate ✕</small>';
+    n4.className = 'vtx-node err';
+    n5.className = 'vtx-node err'; n5.innerHTML = '<b>05 · STATUS</b><small>VM BLOCKED ✕</small>';
+    exp.style.background = '#fef2f2';
+    exp.style.borderLeftColor = 'var(--cyber-red)';
+    exp.innerHTML = '<b>WITHOUT VIRTUALIZATION:</b> 64-bit guest operating systems cannot execute Ring 0 privileged instructions. VirtualBox will throw the error: <i>"VT-x/AMD-V hardware acceleration is not available on your system."</i>';
+  }
+}
+
+/* 4. Lab Stack */
+const STACK_DATA = {
+  6: {
+    tag: 'LAYER 06 · TOP TIER',
+    title: 'CyberCore Missions & Evidence Records',
+    desc: 'The practical scenarios, capture-the-flag challenges, port inspections, and evidence documentation records that validate your cybersecurity competencies.',
+    role: 'ROLE: Demonstrates real-world technical execution inside an authorized scope.'
+  },
+  5: {
+    tag: 'LAYER 05 · GUEST OPERATING SYSTEMS',
+    title: 'Kali Linux Operator & Target Virtual Machines',
+    desc: 'Pre-configured virtual appliances running in isolated sandbox environments. Kali acts as your attacking workstation; Ubuntu/Metasploitable act as authorized target servers.',
+    role: 'ROLE: Isolates all offensive tools and vulnerable services from your personal host OS.'
+  },
+  4: {
+    tag: 'LAYER 04 · NETWORK ISOLATION',
+    title: 'VirtualBox Isolated Virtual Switch (NAT Network)',
+    desc: 'The virtual routing layer that enables Kali to scan and exploit target VMs on private subnet 10.0.2.0/24 without leaking packets onto your home WiFi.',
+    role: 'ROLE: Enforces lab scope and prevents accidental scanning of unintended devices.'
+  },
+  3: {
+    tag: 'LAYER 03 · TYPE-2 HYPERVISOR',
+    title: 'Oracle VM VirtualBox 7.x & Extension Pack',
+    desc: 'The software virtualization layer that provisions virtual CPUs, allocates memory pages, controls virtual disk I/O, and manages VM snapshot states.',
+    role: 'ROLE: Manages hardware slicing and multi-OS orchestration.'
+  },
+  2: {
+    tag: 'LAYER 02 · HOST OPERATING SYSTEM',
+    title: 'Physical Host OS (Windows 11 / macOS / Ubuntu)',
+    desc: 'Your main host computer running your browser, course documentation, and hypervisor software.',
+    role: 'ROLE: Provides the stable execution baseline for VirtualBox and Packet Tracer.'
+  },
+  1: {
+    tag: 'LAYER 01 · PHYSICAL HARDWARE',
+    title: 'Bare Metal Processor, RAM & NVMe Storage',
+    desc: 'The physical silicon executing instructions. Hardware VT-x enables CPU virtualization extensions, RAM holds active VM state, and SSD delivers instant I/O speeds.',
+    role: 'ROLE: Powers the entire computing stack.'
+  }
+};
+
+function inspectStack(layer, el){
+  document.querySelectorAll('.stack-tier').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const d = STACK_DATA[layer];
+  document.getElementById('stackLayerTag').textContent = d.tag;
+  document.getElementById('stackLayerTitle').textContent = d.title;
+  document.getElementById('stackLayerDesc').textContent = d.desc;
+  document.getElementById('stackLayerRole').textContent = d.role;
+}
+
+/* 5. Network Visualizer */
+const NET_MODES = {
+  'nat': {
+    kaliIp: '10.0.2.15 (NAT Assigned)',
+    targetIp: '10.0.2.15 (Isolated NAT)',
+    switchName: 'Virtual NAT Engine',
+    inet: '✓ YES (Outbound NAT)',
+    host: '✓ SAFE (Host Isolated)',
+    intervm: '✗ NO (Isolated VMs)',
+    lan: '✓ 0% EXPOSURE',
+    targetActive: false
+  },
+  'natnet': {
+    kaliIp: '10.0.2.15/24',
+    targetIp: '10.0.2.20/24',
+    switchName: 'NAT Network Router (Shared)',
+    inet: '✓ YES (Shared NAT)',
+    host: '✓ SAFE (Host Isolated)',
+    intervm: '✓ YES (Shared Private Subnet)',
+    lan: '✓ 0% EXPOSURE',
+    targetActive: true
+  },
+  'hostonly': {
+    kaliIp: '192.168.56.20/24',
+    targetIp: '192.168.56.30/24',
+    switchName: 'Host-Only Virtual Adapter',
+    inet: '✗ NO INTERNET (Air-Gapped)',
+    host: '✓ ACCESSIBLE (Host Interface)',
+    intervm: '✓ YES (Host Subnet)',
+    lan: '✓ 0% EXPOSURE',
+    targetActive: true
+  },
+  'bridged': {
+    kaliIp: '192.168.1.185 (From Home Router)',
+    targetIp: '192.168.1.186 (From Home Router)',
+    switchName: 'Physical Home Router (WiFi)',
+    inet: '✓ YES (Direct LAN)',
+    host: '⚠ EXPOSED (Same LAN)',
+    intervm: '✓ YES (On Home LAN)',
+    lan: '⚠ 100% EXPOSED TO HOME LAN',
+    targetActive: true
+  },
+  'internal': {
+    kaliIp: '192.168.100.10 (Static)',
+    targetIp: '192.168.100.20 (Static)',
+    switchName: 'Virtual Air-Gap Switch',
+    inet: '✗ NO INTERNET',
+    host: '✓ 100% AIR-GAPPED',
+    intervm: '✓ YES (Isolated Wire)',
+    lan: '✓ 0% EXPOSURE',
+    targetActive: true
+  }
+};
+
+function setNetMode(mode){
+  document.querySelectorAll('.net-pill').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const d = NET_MODES[mode];
+  document.getElementById('ip-kali').textContent = d.kaliIp;
+  document.getElementById('ip-target').textContent = d.targetIp;
+  document.getElementById('name-switch').textContent = d.switchName;
+  
+  document.getElementById('nb-inet').textContent = d.inet;
+  document.getElementById('nb-host').textContent = d.host;
+  document.getElementById('nb-intervm').textContent = d.intervm;
+  document.getElementById('nb-lan').textContent = d.lan;
+  
+  const targetNode = document.getElementById('nd-target');
+  if(d.targetActive){
+    targetNode.className = 'net-device active-node';
+  } else {
+    targetNode.className = 'net-device blocked-node';
+  }
+}
+
+/* 6. Packet Tracer Sim */
+let ptTimeout = null;
+function sendPtPacket(){
+  const dot = document.getElementById('ptDot');
+  const log = document.getElementById('ptLog');
+  dot.style.display = 'block';
+  dot.style.left = '80px';
+  
+  log.innerHTML = '<span style="color:#58a6ff">[STEP 1 - PC-01]</span> Generating ICMP Echo Request (Type 8, Code 0) ➔ Routing to Default Gateway 192.168.1.1...';
+  
+  clearTimeout(ptTimeout);
+  ptTimeout = setTimeout(() => {
+    dot.style.left = 'calc(35% - 8px)';
+    log.innerHTML = '<span style="color:#a78bfa">[STEP 2 - SWITCH-2960]</span> Layer 2 Frame received on Fa0/1 ➔ MAC Table Lookup ➔ Forwarding out Gigabit0/1 uplink...';
+    
+    ptTimeout = setTimeout(() => {
+      dot.style.left = 'calc(65% - 8px)';
+      log.innerHTML = '<span style="color:var(--cyber-red-2)">[STEP 3 - ROUTER-2911]</span> Layer 3 Routing Table Lookup ➔ Destination 10.10.14.0/24 via Gigabit0/0 ➔ Forwarding to Server...';
+      
+      ptTimeout = setTimeout(() => {
+        dot.style.left = 'calc(100% - 90px)';
+        log.innerHTML = '<span style="color:#7ee787">[STEP 4 - SERVER-01]</span> ICMP Echo Request received! Generating ICMP Echo Reply (Type 0, Code 0). <b style="color:#7ee787">ROUND TRIP SUCCESS (RTT: 18ms, 0% Packet Loss)</b> ✓';
+      }, 700);
+    }, 700);
+  }, 700);
+}
+
+function resetPtPacket(){
+  clearTimeout(ptTimeout);
+  const dot = document.getElementById('ptDot');
+  dot.style.display = 'none';
+  dot.style.left = '80px';
+  document.getElementById('ptLog').textContent = 'SIMULATION STATE: IDLE. Click "SEND ICMP PING" to trigger packet transmission.';
+}
+
+/* 7. Toolchain Info */
+const TOOL_INFO = {
+  vbox: '<b>Oracle VirtualBox 7.x:</b> Type-2 Hypervisor foundation. Allocates isolated virtual CPUs, virtual disks, and host-only network subnets for testing without modifying your physical machine.',
+  pt: '<b>Cisco Packet Tracer 8.2+:</b> Official network simulator. Recreates real-world enterprise topologies (routers, firewalls, switches) with packet-level inspection and simulation modes.',
+  kali: '<b>Kali Linux 2024.x:</b> The industry-standard Linux security distribution. Comes pre-equipped with Nmap, Wireshark, Burp Suite, Metasploit, and Python for all CyberCore labs.',
+  wireshark: '<b>Wireshark:</b> Deep packet inspection engine. Captures raw network frames to analyze TCP 3-way handshakes, DNS queries, and TLS handshakes.',
+  vscode: '<b>Visual Studio Code:</b> Clean text and code editor for writing Python automation scripts, parsing log files, and modifying configuration parameters.',
+  sevenzip: '<b>7-Zip 64-bit:</b> High-performance decompression utility. Extracts large multi-part `.ova` and `.7z` virtual machine archives without corrupting file hashes.'
+};
+
+function showToolInfo(tool, el){
+  document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('toolInfoBox').innerHTML = TOOL_INFO[tool];
+}
+
+/* 8. Snapshot Lifecycle */
+function simulateCorruptVm(){
+  const b3 = document.getElementById('sb-3');
+  b3.className = 'snap-box dirty';
+  document.getElementById('sb3-title').textContent = '03 · SYSTEM CORRUPTED ⚠';
+  document.getElementById('sb3-title').style.color = 'var(--cyber-red)';
+  document.getElementById('sb3-state').textContent = 'Exploit Crash / Broken Config';
+  document.getElementById('sb3-desc').textContent = 'Root partition locked, network config broken';
+}
+
+function simulateRestoreVm(){
+  const b3 = document.getElementById('sb-3');
+  b3.className = 'snap-box clean';
+  document.getElementById('sb3-title').textContent = '03 · RESTORED BASELINE ✓';
+  document.getElementById('sb3-title').style.color = 'var(--green)';
+  document.getElementById('sb3-state').textContent = '00-Clean-Base-State';
+  document.getElementById('sb3-desc').textContent = 'VM 100% healthy, clean & ready for next lab';
+}
+
+/* 9. Quiz Evaluator */
 function evalQuiz(btn, choice){
   const card = btn.closest('.cp-card');
   const correctAns = card.dataset.ans;
@@ -960,16 +1312,18 @@ function evalQuiz(btn, choice){
   }
 }
 
+/* 10. Readiness Gate */
 function passReadiness(){
   const g = document.getElementById('gateCard');
   const msg = document.getElementById('gateFeedback');
   const link = document.getElementById('mod1Link');
   g.classList.add('passed');
-  msg.textContent = '✓ PREREQUISITES VERIFIED! Workstation is 100% configured. You are ready to start Module 01.';
+  msg.textContent = '✓ PREREQUISITES 100% VERIFIED! Workstation Cockpit is fully operational. You are ready to start Module 01.';
   msg.style.color = '#10b981';
   link.style.display = 'inline-flex';
   document.getElementById('progPct').textContent = '100%';
   document.getElementById('progBar').style.width = '100%';
+  document.getElementById('cockpitPct').textContent = '100%';
 }
 
 /* Scroll spy */
