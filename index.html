@@ -9,1206 +9,482 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --cyber-red:#e21b23;--ink:#111;--muted:#5d6670;--line:#d8dadd;--soft:#f6f6f6;
-  --panel:#fff;--dark:#151515;--dark2:#202020;--green:#1e9b63;
-  --blue:#3b82f6;--amber:#f59e0b;
-  --mono:"IBM Plex Mono","Courier New",monospace;--sans:Inter,Arial,Helvetica,sans-serif;
-  --cyber-red-dark:#b9151c;--cyber-ink:#151719;--cyber-muted:#687078;--cyber-line:#dfe2e5;
-  --cyber-paper:#ffffff;--cyber-soft:#f6f7f8;--cyber-panel:#111417;--cyber-grid:rgba(226,27,35,.07);
-  --cyber-radius:12px;--cyber-shadow:0 12px 35px rgba(15,18,20,.08);
-  --cc-red:#e21b23;--cc-red-2:#ff3b42;--cc-ink:#0b0d10;--cc-text:#171a1e;
-  --cc-muted:#66717c;--cc-line:#e3e7eb;--cc-soft:#f5f7f9;--cc-panel:#0c0f12;
-  --cc-panel-2:#12161b;--cc-white:#fff;--cc-shadow:0 18px 55px rgba(13,18,24,.08);
-  --cc-shadow-hover:0 24px 70px rgba(13,18,24,.14);
+  --cyber-red:#e21b23;--cyber-red-dark:#b9151c;--cyber-red-2:#ff3b42;
+  --ink:#0b0e12;--text:#171a1f;--muted:#5e6874;--line:#dce1e7;--soft:#f4f6f9;
+  --panel:#ffffff;--dark:#090c10;--dark2:#12161d;--dark3:#1a202a;
+  --green:#10b981;--green-dark:#059669;--amber:#f59e0b;--blue:#3b82f6;--purple:#8b5cf6;
+  --mono:"IBM Plex Mono",SFMono-Regular,Consolas,monospace;
+  --sans:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --shadow-sm:0 2px 8px rgba(12,18,28,.04);
+  --shadow:0 12px 35px rgba(12,18,28,.07);
+  --shadow-lg:0 24px 70px rgba(12,18,28,.13);
+  --radius:14px;--radius-sm:8px;
 }
 *{box-sizing:border-box} html{scroll-behavior:smooth}
 body{
-  margin:0;
-  font-family:var(--sans);
-  color:var(--cc-text)!important;
-  background:
-    radial-gradient(circle at 84% 8%,rgba(226,27,35,.07),transparent 22rem),
-    radial-gradient(circle at 12% 34%,rgba(226,27,35,.035),transparent 25rem),
-    #fafbfc!important;
+  margin:0;font-family:var(--sans);color:var(--text);background:#fafbfc;line-height:1.65;
 }
 body:before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  opacity:.55;
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.55;
   background-image:
     linear-gradient(rgba(15,20,25,.028) 1px,transparent 1px),
     linear-gradient(90deg,rgba(15,20,25,.028) 1px,transparent 1px);
-  background-size:36px 36px;
-  mask-image:linear-gradient(to bottom,#000,transparent 85%);
-  z-index:-1;
+  background-size:36px 36px;mask-image:linear-gradient(to bottom,#000,transparent 85%);z-index:-1;
 }
-button{font:inherit} a{color:inherit}
+button{font:inherit} a{color:inherit;text-decoration:none}
+code,pre{font-family:var(--mono)}
+
+/* TOP NAVBAR */
 .top{
-  height:72px!important;
-  padding:0 24px!important;
-  background:rgba(255,255,255,.94)!important;
-  border-bottom:1px solid #dfe3e7!important;
-  box-shadow:0 6px 28px rgba(15,20,25,.07)!important;
-  position:sticky!important;
-  top:0;
-  z-index:50;
-  display:flex;
-  align-items:center;
-  gap:16px;
-  backdrop-filter:blur(12px);
+  height:72px;padding:0 24px;background:rgba(255,255,255,.94);border-bottom:1px solid var(--line);
+  box-shadow:0 6px 28px rgba(15,20,25,.06);position:sticky;top:0;z-index:100;display:flex;
+  align-items:center;gap:16px;backdrop-filter:blur(14px);
 }
-.brand{
-  font-weight:900!important;
-  letter-spacing:.08em!important;
-  font-size:15px!important;
-  white-space:nowrap;
+.brand{display:flex;align-items:center;gap:14px;cursor:pointer;white-space:nowrap}
+.brand-logo-box{
+  background:#04070c;padding:4px 10px;border-radius:10px;border:1px solid #1a2332;
+  display:flex;align-items:center;box-shadow:0 4px 14px rgba(0,0,0,0.18);
 }
-.brand span{color:var(--cc-red)!important}
+.brand-logo-box img{height:46px;max-height:48px;width:auto;object-fit:contain;display:block}
+.brand-meta{border-left:2px solid var(--line);padding-left:12px;display:flex;flex-direction:column;justify-content:center}
+.brand-title{font-size:15px;font-weight:900;letter-spacing:.08em;color:var(--text);line-height:1.2}
+.brand-title span{color:var(--cyber-red)}
+.brand-tag{font:800 9.5px var(--mono);letter-spacing:.14em;color:#475569;margin-top:2px;white-space:nowrap}
 .top .grow{flex:1}
-.topnav{display:flex;align-items:center;gap:2px}
-.topnav a{
-  font:800 11px var(--mono);
-  letter-spacing:.1em;
-  color:#3d474f;
-  text-decoration:none;
-  padding:9px 12px;
-  border-radius:8px;
-  white-space:nowrap;
-}
-.topnav a:hover{background:#f5f6f7;color:#14181c}
+
+.top-actions{display:flex;align-items:center;gap:10px}
 .search{
-  height:40px!important;
-  background:#f7f8fa!important;
-  border:1px solid #d9dee3!important;
-  border-radius:10px!important;
-  padding:10px 14px;
-  width:min(220px,26vw);
-  font-size:13px;
-  transition:.2s ease;
+  height:42px;background:#f4f6f9;border:1px solid var(--line);border-radius:10px;padding:10px 14px;
+  width:min(260px,26vw);font:13px var(--sans);transition:all .2s ease;
 }
-.search:focus{
-  outline:none;
-  border-color:var(--cc-red)!important;
-  box-shadow:0 0 0 4px rgba(226,27,35,.09);
-  background:#fff!important;
-}
+.search:focus{outline:none;border-color:var(--cyber-red);box-shadow:0 0 0 3px rgba(226,27,35,.1);background:#fff}
+
 .btn{
-  min-height:40px;
-  border:1px solid #d6dbe0!important;
-  background:#fff;
-  padding:9px 14px;
-  border-radius:10px!important;
-  font-weight:800!important;
-  font-size:13px;
-  cursor:pointer;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
-  white-space:nowrap;
-  text-decoration:none;
+  min-height:40px;border:1px solid #d6dbe0;background:#fff;padding:9px 15px;border-radius:10px;
+  font:800 12.5px var(--mono);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;
+  gap:6px;transition:all .18s ease;white-space:nowrap;
 }
-.btn:hover{
-  transform:translateY(-1px);
-  box-shadow:0 8px 20px rgba(0,0,0,.08);
-}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,0,0,.08);border-color:#bfc5cb}
 .btn.red{
-  background:linear-gradient(135deg,var(--cc-red),#c9151d)!important;
-  color:#fff;
-  border-color:var(--cc-red)!important;
-  box-shadow:0 7px 18px rgba(226,27,35,.20);
+  background:linear-gradient(135deg,var(--cyber-red),var(--cyber-red-dark));color:#fff;border-color:var(--cyber-red);
+  box-shadow:0 6px 18px rgba(226,27,35,.22);
 }
-.btn.ghost{background:transparent!important}
-.btn.lg{min-height:50px;padding:13px 22px;font-size:14px;border-radius:12px!important}
-.layout{
-  display:grid;
-  grid-template-columns:280px minmax(0,1fr);
-  min-height:calc(100vh - 72px);
-  transition:grid-template-columns .22s ease;
-}
+.btn.red:hover{background:linear-gradient(135deg,#ed232b,#a61117);box-shadow:0 8px 24px rgba(226,27,35,.32)}
+.btn.dark{background:var(--dark2);color:#fff;border-color:#333}
+.btn.sm{min-height:34px;padding:6px 11px;font-size:11px;border-radius:7px}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:280px minmax(0,1fr);min-height:calc(100vh - 72px);transition:grid-template-columns .22s ease}
 .layout.collapsed{grid-template-columns:0 minmax(0,1fr)}
 .layout.collapsed aside{padding:0;border-right:0;overflow:hidden}
-#sidebar{
-  background:rgba(255,255,255,.92)!important;
-  border-right:1px solid #e1e5e8!important;
-  box-shadow:8px 0 35px rgba(12,18,24,.035);
-  padding:24px 14px!important;
-  position:sticky!important;
-  top:72px;
-  height:calc(100vh - 72px);
-  overflow:auto;
+aside{
+  background:rgba(255,255,255,.94);border-right:1px solid var(--line);padding:24px 14px;
+  position:sticky;top:72px;height:calc(100vh - 72px);overflow-y:auto;box-shadow:8px 0 35px rgba(12,18,24,.03);
 }
-.side-k{
-  font:900 10px var(--mono)!important;
-  letter-spacing:.18em!important;
-  color:var(--cc-red)!important;
-  margin:4px 6px;
-}
-.side-k:after{
-  content:"CYBER VISUAL PLATFORM";
-  display:block;
-  margin-top:7px;
-  color:#7a838c;
-  font-size:9px;
-  letter-spacing:.12em;
-}
-.progress{
-  height:5px!important;
-  background:#eceff1!important;
-  margin:12px 6px 18px;
-  border-radius:99px!important;
-  overflow:hidden;
-}
-.progress i{
-  display:block;
-  width:12%;
-  height:100%;
-  background:linear-gradient(90deg,var(--cc-red),var(--cc-red-2))!important;
-  box-shadow:0 0 12px rgba(226,27,35,.45);
-}
+.side-k{font:900 10px var(--mono);letter-spacing:.18em;color:var(--cyber-red);margin:4px 6px;text-transform:uppercase}
+.side-title{font-size:18px;font-weight:900;margin:4px 6px 2px;letter-spacing:-.03em}
+.side-sub{color:var(--muted);font-size:12px;margin:0 6px 12px}
+.progress{height:5px;background:#eceff1;margin:12px 6px 16px;border-radius:99px;overflow:hidden}
+.progress i{display:block;width:15%;height:100%;background:linear-gradient(90deg,var(--cyber-red),var(--cyber-red-2));box-shadow:0 0 12px rgba(226,27,35,.45)}
+
 .nav a{
-  position:relative;
-  display:block;
-  text-decoration:none;
-  padding:12px 12px 11px 14px!important;
-  border-radius:10px!important;
-  font-size:13.5px;
-  font-weight:700;
-  margin:3px 0!important;
-  color:#20252a!important;
-  transition:.18s ease;
+  display:block;padding:11px 12px;border-radius:9px;font-size:13px;font-weight:700;margin:3px 0;
+  color:#2d3748;transition:all .18s ease;position:relative;
 }
-.nav a:hover{
-  background:#f5f6f7!important;
-  transform:translateX(2px);
-}
-.nav a.active{
-  background:linear-gradient(90deg,#fff1f2,#f8f9fa)!important;
-  box-shadow:inset 0 0 0 1px #f0d8da;
-}
-.nav a.active:before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:10px;
-  bottom:10px;
-  width:3px;
-  border-radius:4px;
-  background:var(--cc-red);
-}
-.nav a small{
-  display:block;
-  color:#7a838c!important;
-  font-weight:400;
-  margin-top:3px;
-  font-size:11px;
-}
-main{min-width:0!important}
-/* ===== HERO ===== */
+.nav a:hover{background:#f1f4f8;transform:translateX(2px)}
+.nav a.active{background:linear-gradient(90deg,#fff1f2,#fafbfc);color:var(--cyber-red);border-left:3px solid var(--cyber-red);padding-left:11px}
+.nav small{display:block;color:var(--muted);font-weight:400;margin-top:2px;font-size:11px}
+
+main{min-width:0}
+
+/* PLATFORM HERO */
 .hero{
-  min-height:640px;
-  padding:64px clamp(28px,5.5vw,85px) 56px!important;
-  display:grid;
-  grid-template-columns:1.05fr .95fr;
-  gap:40px;
-  align-items:center;
-  position:relative;
-  overflow:hidden;
-  border-bottom:1px solid var(--line);
-}
-.hero:after{
-  content:"CYBERCORE";
-  position:absolute;
-  right:-20px;
-  bottom:-55px;
-  font-size:180px;
-  line-height:1;
-  font-weight:1000;
-  letter-spacing:-.08em;
-  color:rgba(226,27,35,.035);
-  pointer-events:none;
-}
-.kicker{
-  font-family:var(--mono)!important;
-  font-weight:800!important;
-  letter-spacing:.16em!important;
-  font-size:10px!important;
-  color:var(--cc-red)!important;
-  text-transform:uppercase;
-}
-.hero-copy{position:relative;z-index:1}
-.hero-id{display:flex;flex-direction:column;gap:1px;margin-bottom:18px}
-.hero-id b{font:900 13px var(--mono);letter-spacing:.22em;color:#171a1e}
-.hero-id b.red{color:var(--cc-red)}
-.hero-id small{font:800 9px var(--mono);letter-spacing:.2em;color:#8992a0;margin-top:6px}
-.hero h1{
-  font-size:clamp(38px,4.6vw,64px)!important;
-  line-height:1.04!important;
-  letter-spacing:-.03em!important;
-  margin:0 0 20px!important;
-  text-transform:uppercase;
-}
-.hero h1 em{
-  display:block;
-  font-style:normal;
-  color:var(--cc-red)!important;
-}
-.hero .lead{
-  max-width:520px!important;
-  font-size:16px!important;
-  line-height:1.7!important;
-  color:#52606b!important;
-  margin:0 0 26px!important;
-}
-.hero-ctas{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px}
-.badges{
-  display:flex!important;
-  flex-wrap:wrap;
-  gap:8px!important;
-}
-.badge{
-  border:1px solid #d9dee3!important;
-  background:rgba(255,255,255,.82)!important;
-  border-radius:999px!important;
-  padding:7px 11px!important;
-  font-size:10px!important;
-  font-weight:900!important;
-  letter-spacing:.08em;
-  box-shadow:0 4px 12px rgba(0,0,0,.025);
-  font-family:var(--mono);
-}
-/* Hero ecosystem visual */
-.eco-wrap{position:relative;z-index:1}
-.eco-stage{
-  position:relative;
-  height:460px;
-  border:1px solid #20252a;
-  border-radius:20px;
-  background:radial-gradient(circle at 78% 14%,rgba(226,27,35,.18),transparent 18rem),linear-gradient(150deg,#0a0d10,#12171c);
-  box-shadow:0 30px 70px rgba(0,0,0,.2);
-  overflow:hidden;
-}
-.eco-label{position:absolute;left:18px;top:16px;font:800 10px var(--mono);letter-spacing:.16em;color:#ff6970;z-index:3}
-.eco-hint{position:absolute;right:18px;top:16px;font:700 9px var(--mono);letter-spacing:.1em;color:#7c8891;z-index:3}
-.eco-link{position:absolute;height:2px;background:linear-gradient(90deg,#39414a,#e21b23);opacity:.75;transform-origin:left center;z-index:1}
-.eco-node{
-  position:absolute;
-  transform:translate(-50%,-50%);
-  border:1px solid #33393f;
-  background:#12161b;
-  color:#e8edf0;
-  border-radius:13px;
-  padding:10px 14px;
-  min-width:96px;
-  text-align:center;
-  cursor:pointer;
-  font:800 11px var(--mono);
-  letter-spacing:.08em;
-  z-index:2;
-  transition:.2s ease;
-}
-.eco-node:hover,.eco-node.active{border-color:#e21b23;background:#1c1215;box-shadow:0 0 0 5px rgba(226,27,35,.12);transform:translate(-50%,-50%) translateY(-2px)}
-.eco-node.root{background:#e21b23;border-color:#ff5a60;color:#fff;padding:16px 22px;font-size:13px;min-width:130px}
-.eco-node.root small{display:block;font:700 8px var(--mono);letter-spacing:.16em;color:#ffd9da;margin-top:3px}
-.eco-node small{display:block;font-weight:700;color:#8e98a1;margin-top:2px;font-size:9px}
-.eco-panel{
-  position:absolute;left:16px;right:16px;bottom:14px;
-  background:rgba(9,11,13,.88);
-  border:1px solid #2a3138;
-  border-radius:13px;
-  padding:14px 16px;
-  z-index:3;
-  backdrop-filter:blur(6px);
-}
-.eco-panel b{display:block;color:#fff;font-size:13px;margin-bottom:6px;letter-spacing:.02em}
-.eco-chips{display:flex;flex-wrap:wrap;gap:6px}
-.eco-chip{border:1px solid #333a41;background:#181d22;color:#c7ced4;font:800 9px var(--mono);letter-spacing:.06em;padding:5px 9px;border-radius:999px}
-/* ===== Sections shared ===== */
-.content{max-width:1500px;margin:0 auto}
-.section{
-  padding:70px clamp(28px,5vw,78px)!important;
-  border-top:1px solid #e3e6e9!important;
-  position:relative;
-}
-.section>h2{
-  font-size:clamp(28px,3.4vw,46px)!important;
-  line-height:1.08!important;
-  letter-spacing:-.04em!important;
-  max-width:1000px;
-  margin:10px 0 24px!important;
-}
-.section>p{max-width:820px}
-.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.card,.gate,.mission{
-  background:rgba(255,255,255,.94)!important;
-  border:1px solid #dce1e5!important;
-  border-radius:16px!important;
-  box-shadow:var(--cc-shadow)!important;
-  padding:24px!important;
-  position:relative;
-  overflow:hidden;
-}
-.card strong{font-size:18px}
-.card h3{letter-spacing:-.025em!important;margin:8px 0 10px}
-.muted{color:var(--muted);line-height:1.6}
-.visual,.lab,.output,.terminal,.mini-terminal{
-  border-radius:16px!important;
-}
-.visual{
-  border:1px solid #20252a!important;
+  padding:50px clamp(24px,5vw,75px) 45px;border-bottom:1px solid var(--line);
   background:
-    radial-gradient(circle at 82% 18%,rgba(226,27,35,.16),transparent 20rem),
-    linear-gradient(135deg,#0b0e11,#12171c)!important;
-  box-shadow:0 25px 65px rgba(0,0,0,.18)!important;
-  color:#fff;
-  padding:22px;
-  overflow:hidden;
+    radial-gradient(circle at 85% 15%,rgba(226,27,35,.09),transparent 26rem),
+    radial-gradient(circle at 10% 40%,rgba(59,130,246,.06),transparent 22rem),
+    #ffffff;
+  position:relative;overflow:hidden;
 }
-.visual .label{
-  font:700 11px var(--mono);
-  letter-spacing:.16em!important;
-  color:#ff6970!important;
-  margin-bottom:14px;
+.hero-grid{display:grid;grid-template-columns:1.1fr 1.2fr;gap:36px;align-items:center}
+.kicker{font:800 10.5px var(--mono);letter-spacing:.16em;color:var(--cyber-red);text-transform:uppercase}
+.hero h1{
+  font-size:clamp(36px,4.5vw,58px);line-height:1.02;margin:12px 0 16px;letter-spacing:-.04em;font-weight:900;
 }
-.env{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.window{
-  border:1px solid #343b42!important;
-  background:rgba(255,255,255,.025)!important;
-  border-radius:13px!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
-  padding:16px;
-  min-height:210px;
+.hero h1 span{color:var(--cyber-red);display:inline-block}
+.lead{font-size:16.5px;line-height:1.68;color:#4b5563;max-width:580px;margin:0 0 22px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{
+  border:1px solid #d9dee3;border-radius:999px;padding:6px 12px;font:800 10.5px var(--mono);
+  background:#fff;letter-spacing:.06em;color:#374151;box-shadow:var(--shadow-sm);display:inline-flex;align-items:center;gap:5px;
 }
-.window h4{margin:0 0 12px;font-size:16px}
-.screen{
-  border-radius:10px!important;
-  background:#090b0d!important;
-  border:1px solid #2c3339!important;
-  font:11px var(--mono);
-  overflow:hidden;
+.badge.red{border-color:#fecaca;background:#fef2f2;color:var(--cyber-red)}
+.badge.blue{border-color:#bfdbfe;background:#eff6ff;color:#1d4ed8}
+
+/* HERO LIVE SIMULATION WORKBENCH */
+.hero-workbench{
+  background:#090c10;border:1px solid #28313e;border-radius:18px;padding:22px;color:#fff;
+  box-shadow:var(--shadow-lg);position:relative;overflow:hidden;
 }
-.screen-top{background:#15191d!important;padding:8px 10px;color:#929ba4!important;letter-spacing:.06em}
-.screen-row{display:grid;grid-template-columns:12px 1fr 1.4fr;gap:7px;padding:8px 10px;border-top:1px solid #272e34;color:#ddd}
-.screen-row .dot{width:7px;height:7px;border-radius:50%;background:var(--cyber-red);margin-top:3px}
-.terminal,.output,.mini-terminal{
-  background:#080a0c!important;
-  border:1px solid #252b31!important;
-  color:#d7dde2!important;
-  box-shadow:inset 0 0 35px rgba(255,255,255,.018);
-  padding:14px;
-  font:13px/1.65 var(--mono);
-  min-height:170px;
-  white-space:pre-wrap;
+.wb-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:1px solid #1f2732;padding-bottom:12px}
+.wb-canvas{
+  background:#05070a;border:1px solid #1c232c;border-radius:12px;padding:18px;min-height:220px;
+  position:relative;display:flex;align-items:center;justify-content:space-between;
 }
-.term-ok{color:#6ff0ae!important}
-.term-red{color:#ff626a!important}
-.interface-strip{
-  font:10px var(--mono);
-  background:#191e23!important;
-  border:1px solid #31383f!important;
-  border-radius:6px;
-  padding:7px 10px;
-  margin-top:8px;
-  color:#ddd;
+.wb-node{
+  background:#141922;border:1px solid #2b3543;border-radius:10px;padding:12px;text-align:center;
+  min-width:100px;z-index:2;box-shadow:0 4px 12px rgba(0,0,0,.4);transition:all .2s ease;
 }
-.conn{
-  margin:14px 0 0;
-  padding:14px;
-  text-align:center;
-  font:11px var(--mono);
-  letter-spacing:.08em;
-  color:#8d98a2!important;
-  border-top:1px solid #2c3339!important;
+.wb-node.active{border-color:var(--cyber-red);box-shadow:0 0 16px rgba(226,27,35,.35)}
+.wb-wire{position:absolute;left:80px;right:80px;top:50%;height:2px;background:#253040;z-index:1}
+.wb-packet{
+  width:14px;height:14px;border-radius:50%;background:var(--cyber-red);position:absolute;top:calc(50% - 7px);
+  left:80px;box-shadow:0 0 14px var(--cyber-red);transition:left .6s cubic-bezier(.4,0,.2,1);z-index:5;display:none;
 }
-.moduleCard{
-  min-height:225px;
-  border-left:3px solid transparent!important;
-  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease!important;
-  cursor:pointer;
-  display:flex;
-  flex-direction:column;
+.wb-console{
+  margin-top:14px;background:#000;border:1px solid #1f2732;border-radius:8px;padding:10px 14px;
+  font:11.5px/1.6 var(--mono);color:#7ee787;max-height:100px;overflow-y:auto;white-space:pre-wrap;
 }
-.moduleCard:hover{
-  border-left-color:var(--cc-red)!important;
-  transform:translateY(-4px)!important;
-  box-shadow:var(--cc-shadow-hover)!important;
+
+/* CONTENT SECTIONS */
+.content{padding:10px clamp(24px,5vw,72px) 80px;max-width:1500px;margin:0 auto}
+.section{padding:54px 0;border-bottom:1px solid var(--line)}
+.section-head{margin-bottom:26px}
+.section-head h2{font-size:clamp(26px,3.2vw,40px);letter-spacing:-.04em;margin:8px 0 8px;font-weight:800;line-height:1.1}
+.section-head p{color:var(--muted);font-size:15px;max-width:840px;margin:0}
+
+/* VISUAL ATLAS & SIMULATOR (PRIMARY PLATFORM FEATURE) */
+.atlas-box{
+  background:#090c10;border:1px solid #28313e;border-radius:18px;padding:26px;color:#fff;
+  box-shadow:var(--shadow-lg);margin-top:20px;
 }
-.mc-scene{
-  position:relative;
-  border:1px solid #eef0f2;
-  border-radius:12px;
-  height:112px;
-  margin-bottom:10px;
-  overflow:hidden;
-  background:#12161b;
+.atlas-nav-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;align-items:center}
+.atlas-pill{
+  background:#141922;border:1px solid #26303d;color:#8b949e;padding:7px 14px;border-radius:99px;
+  font:800 11px var(--mono);cursor:pointer;transition:all .15s ease;
 }
-.mc-scene img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease}
-.moduleCard:hover .mc-scene img{transform:scale(1.04)}
-.mc-scene-fade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,13,16,0) 40%,rgba(11,13,16,.82) 100%)}
-.mc-cap{position:absolute;left:10px;right:10px;bottom:8px;font:800 8.5px/1.3 var(--mono);letter-spacing:.05em;color:#f2f3f5;text-shadow:0 1px 3px rgba(0,0,0,.6)}
-.mc-top2{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
-.mc-top2 .mc-domain{font:800 9.5px/1 var(--mono);letter-spacing:.14em;color:var(--cc-red)}
-.mc-top2 .mc-modnum{font:800 9px/1 var(--mono);letter-spacing:.1em;color:#9aa4ac}
-.mc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px}
-.mc-icon{
-  width:46px;height:46px;flex:0 0 auto;border-radius:12px;
-  background:radial-gradient(circle at 30% 20%,#1a1f25,#0c0f12);
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:inset 0 0 0 1px #262c32;
+.atlas-pill:hover{color:#fff;border-color:#58a6ff}
+.atlas-pill.active{background:var(--cyber-red);border-color:var(--cyber-red);color:#fff;box-shadow:0 0 14px rgba(226,27,35,.4)}
+.atlas-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:24px}
+.atlas-stage{
+  background:#05070a;border:1px solid #1c232c;border-radius:14px;padding:20px;min-height:360px;
+  display:flex;flex-direction:column;justify-content:space-between;
 }
-.mc-icon svg{width:30px;height:30px;display:block}
-.mc-meta{flex:1;min-width:0;padding-top:2px}
-.mc-domain{font:800 9.5px/1 var(--mono);letter-spacing:.14em;color:var(--cc-red)}
-.mc-modnum{font:800 9px/1 var(--mono);letter-spacing:.1em;color:#9aa4ac;margin-top:5px}
-.mc-num{font:900 30px/1 var(--mono);color:#eceff1;-webkit-text-stroke:1px #dce1e5;flex:0 0 auto}
-.moduleCard h3{font-size:17px!important;line-height:1.28!important;margin:0 0 auto!important}
-.mc-strip{display:flex;gap:4px;margin-top:16px}
-.mc-seg{
-  flex:1;height:6px;border-radius:4px;
-  background:#eef0f2;
-  transition:background .18s ease,transform .18s ease;
+.atlas-inspector{
+  background:#141922;border:1px solid #242e3a;border-radius:14px;padding:20px;
+  display:flex;flex-direction:column;justify-content:space-between;
 }
-.moduleCard:hover .mc-seg{background:linear-gradient(90deg,#f3c6c8,var(--cc-red))}
-.mc-strip-label{font:700 9px/1 var(--mono);letter-spacing:.1em;color:#9aa4ac;margin-top:8px}
-.mc-ribbon{
-  position:absolute;top:16px;right:-32px;transform:rotate(40deg);
-  background:var(--cc-red);color:#fff;font:800 9px/1 var(--mono);letter-spacing:.1em;
-  padding:4px 38px;box-shadow:0 4px 10px rgba(226,27,35,.35);
+
+/* LIVE SLIDERS & CONTROLS */
+.sim-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:10px 0}
+.sim-row label{font:700 11.5px var(--mono);color:#c9d1d9}
+.sim-slider{flex:1;accent-color:var(--cyber-red)}
+.sim-val{font:800 12px var(--mono);color:#7ee787;min-width:35px;text-align:right}
+
+/* 40-MODULE MATRIX */
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 24px}
+.filter-tab{
+  background:#fff;border:1px solid var(--line);padding:7px 14px;border-radius:8px;
+  font:800 11px var(--mono);color:#475569;cursor:pointer;transition:all .15s ease;
 }
-.tag{
-  display:inline-block;
-  font-size:10px;
-  padding:4px 8px;
-  background:#f7f8f9!important;
-  border:1px solid #e0e4e7!important;
-  border-radius:999px!important;
-  font-weight:800;
-  color:#60676d;
-  margin:6px 4px 0 0;
-  font-family:var(--mono);
+.filter-tab:hover{border-color:var(--cyber-red);color:var(--cyber-red)}
+.filter-tab.active{background:var(--dark2);border-color:var(--dark2);color:#fff}
+
+.module-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.mod-card{
+  background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;cursor:pointer;
+  transition:all .2s ease;display:flex;flex-direction:column;justify-content:space-between;position:relative;
+  box-shadow:var(--shadow-sm);
 }
-.flow{
-  display:flex;
-  align-items:stretch;
-  padding:18px;
-  border:1px solid #dfe4e8;
-  background:#fff;
-  border-radius:16px;
-  box-shadow:var(--cc-shadow);
-  gap:10px!important;
-  overflow-x:auto;
-}
-.flow .node{
-  min-height:92px;
-  min-width:165px;
-  border:1px solid #dce1e5!important;
-  border-radius:12px!important;
-  padding:14px;
-  background:#fafbfc!important;
-  cursor:pointer;
-  transition:.18s ease;
-}
-.flow .node:hover,.flow .node.active{
-  border-color:var(--cc-red)!important;
-  background:#fff!important;
-  box-shadow:0 10px 25px rgba(226,27,35,.08);
-  transform:translateY(-2px);
-}
-.flow .node.active b{color:var(--cc-red)}
-.flow .arrow{display:flex;align-items:center;color:var(--cc-red)!important;font-size:22px;font-weight:900;padding:0 8px}
-.explain{
-  display:none;
-  border:1px solid #e0e4e8!important;
-  border-left:4px solid var(--cc-red)!important;
-  border-radius:10px!important;
-  background:#fff!important;
-  padding:15px 18px;
-  margin-top:10px;
-  box-shadow:0 8px 25px rgba(0,0,0,.045);
-}
-.explain.open{display:block}
-.loop{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-.lab{background:#111;color:#fff;border-radius:16px;padding:24px}
-.labgrid{display:grid;grid-template-columns:1fr 1.1fr;gap:18px}
-.mission{background:#fff!important;color:#111;border-radius:12px;padding:20px!important}
-.check{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #eee;font-size:13.5px}
-.check input{accent-color:var(--cyber-red);margin-top:3px}
-.cmds{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
-.cmds button{
-  background:#252525;
-  border:1px solid #555;
-  color:#fff;
-  border-radius:6px;
-  padding:7px 11px;
-  font:12px var(--mono);
-  cursor:pointer;
-  transition:.15s ease;
-}
-.cmds button:hover{border-color:var(--cyber-red);background:#303030}
-.evidence{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.evi{
-  border:1px solid #dce1e5!important;
-  border-radius:14px!important;
-  background:#fff!important;
-  padding:20px!important;
-  box-shadow:0 10px 30px rgba(0,0,0,.05);
-  position:relative;
-}
-.evi:before{
-  content:"";
-  display:block;
-  width:28px;
-  height:3px;
-  border-radius:3px;
-  background:var(--cc-red);
-  margin-bottom:14px;
-}
-.evi b{display:block;margin-bottom:6px;font-size:14px}
-.gate{
-  border-top:3px solid var(--cc-red)!important;
-  padding:26px!important;
-}
-.gate.pass{border-top-color:#1e9b63!important}
-.svgbox{
-  border:1px solid #e0e4e8!important;
-  border-radius:16px!important;
-  background:#fff!important;
-  box-shadow:var(--cc-shadow);
-  padding:16px!important;
-}
+.mod-card:hover{border-color:var(--cyber-red);transform:translateY(-3px);box-shadow:var(--shadow)}
+.mod-kicker{font:800 10px var(--mono);letter-spacing:.14em;color:var(--cyber-red);margin-bottom:6px;display:flex;justify-content:space-between}
+.mod-card h3{margin:0 0 10px;font-size:16px;line-height:1.3;letter-spacing:-.02em}
+.mod-topics{display:flex;flex-wrap:wrap;gap:4px;margin-top:12px}
+.mod-tag{font:700 9.5px var(--mono);background:#f1f4f8;padding:3px 8px;border-radius:999px;color:#475569}
+
+/* MODAL */
 .modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(5,8,11,.75)!important;
-  backdrop-filter:blur(8px);
-  z-index:100;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
+  display:none;position:fixed;inset:0;background:rgba(5,8,11,.75);backdrop-filter:blur(8px);
+  z-index:200;align-items:center;justify-content:center;padding:20px;
 }
 .modal.show{display:flex}
 .modalBox{
-  width:min(980px,96vw);
-  max-height:90vh;
-  overflow:auto;
-  background:#fff;
-  border:1px solid #d9dee3!important;
-  border-radius:20px!important;
-  padding:30px!important;
-  box-shadow:0 35px 100px rgba(0,0,0,.32)!important;
+  width:min(880px,96vw);max-height:90vh;overflow-y:auto;background:#fff;border:1px solid var(--line);
+  border-radius:18px;padding:28px;box-shadow:var(--shadow-lg);
 }
-.modalHead{display:flex;justify-content:space-between;align-items:flex-start;gap:15px}
-.modalGrid{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;margin:18px 0}
+
 footer{
-  padding:34px 24px!important;
-  background:#0b0d10!important;
-  color:#8f98a0!important;
-  letter-spacing:.12em!important;
-  font:10px var(--mono)!important;
-  text-align:center;
+  padding:36px 24px;border-top:1px solid var(--line);background:#090c10;color:#8b949e;
+  font:11px var(--mono);text-align:center;
 }
-.sim-terminal{background:#080808;border:1px solid #333a41;border-radius:9px;padding:12px 14px;font:12.5px/1.6 var(--mono);color:#e8e8e8;white-space:pre-wrap;overflow:auto;max-height:260px}
-/* ===== SEE THE DIFFERENCE — mini visuals ===== */
-.mv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
-.mv-card{border:1px solid #dce1e5;border-radius:16px;background:#fff;box-shadow:var(--cc-shadow);padding:18px;display:flex;flex-direction:column;gap:12px}
-.mv-num{font:800 9px var(--mono);letter-spacing:.16em;color:var(--cc-red)}
-.mv-title{font-weight:800;font-size:14px;letter-spacing:-.01em}
-.mv-stage{background:#0b0e11;border-radius:12px;padding:16px;color:#e8edf0;min-height:150px;display:flex;flex-direction:column;justify-content:center;gap:10px}
-.mv-addr{font:800 15px var(--mono);letter-spacing:.02em;text-align:center}
-.mv-addr .net{color:#ff6970}
-.mv-addr .host{color:#7fd6ff}
-.mv-legend{display:flex;justify-content:center;gap:14px;font:700 9px var(--mono);color:#9aa4ac}
-.mv-legend b{color:#ff6970}.mv-legend i{color:#7fd6ff;font-style:normal}
-.mv-bits{display:flex;justify-content:center;gap:3px;margin-top:2px;flex-wrap:wrap}
-.mv-bit{width:16px;height:16px;border-radius:3px;background:#22282e;display:flex;align-items:center;justify-content:center;font:800 8px var(--mono);color:#6b7580}
-.mv-bit.net{background:rgba(226,27,35,.28);color:#ff9296}
-.mv-bit.host{background:rgba(127,214,255,.2);color:#a9e2ff}
-.mv-cidr-row{display:flex;gap:6px;justify-content:center}
-.mv-cidr{border:1px solid #333a41;background:#181d22;color:#c7ced4;font:800 10px var(--mono);padding:6px 10px;border-radius:999px;cursor:pointer}
-.mv-cidr.active{background:#e21b23;border-color:#ff5a60;color:#fff}
-.mv-port-row{display:flex;gap:6px;justify-content:center}
-.mv-port{border:1px solid #333a41;background:#181d22;color:#c7ced4;font:800 11px var(--mono);padding:8px 12px;border-radius:8px;cursor:pointer}
-.mv-port.active{background:#e21b23;border-color:#ff5a60;color:#fff}
-.mv-reveal{text-align:center;font:800 11px var(--mono);color:#9aa4ac;display:flex;flex-direction:column;align-items:center;gap:4px}
-.mv-reveal b{color:#fff;font-size:12px}
-.mv-hops{display:flex;justify-content:space-between;position:relative;padding:0 4px}
-.mv-hop{font:800 9px var(--mono);color:#9aa4ac;text-align:center;flex:1}
-.mv-hop.lit{color:#ff9296}
-.mv-track{position:relative;height:4px;background:#22282e;border-radius:2px;margin:6px 4px}
-.mv-track i{position:absolute;top:-5px;width:14px;height:14px;border-radius:50%;background:#e21b23;box-shadow:0 0 10px rgba(226,27,35,.7);left:0;transition:left .5s ease}
-.mv-detail{font:700 10px var(--mono);color:#9aa4ac;text-align:center;line-height:1.6}
-.mv-fw-row{display:flex;align-items:center;justify-content:center;gap:6px;position:relative}
-.mv-fw-toggle{display:flex;border:1px solid #333a41;border-radius:999px;overflow:hidden}
-.mv-fw-toggle button{border:0;background:#181d22;color:#9aa4ac;font:800 10px var(--mono);padding:7px 14px;cursor:pointer}
-.mv-fw-toggle button.on{background:#158a52;color:#fff}
-.mv-fw-toggle button.off{background:#c4141c;color:#fff}
-.mv-caption{font:700 10px var(--mono);letter-spacing:.06em;color:#8992a0;text-align:center}
-/* ===== NOT ANOTHER COURSE ===== */
-.cmp-wrap{display:grid;grid-template-columns:1fr auto 1fr;gap:22px;align-items:center;margin-top:30px}
-.cmp-col{display:flex;flex-direction:column;gap:10px}
-.cmp-vs{font:900 12px var(--mono);color:#c9cccf;letter-spacing:.1em;writing-mode:vertical-rl;text-align:center}
-.cmp-label{font:800 10px var(--mono);letter-spacing:.16em;margin-bottom:4px}
-.cmp-label.trad{color:#98a1a8}
-.cmp-label.cc{color:var(--cc-red)}
-.cmp-step{border:1px solid #dfe4e8;border-radius:12px;padding:14px 16px;font-weight:800;font-size:13px;background:#fafbfc;color:#7a858e}
-.cmp-step.on{background:#fff;border-color:#efc9cb;color:#171a1e;box-shadow:0 8px 22px rgba(226,27,35,.08)}
-.cmp-step.on b{color:var(--cc-red)}
-/* ===== JOURNEY ===== */
-.jr-rail{display:flex;flex-direction:column;gap:0;margin-top:30px;max-width:640px}
-.jr-step{display:grid;grid-template-columns:46px 1fr;gap:16px;position:relative;padding-bottom:26px}
-.jr-step:last-child{padding-bottom:0}
-.jr-dot{width:46px;height:46px;border-radius:50%;background:#fff;border:2px solid #dce1e5;display:flex;align-items:center;justify-content:center;font:800 12px var(--mono);color:#7a858e;z-index:1}
-.jr-step.on .jr-dot{border-color:var(--cc-red);color:var(--cc-red);background:#fff5f5}
-.jr-step:not(:last-child):before{content:"";position:absolute;left:22px;top:46px;bottom:0;width:2px;background:#e3e7eb}
-.jr-body h4{margin:8px 0 4px;font-size:16px;letter-spacing:-.01em}
-.jr-body p{margin:0;color:#7a858e;font-size:13px}
-.jr-stat{margin-top:34px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-.jr-stat b{font:900 40px var(--mono);color:var(--cc-red);letter-spacing:-.02em}
-.jr-stat span{font:800 11px var(--mono);letter-spacing:.1em;color:#66717c}
-/* ===== WHAT YOU BUILD ===== */
-.cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
-.cap-card{border:1px solid #dce1e5;border-radius:16px;background:#fff;box-shadow:var(--cc-shadow);padding:20px;transition:.2s ease}
-.cap-card:hover{transform:translateY(-3px);box-shadow:var(--cc-shadow-hover)}
-.cap-motif{height:56px;margin-bottom:12px}
-.cap-card h3{margin:0 0 6px;font-size:16px;letter-spacing:-.01em}
-/* ===== LAB PREVIEW ===== */
-.labprev{background:#0b0e11;border-radius:20px;padding:26px;color:#e8edf0;margin-top:26px;position:relative;overflow:hidden}
-.labprev-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px}
-.labprev-head b{font:800 12px var(--mono);letter-spacing:.14em;color:#ff6970}
-.labprev-net{position:relative;display:flex;justify-content:space-between;align-items:center;padding:26px 10px;margin-bottom:16px}
-.labprev-node{border:1px solid #333a41;background:#181d22;border-radius:12px;padding:14px 18px;text-align:center;z-index:1}
-.labprev-node b{display:block;font-size:13px}
-.labprev-node small{display:block;color:#8e98a1;font:700 10px var(--mono);margin-top:4px}
-.labprev-line{position:absolute;left:110px;right:110px;top:50%;height:2px;background:#333a41}
-.labprev-line i{position:absolute;top:-6px;width:14px;height:14px;border-radius:50%;background:#e21b23;box-shadow:0 0 10px rgba(226,27,35,.7);left:0;opacity:0;transition:left .6s ease,opacity .2s ease}
-.labprev-label{position:absolute;left:50%;top:-20px;transform:translateX(-50%);font:800 9px var(--mono);color:#8992a0;letter-spacing:.14em}
-.labprev-cmds{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.labprev-cmds button{background:#181d22;border:1px solid #333a41;color:#e8edf0;border-radius:8px;padding:9px 14px;font:800 11px var(--mono);letter-spacing:.06em;cursor:pointer}
-.labprev-cmds button:hover{border-color:#e21b23}
-/* ===== CAREER ===== */
-.career-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
-.career-card{border:1px solid #dce1e5;border-radius:16px;background:#fff;box-shadow:var(--cc-shadow);padding:20px}
-.career-card h3{margin:0 0 6px;font-size:15px}
-.career-card span{font:700 11px var(--mono);color:#7a858e;letter-spacing:.02em}
-/* ===== FINAL CTA ===== */
-.finalcta{background:#0b0e11;color:#fff;text-align:center;padding:90px 24px!important;border-top:0!important}
-.finalcta .kicker{color:#ff6970!important}
-.finalcta h2{color:#fff!important;max-width:820px;margin:14px auto 10px!important}
-.finalcta p{color:#9aa4ac;font:800 12px var(--mono);letter-spacing:.1em;margin:0 0 30px}
-.finalcta-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-body.darkMode{background:#080a0d!important;color:#eef2f5!important}
-body.darkMode:before{background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px)}
-body.darkMode .top,body.darkMode #sidebar{background:rgba(13,16,20,.92)!important;border-color:#292f35!important}
-body.darkMode .nav a{color:#e8edf1!important}
-body.darkMode .nav a:hover{background:#181c21!important}
-body.darkMode .nav a.active{background:#1a1516!important;border-color:#3a292b!important}
-body.darkMode .hero .lead,body.darkMode .muted{color:#a7b0b8!important}
-body.darkMode .card,body.darkMode .gate,body.darkMode .mission,body.darkMode .flow,body.darkMode .flow .node,body.darkMode .explain,body.darkMode .evi,body.darkMode .svgbox,body.darkMode .modalBox,body.darkMode .mv-card,body.darkMode .cap-card,body.darkMode .career-card{background:#11151a!important;border-color:#2a3138!important;color:#edf1f4!important}
-body.darkMode .cmp-step{background:#11151a!important;border-color:#2a3138!important;color:#a7b0b8!important}
-body.darkMode .search{background:#15191e!important;color:#fff!important;border-color:#333a41!important}
-body.darkMode .badge,body.darkMode .tag{background:#15191e!important;border-color:#343b42!important;color:#c6cdd3!important}
-body.darkMode .btn:not(.red){background:#15191e!important;color:#fff!important;border-color:#333a41!important}
-body.darkMode .topnav a{color:#c6cdd3}
-@media(max-width:1150px){
-  #moduleGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  .hero{grid-template-columns:1fr}
-  .eco-stage{height:380px}
-  .mv-grid{grid-template-columns:1fr 1fr}
-  .cap-grid{grid-template-columns:1fr 1fr}
-  .career-grid{grid-template-columns:1fr 1fr}
+
+@media(max-width:1100px){
+  .hero-grid,.atlas-grid{grid-template-columns:1fr}
+  .module-grid{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:900px){
-  #sidebar{position:relative!important;top:0;width:auto!important;height:auto!important;border-right:0!important;border-bottom:1px solid #e1e5e8!important}
-  .layout{display:block!important}
-  .nav{display:grid!important;grid-template-columns:repeat(3,1fr);gap:4px}
-  .nav a{margin:0!important}
-  .hero{min-height:auto;padding-top:45px!important}
-  .env,.grid2,.cmp-wrap{grid-template-columns:1fr!important}
-  .cmp-vs{writing-mode:horizontal-tb}
-  .modalGrid{grid-template-columns:1fr}
-  .evidence{grid-template-columns:1fr 1fr}
-  .loop{grid-template-columns:1fr}
-  .topnav{display:none}
+  .layout{grid-template-columns:1fr}
+  aside{position:relative;top:0;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .search{display:none}
 }
 @media(max-width:650px){
-  .top{padding:0 12px!important}
-  .brand{font-size:12px!important}
-  .search{display:none}
-  .hero{padding:40px 18px 36px!important}
-  .hero h1{font-size:34px!important}
-  .section{padding:40px 18px!important}
-  #moduleGrid,.grid3,.mv-grid,.cap-grid,.career-grid{grid-template-columns:1fr!important}
-  .nav{grid-template-columns:1fr 1fr!important}
-  .labprev-net{padding:20px 4px}
-  .labprev-line{left:78px;right:78px}
+  .module-grid{grid-template-columns:1fr}
+  .top{padding:0 14px}
+  .hero{padding:36px 16px}
 }
 </style>
 </head>
 <body>
 
 <header class="top">
-  <a href="index.html" class="brand" title="ShadowXLab Home" style="display:flex;align-items:center;gap:14px;text-decoration:none;cursor:pointer">
-    <div style="background:#04070c;padding:4px 10px;border-radius:10px;border:1px solid #1a2332;display:flex;align-items:center;box-shadow:0 4px 14px rgba(0,0,0,0.18)">
-      <img src="assets/logo.png" alt="ShadowXLab Logo" style="height:46px;max-height:48px;width:auto;object-fit:contain;display:block">
+  <a href="index.html" class="brand" title="ShadowXLab Home">
+    <div class="brand-logo-box">
+      <img src="assets/logo.png" alt="ShadowXLab Logo">
     </div>
-    <div style="border-left:2px solid var(--line);padding-left:12px;display:flex;flex-direction:column;justify-content:center">
-      <div style="font-size:15px;font-weight:900;letter-spacing:.08em;color:var(--text);line-height:1.2">CYBER<span style="color:var(--cyber-red)">CORE</span></div>
-      <div style="font:800 9.5px var(--mono);letter-spacing:.14em;color:#475569;margin-top:2px;white-space:nowrap">
-        EMPOWER <span style="color:var(--blue)">•</span> ILLUMINATE <span style="color:var(--cyber-red)">•</span> UPHOLD
-      </div>
+    <div class="brand-meta">
+      <div class="brand-title">CYBER<span>CORE</span></div>
+      <div class="brand-tag">EMPOWER <span style="color:var(--blue)">•</span> ILLUMINATE <span style="color:var(--cyber-red)">•</span> UPHOLD</div>
     </div>
   </a>
-  <nav class="topnav">
-    <a href="#overview">CYBERCORE</a>
-    <a href="#modules">PLATFORM</a>
-    <a href="#journey">JOURNEY</a>
-    <a href="#lab-preview">LABS</a>
-    <a href="#career">CAREER</a>
-  </nav>
+  
   <div class="grow"></div>
-  <input id="moduleSearch" class="search" placeholder="Search modules..." oninput="filterModules(this.value)">
-  <a href="module-00.html" class="btn" style="border-color:#fca5a5;background:#fef2f2;color:#b91c1c">MODULE 00 →</a>
-  <button class="btn" onclick="toggleTheme()">◐ MODE</button>
-  <a href="module-00.html" class="btn red">START CYBERCORE →</a>
+  
+  <div class="top-actions">
+    <input id="moduleSearch" class="search" placeholder="Search 40 modules &amp; concepts..." oninput="filterModules(this.value)">
+    <a href="module-00.html" class="btn sm" style="border-color:#fca5a5;background:#fef2f2;color:#b91c1c">MODULE 00: SETUP →</a>
+    <a href="module-01.html" class="btn sm">KALI ONBOARDING LAB →</a>
+    <button class="btn sm" onclick="toggleTheme()">◐</button>
+    <a href="module-00.html" class="btn sm red">START CYBERCORE →</a>
+  </div>
 </header>
 
 <div class="layout" id="layout">
 <aside id="sidebar">
-  <div class="side-k" style="margin-top:8px">SHADOWXLAB · CYBERCORE</div>
-  <h3 style="margin:2px 6px 5px;font-size:20px">CYBER VISUAL PLATFORM</h3>
-  <div style="color:#777;font-size:12px;margin:0 6px 10px">See cybersecurity. Understand it. Build it.</div>
+  <div class="side-k">SHADOWXLAB · CYBERCORE</div>
+  <div class="side-title">Cyber Visual Platform</div>
+  <div class="side-sub">40 Modules · Visual Architecture</div>
+  
   <div class="progress"><i id="progressBar"></i></div>
+
   <nav class="nav" id="moduleNav">
     <a href="module-00.html" style="background:#fee2e2;color:#b91c1c;font-weight:800;border-left:3px solid #b91c1c;margin-bottom:8px">00 · Prerequisites Setup<small>Hardware, Packet Tracer &amp; VMs</small></a>
-    <a href="#overview" class="active">01 · Platform<small>What CyberCore is</small></a>
-    <a href="#see-difference">02 · See The Difference<small>Real interactive proof</small></a>
-    <a href="#journey">03 · Learning Journey<small>7 stages / 40 modules</small></a>
-    <a href="#modules">04 · CyberCore Modules<small>40 modules / 200+ concepts</small></a>
-    <a href="#what-you-build">05 · What You Build<small>Six capability tracks</small></a>
-    <a href="#lab-preview">06 · CyberCore Lab<small>Simulated lab network</small></a>
-    <a href="#career">07 · Career Paths<small>Where CyberCore leads</small></a>
-    <a href="#readiness">08 · Track Capability<small>Evidence &amp; readiness</small></a>
+    <a href="#sec-overview" class="active">01 · Visual Platform<small>Mission &amp; live engine</small></a>
+    <a href="#sec-atlas">02 · Visual Atlas Simulator<small>Interactive visual systems</small></a>
+    <a href="#sec-workbench">03 · Tool &amp; Packet Console<small>Live command simulator</small></a>
+    <a href="#sec-curriculum">04 · 40-Module Catalog<small>7 domains / 200+ concepts</small></a>
+    <a href="#sec-evidence">05 · Capability &amp; Evidence<small>Verification &amp; portfolios</small></a>
   </nav>
 </aside>
 
 <main>
-<section class="hero" id="overview">
-  <div class="hero-copy">
-    <div class="hero-id">
-      <b>SHADOWXLAB</b>
-      <b class="red">CYBERCORE</b>
-      <small>CYBER VISUAL PLATFORM</small>
+<!-- HERO -->
+<section class="hero" id="sec-overview">
+  <div class="hero-grid">
+    <div>
+      <div class="kicker">SHADOWXLAB CYBERCORE · CYBER VISUAL PLATFORM</div>
+      <h1>Understand Cybersecurity.<br><span>Visually.</span></h1>
+      <p class="lead">CyberCore transforms cybersecurity concepts into interactive visual systems — connecting networking, operating systems, offensive testing, SOC operations, cloud architecture, and security engineering into one unified platform.</p>
+      
+      <div class="hero-ctas">
+        <a href="module-00.html" class="btn red">ENTER MODULE 00 (LAB SETUP) →</a>
+        <button class="btn" onclick="document.getElementById('sec-atlas').scrollIntoView({behavior:'smooth'})">EXPLORE VISUAL ATLAS</button>
+      </div>
+
+      <div class="badges">
+        <span class="badge red">40 INTERACTIVE MODULES</span>
+        <span class="badge blue">LIVE SIMULATION ENGINES</span>
+        <span class="badge">ZERO-TRUST ARCHITECTURE</span>
+      </div>
     </div>
-    <h1>See cybersecurity.<br>Understand it.<br><em>Build it.</em></h1>
-    <p class="lead">An interactive cybersecurity learning environment where networking, systems, offensive security, defensive security, cloud and security engineering are learned through visual models, simulations and hands‑on experiences.</p>
-    <div class="hero-ctas">
-      <button class="btn red lg" onclick="document.getElementById('see-difference').scrollIntoView({behavior:'smooth'})">EXPLORE CYBERCORE →</button>
-      <button class="btn lg" onclick="document.getElementById('journey').scrollIntoView({behavior:'smooth'})">VIEW 40‑MODULE JOURNEY</button>
-    </div>
-    <div class="badges"><span class="badge">40 MODULES</span><span class="badge">200+ CONCEPTS</span><span class="badge">VISUAL</span><span class="badge">INTERACTIVE</span><span class="badge">CONCEPT‑FIRST</span></div>
-  </div>
-  <div class="eco-wrap">
-    <div class="eco-stage" id="ecoStage">
-      <div class="eco-label">CYBERCORE ECOSYSTEM</div>
-      <div class="eco-hint">CLICK A SYSTEM</div>
-      <!-- links + nodes injected by JS -->
-    </div>
-    <div class="eco-panel">
-      <b id="ecoPanelTitle">Select a system</b>
-      <div class="eco-chips" id="ecoPanelChips"></div>
+
+    <!-- Live Interactive Workbench Engine -->
+    <div class="hero-workbench">
+      <div class="wb-header">
+        <div>
+          <div style="font:800 10.5px var(--mono);color:#ff6970;letter-spacing:.1em">LIVE WORKBENCH SIMULATOR</div>
+          <div style="font-size:11px;color:#8b949e">Source: Kali Linux (10.0.2.15) ➔ Destination: Target Server (10.0.2.20)</div>
+        </div>
+        <button class="btn sm red" onclick="triggerHeroPacket()">INJECT PACKET →</button>
+      </div>
+
+      <div class="wb-canvas">
+        <div class="wb-wire"></div>
+        <div class="wb-packet" id="heroPacket"></div>
+
+        <div class="wb-node active" id="node-kali">
+          <div style="font:800 9px var(--mono);color:var(--cyber-red)">OPERATOR</div>
+          <div style="font-weight:800;font-size:12px">Kali Linux</div>
+          <div style="font-size:9.5px;color:#8b949e">10.0.2.15</div>
+        </div>
+
+        <div class="wb-node" id="node-fw">
+          <div style="font:800 9px var(--mono);color:#58a6ff">GATEWAY</div>
+          <div style="font-weight:800;font-size:12px">Stateful FW</div>
+          <div style="font-size:9.5px;color:#8b949e">ALLOW: 443</div>
+        </div>
+
+        <div class="wb-node" id="node-target">
+          <div style="font:800 9px var(--mono);color:#7ee787">TARGET</div>
+          <div style="font-weight:800;font-size:12px">Ubuntu Server</div>
+          <div style="font-size:9.5px;color:#8b949e">10.0.2.20:443</div>
+        </div>
+      </div>
+
+      <div class="wb-console" id="heroConsole">SIMULATOR > ready. Click "INJECT PACKET" to simulate packet telemetry.</div>
     </div>
   </div>
 </section>
 
 <div class="content">
 
-<section class="section" id="see-difference">
-  <div class="kicker">SEE THE DIFFERENCE</div>
-  <h2>Don't take our word for it. Try it.</h2>
-  <p class="muted">Four small, real, interactive visuals — the same visual grammar CyberCore uses across all 40 modules.</p>
-  <div class="mv-grid">
+<!-- VISUAL ATLAS SIMULATOR (PRIMARY PLATFORM EXPERIENCE) -->
+<section class="section" id="sec-atlas">
+  <div class="section-head">
+    <div class="kicker">02 · INTERACTIVE VISUAL ATLAS</div>
+    <h2>Interactive Visual System Models</h2>
+    <p>Select any foundational security system below to explore its live state machine, change parameters, and observe the cause-and-effect telemetry.</p>
+  </div>
 
-    <div class="mv-card">
-      <div class="mv-num">VISUAL 01 · NETWORK</div>
-      <div class="mv-title">Network vs. host boundary</div>
-      <div class="mv-stage">
-        <div class="mv-addr" id="mvNetAddr">192.168.10<span class="net">.25</span></div>
-        <div class="mv-bits" id="mvNetBits"></div>
-        <div class="mv-legend"><span><b>■</b> network</span><span><i>■</i> host</span></div>
+  <div class="atlas-box">
+    <div class="atlas-nav-row">
+      <button class="atlas-pill active" onclick="loadAtlasSys('risk',this)">01 · Quantitative Risk &amp; CIA Triad</button>
+      <button class="atlas-pill" onclick="loadAtlasSys('handshake',this)">11 · TCP 3-Way Handshake Engine</button>
+      <button class="atlas-pill" onclick="loadAtlasSys('firewall',this)">13 · Stateful Firewall Rule Inspector</button>
+      <button class="atlas-pill" onclick="loadAtlasSys('soc',this)">25 · SOC Alert Triage Pipeline</button>
+      <button class="atlas-pill" onclick="loadAtlasSys('cloud',this)">38 · Cloud IAM Trust Boundaries</button>
+    </div>
+
+    <div class="atlas-grid">
+      <!-- Live Interactive Visual Stage -->
+      <div class="atlas-stage" id="atlasStage">
+        <!-- Injected dynamically by JS -->
       </div>
-      <div class="mv-cidr-row">
-        <button class="mv-cidr active" data-c="24" onclick="mvSetCidr(24,this)">/24</button>
-        <button class="mv-cidr" data-c="25" onclick="mvSetCidr(25,this)">/25</button>
-        <button class="mv-cidr" data-c="26" onclick="mvSetCidr(26,this)">/26</button>
-      </div>
-      <div class="mv-caption" id="mvNetCaption">/24 → last octet is entirely host</div>
-    </div>
 
-    <div class="mv-card">
-      <div class="mv-num">VISUAL 02 · PORT</div>
-      <div class="mv-title">Port → service → purpose</div>
-      <div class="mv-stage">
-        <div class="mv-addr">192.168.10.20:<span id="mvPortNum" class="net">443</span></div>
-        <div class="mv-reveal">
-          <span>↓</span><b id="mvPortSvc">HTTPS</b>
-          <span>↓</span><b id="mvPortHost">SERVER</b>
-          <span>↓</span><b id="mvPortPurpose">WEB APPLICATION</b>
-        </div>
-      </div>
-      <div class="mv-port-row">
-        <button class="mv-port active" data-p="443" onclick="mvSetPort(443,this)">443</button>
-        <button class="mv-port" data-p="22" onclick="mvSetPort(22,this)">22</button>
-      </div>
-      <div class="mv-caption">IP → HOST · PORT → SERVICE</div>
-    </div>
-
-    <div class="mv-card">
-      <div class="mv-num">VISUAL 03 · PACKET</div>
-      <div class="mv-title">A packet crossing the network</div>
-      <div class="mv-stage">
-        <div class="mv-hops" id="mvPacketHops">
-          <div class="mv-hop">CLIENT</div><div class="mv-hop">SWITCH</div><div class="mv-hop">ROUTER</div><div class="mv-hop">SERVER</div>
-        </div>
-        <div class="mv-track"><i id="mvPacketDot"></i></div>
-        <div class="mv-detail" id="mvPacketDetail">HOP — · SRC 192.168.10.5 · DST 192.168.10.20 · TCP</div>
-      </div>
-      <button class="mv-port active" style="width:100%" onclick="mvSendPacket(this)">SEND PACKET →</button>
-      <div class="mv-caption">EDUCATIONAL SIMULATION</div>
-    </div>
-
-    <div class="mv-card">
-      <div class="mv-num">VISUAL 04 · FIREWALL</div>
-      <div class="mv-title">Allow vs. block</div>
-      <div class="mv-stage">
-        <div class="mv-hops"><div class="mv-hop">CLIENT</div><div class="mv-hop lit">FIREWALL</div><div class="mv-hop">SERVER</div></div>
-        <div class="mv-track"><i id="mvFwDot"></i></div>
-        <div class="mv-detail" id="mvFwDetail">TCP 443 — press send to test the policy</div>
-      </div>
-      <div class="mv-fw-row">
-        <div class="mv-fw-toggle">
-          <button class="on" id="mvFwAllow" onclick="mvSetFw(true)">ALLOW</button>
-          <button id="mvFwBlock" onclick="mvSetFw(false)">BLOCK</button>
-        </div>
-        <button class="mv-port" style="margin-left:8px" onclick="mvFireFirewall(this)">SEND →</button>
-      </div>
-      <div class="mv-caption">EDUCATIONAL SIMULATION</div>
-    </div>
-
-  </div>
-</section>
-
-<section class="section" id="not-course">
-  <div class="kicker">WHY CYBERCORE IS DIFFERENT</div>
-  <h2>Not another cybersecurity course.</h2>
-  <p class="muted">Cybersecurity should not be learned as disconnected chapters of text.</p>
-  <div class="cmp-wrap">
-    <div class="cmp-col">
-      <div class="cmp-label trad">TRADITIONAL</div>
-      <div class="cmp-step">VIDEO</div>
-      <div class="cmp-step">SLIDES</div>
-      <div class="cmp-step">NOTES</div>
-      <div class="cmp-step">QUIZ</div>
-    </div>
-    <div class="cmp-vs">VS</div>
-    <div class="cmp-col">
-      <div class="cmp-label cc">CYBERCORE</div>
-      <div class="cmp-step on"><b>CONCEPT</b></div>
-      <div class="cmp-step on"><b>VISUAL MODEL</b></div>
-      <div class="cmp-step on"><b>INTERACTION</b></div>
-      <div class="cmp-step on"><b>SIMULATION</b></div>
-      <div class="cmp-step on"><b>LAB</b></div>
-      <div class="cmp-step on"><b>SKILL</b></div>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="environment">
-  <div class="kicker">PLATFORM · LEARNING LOOP</div>
-  <h2>The CyberCore becomes a visual cybersecurity environment.</h2>
-  <div class="visual">
-    <div class="label">LEARNER → CYBERCORE → LAB → EVIDENCE</div>
-    <div class="env">
-      <div class="window"><h4>LEARNER WORKSPACE</h4>
-        <div class="screen"><div class="screen-top">OBJECTIVE · SCOPE · EXPECTED OUTCOME</div>
-          <div class="screen-row"><span class="dot"></span><b>CONCEPT</b><span>Understand the mechanism</span></div>
-          <div class="screen-row"><span class="dot"></span><b>VISUAL</b><span>See the system behaviour</span></div>
-          <div class="screen-row"><span class="dot"></span><b>SIMULATE</b><span>Change variables safely</span></div>
-          <div class="screen-row"><span class="dot"></span><b>APPLY</b><span>Capture evidence</span></div>
-        </div>
-      </div>
-      <div class="window"><h4>AUTHORIZED TRAINING ENVIRONMENT</h4>
-        <div class="terminal">SIMULATOR > status<br><span class="term-ok">LEARNING ENGINE · READY</span><br>SIMULATOR > scope<br><span class="term-ok">MODULE / SIMULATOR / EVIDENCE</span><br>SIMULATOR > verify<br><span class="term-red">2 OBJECTIVES PENDING</span></div>
-        <div class="interface-strip">BROWSER → SIMULATOR → OBSERVABLE OUTPUT → EXPLANATION</div>
-      </div>
-    </div>
-    <div class="conn">CONCEPT → EXPLANATION → VISUAL → EXAMPLE → SIMULATION → KNOWLEDGE CHECK → MASTERY</div>
-  </div>
-</section>
-
-<section class="section" id="journey">
-  <div class="kicker">CYBERCORE LEARNING JOURNEY</div>
-  <h2>One connected journey, not forty disconnected chapters.</h2>
-  <p class="muted">Every module fits into a single arc — each stage builds directly on the one before it.</p>
-  <div class="jr-rail">
-    <div class="jr-step on"><div class="jr-dot">1</div><div class="jr-body"><h4>Foundation</h4><p>Security mindset, frameworks, roles and general skills.</p></div></div>
-    <div class="jr-step"><div class="jr-dot">2</div><div class="jr-body"><h4>Systems &amp; Networks</h4><p>Linux, Windows, data, scripting and networking fundamentals.</p></div></div>
-    <div class="jr-step"><div class="jr-dot">3</div><div class="jr-body"><h4>Security Fundamentals</h4><p>Firewalls, cloud basics, GenAI and cryptography.</p></div></div>
-    <div class="jr-step"><div class="jr-dot">4</div><div class="jr-body"><h4>Offensive Security</h4><p>Recon, enumeration, web and endpoint attacks, evasion, cloud attack surface.</p></div></div>
-    <div class="jr-step"><div class="jr-dot">5</div><div class="jr-body"><h4>Defensive Security</h4><p>SOC operations, detection, vulnerability and malware, social engineering, resilience.</p></div></div>
-    <div class="jr-step"><div class="jr-dot">6</div><div class="jr-body"><h4>Cloud &amp; Modern Security</h4><p>Risk management and modern cloud architecture.</p></div></div>
-    <div class="jr-step"><div class="jr-dot">7</div><div class="jr-body"><h4>Security Engineering</h4><p>Secure SDLC, input validation, assurance testing and career readiness.</p></div></div>
-  </div>
-  <div class="jr-stat">
-    <b>40</b><span>MODULES<br>ACROSS 7 STAGES</span>
-    <button class="btn red" onclick="document.getElementById('modules').scrollIntoView({behavior:'smooth'})">EXPLORE ALL MODULES →</button>
-  </div>
-</section>
-
-<section class="section" id="modules">
-  <div class="kicker">CYBERCORE CURRICULUM</div>
-  <h2>40 modules using one consistent CyberCore-style module architecture.</h2>
-  <p class="muted">Every module is designed to open into the same experience rather than becoming a different-looking page.</p>
-  <div id="moduleGrid" class="grid3" style="margin-top:24px"></div>
-</section>
-
-<section class="section" id="concepts">
-  <div class="kicker">PLATFORM · MENTAL MODELS</div>
-  <h2>Visualize the mental model before the tool.</h2>
-  <div class="grid3">
-    <div class="card"><div class="kicker">SECURITY</div><h3>Asset → Threat → Vulnerability → Risk</h3><p class="muted">The core reasoning chain connects foundational security concepts to risk management and defensive decisions.</p></div>
-    <div class="card"><div class="kicker">NETWORKING</div><h3>Application → Transport → Network → Link</h3><p class="muted">Protocol behaviour is visualized before command execution or troubleshooting.</p></div>
-    <div class="card"><div class="kicker">SOC</div><h3>Telemetry → Detection → Triage → Response</h3><p class="muted">Security operations are treated as a repeatable decision pipeline.</p></div>
-  </div>
-  <div class="svgbox" style="margin-top:18px">
-    <svg viewBox="0 0 1000 210" role="img" aria-label="CyberCore learning architecture" style="width:100%;height:auto">
-      <rect x="25" y="70" width="155" height="65" rx="10" fill="#fff" stroke="#222" stroke-width="2"/><text x="102" y="98" text-anchor="middle" font-family="Arial" font-weight="700">CONCEPT</text><text x="102" y="118" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">mental model</text>
-      <line x1="180" y1="102" x2="235" y2="102" stroke="#e21b23" stroke-width="4"/><polygon points="235,102 220,94 220,110" fill="#e21b23"/>
-      <rect x="235" y="70" width="155" height="65" rx="10" fill="#fff" stroke="#222" stroke-width="2"/><text x="312" y="98" text-anchor="middle" font-family="Arial" font-weight="700">VISUAL</text><text x="312" y="118" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">diagram / flow</text>
-      <line x1="390" y1="102" x2="445" y2="102" stroke="#e21b23" stroke-width="4"/><polygon points="445,102 430,94 430,110" fill="#e21b23"/>
-      <rect x="445" y="70" width="155" height="65" rx="10" fill="#fff" stroke="#222" stroke-width="2"/><text x="522" y="98" text-anchor="middle" font-family="Arial" font-weight="700">SIMULATOR</text><text x="522" y="118" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">change variables</text>
-      <line x1="600" y1="102" x2="655" y2="102" stroke="#e21b23" stroke-width="4"/><polygon points="655,102 640,94 640,110" fill="#e21b23"/>
-      <rect x="655" y="70" width="155" height="65" rx="10" fill="#fff" stroke="#222" stroke-width="2"/><text x="732" y="98" text-anchor="middle" font-family="Arial" font-weight="700">LAB</text><text x="732" y="118" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">operate in scope</text>
-      <line x1="810" y1="102" x2="865" y2="102" stroke="#e21b23" stroke-width="4"/><polygon points="865,102 850,94 850,110" fill="#e21b23"/>
-      <rect x="865" y="70" width="110" height="65" rx="10" fill="#fff" stroke="#222" stroke-width="2"/><text x="920" y="98" text-anchor="middle" font-family="Arial" font-weight="700">APPLY</text><text x="920" y="118" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">evidence</text>
-    </svg>
-  </div>
-</section>
-
-<section class="section" id="flows">
-  <div class="kicker">PLATFORM · LEARNING FLOW</div>
-  <h2>Same interaction grammar across every module.</h2>
-  <div class="flow">
-    <div class="node active" onclick="showFlow('f1',this)"><b>OBJECTIVE</b><small>What must be learned?</small></div><div class="arrow">→</div>
-    <div class="node" onclick="showFlow('f2',this)"><b>CONCEPT</b><small>What is happening?</small></div><div class="arrow">→</div>
-    <div class="node" onclick="showFlow('f3',this)"><b>SIMULATE</b><small>What changes?</small></div><div class="arrow">→</div>
-    <div class="node" onclick="showFlow('f4',this)"><b>LAB</b><small>Can you recognize it?</small></div><div class="arrow">→</div>
-    <div class="node" onclick="showFlow('f5',this)"><b>EVIDENCE</b><small>Can you explain it?</small></div>
-  </div>
-  <div id="f1" class="explain open"><b>OBJECTIVE:</b> Every module begins with scope, outcome and success criteria.</div>
-  <div id="f2" class="explain"><b>CONCEPT:</b> Build the mental model before asking the learner to memorize tool syntax.</div>
-  <div id="f3" class="explain"><b>SIMULATE:</b> Make cause and effect visible through safe interactive controls.</div>
-  <div id="f4" class="explain"><b>LAB:</b> Apply the concept in an authorized, bounded concept exploration.</div>
-  <div id="f5" class="explain"><b>EVIDENCE:</b> Record what happened, what it means and why the conclusion is valid.</div>
-</section>
-
-<section class="section" id="what-you-build">
-  <div class="kicker">WHAT YOU BUILD</div>
-  <h2>Six capability tracks, one connected journey.</h2>
-  <div class="cap-grid">
-    <div class="cap-card">
-      <svg class="cap-motif" viewBox="0 0 200 56"><circle cx="10" cy="28" r="5" fill="#e21b23"/><line x1="15" y1="28" x2="70" y2="14" stroke="#dce1e5" stroke-width="2"/><line x1="15" y1="28" x2="70" y2="42" stroke="#dce1e5" stroke-width="2"/><circle cx="70" cy="14" r="4" fill="#171a1e"/><circle cx="70" cy="42" r="4" fill="#171a1e"/><line x1="70" y1="14" x2="130" y2="28" stroke="#dce1e5" stroke-width="2"/><line x1="70" y1="42" x2="130" y2="28" stroke="#dce1e5" stroke-width="2"/><circle cx="130" cy="28" r="5" fill="#171a1e"/><line x1="135" y1="28" x2="190" y2="28" stroke-dasharray="3 3" stroke="#e21b23" stroke-width="2"/></svg>
-      <h3>Networks</h3><p class="muted">Understand how data moves — addressing, protocols, ports and packets.</p>
-    </div>
-    <div class="cap-card">
-      <svg class="cap-motif" viewBox="0 0 200 56"><rect x="8" y="8" width="184" height="40" rx="6" fill="none" stroke="#dce1e5" stroke-width="2"/><line x1="8" y1="20" x2="192" y2="20" stroke="#dce1e5" stroke-width="2"/><circle cx="16" cy="14" r="2" fill="#e21b23"/><circle cx="24" cy="14" r="2" fill="#171a1e"/><rect x="16" y="28" width="60" height="6" fill="#f0f1f2"/><rect x="16" y="38" width="90" height="6" fill="#f0f1f2"/></svg>
-      <h3>Systems</h3><p class="muted">Understand operating systems, processes, permissions and infrastructure.</p>
-    </div>
-    <div class="cap-card">
-      <svg class="cap-motif" viewBox="0 0 200 56"><circle cx="100" cy="28" r="22" fill="none" stroke="#dce1e5" stroke-width="2"/><circle cx="100" cy="28" r="10" fill="none" stroke="#e21b23" stroke-width="2"/><line x1="100" y1="2" x2="100" y2="14" stroke="#dce1e5" stroke-width="2"/><line x1="100" y1="42" x2="100" y2="54" stroke="#dce1e5" stroke-width="2"/><line x1="74" y1="28" x2="86" y2="28" stroke="#dce1e5" stroke-width="2"/><line x1="114" y1="28" x2="126" y2="28" stroke="#dce1e5" stroke-width="2"/></svg>
-      <h3>Offensive</h3><p class="muted">Understand how systems are discovered, enumerated and attacked.</p>
-    </div>
-    <div class="cap-card">
-      <svg class="cap-motif" viewBox="0 0 200 56"><path d="M100 4 L100 52" stroke="#dce1e5" stroke-width="2"/><path d="M60 28 A40 40 0 0 1 140 28" fill="none" stroke="#dce1e5" stroke-width="2"/><path d="M75 28 A25 25 0 0 1 125 28" fill="none" stroke="#e21b23" stroke-width="2"/><circle cx="100" cy="28" r="4" fill="#171a1e"/></svg>
-      <h3>Defensive</h3><p class="muted">Understand how attacks are detected, triaged and investigated.</p>
-    </div>
-    <div class="cap-card">
-      <svg class="cap-motif" viewBox="0 0 200 56"><circle cx="60" cy="30" r="12" fill="none" stroke="#dce1e5" stroke-width="2"/><circle cx="90" cy="18" r="10" fill="none" stroke="#dce1e5" stroke-width="2"/><circle cx="120" cy="30" r="14" fill="none" stroke="#e21b23" stroke-width="2"/><circle cx="150" cy="20" r="8" fill="none" stroke="#dce1e5" stroke-width="2"/></svg>
-      <h3>Cloud</h3><p class="muted">Understand modern cloud infrastructure, identity and shared responsibility.</p>
-    </div>
-    <div class="cap-card">
-      <svg class="cap-motif" viewBox="0 0 200 56"><rect x="10" y="10" width="70" height="36" fill="none" stroke="#dce1e5" stroke-width="2"/><line x1="10" y1="22" x2="80" y2="22" stroke="#dce1e5" stroke-width="1"/><line x1="10" y1="34" x2="80" y2="34" stroke="#dce1e5" stroke-width="1"/><line x1="30" y1="10" x2="30" y2="46" stroke="#dce1e5" stroke-width="1"/><path d="M100 28 L120 18 L140 28 L120 38 Z" fill="none" stroke="#e21b23" stroke-width="2"/><line x1="150" y1="28" x2="190" y2="28" stroke="#dce1e5" stroke-width="2"/></svg>
-      <h3>Engineering</h3><p class="muted">Build secure systems and architectures from the ground up.</p>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="lab-preview">
-  <div class="kicker">CYBERCORE LAB</div>
-  <h2>CyberCore has labs. Here's what they look like.</h2>
-  <p class="muted">A miniature version of the browser simulation used across the practical modules.</p>
-  <div class="labprev">
-    <div class="labprev-head"><b>CYBERCORE LAB · SIMULATED NETWORK</b><span class="badge" style="background:#181d22;border-color:#333a41;color:#c7ced4">BROWSER SIMULATION</span></div>
-    <div class="labprev-net">
-      <div class="labprev-line"><span class="labprev-label" id="labLineLabel">PACKETS</span><i id="labprevDot"></i></div>
-      <div class="labprev-node"><b>KALI</b><small>192.168.10.10</small></div>
-      <div class="labprev-node"><b>TARGET</b><small>192.168.10.20</small></div>
-    </div>
-    <div class="labprev-cmds">
-      <button onclick="labprevAction('send')">[ SEND ]</button>
-      <button onclick="labprevAction('inspect')">[ INSPECT ]</button>
-      <button onclick="labprevAction('simulate')">[ SIMULATE ]</button>
-    </div>
-    <div class="sim-terminal" id="labprevTerminal">SIMULATOR &gt; ready
-&gt; awaiting command …</div>
-  </div>
-</section>
-
-<section class="section" id="commands">
-  <div class="gate" style="margin-bottom:16px;border-left:4px solid var(--cyber-red)">
-    <div class="kicker">SIMULATION ONLY</div>
-    <h3>No production execution</h3>
-    <p class="muted">CyberCore is a controlled visual learning environment. Tool interactions shown here are simulated and do not instruct learners to execute commands against production systems.</p>
-  </div>
-
-  <div class="kicker">TOOL CONSOLE</div>
-  <h2>Tool output is part of the learning experience.</h2>
-  <div class="grid2">
-    <div class="card">
-      <h3>Tool / Meaning</h3>
-      <div class="terminal" id="consoleOutput">SIMULATOR > inspect --module 11
-<span class="term-ok">NETWORKING FUNDAMENTALS LOADED</span>
-SIMULATOR > explain tcp-handshake
-<span class="term-ok">SYN → SYN/ACK → ACK</span>
-SIMULATOR > evidence --status
-<span class="term-red">2 ITEMS PENDING</span></div>
-      <div class="cmds">
-        <button class="btn" onclick="runConsole('ip addr')">IP address view</button>
-        <button class="btn" onclick="runConsole('ip route')">Route view</button>
-        <button class="btn" onclick="runConsole('ss -tuln')">Socket view</button>
-        <button class="btn" onclick="runConsole('journalctl')">Log view</button>
-      </div>
-    </div>
-    <div class="card">
-      <h3>Teaching pattern</h3>
-      <p class="muted">Every tool demonstration should explain the command, expected output, why it matters, what can go wrong and what evidence should be captured.</p>
-      <div class="mini-terminal">SIMULATOR > tool-action<br><b>expected output</b><br><span>failure / warning state</span></div>
-      <div style="margin-top:16px">
-        <a href="module-01.html#lab" class="btn red" style="font-size:12px">OPEN FULL KALI TERMINAL SIMULATOR →</a>
+      <!-- Detail / Concept Panel -->
+      <div class="atlas-inspector" id="atlasInspector">
+        <!-- Injected dynamically by JS -->
       </div>
     </div>
   </div>
 </section>
 
-<section class="section" id="lab">
-  <div class="kicker">CONCEPT EXPLORER</div>
-  <h2>Concept Learning &amp; Explanation</h2>
-  <div class="lab">
-    <div class="labgrid">
-      <div class="mission">
-        <div class="kicker">CONCEPT EXPLORER · CYBERCORE-001</div>
-        <h3>Understanding a Security Environment</h3>
-        <p>This section explains the fundamental relationship between assets, trust boundaries, threats and security observations. No production commands or operational instructions are required.</p>
-        <div class="check"><input type="checkbox" class="labCheck"><label><b>1.</b> What is an asset? Understand its role and value.</label></div>
-        <div class="check"><input type="checkbox" class="labCheck"><label><b>2.</b> What is a trust boundary? Understand where trust changes.</label></div>
-        <div class="check"><input type="checkbox" class="labCheck"><label><b>3.</b> What is a threat? Understand how threats affect assets.</label></div>
-        <div class="check"><input type="checkbox" class="labCheck"><label><b>4.</b> What is evidence? Understand how observations support conclusions.</label></div>
-        <button class="btn red" style="margin-top:14px" onclick="submitMission()">MARK CONCEPTS REVIEWED</button>
-        <p id="missionMsg" class="muted" style="margin-top:10px"></p>
-      </div>
-      <div>
-        <div class="output" id="labOutput">SIMULATOR > concept-explorer --start
-<span class="term-ok">CONCEPT SCOPE: SECURITY-ENVIRONMENT-001</span>
-SIMULATOR > explain asset
-<span class="term-ok">ASSET: TRAINING-WORKSTATION</span>
-SIMULATOR > explain boundary
-<span class="term-ok">Concept: Trust boundary between user and environment</span>
-SIMULATOR > explain threat
-<span class="term-red">Concept: Unauthorized access as a threat</span>
+<!-- TOOL & PACKET CONSOLE -->
+<section class="section" id="sec-workbench">
+  <div class="section-head">
+    <div class="kicker">03 · INTERACTIVE TOOL CONSOLE</div>
+    <h2>Command &amp; Protocol Dissector Engine</h2>
+    <p>Simulate key cybersecurity diagnostic utilities without leaving the visual environment.</p>
+  </div>
 
-<span class="term-red">CONCEPT REVIEW: IN PROGRESS</span></div>
-        <div class="cmds">
-          <button onclick="labCmd('explain asset')">explain asset</button>
-          <button onclick="labCmd('explain boundary')">explain boundary</button>
-          <button onclick="labCmd('explain threat')">explain threat</button>
-          <button onclick="labCmd('show example')">show example</button>
-        </div>
+  <div class="atlas-grid" style="margin-top:20px">
+    <div style="background:#090c10;border:1px solid #28313e;border-radius:14px;padding:20px;color:#fff">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <span style="font:800 11px var(--mono);color:#ff6970">SIMULATED CLI ENGINE</span>
+        <span style="font:700 10px var(--mono);color:#8b949e">SANDBOX ISOLATED</span>
+      </div>
+      
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+        <button class="btn sm dark" onclick="runConsoleCmd('ip addr')">ip addr</button>
+        <button class="btn sm dark" onclick="runConsoleCmd('ss -tuln')">ss -tuln (Ports)</button>
+        <button class="btn sm dark" onclick="runConsoleCmd('nmap -sS 10.0.2.20')">nmap scan</button>
+        <button class="btn sm dark" onclick="runConsoleCmd('iptables -L -v')">iptables rules</button>
+      </div>
+
+      <div style="background:#000;border:1px solid #1a2332;border-radius:8px;padding:12px;font:11.5px/1.65 var(--mono);color:#c9d1d9;min-height:160px;max-height:180px;overflow-y:auto" id="cliOutput">
+$ ip addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536
+    inet 127.0.0.1/8 scope host lo
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500
+    inet 10.0.2.15/24 brd 10.0.2.255 scope global eth0
+      </div>
+    </div>
+
+    <div style="background:#090c10;border:1px solid #28313e;border-radius:14px;padding:20px;color:#fff">
+      <div style="font:800 11px var(--mono);color:#58a6ff;margin-bottom:12px">PROTOCOL PACKET DISSECTOR</div>
+      <div style="background:#05070a;border:1px solid #1a2332;border-radius:8px;padding:14px;font:11.5px/1.7 var(--mono);color:#c9d1d9" id="pcapDissect">
+        <div style="color:#7ee787">Frame 1: 74 bytes on wire (592 bits)</div>
+        <div>Ethernet II: Src: 08:00:27:11:22:33, Dst: 08:00:27:5a:32:bc</div>
+        <div>Internet Protocol Version 4: Src: 10.0.2.15, Dst: 10.0.2.20</div>
+        <div style="color:#ff6970">Transmission Control Protocol: 49152 → 443 [SYN] Seq=0 Win=64240</div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section" id="career">
-  <div class="kicker">CAREER PATHS</div>
-  <h2>Where the CyberCore journey leads.</h2>
-  <div class="career-grid">
-    <div class="career-card"><h3>SOC Analyst</h3><span>Detection • Investigation • Response</span></div>
-    <div class="career-card"><h3>VAPT Analyst</h3><span>Recon • Enumeration • Web • Endpoint</span></div>
-    <div class="career-card"><h3>Network Security</h3><span>Architecture • Protocols • Firewalls</span></div>
-    <div class="career-card"><h3>Security Engineer</h3><span>Software • Cloud • Architecture • Assurance</span></div>
+<!-- 40-MODULE CATALOG MATRIX -->
+<section class="section" id="sec-curriculum">
+  <div class="section-head">
+    <div class="kicker">04 · CYBERCORE CURRICULUM</div>
+    <h2>40 Modules · One Connected Learning Platform</h2>
+    <p>Every module follows the rigorous CyberCore visual standard: objective ➔ mental model ➔ simulation ➔ lab ➔ evidence.</p>
   </div>
+
+  <div class="filter-tabs">
+    <button class="filter-tab active" onclick="filterByDomain('ALL',this)">ALL (40)</button>
+    <button class="filter-tab" onclick="filterByDomain('PREREQUISITES',this)">PREREQUISITES</button>
+    <button class="filter-tab" onclick="filterByDomain('FOUNDATION',this)">FOUNDATION</button>
+    <button class="filter-tab" onclick="filterByDomain('NETWORKING',this)">NETWORKING</button>
+    <button class="filter-tab" onclick="filterByDomain('OFFENSIVE',this)">OFFENSIVE</button>
+    <button class="filter-tab" onclick="filterByDomain('DEFENSIVE',this)">DEFENSIVE</button>
+    <button class="filter-tab" onclick="filterByDomain('CLOUD',this)">CLOUD &amp; AI</button>
+    <button class="filter-tab" onclick="filterByDomain('ENGINEERING',this)">ENGINEERING &amp; GRC</button>
+  </div>
+
+  <div class="module-grid" id="moduleGrid"></div>
 </section>
 
-<section class="section" id="evidence">
-  <div class="kicker">TRACK YOUR CAPABILITY</div>
-  <h2>Build understanding, not just completion ticks.</h2>
-  <div class="evidence">
-    <div class="evi"><b>OBSERVATION</b><span class="muted">What did the environment show?</span></div>
-    <div class="evi"><b>INTERPRETATION</b><span class="muted">What does the output mean?</span></div>
-    <div class="evi"><b>IMPACT</b><span class="muted">Why does it matter?</span></div>
-    <div class="evi"><b>ACTION</b><span class="muted">What should happen next?</span></div>
+<!-- EVIDENCE & READINESS -->
+<section class="section" id="sec-evidence">
+  <div class="section-head">
+    <div class="kicker">05 · CAPABILITY &amp; EVIDENCE</div>
+    <h2>Proof of Competency</h2>
+    <p>Every completed simulation produces an evidence record for learner portfolios.</p>
   </div>
-  <div class="gate" style="margin-top:16px">
-    <h3>Evidence Record</h3>
-    <p class="muted">Module evidence should be reusable in a learner portfolio: simulator state or captured observation, interpretation, security significance and remediation/next step.</p>
-  </div>
-</section>
 
-<section class="section" id="readiness">
-  <div class="kicker">READINESS GATE</div>
-  <h2>Understanding before progression.</h2>
-  <div class="gate" id="gate">
-    <h3>CyberCore Module Gate</h3>
-    <p class="muted">Progress when the learner can explain the concept, describe how it works, recognize it in a scenario, and explain its security significance.</p>
-    <div class="grid3">
-      <div><b>CONCEPT</b><p class="muted">Understand</p></div>
-      <div><b>UNDERSTAND</b><p class="muted">Explain</p></div>
-      <div><b>EVIDENCE</b><p class="muted">Prove</p></div>
+  <div class="atlas-grid" style="margin-top:20px">
+    <div style="background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:var(--shadow-sm)">
+      <div class="kicker">PORTFOLIO EVIDENCE SPECIFICATION</div>
+      <h3 style="margin:8px 0 14px">Observation ➔ Interpretation ➔ Mitigation</h3>
+      <p style="font-size:13.5px;color:var(--muted)">Rather than multiple-choice completion ticks, students validate skills through exported telemetry, Wireshark captures, and root-cause evidence records.</p>
     </div>
-    <button class="btn red" onclick="checkReadiness()" style="margin-top:16px">CHECK READINESS →</button>
-    <p id="gateMsg" class="muted" style="margin-top:8px"></p>
+    <div style="background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:var(--shadow-sm)">
+      <div class="kicker">READY TO BEGIN?</div>
+      <h3 style="margin:8px 0 14px">Module 00: Workstation Setup Cockpit</h3>
+      <p style="font-size:13.5px;color:var(--muted)">Assemble your host resources, enable CPU virtualization, and initialize your clean snapshot baseline.</p>
+      <a href="module-00.html" class="btn red" style="margin-top:10px">LAUNCH MODULE 00 →</a>
+    </div>
   </div>
 </section>
+
 </div>
 
-<section class="section finalcta">
-  <div class="kicker">START HERE</div>
-  <h2>Your cybersecurity journey starts here.</h2>
-  <p>40 MODULES. ONE CONNECTED LEARNING JOURNEY.</p>
-  <div finalcta-ctas style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-    <a href="module-00.html" class="btn red lg">START CYBERCORE →</a>
-    <button class="btn lg ghost" style="color:#fff;border-color:#333a41" onclick="document.getElementById('modules').scrollIntoView({behavior:'smooth'})">EXPLORE THE PLATFORM</button>
-  </div>
-</section>
-
-<footer>SHADOWXLAB · CYBERCORE · CYBER VISUAL PLATFORM · 40 MODULES · 200+ CONCEPTS</footer>
+<footer>
+  SHADOWXLAB · CYBERCORE · CYBER VISUAL PLATFORM · 40 MODULES · 200+ VISUAL SYSTEMS
+</footer>
 </main>
 </div>
 
-<div id="moduleModal" class="modal" aria-hidden="true">
+<!-- MODULE DEEP-LINK MODAL -->
+<div id="moduleModal" class="modal" aria-hidden="true" onclick="if(event.target.id==='moduleModal')closeModule()">
   <div class="modalBox">
-    <div class="modalHead"><div><div id="modalKicker" class="kicker"></div><h2 id="modalTitle" style="margin:6px 0"></h2></div><button class="btn" onclick="closeModule()">✕</button></div>
-    <p id="modalIntro" class="muted"></p>
-    <div class="modalGrid">
-      <div class="card"><div class="kicker">TOPIC MAP</div><div id="modalTopics"></div></div>
-      <div class="card"><div class="kicker">MODULE ENGINE</div><div class="check"><b>01</b><span>Concept explanation</span></div><div class="check"><b>02</b><span>Visual model / flow</span></div><div class="check"><b>03</b><span>Interactive simulator</span></div><div class="check"><b>04</b><span>Scenario + practical lab</span></div><div class="check"><b>05</b><span>Evidence + readiness gate</span></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <div id="modalKicker" class="kicker"></div>
+        <h2 id="modalTitle" style="margin:6px 0 12px"></h2>
+      </div>
+      <button class="btn sm" onclick="closeModule()">✕</button>
     </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <a id="modalDeepLink" href="module-01.html" class="btn red">LAUNCH PRACTICAL LAB →</a>
+    <p id="modalIntro" style="font-size:13.5px;color:var(--muted);margin-bottom:18px"></p>
+    
+    <div style="background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:20px">
+      <div style="font:800 10.5px var(--mono);color:var(--cyber-red);margin-bottom:8px">CORE CURRICULUM TOPICS</div>
+      <div id="modalTopics" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px"></div>
+    </div>
+
+    <div style="display:flex;gap:10px">
+      <a id="modalDeepLink" href="module-00.html" class="btn red">LAUNCH MODULE →</a>
+      <button class="btn" onclick="closeModule()">CLOSE</button>
     </div>
   </div>
 </div>
@@ -1258,313 +534,344 @@ const MODULES = [
   {"id": 40, "name": "Starting and Developing a Career in Cybersecurity", "domain": "CAREER", "topics": ["Role selection", "Skills portfolio", "Lab evidence and projects", "Interview readiness", "Continuous professional development"]}
 ];
 
-const MODULE_PHOTO = {
-  "0": {img:"https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=760&h=380&q=70", caption:"BIOS VIRTUALIZATION → TOOL INSTALL → LAB VM READY"},
-  "1": {img:"https://images.unsplash.com/photo-1614064643087-96ce7f0737c8?auto=format&fit=crop&w=760&h=380&q=70", caption:"ASSETS & RISK → CIA TRIAD → DEFENSE LAYERS"},
-  "2": {img:"https://images.unsplash.com/photo-1568992687947-868a62a9f521?auto=format&fit=crop&w=760&h=380&q=70", caption:"PEOPLE & PROCESS → TRUST BOUNDARY → OPS LIFECYCLE"},
-  "3": {img:"https://images.unsplash.com/photo-1568992687947-868a62a9f521?auto=format&fit=crop&w=760&h=380&q=70", caption:"NIST / ISO / CIS → POLICY MAPPING → CONTROL IMPLEMENTATION"},
-  "4": {img:"https://images.unsplash.com/photo-1568992687947-868a62a9f521?auto=format&fit=crop&w=760&h=380&q=70", caption:"SOC & OFFENSIVE ROLES → GRC ROLES → ESCALATION PATHS"},
-  "5": {img:"https://images.unsplash.com/photo-1568992687947-868a62a9f521?auto=format&fit=crop&w=760&h=380&q=70", caption:"TERMINOLOGY → EVIDENCE & DOCS → TROUBLESHOOTING METHOD"},
-  "6": {img:"https://images.unsplash.com/photo-1639507986194-48ef61205b61?auto=format&fit=crop&w=760&h=380&q=70", caption:"FILESYSTEM → USERS & PERMS → SHELL ADMINISTRATION"},
-  "7": {img:"https://images.unsplash.com/photo-1639507986194-48ef61205b61?auto=format&fit=crop&w=760&h=380&q=70", caption:"WINDOWS ARCH → REGISTRY & SERVICES → EVENT LOGS"},
-  "8": {img:"https://images.unsplash.com/photo-1644088379091-d574269d422f?auto=format&fit=crop&w=760&h=380&q=70", caption:"RAW DATA → PARSE & NORMALIZE → SECURITY PIPELINE"},
-  "9": {img:"https://images.unsplash.com/photo-1639507986194-48ef61205b61?auto=format&fit=crop&w=760&h=380&q=70", caption:"PYTHON SYNTAX → FILES & MODULES → SECURITY SCRIPTS"},
-  "10": {img:"https://images.unsplash.com/photo-1639507986194-48ef61205b61?auto=format&fit=crop&w=760&h=380&q=70", caption:"PS OBJECTS/PIPELINE → WINDOWS AUTOMATION → INVESTIGATION SCRIPTS"},
-  "11": {img:"https://images.unsplash.com/photo-1691435828932-911a7801adfb?auto=format&fit=crop&w=760&h=380&q=70", caption:"OSI / TCP-IP → IPv4 SUBNETTING → PORTS & PROTOCOLS"},
-  "12": {img:"https://images.unsplash.com/photo-1691435828932-911a7801adfb?auto=format&fit=crop&w=760&h=380&q=70", caption:"VLAN & SEGMENTATION → ROUTING/NAT → NETWORK MONITORING"},
-  "13": {img:"https://images.unsplash.com/photo-1691435828932-911a7801adfb?auto=format&fit=crop&w=760&h=380&q=70", caption:"FIREWALL PLACEMENT → RULES & ZONES → LOGGING & TROUBLESHOOT"},
-  "14": {img:"https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=760&h=380&q=70", caption:"IaaS/PaaS/SaaS → CLOUD IDENTITY → CLOUD SECURITY BASICS"},
-  "15": {img:"https://images.unsplash.com/photo-1644088379091-d574269d422f?auto=format&fit=crop&w=760&h=380&q=70", caption:"GENAI ARCHITECTURE → PROMPTS & CONTEXT → DATA LEAKAGE RISK"},
-  "16": {img:"https://images.unsplash.com/photo-1614064643087-96ce7f0737c8?auto=format&fit=crop&w=760&h=380&q=70", caption:"SYMMETRIC/ASYMMETRIC KEYS → HASHING → PKI & TLS"},
-  "17": {img:"https://images.unsplash.com/photo-1658232212757-9ddbb370f675?auto=format&fit=crop&w=760&h=380&q=70", caption:"OFFENSIVE MINDSET → RULES OF ENGAGEMENT → EVIDENCE & TESTING"},
-  "18": {img:"https://images.unsplash.com/photo-1658232212757-9ddbb370f675?auto=format&fit=crop&w=760&h=380&q=70", caption:"SCOPE → RECON & ENUMERATION → REPORTING & RETEST"},
-  "19": {img:"https://images.unsplash.com/photo-1658232212757-9ddbb370f675?auto=format&fit=crop&w=760&h=380&q=70", caption:"PASSIVE/ACTIVE RECON → SERVICE DISCOVERY → ATTACK-SURFACE DOCS"},
-  "20": {img:"https://images.unsplash.com/photo-1639507986194-48ef61205b61?auto=format&fit=crop&w=760&h=380&q=70", caption:"HTTP MODEL → AUTH WEAKNESS → INJECTION & ACCESS FLAWS"},
-  "21": {img:"https://images.unsplash.com/photo-1658232212757-9ddbb370f675?auto=format&fit=crop&w=760&h=380&q=70", caption:"ENDPOINT SURFACE → PRIVILEGE CONCEPTS → PERSISTENCE & REMEDIATION"},
-  "22": {img:"https://images.unsplash.com/photo-1658232212757-9ddbb370f675?auto=format&fit=crop&w=760&h=380&q=70", caption:"DETECTION-AWARE BEHAVIOR → OBFUSCATION → BLUE-TEAM COUNTERMEASURES"},
-  "23": {img:"https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=760&h=380&q=70", caption:"CLOUD ATTACK SURFACE → IDENTITY ABUSE → MISCONFIG DISCOVERY"},
-  "24": {img:"https://images.unsplash.com/photo-1686061592689-312bbfb5c055?auto=format&fit=crop&w=760&h=380&q=70", caption:"TELEMETRY & VISIBILITY → DETECTION → RESPONSE FUNDAMENTALS"},
-  "25": {img:"https://images.unsplash.com/photo-1686061592689-312bbfb5c055?auto=format&fit=crop&w=760&h=380&q=70", caption:"SOC MODEL → L1/L2/L3 WORKFLOW → METRICS & IMPROVEMENT"},
-  "26": {img:"https://images.unsplash.com/photo-1686061592689-312bbfb5c055?auto=format&fit=crop&w=760&h=380&q=70", caption:"DETECTION LIFECYCLE → INCIDENT RESPONSE → LESSONS LEARNED"},
-  "27": {img:"https://images.unsplash.com/photo-1686061592689-312bbfb5c055?auto=format&fit=crop&w=760&h=380&q=70", caption:"ASSET INVENTORY → VULNERABILITY DISCOVERY → REMEDIATION & VALIDATION"},
-  "28": {img:"https://images.unsplash.com/photo-1639507986194-48ef61205b61?auto=format&fit=crop&w=760&h=380&q=70", caption:"MALWARE TAXONOMY → STATIC/DYNAMIC ANALYSIS → IOC REPORTING"},
-  "29": {img:"https://images.unsplash.com/photo-1568992687947-868a62a9f521?auto=format&fit=crop&w=760&h=380&q=70", caption:"SOCIAL ENGINEERING → PHISHING ANATOMY → AWARENESS & RESPONSE"},
-  "30": {img:"https://images.unsplash.com/photo-1686061592689-312bbfb5c055?auto=format&fit=crop&w=760&h=380&q=70", caption:"AVAILABILITY THREATS → RANSOMWARE LIFECYCLE → DDoS & RECOVERY"},
-  "31": {img:"https://images.unsplash.com/photo-1691435828932-911a7801adfb?auto=format&fit=crop&w=760&h=380&q=70", caption:"802.11 BASICS → ROGUE AP RISK → WIRELESS MONITORING"},
-  "32": {img:"https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=760&h=380&q=70", caption:"EMBEDDED ARCHITECTURE → FIRMWARE UPDATES → SECURE LIFECYCLE"},
-  "33": {img:"https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=760&h=380&q=70", caption:"OT ARCHITECTURE → ICS ZONES & SAFETY → OT INCIDENT RESPONSE"},
-  "34": {img:"https://images.unsplash.com/photo-1686061592689-312bbfb5c055?auto=format&fit=crop&w=760&h=380&q=70", caption:"ASSET IMPACT → LIKELIHOOD & IMPACT → RISK REGISTER"},
-  "35": {img:"https://images.unsplash.com/photo-1639507986194-48ef61205b61?auto=format&fit=crop&w=760&h=380&q=70", caption:"SECURITY REQUIREMENTS → AUTOMATION → BUILD-AND-VERIFY"},
-  "36": {img:"https://images.unsplash.com/photo-1639507986194-48ef61205b61?auto=format&fit=crop&w=760&h=380&q=70", caption:"THREAT MODELING → CODE REVIEW → SECURITY IN CI/CD"},
-  "37": {img:"https://images.unsplash.com/photo-1639507986194-48ef61205b61?auto=format&fit=crop&w=760&h=380&q=70", caption:"TRUST BOUNDARY → ALLOWLIST VALIDATION → CANONICALIZATION"},
-  "38": {img:"https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=760&h=380&q=70", caption:"CLOUD REFERENCE ARCH → IDENTITY BOUNDARIES → NETWORK SEGMENTATION"},
-  "39": {img:"https://images.unsplash.com/photo-1686061592689-312bbfb5c055?auto=format&fit=crop&w=760&h=380&q=70", caption:"CONTROL TESTING → EVIDENCE SAMPLING → FINDINGS VALIDATION"},
-  "40": {img:"https://images.unsplash.com/photo-1568992687947-868a62a9f521?auto=format&fit=crop&w=760&h=380&q=70", caption:"SKILLS PORTFOLIO → INTERVIEW READINESS → CAREER GROWTH"},
-};
-
-function renderModuleGrid(){
+/* 1. RENDER MODULE GRID */
+let currentFilter = 'ALL';
+function renderModuleCatalog(){
   const grid = document.getElementById('moduleGrid');
   if(!grid) return;
-  grid.innerHTML = MODULES.map(m => {
-    const photo = MODULE_PHOTO[String(m.id)] || {img:'', caption:''};
-    return `
-    <div class="card moduleCard" onclick="openModule(${m.id})" style="position:relative;overflow:hidden">
-      ${m.id===0?'<div class="mc-ribbon">START HERE</div>':m.id===1?'<div class="mc-ribbon">LABS &amp; VISUALS</div>':''}
-      <div class="mc-scene">
-        <img src="${photo.img}" alt="${m.domain}" loading="lazy"/>
-        <div class="mc-scene-fade"></div>
-        <div class="mc-cap">${photo.caption}</div>
+  
+  const filtered = MODULES.filter(m => {
+    if(currentFilter === 'ALL') return true;
+    if(currentFilter === 'PREREQUISITES') return m.domain === 'PREREQUISITES';
+    if(currentFilter === 'FOUNDATION') return m.domain === 'FOUNDATION' || m.domain === 'SYSTEMS' || m.domain === 'DATA' || m.domain === 'SCRIPTING';
+    if(currentFilter === 'NETWORKING') return m.domain === 'NETWORKING';
+    if(currentFilter === 'OFFENSIVE') return m.domain === 'OFFENSIVE';
+    if(currentFilter === 'DEFENSIVE') return m.domain === 'DEFENSIVE';
+    if(currentFilter === 'CLOUD') return m.domain === 'CLOUD' || m.domain === 'AI SECURITY';
+    if(currentFilter === 'ENGINEERING') return m.domain === 'ENGINEERING' || m.domain === 'GRC' || m.domain === 'ASSURANCE' || m.domain === 'CAREER';
+    return true;
+  });
+
+  grid.innerHTML = filtered.map(m => `
+    <div class="mod-card" onclick="openModuleModal(${m.id})">
+      <div>
+        <div class="mod-kicker">
+          <span>MODULE ${String(m.id).padStart(2,'0')}</span>
+          <span style="color:#8b949e">${m.domain}</span>
+        </div>
+        <h3>${m.name}</h3>
       </div>
-      <div class="mc-top2">
-        <span class="mc-domain">${m.domain}</span>
-        <span class="mc-modnum">MODULE ${String(m.id).padStart(2,'0')}</span>
+      <div>
+        <div class="mod-topics">
+          ${m.topics.slice(0,3).map(t => `<span class="mod-tag">${t}</span>`).join('')}
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;border-top:1px solid #f1f4f8;padding-top:10px">
+          <span style="font:800 10px var(--mono);color:var(--cyber-red)">${m.id === 0 ? '★ SETUP COCKPIT' : m.id === 1 ? '★ HANDS-ON LAB' : 'EXPLORE SYSTEM →'}</span>
+          <span style="font:700 9.5px var(--mono);color:#8b949e">${m.topics.length} Concepts</span>
+        </div>
       </div>
-      <h3>${m.name}</h3>
-      <div class="mc-strip">${m.topics.map(t=>`<span class="mc-seg" title="${t.replace(/"/g,'&quot;')}"></span>`).join('')}</div>
-      <div class="mc-strip-label">${m.topics.length} CORE CONCEPTS</div>
     </div>
-  `;
-  }).join('');
+  `).join('');
 }
 
-function showFlow(id,el){
-  document.querySelectorAll('.flow .node').forEach(x=>x.classList.remove('active'));
-  document.querySelectorAll('.explain').forEach(x=>x.classList.remove('open'));
-  el.classList.add('active'); document.getElementById(id).classList.add('open');
+function filterByDomain(domain, btn){
+  currentFilter = domain;
+  document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderModuleCatalog();
 }
-function runConsole(cmd){
-  const map={'ip addr':'eth0: inet 192.168.56.20/24','ip route':'default via 192.168.56.1 dev eth0','ss -tuln':'LISTEN 0 128 0.0.0.0:22','journalctl':'security.service: active'};
-  const out=document.getElementById('consoleOutput');
-  out.innerHTML += "\n$ "+cmd+"\n<span class='term-ok'>"+(map[cmd]||'simulated tool response')+"</span>";
-  out.scrollTop = out.scrollHeight;
-}
-function labCmd(cmd){
-  const map={'explain asset':'ASSET: TRAINING-WORKSTATION','explain boundary':'Concept: Trust boundary between user and environment','explain threat':'THREAT: UNAUTHORIZED ACCESS','show example':'Example: Observation → interpretation'};
-  const out=document.getElementById('labOutput');
-  out.innerHTML += "\n$ "+cmd+"\n<span class='term-ok'>"+map[cmd]+"</span>";
-  out.scrollTop = out.scrollHeight;
-}
-function submitMission(){
-  const n=[...document.querySelectorAll('.labCheck:checked')].length;
-  const msg=document.getElementById('missionMsg');
-  const out=document.getElementById('labOutput');
-  if(n===4){ msg.textContent='MISSION PASSED — evidence objectives complete.'; msg.style.color='#1e9b63'; out.innerHTML += "\n\n<span class='term-ok'>CONCEPT REVIEW: COMPLETE</span>"; document.getElementById('progressBar').style.width='100%'; }
-  else { msg.textContent=(4-n)+' concept area(s) remain to review.'; msg.style.color='#e21b23'; }
-}
-function checkReadiness(){
-  const n=[...document.querySelectorAll('.labCheck:checked')].length;
-  const msg=document.getElementById('gateMsg');
-  if(n===4){ document.getElementById('gate').classList.add('pass'); msg.textContent='READY — concept areas reviewed. Module understanding checkpoint unlocked.'; msg.style.color='#1e9b63'; }
-  else { msg.textContent='NOT READY — complete the concept exploration first.'; msg.style.color='#e21b23'; }
-}
-function openModule(id){
-  const m=MODULES.find(x => x.id === id) || MODULES[0];
-  document.getElementById('modalKicker').textContent='MODULE '+String(id).padStart(2,'0')+' · '+m.domain;
-  document.getElementById('modalTitle').textContent=m.name;
-  document.getElementById('modalIntro').textContent='This module follows the CyberCore design template: objective → concept → visual → simulator → scenario → lab → evidence → readiness.';
-  document.getElementById('modalTopics').innerHTML=m.topics.map((t,i)=>`<div class="check"><b>${String(i+1).padStart(2,'0')}</b><span>${t}</span></div>`).join('');
-  const deepLink = document.getElementById('modalDeepLink');
-  if(deepLink){
-    const page = 'module-' + String(id).padStart(2,'0') + '.html';
-    deepLink.href = page;
-    deepLink.textContent = id === 0
-      ? 'OPEN COMPLETE MODULE 00 SETUP & PREREQUISITES →'
-      : 'OPEN MODULE ' + String(id).padStart(2,'0') + ' — ' + m.name.toUpperCase() + ' →';
-    deepLink.className = 'btn red';
-    deepLink.onclick = null;
-  }
-  document.getElementById('moduleModal').classList.add('show');
-  document.getElementById('moduleModal').setAttribute('aria-hidden','false');
-}
-function closeModule(){document.getElementById('moduleModal').classList.remove('show');document.getElementById('moduleModal').setAttribute('aria-hidden','true');}
+
 function filterModules(q){
-  q=q.toLowerCase().trim();
-  document.querySelectorAll('.moduleCard').forEach((card,i)=>{
-    const m=MODULES[i]; const hay=(m.name+' '+m.domain+' '+m.topics.join(' ')).toLowerCase();
-    card.style.display=!q||hay.includes(q)?'block':'none';
+  q = q.toLowerCase().trim();
+  document.querySelectorAll('.mod-card').forEach((c, idx) => {
+    const m = MODULES[idx];
+    if(!m) return;
+    const text = (m.name + ' ' + m.domain + ' ' + m.topics.join(' ')).toLowerCase();
+    c.style.display = !q || text.includes(q) ? 'flex' : 'none';
   });
 }
+
+/* 2. LIVE ATLAS SYSTEM SIMULATOR */
+const ATLAS_SYSTEMS = {
+  risk: {
+    title: 'Module 01: Quantitative Risk & Residual Impact Engine',
+    desc: 'Risk is calculated as a dynamic function of Asset Value, Threat Likelihood, and Mitigating Security Controls. Adjust the live parameters to observe real-time risk reduction.',
+    renderStage: () => `
+      <div>
+        <div style="font:800 11px var(--mono);color:#58a6ff;margin-bottom:10px">INTERACTIVE RISK PARAMETERS</div>
+        <div class="sim-row">
+          <label>ASSET VALUE ($)</label>
+          <input type="range" class="sim-slider" min="10" max="100" value="80" id="sl-av" oninput="calcRisk()">
+          <span class="sim-val" id="val-av">80</span>
+        </div>
+        <div class="sim-row">
+          <label>THREAT LIKELIHOOD</label>
+          <input type="range" class="sim-slider" min="10" max="100" value="65" id="sl-lk" oninput="calcRisk()">
+          <span class="sim-val" id="val-lk">65%</span>
+        </div>
+        <div class="sim-row">
+          <label>SECURITY CONTROLS (MFA, WAF, EDR)</label>
+          <input type="range" class="sim-slider" min="0" max="80" value="30" id="sl-ctrl" oninput="calcRisk()">
+          <span class="sim-val" id="val-ctrl">-30%</span>
+        </div>
+      </div>
+      <div style="background:#141922;border:1px solid #232b36;border-radius:10px;padding:14px;margin-top:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font:800 11px var(--mono);color:#ff6970">RESIDUAL RISK SCORE</span>
+          <span style="font:900 24px var(--mono);color:#f59e0b" id="resRiskScore">52 (MEDIUM)</span>
+        </div>
+        <div style="height:8px;background:#05070a;border-radius:99px;overflow:hidden;margin-top:8px">
+          <div style="height:100%;width:52%;background:linear-gradient(90deg,var(--green),var(--amber),var(--cyber-red));transition:width .3s ease" id="resRiskBar"></div>
+        </div>
+      </div>
+    `,
+    renderInspector: () => `
+      <div>
+        <div style="font:800 10.5px var(--mono);color:var(--cyber-red)">CYBERCORE MENTAL MODEL</div>
+        <h3 style="margin:6px 0 10px;font-size:18px">Asset ➔ Threat ➔ Control ➔ Residual Risk</h3>
+        <p style="font-size:13px;color:#8b949e;line-height:1.7">
+          Security controls don't eliminate threat likelihood; they mitigate the vulnerability surface. Quantitative modeling allows CISOs to justify defensive investments.
+        </p>
+      </div>
+      <a href="module-01.html" class="btn red">OPEN FULL MODULE 01 LAB →</a>
+    `
+  },
+  handshake: {
+    title: 'Module 11: TCP 3-Way Handshake State Machine',
+    desc: 'Observe the synchronized sequence numbers and control flags establishing stateful transmission.',
+    renderStage: () => `
+      <div style="text-align:center;padding:10px 0">
+        <div style="font:800 11px var(--mono);color:#58a6ff;margin-bottom:14px">STATE: <span id="hsState" style="color:#7ee787">ESTABLISHED (Connection Ready)</span></div>
+        <div style="display:flex;justify-content:space-around;font:700 12px var(--mono);margin-bottom:10px">
+          <span style="color:var(--cyber-red)">CLIENT (SYN_SENT)</span>
+          <span style="color:#7ee787">SERVER (LISTEN ➔ SYN_RCVD)</span>
+        </div>
+        <div style="background:#141922;border:1px solid #232b36;border-radius:10px;padding:12px;font:11.5px/1.8 var(--mono);text-align:left">
+          <div>1. Client ➔ Server: <span style="color:#58a6ff">[SYN] Seq=100</span></div>
+          <div>2. Server ➔ Client: <span style="color:#7ee787">[SYN, ACK] Seq=500, Ack=101</span></div>
+          <div>3. Client ➔ Server: <span style="color:var(--cyber-red)">[ACK] Seq=101, Ack=501</span></div>
+        </div>
+      </div>
+      <button class="btn sm red" style="width:100%;margin-top:10px" onclick="retransmitHandshake()">RE-TRANSMIT HANDSHAKE</button>
+    `,
+    renderInspector: () => `
+      <div>
+        <div style="font:800 10.5px var(--mono);color:var(--cyber-red)">LAYER 4 TRANSPORT</div>
+        <h3 style="margin:6px 0 10px;font-size:18px">Stateful Connection Initiation</h3>
+        <p style="font-size:13px;color:#8b949e;line-height:1.7">
+          SYN floods abuse the embryonic half-open connection queue. SYN cookies and stateful inspection mitigate volumetric exhaustion.
+        </p>
+      </div>
+      <button class="btn" onclick="openModuleModal(11)">MODULE 11 SPECS →</button>
+    `
+  },
+  firewall: {
+    title: 'Module 13: Stateful Firewall Rule Matrix',
+    desc: 'Test real-time packet filtering decisions based on tuple matching (Source, Destination, Port, State).',
+    renderStage: () => `
+      <div style="font:800 11px var(--mono);color:#58a6ff;margin-bottom:10px">FIREWALL ACCESS CONTROL LIST</div>
+      <table style="width:100%;border-collapse:collapse;font:11px var(--mono);margin-bottom:14px">
+        <tr style="background:#141922;color:#8b949e"><th style="padding:6px">SRC</th><th>DST</th><th>PORT</th><th>ACTION</th></tr>
+        <tr style="border-bottom:1px solid #1f2732"><td style="padding:6px">10.0.2.0/24</td><td>Any</td><td>443 (HTTPS)</td><td style="color:#7ee787">ALLOW</td></tr>
+        <tr style="border-bottom:1px solid #1f2732"><td style="padding:6px">10.0.2.0/24</td><td>Any</td><td>22 (SSH)</td><td style="color:#7ee787">ALLOW</td></tr>
+        <tr><td style="padding:6px">Any</td><td>Any</td><td>All</td><td style="color:#ef4444">DROP (Default)</td></tr>
+      </table>
+      <div style="display:flex;gap:6px">
+        <button class="btn sm red" onclick="testFwPacket(443)">TEST TCP 443 →</button>
+        <button class="btn sm dark" onclick="testFwPacket(8080)">TEST TCP 8080 (BLOCKED) →</button>
+      </div>
+      <div id="fwDecisionLog" style="margin-top:10px;font:11px var(--mono);color:#7ee787">Ready. Click a test button to evaluate packet matching.</div>
+    `,
+    renderInspector: () => `
+      <div>
+        <div style="font:800 10.5px var(--mono);color:var(--cyber-red)">NETWORK BOUNDARY</div>
+        <h3 style="margin:6px 0 10px;font-size:18px">Implicit Deny &amp; Stateful Tracking</h3>
+        <p style="font-size:13px;color:#8b949e;line-height:1.7">
+          Modern firewalls track bidirectional session tables (ESTABLISHED, RELATED), preventing unrequested inbound scans while allowing return traffic.
+        </p>
+      </div>
+      <button class="btn" onclick="openModuleModal(13)">MODULE 13 SPECS →</button>
+    `
+  },
+  soc: {
+    title: 'Module 25: SOC Alert Triage Pipeline',
+    desc: 'Follow an incoming detection event from raw log ingestion to escalation and remediation.',
+    renderStage: () => `
+      <div style="font:800 11px var(--mono);color:#58a6ff;margin-bottom:10px">INCIDENT RESPONSE LIFECYCLE</div>
+      <div style="display:flex;gap:6px;margin-bottom:14px">
+        <div style="flex:1;background:#141922;border:1px solid #232b36;padding:10px;border-radius:8px;text-align:center">
+          <div style="font:800 9px var(--mono);color:#8b949e">INGESTION</div>
+          <div style="font-size:11px;font-weight:700">Windows Event 4625</div>
+        </div>
+        <div style="flex:1;background:#141922;border:1px solid var(--cyber-red);padding:10px;border-radius:8px;text-align:center">
+          <div style="font:800 9px var(--mono);color:var(--cyber-red)">TRIAGE (L1)</div>
+          <div style="font-size:11px;font-weight:700">Brute Force Alert</div>
+        </div>
+        <div style="flex:1;background:#141922;border:1px solid #232b36;padding:10px;border-radius:8px;text-align:center">
+          <div style="font:800 9px var(--mono);color:#7ee787">CONTAINMENT</div>
+          <div style="font-size:11px;font-weight:700">Disable Account</div>
+        </div>
+      </div>
+      <button class="btn sm red" onclick="alert('SOC Incident Escalated: Severity HIGH. Host isolated via EDR.')">SIMULATE L2 ESCALATION</button>
+    `,
+    renderInspector: () => `
+      <div>
+        <div style="font:800 10.5px var(--mono);color:var(--cyber-red)">DEFENSIVE OPERATIONS</div>
+        <h3 style="margin:6px 0 10px;font-size:18px">Mean Time to Detect &amp; Respond (MTTR)</h3>
+        <p style="font-size:13px;color:#8b949e;line-height:1.7">
+          Security Operations Centers prioritize triage playbooks to minimize dwell time before lateral movement occurs.
+        </p>
+      </div>
+      <button class="btn" onclick="openModuleModal(25)">MODULE 25 SPECS →</button>
+    `
+  },
+  cloud: {
+    title: 'Module 38: Cloud IAM Trust Boundaries',
+    desc: 'Evaluate role assumption and cross-account policy evaluation in modern cloud environments.',
+    renderStage: () => `
+      <div style="font:800 11px var(--mono);color:#58a6ff;margin-bottom:10px">IAM POLICY EVALUATION LOGIC</div>
+      <div style="background:#141922;border:1px solid #232b36;border-radius:10px;padding:12px;font:11px/1.7 var(--mono)">
+        <div>{</div>
+        <div>&nbsp;&nbsp;"Effect": "<span style="color:#7ee787">Allow</span>",</div>
+        <div>&nbsp;&nbsp;"Principal": "arn:aws:iam::123456:role/OperatorRole",</div>
+        <div>&nbsp;&nbsp;"Action": ["s3:GetObject", "s3:ListBucket"],</div>
+        <div>&nbsp;&nbsp;"Resource": "arn:aws:s3:::cybercore-evidence-vault/*"</div>
+        <div>}</div>
+      </div>
+      <button class="btn sm red" style="margin-top:10px" onclick="alert('IAM Policy Check: Principal authenticated. Access GRANTED to S3 Vault.')">EVALUATE ACCESS REQUEST</button>
+    `,
+    renderInspector: () => `
+      <div>
+        <div style="font:800 10.5px var(--mono);color:var(--cyber-red)">CLOUD ARCHITECTURE</div>
+        <h3 style="margin:6px 0 10px;font-size:18px">Least Privilege &amp; Identity Perimeters</h3>
+        <p style="font-size:13px;color:#8b949e;line-height:1.7">
+          In cloud environments, identity is the new perimeter. Misconfigured trust relationships represent the leading initial attack vector.
+        </p>
+      </div>
+      <button class="btn" onclick="openModuleModal(38)">MODULE 38 SPECS →</button>
+    `
+  }
+};
+
+function loadAtlasSys(id, btn){
+  document.querySelectorAll('.atlas-pill').forEach(p => p.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+
+  const sys = ATLAS_SYSTEMS[id];
+  document.getElementById('atlasStage').innerHTML = sys.renderStage();
+  document.getElementById('atlasInspector').innerHTML = sys.renderInspector();
+}
+
+function calcRisk(){
+  const av = parseInt(document.getElementById('sl-av').value);
+  const lk = parseInt(document.getElementById('sl-lk').value);
+  const ctrl = parseInt(document.getElementById('sl-ctrl').value);
+
+  document.getElementById('val-av').textContent = av;
+  document.getElementById('val-lk').textContent = lk + '%';
+  document.getElementById('val-ctrl').textContent = '-' + ctrl + '%';
+
+  const rawRisk = Math.round((av * (lk / 100)) * (1 - (ctrl / 100)));
+  const scoreEl = document.getElementById('resRiskScore');
+  const barEl = document.getElementById('resRiskBar');
+
+  barEl.style.width = Math.min(100, rawRisk * 1.5) + '%';
+  if(rawRisk <= 25){
+    scoreEl.textContent = `${rawRisk} (LOW RISK)`;
+    scoreEl.style.color = '#7ee787';
+  } else if(rawRisk <= 55){
+    scoreEl.textContent = `${rawRisk} (MEDIUM RISK)`;
+    scoreEl.style.color = '#f59e0b';
+  } else {
+    scoreEl.textContent = `${rawRisk} (CRITICAL RISK)`;
+    scoreEl.style.color = '#ef4444';
+  }
+}
+
+function testFwPacket(port){
+  const log = document.getElementById('fwDecisionLog');
+  if(port === 443){
+    log.innerHTML = `<span style="color:#7ee787">✓ MATCH RULE 1: TCP 443 ➔ PERMITTED. Packet forwarded to web server.</span>`;
+  } else {
+    log.innerHTML = `<span style="color:#ef4444">✕ MATCH DEFAULT RULE: TCP ${port} ➔ BLOCKED. Packet dropped at interface.</span>`;
+  }
+}
+
+function retransmitHandshake(){
+  alert("TCP Handshake Sequence reset. 3-way synchronization active.");
+}
+
+/* 3. HERO PACKET SIMULATOR */
+let heroTimer = null;
+function triggerHeroPacket(){
+  const p = document.getElementById('heroPacket');
+  const log = document.getElementById('heroConsole');
+  p.style.display = 'block';
+  p.style.left = '80px';
+  
+  log.innerHTML = 'SIMULATOR > Sending TCP SYN from Kali (10.0.2.15:49152) to 10.0.2.20:443...';
+  
+  clearTimeout(heroTimer);
+  heroTimer = setTimeout(() => {
+    p.style.left = 'calc(50% - 7px)';
+    log.innerHTML = 'SIMULATOR > Packet reached Gateway Firewall. Rule MATCH: Port 443 ALLOWED.';
+    
+    heroTimer = setTimeout(() => {
+      p.style.left = 'calc(100% - 90px)';
+      log.innerHTML = '<span style="color:#7ee787">SIMULATOR > Target 10.0.2.20 accepted connection. TCP SYN-ACK received. RTT: 14ms ✓</span>';
+    }, 500);
+  }, 500);
+}
+
+/* 4. CLI CONSOLE */
+const CLI_RESPONSES = {
+  'ip addr': `$ ip addr\n1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536\n    inet 127.0.0.1/8 scope host lo\n2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500\n    inet 10.0.2.15/24 brd 10.0.2.255 scope global eth0`,
+  'ss -tuln': `$ ss -tuln\nNetid  State   Recv-Q  Send-Q   Local Address:Port   Peer Address:Port\ntcp    LISTEN  0       128            0.0.0.0:22               0.0.0.0:*\ntcp    LISTEN  0       128            0.0.0.0:443              0.0.0.0:*`,
+  'nmap -sS 10.0.2.20': `$ nmap -sS 10.0.2.20\nStarting Nmap 7.94 ( https://nmap.org )\nNmap scan report for target.lab (10.0.2.20)\nHost is up (0.00042s latency).\nPORT    STATE SERVICE\n22/tcp  open  ssh\n443/tcp open  https\nNmap done: 1 IP address scanned in 0.28 seconds`,
+  'iptables -L -v': `$ iptables -L -v\nChain INPUT (policy DROP 12 packets, 720 bytes)\n pkts bytes target     prot opt in     out     source      destination\n  142 11360 ACCEPT     tcp  --  eth0   any     10.0.2.0/24  anywhere  tcp dpt:https\n   89  7120 ACCEPT     tcp  --  eth0   any     10.0.2.0/24  anywhere  tcp dpt:ssh`
+};
+
+function runConsoleCmd(cmd){
+  const out = document.getElementById('cliOutput');
+  out.textContent = CLI_RESPONSES[cmd] || `$ ${cmd}\nCommand executed in isolated simulator sandbox.`;
+}
+
+/* 5. MODAL MANAGEMENT */
+function openModuleModal(id){
+  const m = MODULES.find(x => x.id === id) || MODULES[0];
+  document.getElementById('modalKicker').textContent = `MODULE ${String(id).padStart(2,'0')} · ${m.domain}`;
+  document.getElementById('modalTitle').textContent = m.name;
+  document.getElementById('modalIntro').textContent = `This module delivers complete interactive visual models, mental frameworks, and guided practical lab simulations for ${m.name}.`;
+  document.getElementById('modalTopics').innerHTML = m.topics.map((t, idx) => `<div><b>${String(idx+1).padStart(2,'0')}.</b> ${t}</div>`).join('');
+  
+  const deepLink = document.getElementById('modalDeepLink');
+  if(id === 0){
+    deepLink.href = 'module-00.html';
+    deepLink.textContent = 'OPEN MODULE 00 SETUP COCKPIT →';
+  } else if(id === 1){
+    deepLink.href = 'module-01.html';
+    deepLink.textContent = 'OPEN MODULE 01 ONBOARDING LAB →';
+  } else {
+    deepLink.href = 'module-00.html';
+    deepLink.textContent = `PREREQUISITE: COMPLETE SETUP COCKPIT →`;
+  }
+
+  document.getElementById('moduleModal').classList.add('show');
+}
+
+function closeModule(){
+  document.getElementById('moduleModal').classList.remove('show');
+}
+
 function toggleTheme(){
   document.body.classList.toggle('darkMode');
-  localStorage.setItem('cybercoreTheme',document.body.classList.contains('darkMode')?'dark':'light');
-}
-if(localStorage.getItem('cybercoreTheme')==='dark') document.body.classList.add('darkMode');
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModule();});
-document.getElementById('moduleModal').addEventListener('click',e=>{if(e.target.id==='moduleModal')closeModule();});
-function updateScroll(){
-  const max=document.documentElement.scrollHeight-window.innerHeight;
-  const pct=max>0?Math.min(100,(window.scrollY/max)*100):0;
-  document.getElementById('progressBar').style.width=Math.max(12,pct)+'%';
-  const links=[...document.querySelectorAll('#moduleNav a')];
-  const ids=links.map(a=>a.getAttribute('href')).filter(Boolean);
-  let active=ids[0];
-  ids.forEach(id=>{const el=document.querySelector(id);if(el&&window.scrollY+180>=el.offsetTop)active=id;});
-  links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')===active));
-}
-window.addEventListener('scroll',updateScroll); updateScroll();
-
-/* ===================== HERO ECOSYSTEM VISUAL ===================== */
-const ECO_NODES = [
-  {id:"root",label:"CYBERCORE",sub:"",x:50,y:16,root:true},
-  {id:"offensive",label:"OFFENSIVE",sub:"attack",x:20,y:42},
-  {id:"defensive",label:"DEFENSIVE",sub:"detect",x:50,y:42},
-  {id:"cloud",label:"CLOUD",sub:"identity",x:80,y:42},
-  {id:"network",label:"NETWORK + SYSTEMS",sub:"foundation",x:50,y:68},
-  {id:"lab",label:"CYBER LAB",sub:"practice",x:50,y:92}
-];
-const ECO_LINKS = [["root","offensive"],["root","defensive"],["root","cloud"],["offensive","network"],["defensive","network"],["cloud","network"],["network","lab"]];
-const ECO_DATA = {
-  network:{title:"Networking",chips:["IP","MAC","PORTS","PROTOCOLS","PACKETS"]},
-  offensive:{title:"Offensive Security",chips:["RECON","ENUMERATION","WEB","ENDPOINT"]},
-  defensive:{title:"Defensive Security",chips:["SOC","DETECTION","VULNERABILITY","MALWARE"]},
-  cloud:{title:"Cloud",chips:["CLOUD SECURITY","IDENTITY","ARCHITECTURE"]},
-  lab:{title:"Cyber Lab",chips:["SIMULATED NETWORK","PACKETS","HANDS-ON PRACTICE"]},
-  root:{title:"CyberCore",chips:["40 MODULES","200+ CONCEPTS","ONE JOURNEY"]}
-};
-function ecoRender(){
-  const stage=document.getElementById('ecoStage');
-  if(!stage)return;
-  const w=stage.clientWidth,h=stage.clientHeight;
-  const pos=Object.fromEntries(ECO_NODES.map(n=>[n.id,n]));
-  ECO_LINKS.forEach(([a,b])=>{
-    const A=pos[a],B=pos[b];
-    const x1=A.x/100*w,y1=A.y/100*h,x2=B.x/100*w,y2=B.y/100*h;
-    const dx=x2-x1,dy=y2-y1;
-    const line=document.createElement('div');
-    line.className='eco-link';
-    line.style.left=x1+'px';line.style.top=y1+'px';
-    line.style.width=Math.hypot(dx,dy)+'px';
-    line.style.transform=`rotate(${Math.atan2(dy,dx)}rad)`;
-    stage.appendChild(line);
-  });
-  ECO_NODES.forEach(n=>{
-    const el=document.createElement('div');
-    el.className='eco-node'+(n.root?' root':'');
-    el.style.left=n.x+'%';el.style.top=n.y+'%';
-    el.dataset.node=n.id;
-    el.innerHTML=`${n.label}${n.sub?`<small>${n.sub}</small>`:''}`;
-    el.onclick=()=>ecoSelect(n.id);
-    stage.appendChild(el);
-  });
-  ecoSelect('network');
-}
-function ecoSelect(id){
-  document.querySelectorAll('.eco-node').forEach(n=>n.classList.toggle('active',n.dataset.node===id));
-  const d=ECO_DATA[id];
-  document.getElementById('ecoPanelTitle').textContent=d.title;
-  document.getElementById('ecoPanelChips').innerHTML=d.chips.map(c=>`<span class="eco-chip">${c}</span>`).join('');
-}
-window.addEventListener('load',ecoRender);
-
-/* ===================== SEE THE DIFFERENCE — mini visuals ===================== */
-function mvRenderBits(cidr){
-  const hostBitsInOctet = 8-(cidr-24);
-  const box=document.getElementById('mvNetBits');
-  let html='';
-  for(let i=0;i<8;i++){
-    const isHost = i >= (8-hostBitsInOctet);
-    html+=`<div class="mv-bit ${isHost?'host':'net'}">${isHost?'h':'n'}</div>`;
-  }
-  box.innerHTML=html;
-}
-function mvSetCidr(cidr,btn){
-  document.querySelectorAll('.mv-cidr').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  const addr=document.getElementById('mvNetAddr');
-  const cap=document.getElementById('mvNetCaption');
-  if(cidr===24){
-    addr.innerHTML='192.168.10<span class="net">.25</span>';
-    cap.textContent='/24 → last octet is entirely host (256 addresses)';
-  } else if(cidr===25){
-    addr.innerHTML='192.168.10.<span class="net">1</span><span class="host">xx</span>';
-    cap.textContent='/25 → first bit of the last octet joins the network (2 subnets)';
-  } else {
-    addr.innerHTML='192.168.10.<span class="net">01</span><span class="host">xx</span>';
-    cap.textContent='/26 → first two bits of the last octet join the network (4 subnets)';
-  }
-  mvRenderBits(cidr);
-}
-function mvSetPort(port,btn){
-  document.querySelectorAll('.mv-port-row .mv-port').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('mvPortNum').textContent=port;
-  if(port===443){
-    document.getElementById('mvPortSvc').textContent='HTTPS';
-    document.getElementById('mvPortHost').textContent='SERVER';
-    document.getElementById('mvPortPurpose').textContent='WEB APPLICATION';
-  } else {
-    document.getElementById('mvPortSvc').textContent='SSH';
-    document.getElementById('mvPortHost').textContent='SERVER';
-    document.getElementById('mvPortPurpose').textContent='REMOTE ADMINISTRATION';
-  }
-}
-let mvPacketBusy=false;
-function mvSendPacket(btn){
-  if(mvPacketBusy)return; mvPacketBusy=true;
-  const hops=[...document.querySelectorAll('#mvPacketHops .mv-hop')];
-  const dot=document.getElementById('mvPacketDot');
-  const detail=document.getElementById('mvPacketDetail');
-  const track=dot.parentElement;
-  const stops=[0,33,66,100];
-  const names=['CLIENT','SWITCH','ROUTER','SERVER'];
-  let i=0;
-  function step(){
-    hops.forEach((h,idx)=>h.classList.toggle('lit',idx===i));
-    dot.style.left=(stops[i]/100*(track.clientWidth-14))+'px';
-    detail.textContent=`HOP ${i+1}/4 · ${names[i]} · SRC 192.168.10.5 · DST 192.168.10.20 · TCP`;
-    i++;
-    if(i<stops.length){ setTimeout(step,550); } else { mvPacketBusy=false; }
-  }
-  step();
-}
-let mvFwAllowState=true;
-function mvSetFw(allow){
-  mvFwAllowState=allow;
-  document.getElementById('mvFwAllow').classList.toggle('on',allow);
-  document.getElementById('mvFwBlock').classList.toggle('off',!allow);
-  document.getElementById('mvFwDetail').textContent = allow? 'Policy: ALLOW TCP 443 — press send to test' : 'Policy: BLOCK TCP 443 — press send to test';
-}
-let mvFwBusy=false;
-function mvFireFirewall(btn){
-  if(mvFwBusy)return; mvFwBusy=true;
-  const dot=document.getElementById('mvFwDot');
-  const track=dot.parentElement;
-  const detail=document.getElementById('mvFwDetail');
-  dot.style.opacity='1'; dot.style.left='0px';
-  const endLeft = mvFwAllowState ? (track.clientWidth-14) : (track.clientWidth/2-7);
-  setTimeout(()=>{
-    dot.style.left=endLeft+'px';
-    detail.textContent = mvFwAllowState ? 'TCP 443 passed through the firewall to the server.' : 'TCP 443 stopped at the firewall — packet dropped.';
-  },50);
-  setTimeout(()=>{ dot.style.opacity='0'; mvFwBusy=false; },900);
-}
-document.addEventListener('DOMContentLoaded',()=>{ mvRenderBits(24); mvSetFw(true); });
-
-/* ===================== LAB PREVIEW ===================== */
-let labprevBusy=false;
-function labprevAction(kind){
-  const term=document.getElementById('labprevTerminal');
-  const dot=document.getElementById('labprevDot');
-  const line=dot.parentElement;
-  const label=document.getElementById('labLineLabel');
-  function log(t){ term.textContent += "\n"+t; term.scrollTop=term.scrollHeight; }
-  if(kind==='send'){
-    if(labprevBusy)return; labprevBusy=true;
-    label.textContent='PACKET';
-    log('SIMULATOR > send --from KALI --to TARGET');
-    dot.style.opacity='1'; dot.style.left='0px';
-    setTimeout(()=>{ dot.style.left=(line.clientWidth-14)+'px'; },50);
-    setTimeout(()=>{ log('TARGET 192.168.10.20 responded — TCP handshake simulated.'); dot.style.opacity='0'; labprevBusy=false; },850);
-  } else if(kind==='inspect'){
-    log('SIMULATOR > inspect --link KALI-TARGET');
-    log('LAB NET: 192.168.10.0/24 · 2 hosts · isolated segment');
-  } else if(kind==='simulate'){
-    log('SIMULATOR > simulate --scope authorized');
-    log('TARGET 192.168.10.20 — 2 simulated services observed (22, 443)');
-  }
 }
 
-document.addEventListener("DOMContentLoaded", renderModuleGrid);
+// Initial Load
+document.addEventListener('DOMContentLoaded', () => {
+  renderModuleCatalog();
+  loadAtlasSys('risk');
+});
 </script>
 </body>
 </html>
