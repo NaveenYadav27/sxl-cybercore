@@ -1,9 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script type="module">
+  import { requireAuth } from "./auth.js";
+  await requireAuth();
+</script>
+<script>(function(){try{var t=localStorage.getItem('sxl-theme');var d=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-theme',t||(d?'dark':'light'))}catch(e){document.documentElement.setAttribute('data-theme','light')}})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ShadowXLab · CyberCore · Module 00: Lab Foundation &amp; Workstation Cockpit</title>
+<title>ShadowXLab · CYBERCORE · Module 00: Lab Foundation &amp; Workstation Cockpit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -360,6 +365,49 @@ footer{
 @media(max-width:600px){
   .cockpit-grid,.toolchain-grid,.net-badge-row,.snap-step-grid,.dep-nodes-row{grid-template-columns:1fr}
 }
+
+/* ═══ DARK THEME SUPPORT ═══ */
+html[data-theme="dark"] {
+  --ink:#e8ecf4; --text:#e8ecf4; --muted:#8b96a8; --line:#242832; --soft:#12151c;
+  --panel:#12151c; --panel-2:#161a22; --dark:#080a0d; --dark2:#0e1117; --dark3:#14181f;
+}
+html[data-theme="dark"] body { background: #0b0d12; color: #e8ecf4; }
+html[data-theme="dark"] .top { background: rgba(11,13,18,.94); border-bottom-color: #242832; }
+html[data-theme="dark"] aside { background: rgba(11,13,18,.94); border-right-color: #242832; }
+html[data-theme="dark"] .hero { background: radial-gradient(circle at 85% 15%,rgba(226,27,35,.15),transparent 24rem), #0b0d12; border-bottom-color: #242832; }
+html[data-theme="dark"] .hero h1 { color: #fff; }
+html[data-theme="dark"] .lead { color: #94a3b8; }
+html[data-theme="dark"] .nav a { color: #94a3b8; }
+html[data-theme="dark"] .nav a:hover { background: #161c24; color: #fff; }
+html[data-theme="dark"] .nav a.active { background: linear-gradient(90deg,#1f1315,#141922); color: var(--cyber-red); }
+html[data-theme="dark"] .progress-card { background: #12161d; border-color: #242b35; }
+html[data-theme="dark"] .progress-header span { color: #94a3b8; }
+html[data-theme="dark"] .progress-bar-bg { background: #222934; }
+html[data-theme="dark"] .btn { background: #141922; border-color: #2c3542; color: #e8ecf4; }
+html[data-theme="dark"] .btn:hover { background: #1c2330; border-color: #48566a; }
+html[data-theme="dark"] .vtx-card { background: #0c0f14; border-color: #28313e; color: #fff; }
+html[data-theme="dark"] .vtx-toggle-row { background: #141922; }
+html[data-theme="dark"] .vtx-node { background: #141922; border-color: #28313e; color: #fff; }
+html[data-theme="dark"] .vtx-node.ok { background: #062816; border-color: #10b981; color: #34d399; }
+html[data-theme="dark"] .vtx-node.err { background: #2d0d0f; border-color: #ef4444; color: #f87171; }
+html[data-theme="dark"] .badge { background: #141922; border-color: #2c3542; color: #cbd5e1; }
+html[data-theme="dark"] .section { border-bottom-color: #242832; }
+
+/* ── Theme Toggle Button ── */
+.theme-toggle {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: var(--soft); border: 1px solid var(--line);
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; position: relative; overflow: hidden; color: var(--text);
+  transition: all .2s ease; margin-left: 8px; flex-shrink: 0;
+}
+.theme-toggle svg { position: absolute; transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.3s; }
+.theme-toggle .icon-sun { opacity: 0; transform: translateY(14px) rotate(-40deg); }
+.theme-toggle .icon-moon { opacity: 1; transform: translateY(0) rotate(0); }
+html[data-theme="dark"] .theme-toggle .icon-sun { opacity: 1; transform: translateY(0) rotate(0); color: #f59e0b; }
+html[data-theme="dark"] .theme-toggle .icon-moon { opacity: 0; transform: translateY(-14px) rotate(40deg); }
+.theme-toggle:hover { border-color: var(--cyber-red); color: var(--cyber-red); }
+
 </style>
 </head>
 <body>
@@ -383,7 +431,14 @@ footer{
     <span>LAB FOUNDATION &amp; WORKSTATION COCKPIT</span>
   </div>
   <div class="grow"></div>
-  <a href="index.html" class="btn sm">← HOME / CURRICULUM</a>
+
+  <!-- Sun/Moon Theme Toggle Button -->
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle light and dark theme" title="Toggle theme">
+    <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/></svg>
+  </button>
+
+  <a href="index.html" class="btn sm" style="margin-left:8px">← HOME / CURRICULUM</a>
   <a href="module-01.html" class="btn sm red">MODULE 01: ONBOARDING →</a>
 </header>
 
@@ -421,9 +476,9 @@ footer{
 <main>
 <!-- HERO -->
 <section class="hero" id="sec-overview">
-  <div class="kicker">SHADOWXLAB CYBERCORE · ZERO-TRUST LAB FOUNDATION · MODULE 00</div>
-  <h1>CyberCore Lab Foundation:<br><span>Workstation Setup Cockpit</span></h1>
-  <p class="lead">You are building the machine on which the entire CyberCore journey will run. Interact with the live workstation cockpit below to assemble host memory, test CPU hardware acceleration, simulate isolated virtual network routing, and inspect protocol frames.</p>
+  <div class="kicker">SHADOWXLAB · CYBERCORE · ZERO-TRUST LAB FOUNDATION · MODULE 00</div>
+  <h1>ShadowXLab CyberCore Lab Foundation:<br><span>Workstation Setup Cockpit</span></h1>
+  <p class="lead">You are building the machine on which the entire ShadowXLab CyberCore journey will run. Interact with the live workstation cockpit below to assemble host memory, test CPU hardware acceleration, simulate isolated virtual network routing, and inspect protocol frames.</p>
   
   <div class="badges">
     <span class="badge red">MODULE 00 / 40</span>
@@ -436,7 +491,7 @@ footer{
   <div class="cockpit-box">
     <div class="cockpit-header">
       <div>
-        <div class="cockpit-title">CYBERCORE WORKSTATION READINESS COCKPIT</div>
+        <div class="cockpit-title">SHADOWXLAB CYBERCORE WORKSTATION READINESS COCKPIT</div>
         <div style="font-size:12px;color:#8b949e;margin-top:2px">All modules below read and write to this unified workstation state model</div>
       </div>
       <div class="cockpit-gauge">
@@ -484,25 +539,40 @@ footer{
 
 <div class="content">
 
-<!-- 2. INTERACTIVE HARDWARE MODEL -->
+<!-- 2. INTERACTIVE HARDWARE & PARALLEL VM CAPACITY MODEL -->
 <section class="section" id="sec-hardware">
   <div class="section-head">
-    <div class="kicker">02 · INTERACTIVE HARDWARE MODEL</div>
-    <h2>Host Memory &amp; Resource Allocation Visualizer</h2>
-    <p>Select your host RAM below. Observe how physical memory is sliced between Host OS, Kali Operator VM, and Target Lab VMs.</p>
+    <div class="kicker">02 · UNIFIED HARDWARE & PARALLEL VM MATRIX</div>
+    <h2>Hardware Resource Sizing & Parallel VM Execution Calculator</h2>
+    <p>Compare host CPU cores, RAM, and Disk storage. Calculate exactly how many virtual machines your rig can run concurrently for ShadowXLab CyberCore labs without tab switching or memory paging.</p>
   </div>
 
   <div class="blueprint-card">
     <div class="blueprint-grid">
-      <!-- Left: Interactive Host Controls -->
+      <!-- Left: Interactive Host Sizing Controls -->
       <div>
-        <div style="font:800 11.5px var(--mono);color:#58a6ff;letter-spacing:.1em;margin-bottom:14px">HOST PHYSICAL MEMORY SIZING</div>
-        
-        <div style="display:flex;gap:8px;margin-bottom:16px">
+        <div style="font:800 11.5px var(--mono);color:#58a6ff;letter-spacing:.1em;margin-bottom:10px">01 · HOST PHYSICAL MEMORY SIZING</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
           <button class="btn sm dark" id="btn-ram-8" onclick="setHostRam(8)">8 GB</button>
-          <button class="btn sm dark" id="btn-ram-16" style="border-color:var(--cyber-red);background:var(--cyber-red);color:#fff" onclick="setHostRam(16)">16 GB (Standard)</button>
+          <button class="btn sm dark" id="btn-ram-16" style="border-color:var(--cyber-red);background:var(--cyber-red);color:#fff" onclick="setHostRam(16)">16 GB (Standard ★)</button>
           <button class="btn sm dark" id="btn-ram-24" onclick="setHostRam(24)">24 GB</button>
           <button class="btn sm dark" id="btn-ram-32" onclick="setHostRam(32)">32 GB (Pro Lab)</button>
+          <button class="btn sm dark" id="btn-ram-64" onclick="setHostRam(64)">64 GB (Enterprise)</button>
+        </div>
+
+        <div style="font:800 11.5px var(--mono);color:#a78bfa;letter-spacing:.1em;margin-bottom:10px">02 · HOST PHYSICAL CPU CORES</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+          <button class="btn sm dark" id="btn-core-4" onclick="setHostCores(4)">4 Cores / 8 Th</button>
+          <button class="btn sm dark" id="btn-core-6" onclick="setHostCores(6)">6 Cores / 12 Th</button>
+          <button class="btn sm dark" id="btn-core-8" style="border-color:var(--cyber-red);background:var(--cyber-red);color:#fff" onclick="setHostCores(8)">8 Cores / 16 Th (Standard ★)</button>
+          <button class="btn sm dark" id="btn-core-16" onclick="setHostCores(16)">16 Cores / 32 Th</button>
+        </div>
+
+        <div style="font:800 11.5px var(--mono);color:#f59e0b;letter-spacing:.1em;margin-bottom:10px">03 · HOST STORAGE DRIVE TYPE & CAPACITY</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">
+          <button class="btn sm dark" id="btn-disk-hdd" onclick="setHostDisk('hdd')">500 GB Mechanical HDD</button>
+          <button class="btn sm dark" id="btn-disk-sata" onclick="setHostDisk('sata')">256 GB SATA SSD</button>
+          <button class="btn sm dark" id="btn-disk-nvme" style="border-color:var(--cyber-red);background:var(--cyber-red);color:#fff" onclick="setHostDisk('nvme')">512 GB+ NVMe PCIe M.2 (Recommended ★)</button>
         </div>
 
         <div style="font:700 12px var(--mono);margin-bottom:6px;display:flex;justify-content:space-between">
@@ -515,46 +585,115 @@ footer{
           <div class="bar-segment host" id="barHost" style="width:50%" title="Host OS"></div>
           <div class="bar-segment kali" id="barKali" style="width:25%" title="Kali VM"></div>
           <div class="bar-segment target" id="barTarget" style="width:25%" title="Target VM"></div>
+          <div class="bar-segment free" id="barFree" style="width:0%" title="Free Headroom"></div>
         </div>
 
         <div style="display:flex;gap:14px;font:700 11px var(--mono);margin-top:6px;flex-wrap:wrap">
           <span style="color:#3b82f6">■ Host OS: <span id="lblHost">8 GB</span></span>
-          <span style="color:var(--cyber-red)">■ Kali VM: <span id="lblKali">4 GB</span></span>
-          <span style="color:var(--green)">■ Target VM: <span id="lblTarget">4 GB</span></span>
-          <span style="color:#8b949e">■ Available: <span id="lblFree">0 GB</span></span>
+          <span style="color:var(--cyber-red)">■ Kali Operator: <span id="lblKali">4 GB</span></span>
+          <span style="color:var(--green)">■ Target Lab VMs: <span id="lblTarget">4 GB</span></span>
+          <span style="color:#8b949e">■ Free Headroom: <span id="lblFree">0 GB</span></span>
         </div>
       </div>
 
       <!-- Right: Real-time Concurrency Blueprint -->
       <div class="alloc-card">
         <div>
-          <div style="font:800 11px var(--mono);color:#7ee787;letter-spacing:.1em">VM CAPACITY &amp; RESOURCE PRESSURE</div>
-          <div style="font-size:20px;font-weight:900;margin:6px 0 10px" id="hwCapacityTitle">2–3 Concurrent Virtual Machines</div>
-          <p style="font-size:13px;color:#8b949e;margin:0 0 16px" id="hwCapacityDesc">
-            16 GB provides the optimal balance: 4 GB for Kali Linux operator tools, 4 GB for vulnerable target machines, and 8 GB reserved for your host system.
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <span style="font:800 11px var(--mono);color:#7ee787;letter-spacing:.1em">VM CAPACITY & CONCURRENCY</span>
+            <span id="badgeVmCount" style="font:800 11px var(--mono);background:var(--cyber-red);color:#fff;padding:2px 8px;border-radius:4px">2-3 VMs PARALLEL</span>
+          </div>
+          <div style="font-size:19px;font-weight:900;margin:6px 0 10px;line-height:1.3" id="hwCapacityTitle">2–3 Concurrent Virtual Machines (Standard)</div>
+          <p style="font-size:12.5px;color:#94a3b8;margin:0 0 14px;line-height:1.55" id="hwCapacityDesc">
+            16 GB RAM with 8 CPU cores provides the optimal baseline: 4 GB Kali Linux + 4 GB Target Server + 8 GB Host OS with zero memory contention.
           </p>
         </div>
 
-        <div style="background:#05070a;border:1px solid #1f2733;border-radius:10px;padding:12px;font:11.5px/1.8 var(--mono)">
-          <div>RESOURCE PRESSURE: <span id="resPressure" style="color:#7ee787;font-weight:700">OPTIMAL (No swapping)</span></div>
-          <div>SWAP RISK: <span id="swapRisk" style="color:#7ee787">0% (Low Host RAM Pressure)</span></div>
+        <div style="background:#05070a;border:1px solid #1f2733;border-radius:10px;padding:12px;font:11px/1.8 var(--mono)">
+          <div style="display:flex;justify-content:space-between"><span>RESOURCE PRESSURE:</span> <span id="resPressure" style="color:#7ee787;font-weight:700">OPTIMAL (No Swapping)</span></div>
+          <div style="display:flex;justify-content:space-between"><span>SWAP PAGING RISK:</span> <span id="swapRisk" style="color:#7ee787">0% (Clean Memory Headroom)</span></div>
+          <div style="display:flex;justify-content:space-between"><span>vCPU OVERSUBSCRIPTION:</span> <span id="cpuOverSub" style="color:#7ee787">1:1 Safe Ratio</span></div>
+          <div style="display:flex;justify-content:space-between"><span>DISK I/O BOTTLENECK:</span> <span id="diskIoStatus" style="color:#7ee787">NVMe 3500 MB/s (Instant Boot)</span></div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="tech-drawer">
-    <button class="tech-drawer-btn" onclick="toggleTechDrawer('dr-hardware')">
-      <span>TECHNICAL SPECIFICATIONS &amp; STORAGE MATRIX (CLICK TO EXPAND)</span>
-      <span>▼</span>
-    </button>
-    <div class="tech-drawer-body" id="dr-hardware">
-      <table class="matrix-table" style="margin:0">
-        <tr><th>Tier</th><th>RAM</th><th>CPU Cores</th><th>Storage</th><th>Lab Concurrency</th></tr>
-        <tr><td>Minimum</td><td>8 GB</td><td>4 Cores</td><td>120 GB HDD</td><td>1 VM at a time</td></tr>
-        <tr><td>Recommended</td><td>16 GB</td><td>6-8 Cores</td><td>250 GB NVMe SSD</td><td>2–3 VMs (Kali + Target)</td></tr>
-        <tr><td>Enterprise Lab</td><td>32 GB+</td><td>8-16 Cores</td><td>500 GB+ NVMe SSD</td><td>Full Active Directory multi-target lab</td></tr>
-      </table>
+    <!-- Unified Machine Breakdown Table -->
+    <div style="margin-top:24px;border-top:1px solid #232d3b;padding-top:20px">
+      <div style="font:800 12px var(--mono);color:#fff;letter-spacing:.08em;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+        <span style="color:var(--cyber-red)">■</span> CYBERCORE LAB APPLIANCES & HARDWARE REQUIREMENTS BREAKDOWN
+      </div>
+      <div style="overflow-x:auto">
+        <table class="matrix-table" style="margin:0;width:100%;font-size:11.5px">
+          <thead>
+            <tr style="background:#141a23">
+              <th>Lab Machine Appliance</th>
+              <th>Role in CyberCore</th>
+              <th>Minimum vRAM</th>
+              <th>Recommended vRAM</th>
+              <th>vCPUs</th>
+              <th>VDI Storage</th>
+              <th>Parallel Run Capability</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b style="color:var(--cyber-red)">Kali Linux 2024.x</b></td>
+              <td>Attacker / Security Operator (Nmap, Burp, Metasploit, Wireshark)</td>
+              <td>2048 MB (2 GB)</td>
+              <td><b>4096 MB (4 GB)</b></td>
+              <td>2 Cores</td>
+              <td>20–40 GB VDI</td>
+              <td><span style="color:#7ee787;font-weight:700">Always Active (Base)</span></td>
+            </tr>
+            <tr>
+              <td><b style="color:#58a6ff">Ubuntu Server 22.04 / Debian</b></td>
+              <td>Defensive Target / Web App / Docker Containers / LAMP Stack</td>
+              <td>1024 MB (1 GB)</td>
+              <td><b>2048 MB (2 GB)</b></td>
+              <td>1–2 Cores</td>
+              <td>15–25 GB VDI</td>
+              <td><span id="capUbuntu" style="color:#7ee787">✓ Parallel with Kali (16GB+)</span></td>
+            </tr>
+            <tr>
+              <td><b style="color:#a78bfa">Metasploitable 2 / 3</b></td>
+              <td>Vulnerable Exploitation &amp; Vulnerability Assessment Target</td>
+              <td>512 MB (0.5 GB)</td>
+              <td><b>1024 MB (1 GB)</b></td>
+              <td>1 Core</td>
+              <td>8–15 GB VDI</td>
+              <td><span id="capMeta" style="color:#7ee787">✓ Parallel with Kali (8GB+)</span></td>
+            </tr>
+            <tr>
+              <td><b style="color:#f59e0b">Windows 10 / 11 Enterprise</b></td>
+              <td>Endpoint Hardening / Malware Triage / AD Domain Member</td>
+              <td>4096 MB (4 GB)</td>
+              <td><b>8192 MB (8 GB)</b></td>
+              <td>2–4 Cores</td>
+              <td>50–80 GB VDI</td>
+              <td><span id="capWin" style="color:#f59e0b">⚠ Requires 24GB+ for Parallel</span></td>
+            </tr>
+            <tr>
+              <td><b style="color:#ef4444">Windows Server 2022 (AD DC)</b></td>
+              <td>Active Directory Domain Controller / Kerberos / Group Policy</td>
+              <td>2048 MB (2 GB)</td>
+              <td><b>4096 MB (4 GB)</b></td>
+              <td>2 Cores</td>
+              <td>40–60 GB VDI</td>
+              <td><span id="capAd" style="color:#f59e0b">⚠ Requires 24GB–32GB RAM</span></td>
+            </tr>
+            <tr>
+              <td><b style="color:#34d399">Splunk / Security Onion (SIEM)</b></td>
+              <td>SOC Log Ingestion, Alerting &amp; Incident Triage Engine</td>
+              <td>4096 MB (4 GB)</td>
+              <td><b>8192 MB (8 GB)</b></td>
+              <td>4 Cores</td>
+              <td>40–100 GB VDI</td>
+              <td><span id="capSiem" style="color:#ef4444">⚠ Requires 32GB+ RAM</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </section>
@@ -881,7 +1020,7 @@ footer{
   <div class="section-head">
     <div class="kicker">09 · UNIFIED DEPENDENCY GRAPH</div>
     <h2>Workstation Dependency &amp; Propagation Model</h2>
-    <p>CyberCore enforces strict prerequisites. If an upstream foundation fails (e.g. CPU virtualization), downstream virtual appliances automatically block.</p>
+    <p>ShadowXLab CyberCore enforces strict prerequisites. If an upstream foundation fails (e.g. CPU virtualization), downstream virtual appliances automatically block.</p>
   </div>
 
   <div class="dep-tree-card">
@@ -917,7 +1056,7 @@ footer{
   <div class="section-head">
     <div class="kicker">10 · CONNECTED HOST TOOLCHAIN</div>
     <h2>Integrated Software Toolchain</h2>
-    <p>Click any tool in the pipeline to see where it fits into your workflow and why CyberCore utilizes it.</p>
+    <p>Click any tool in the pipeline to see where it fits into your workflow and why ShadowXLab CyberCore utilizes it.</p>
   </div>
 
   <div class="toolchain-grid">
@@ -1105,7 +1244,7 @@ footer{
 </div>
 
 <footer>
-  SHADOWXLAB CYBERCORE · MODULE 00: LAB FOUNDATION &amp; WORKSTATION COCKPIT · 40 MODULES TOTAL
+  SHADOWXLAB · CYBERCORE · MODULE 00: LAB FOUNDATION &amp; WORKSTATION COCKPIT · 40 MODULES TOTAL
 </footer>
 </main>
 </div>
@@ -1190,10 +1329,51 @@ function renderCockpit(){
   }
 }
 
-/* 2. Hardware Resource Sizer */
+/* 2. Unified Hardware Sizing & Parallel VM Capacity Model */
+window.labState.hostCores = 8;
+window.labState.hostDisk = 'nvme';
+
+function setHostCores(cores){
+  window.labState.hostCores = cores;
+  [4, 6, 8, 16].forEach(c => {
+    const b = document.getElementById('btn-core-' + c);
+    if(b){
+      if(c === cores){
+        b.style.borderColor = 'var(--cyber-red)';
+        b.style.background = 'var(--cyber-red)';
+        b.style.color = '#fff';
+      } else {
+        b.style.borderColor = '#333';
+        b.style.background = 'var(--dark2)';
+        b.style.color = '#fff';
+      }
+    }
+  });
+  updateHardwareCalculations();
+}
+
+function setHostDisk(type){
+  window.labState.hostDisk = type;
+  ['hdd', 'sata', 'nvme'].forEach(d => {
+    const b = document.getElementById('btn-disk-' + d);
+    if(b){
+      if(d === type){
+        b.style.borderColor = 'var(--cyber-red)';
+        b.style.background = 'var(--cyber-red)';
+        b.style.color = '#fff';
+      } else {
+        b.style.borderColor = '#333';
+        b.style.background = 'var(--dark2)';
+        b.style.color = '#fff';
+      }
+    }
+  });
+  updateHardwareCalculations();
+}
+
 function setHostRam(gb){
   window.labState.ram = gb;
-  [8, 16, 24, 32].forEach(v => {
+  [8, 16, 24, 32, 64].forEach(v => {
     const b = document.getElementById('btn-ram-' + v);
     if(b){
       if(v === gb){
@@ -1207,56 +1387,115 @@ function setHostRam(gb){
       }
     }
   });
+  updateHardwareCalculations();
+}
+
+function updateHardwareCalculations(){
+  const gb = window.labState.ram || 16;
+  const cores = window.labState.hostCores || 8;
+  const disk = window.labState.hostDisk || 'nvme';
 
   const barHost = document.getElementById('barHost');
   const barKali = document.getElementById('barKali');
   const barTarget = document.getElementById('barTarget');
+  const barFree = document.getElementById('barFree');
   
-  const hostGb = Math.max(4, gb / 2);
+  const hostGb = Math.max(4, Math.min(16, gb / 2));
   const kaliGb = gb >= 16 ? 4 : 3;
-  const targetGb = gb >= 16 ? 4 : (gb === 8 ? 0 : 4);
+  const targetGb = gb === 8 ? 1 : (gb === 16 ? 4 : (gb === 24 ? 8 : (gb === 32 ? 14 : 28)));
   const freeGb = Math.max(0, gb - hostGb - kaliGb - targetGb);
 
-  barHost.style.width = (hostGb / gb * 100) + '%';
-  barKali.style.width = (kaliGb / gb * 100) + '%';
-  barTarget.style.width = (targetGb / gb * 100) + '%';
+  if(barHost) barHost.style.width = (hostGb / gb * 100) + '%';
+  if(barKali) barKali.style.width = (kaliGb / gb * 100) + '%';
+  if(barTarget) barTarget.style.width = (targetGb / gb * 100) + '%';
+  if(barFree) barFree.style.width = (freeGb / gb * 100) + '%';
 
-  document.getElementById('lblHost').textContent = hostGb + ' GB';
-  document.getElementById('lblKali').textContent = kaliGb + ' GB';
-  document.getElementById('lblTarget').textContent = targetGb + ' GB' + (targetGb === 0 ? ' (Inactive)' : '');
-  document.getElementById('lblFree').textContent = freeGb + ' GB';
-  document.getElementById('ramSummaryText').textContent = `${gb} GB Total (${hostGb} GB Host / ${kaliGb} GB Kali / ${targetGb} GB Target)`;
+  if(document.getElementById('lblHost')) document.getElementById('lblHost').textContent = hostGb + ' GB';
+  if(document.getElementById('lblKali')) document.getElementById('lblKali').textContent = kaliGb + ' GB';
+  if(document.getElementById('lblTarget')) document.getElementById('lblTarget').textContent = targetGb + ' GB';
+  if(document.getElementById('lblFree')) document.getElementById('lblFree').textContent = freeGb + ' GB';
+  if(document.getElementById('ramSummaryText')) document.getElementById('ramSummaryText').textContent = gb + ' GB Total (' + hostGb + ' GB Host / ' + kaliGb + ' GB Kali / ' + targetGb + ' GB Target / ' + freeGb + ' GB Free)';
 
   const title = document.getElementById('hwCapacityTitle');
   const desc = document.getElementById('hwCapacityDesc');
   const resPressure = document.getElementById('resPressure');
   const swapRisk = document.getElementById('swapRisk');
+  const cpuOverSub = document.getElementById('cpuOverSub');
+  const diskIoStatus = document.getElementById('diskIoStatus');
+  const badgeVmCount = document.getElementById('badgeVmCount');
 
-  if(gb === 8){
-    title.textContent = '1 VM Comfortably (Sequential Execution)';
-    desc.textContent = '8 GB RAM supports running Kali Linux alone (3-4 GB) while host uses 4 GB. You must run Target VMs sequentially, not concurrently.';
-    resPressure.textContent = 'HIGH MEMORY PRESSURE (Host must close heavy browser tabs)';
-    resPressure.style.color = '#f59e0b';
-    swapRisk.textContent = 'MODERATE (Virtual paging risk if multiple apps open)';
-    swapRisk.style.color = '#f59e0b';
+  // Concurrency calculation based on RAM & CPU
+  if(gb <= 8){
+    if(badgeVmCount) badgeVmCount.textContent = '1 VM CONCURRENT';
+    if(title) title.textContent = '1 Active VM at a time (Sequential Execution)';
+    if(desc) desc.textContent = '8 GB RAM supports running Kali Linux (3-4 GB) alone while host OS uses 4 GB. Target VMs must be run sequentially or configured with low RAM (Metasploitable 512MB).';
+    if(resPressure){ resPressure.textContent = 'HIGH MEMORY PRESSURE (Close heavy browser tabs)'; resPressure.style.color = '#f59e0b'; }
+    if(swapRisk){ swapRisk.textContent = 'MODERATE (Host RAM paging likely if multitasking)'; swapRisk.style.color = '#f59e0b'; }
     window.labState.cockpitItems.ram = false;
   } else if(gb === 16){
-    title.textContent = '2–3 Concurrent Virtual Machines (Standard)';
-    desc.textContent = '16 GB provides the optimal CyberCore baseline: 4 GB Kali Linux + 4 GB Target Server + 8 GB Host OS with zero memory contention.';
-    resPressure.textContent = 'OPTIMAL (Zero Host Swapping)';
-    resPressure.style.color = '#7ee787';
-    swapRisk.textContent = '0% (Clean Memory Headroom)';
-    swapRisk.style.color = '#7ee787';
+    if(badgeVmCount) badgeVmCount.textContent = '2–3 VMs PARALLEL';
+    if(title) title.textContent = '2–3 Concurrent Virtual Machines (ShadowXLab Standard)';
+    if(desc) desc.textContent = '16 GB RAM is the sweet spot for ShadowXLab CyberCore: Run Kali Linux (4 GB) + Linux Target / Web App (2-4 GB) + Host OS (8 GB) simultaneously with zero lag.';
+    if(resPressure){ resPressure.textContent = 'OPTIMAL (Zero Host Swapping)'; resPressure.style.color = '#7ee787'; }
+    if(swapRisk){ swapRisk.textContent = '0% (Clean Memory Headroom)'; swapRisk.style.color = '#7ee787'; }
     window.labState.cockpitItems.ram = true;
-  } else {
-    title.textContent = '4–5 Multi-Target Enterprise Active Directory Lab';
-    desc.textContent = `${gb} GB supports running full domain environments (Domain Controller + Kali + Windows 11 Target + Splunk SIEM) simultaneously.`;
-    resPressure.textContent = 'ENTERPRISE LAB HEADROOM';
-    resPressure.style.color = '#7ee787';
-    swapRisk.textContent = '0% (Massive Free Physical RAM)';
-    swapRisk.style.color = '#7ee787';
+  } else if(gb === 24){
+    if(badgeVmCount) badgeVmCount.textContent = '3–4 VMs PARALLEL';
+    if(title) title.textContent = '3–4 Concurrent Virtual Machines (Advanced Lab)';
+    if(desc) desc.textContent = '24 GB RAM allows running Kali Linux + Ubuntu Server + Windows 10 Target machine simultaneously for realistic client-side and lateral movement attacks.';
+    if(resPressure){ resPressure.textContent = 'EXCELLENT LAB HEADROOM'; resPressure.style.color = '#7ee787'; }
+    if(swapRisk){ swapRisk.textContent = '0% (Zero Swap Risk)'; swapRisk.style.color = '#7ee787'; }
+    window.labState.cockpitItems.ram = true;
+  } else if(gb >= 32){
+    if(badgeVmCount) badgeVmCount.textContent = '5–7 VMs PARALLEL';
+    if(title) title.textContent = 'Full Enterprise Active Directory & SOC Multi-Node Range';
+    if(desc) desc.textContent = gb + ' GB supports running full domain environments (Domain Controller + Kali + Windows 11 Target + Splunk SIEM) with ' + cores + ' CPU cores simultaneously.';
+    if(resPressure){ resPressure.textContent = 'ENTERPRISE LAB HEADROOM'; resPressure.style.color = '#7ee787'; }
+    if(swapRisk){ swapRisk.textContent = '0% (Massive Free Physical RAM)'; swapRisk.style.color = '#7ee787'; }
     window.labState.cockpitItems.ram = true;
   }
+
+  // CPU oversubscription
+  if(cpuOverSub){
+    const vCpuCapacity = cores * 2;
+    if(cores < 6){
+      cpuOverSub.textContent = cores + ' Cores: Allocate max 1-2 vCPUs per VM';
+      cpuOverSub.style.color = '#f59e0b';
+    } else {
+      cpuOverSub.textContent = cores + ' Cores (' + vCpuCapacity + ' Threads): Safe for 4-6 parallel vCPUs';
+      cpuOverSub.style.color = '#7ee787';
+    }
+  }
+
+  // Disk I/O Status
+  if(diskIoStatus){
+    if(disk === 'hdd'){
+      diskIoStatus.textContent = 'HDD 120 MB/s ⚠ SEVERE BOTTLENECK (Multiple VMs will freeze)';
+      diskIoStatus.style.color = '#ef4444';
+      window.labState.cockpitItems.disk = false;
+    } else if(disk === 'sata'){
+      diskIoStatus.textContent = 'SATA SSD 550 MB/s ✓ GOOD (2-3 VMs boot in ~25 sec)';
+      diskIoStatus.style.color = '#7ee787';
+      window.labState.cockpitItems.disk = true;
+    } else {
+      diskIoStatus.textContent = 'NVMe PCIe 3500+ MB/s ★ INSTANT (Parallel VM boot in ~6 sec)';
+      diskIoStatus.style.color = '#7ee787';
+      window.labState.cockpitItems.disk = true;
+    }
+  }
+
+  // Update table capabilities
+  const capUbuntu = document.getElementById('capUbuntu');
+  const capMeta = document.getElementById('capMeta');
+  const capWin = document.getElementById('capWin');
+  const capAd = document.getElementById('capAd');
+  const capSiem = document.getElementById('capSiem');
+
+  if(capUbuntu) capUbuntu.innerHTML = gb >= 12 ? '<span style="color:#7ee787;font-weight:700">✓ Parallel with Kali (Enabled)</span>' : '<span style="color:#f59e0b">⚠ Low RAM (Run 1 at a time)</span>';
+  if(capMeta) capMeta.innerHTML = '<span style="color:#7ee787;font-weight:700">✓ Parallel with Kali (Low 512MB Footprint)</span>';
+  if(capWin) capWin.innerHTML = gb >= 24 ? '<span style="color:#7ee787;font-weight:700">✓ Parallel with Kali & Server (Enabled)</span>' : '<span style="color:#ef4444">✗ Requires 24 GB+ RAM</span>';
+  if(capAd) capAd.innerHTML = gb >= 24 ? '<span style="color:#7ee787;font-weight:700">✓ Parallel with Kali & Target (Enabled)</span>' : '<span style="color:#ef4444">✗ Requires 24 GB+ RAM</span>';
+  if(capSiem) capSiem.innerHTML = gb >= 32 ? '<span style="color:#7ee787;font-weight:700">✓ Full Enterprise SOC Mode (Enabled)</span>' : '<span style="color:#ef4444">✗ Requires 32 GB+ RAM</span>';
 
   renderCockpit();
   syncDepGraph();
@@ -1634,7 +1873,7 @@ function syncDepGraph(){
 
 /* 10. Stack Inspector */
 const STACK_DATA = {
-  6: { tag: 'LAYER 06 · TOP TIER', title: 'CyberCore Missions & Evidence Records', desc: 'The practical scenarios, capture-the-flag challenges, port inspections, and evidence documentation records that validate your cybersecurity competencies.', role: 'ROLE: Demonstrates real-world technical execution inside an authorized scope.' },
+  6: { tag: 'LAYER 06 · TOP TIER', title: 'ShadowXLab CyberCore Missions & Evidence Records', desc: 'The practical scenarios, capture-the-flag challenges, port inspections, and evidence documentation records that validate your cybersecurity competencies.', role: 'ROLE: Demonstrates real-world technical execution inside an authorized scope.' },
   5: { tag: 'LAYER 05 · GUEST OPERATING SYSTEMS', title: 'Kali Linux Operator & Target Virtual Machines', desc: 'Pre-configured virtual appliances running in isolated sandbox environments. Kali acts as your attacking workstation; Ubuntu/Metasploitable act as authorized target servers.', role: 'ROLE: Isolates all offensive tools and vulnerable services from your personal host OS.' },
   4: { tag: 'LAYER 04 · NETWORK ISOLATION', title: 'VirtualBox Isolated Virtual Switch (NAT Network)', desc: 'The virtual routing layer that enables Kali to scan and exploit target VMs on private subnet 10.0.2.0/24 without leaking packets onto your home WiFi.', role: 'ROLE: Enforces lab scope and prevents accidental scanning of unintended devices.' },
   3: { tag: 'LAYER 03 · TYPE-2 HYPERVISOR', title: 'Oracle VM VirtualBox 7.x & Extension Pack', desc: 'The software virtualization layer that provisions virtual CPUs, allocates memory pages, controls virtual disk I/O, and manages VM snapshot states.', role: 'ROLE: Manages hardware slicing and multi-OS orchestration.' },
@@ -1656,7 +1895,7 @@ function inspectStack(layer, el){
 const TOOL_INFO = {
   vbox: '<b>Oracle VirtualBox 7.x:</b> Type-2 Hypervisor foundation. Allocates isolated virtual CPUs, virtual disks, and host-only network subnets for testing without modifying your physical machine.',
   pt: '<b>Cisco Packet Tracer 8.2+:</b> Official network simulator. Recreates real-world enterprise topologies (routers, firewalls, switches) with packet-level inspection and simulation modes.',
-  kali: '<b>Kali Linux 2024.x:</b> The industry-standard Linux security distribution. Comes pre-equipped with Nmap, Wireshark, Burp Suite, Metasploit, and Python for all CyberCore labs.',
+  kali: '<b>Kali Linux 2024.x:</b> The industry-standard Linux security distribution. Comes pre-equipped with Nmap, Wireshark, Burp Suite, Metasploit, and Python for all ShadowXLab CyberCore labs.',
   wireshark: '<b>Wireshark:</b> Deep packet inspection engine. Captures raw network frames to analyze TCP 3-way handshakes, DNS queries, and TLS handshakes.',
   vscode: '<b>Visual Studio Code:</b> Clean text and code editor for writing Python automation scripts, parsing log files, and modifying configuration parameters.',
   sevenzip: '<b>7-Zip 64-bit:</b> High-performance decompression utility. Extracts large multi-part `.ova` and `.7z` virtual machine archives without corrupting file hashes.'
@@ -1725,6 +1964,15 @@ syncDepGraph();
     });
   });
 })();
+
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme') || 'light';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('sxl-theme', next); } catch(e){}
+}
+
 </script>
+
 </body>
 </html>
