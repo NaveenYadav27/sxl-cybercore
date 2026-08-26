@@ -722,11 +722,16 @@ body.darkMode .btn:not(.red){background:#15191e!important;color:#fff!important;b
 <body>
 
 <header class="top">
-  <a href="index.html" class="brand" title="ShadowXLab Home" style="display:flex;align-items:center;gap:14px;text-decoration:none">
-    <div style="background:#080b10;padding:4px 10px;border-radius:10px;border:1px solid #1e2633;display:flex;align-items:center;box-shadow:0 4px 14px rgba(0,0,0,0.12)">
-      <img src="assets/logo.png" alt="ShadowXLab Logo" style="height:44px;max-height:46px;width:auto;object-fit:contain;display:block">
+  <a href="index.html" class="brand" title="ShadowXLab Home" style="display:flex;align-items:center;gap:14px;text-decoration:none;cursor:pointer">
+    <div style="background:#04070c;padding:4px 10px;border-radius:10px;border:1px solid #1a2332;display:flex;align-items:center;box-shadow:0 4px 14px rgba(0,0,0,0.18)">
+      <img src="assets/logo.png" alt="ShadowXLab Logo" style="height:46px;max-height:48px;width:auto;object-fit:contain;display:block">
     </div>
-    <div style="font-size:15px;font-weight:900;letter-spacing:.08em;color:var(--text);border-left:2px solid var(--line);padding-left:12px;margin-left:2px">CYBER<span style="color:var(--cyber-red)">CORE</span></div>
+    <div style="border-left:2px solid var(--line);padding-left:12px;display:flex;flex-direction:column;justify-content:center">
+      <div style="font-size:15px;font-weight:900;letter-spacing:.08em;color:var(--text);line-height:1.2">CYBER<span style="color:var(--cyber-red)">CORE</span></div>
+      <div style="font:800 9.5px var(--mono);letter-spacing:.14em;color:#475569;margin-top:2px;white-space:nowrap">
+        EMPOWER <span style="color:var(--blue)">•</span> ILLUMINATE <span style="color:var(--cyber-red)">•</span> UPHOLD
+      </div>
+    </div>
   </a>
   <div class="grow"></div>
   <input id="moduleSearch" class="search" placeholder="Search modules / topics..." oninput="filterModules(this.value)">
