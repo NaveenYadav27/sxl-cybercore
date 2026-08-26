@@ -45,18 +45,18 @@ body:before{
 }
 button{font:inherit} a{color:inherit}
 .top{
-  height:64px!important;
+  height:72px!important;
   padding:0 24px!important;
-  background:rgba(255,255,255,.88)!important;
+  background:rgba(255,255,255,.94)!important;
   border-bottom:1px solid #dfe3e7!important;
-  box-shadow:0 5px 25px rgba(15,20,25,.055)!important;
+  box-shadow:0 6px 28px rgba(15,20,25,.07)!important;
   position:sticky!important;
   top:0;
   z-index:50;
   display:flex;
   align-items:center;
   gap:16px;
-  backdrop-filter:blur(10px);
+  backdrop-filter:blur(12px);
 }
 .brand{
   font-weight:900!important;
@@ -722,9 +722,9 @@ body.darkMode .btn:not(.red){background:#15191e!important;color:#fff!important;b
 <body>
 
 <header class="top">
-  <a href="index.html" class="brand" style="display:flex;align-items:center;gap:12px;text-decoration:none">
-    <img src="assets/logo.png" alt="ShadowXLab Logo" style="height:36px;object-fit:contain">
-    <div style="font-size:14px;font-weight:900;letter-spacing:.08em;color:var(--text);border-left:1.5px solid var(--line);padding-left:10px">CYBER<span style="color:var(--cyber-red)">CORE</span></div>
+  <a href="index.html" class="brand" title="ShadowXLab Home" style="display:flex;align-items:center;gap:14px;text-decoration:none">
+    <img src="assets/logo.png" alt="ShadowXLab Logo" style="height:48px;max-height:50px;width:auto;object-fit:contain;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.06))">
+    <div style="font-size:15px;font-weight:900;letter-spacing:.08em;color:var(--text);border-left:2px solid var(--line);padding-left:12px;margin-left:2px">CYBER<span style="color:var(--cyber-red)">CORE</span></div>
   </a>
   <div class="grow"></div>
   <input id="moduleSearch" class="search" placeholder="Search modules / topics..." oninput="filterModules(this.value)">
@@ -736,8 +736,8 @@ body.darkMode .btn:not(.red){background:#15191e!important;color:#fff!important;b
 
 <div class="layout" id="layout">
 <aside id="sidebar">
-  <a href="index.html" style="display:block;padding:4px 6px 12px" title="Return to CyberCore Home">
-    <img src="assets/logo.png" alt="ShadowXLab" style="height:32px;max-width:100%;object-fit:contain">
+  <a href="index.html" style="display:block;padding:8px 6px 14px" title="Return to CyberCore Home">
+    <img src="assets/logo.png" alt="ShadowXLab" style="height:44px;max-width:100%;object-fit:contain">
   </a>
   <div class="side-k">SHADOWXLAB · CYBERCORE</div>
   <h3 style="margin:2px 6px 5px;font-size:20px">CYBER VISUAL PLATFORM</h3>

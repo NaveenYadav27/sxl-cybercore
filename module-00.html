@@ -37,9 +37,9 @@ code,pre{font-family:var(--mono)}
 
 /* TOP NAVBAR */
 .top{
-  height:64px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;gap:16px;
-  position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);z-index:100;
-  box-shadow:0 4px 20px rgba(0,0,0,.03);
+  height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;gap:16px;
+  position:sticky;top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);z-index:100;
+  box-shadow:0 6px 28px rgba(0,0,0,.06);
 }
 .brand{font-weight:900;letter-spacing:.08em;font-size:15px;display:flex;align-items:center;gap:8px;white-space:nowrap}
 .brand-badge{background:var(--cyber-red);color:#fff;font-size:10px;padding:2px 7px;border-radius:5px;font-family:var(--mono);font-weight:700}
@@ -61,11 +61,11 @@ code,pre{font-family:var(--mono)}
 .btn.dark{background:var(--dark2);color:#fff;border-color:#333}
 
 /* LAYOUT */
-.layout{display:grid;grid-template-columns:290px minmax(0,1fr);min-height:calc(100vh - 64px);transition:grid-template-columns .22s ease}
+.layout{display:grid;grid-template-columns:290px minmax(0,1fr);min-height:calc(100vh - 72px);transition:grid-template-columns .22s ease}
 .layout.collapsed{grid-template-columns:0 minmax(0,1fr)}
 .layout.collapsed aside{padding:0;border-right:0;overflow:hidden}
 aside{
-  border-right:1px solid var(--line);padding:24px 16px;position:sticky;top:64px;height:calc(100vh - 64px);
+  border-right:1px solid var(--line);padding:24px 16px;position:sticky;top:72px;height:calc(100vh - 72px);
   overflow-y:auto;background:rgba(255,255,255,.94);transition:padding .22s ease;
 }
 .side-k{font:900 10px var(--mono);letter-spacing:.18em;color:var(--cyber-red);margin:4px 8px;text-transform:uppercase}
@@ -365,11 +365,11 @@ footer{
 <body>
 
 <header class="top">
-  <a href="index.html" class="brand" title="ShadowXLab Home" style="display:flex;align-items:center;gap:12px;text-decoration:none;cursor:pointer">
-    <img src="assets/logo.png" alt="ShadowXLab Logo" style="height:38px;object-fit:contain">
-    <div style="font-size:14px;font-weight:900;letter-spacing:.08em;color:var(--text);border-left:1.5px solid var(--line);padding-left:10px">CYBER<span style="color:var(--cyber-red)">CORE</span></div>
+  <a href="index.html" class="brand" title="ShadowXLab Home" style="display:flex;align-items:center;gap:14px;text-decoration:none;cursor:pointer">
+    <img src="assets/logo.png" alt="ShadowXLab Logo" style="height:48px;max-height:50px;width:auto;object-fit:contain;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.06))">
+    <div style="font-size:15px;font-weight:900;letter-spacing:.08em;color:var(--text);border-left:2px solid var(--line);padding-left:12px;margin-left:2px">CYBER<span style="color:var(--cyber-red)">CORE</span></div>
   </a>
-  <button class="btn sm" onclick="toggleSidebar()" aria-label="Toggle navigation" style="margin-left:4px">☰ MENU</button>
+  <button class="btn sm" onclick="toggleSidebar()" aria-label="Toggle navigation" style="margin-left:6px">☰ MENU</button>
   <div class="top-meta">
     <span>MODULE 00 / 40</span>
     <span>•</span>
@@ -382,8 +382,8 @@ footer{
 
 <div class="layout" id="layout">
 <aside id="sidebar">
-  <a href="index.html" style="display:block;padding:4px 6px 12px" title="Return to CyberCore Home">
-    <img src="assets/logo.png" alt="ShadowXLab" style="height:32px;max-width:100%;object-fit:contain">
+  <a href="index.html" style="display:block;padding:8px 6px 14px" title="Return to CyberCore Home">
+    <img src="assets/logo.png" alt="ShadowXLab" style="height:44px;max-width:100%;object-fit:contain">
   </a>
   <div class="side-k">SHADOWXLAB · CYBERCORE</div>
   <div class="side-title">Module 00</div>
