@@ -772,6 +772,7 @@ body.darkMode .topnav a{color:#c6cdd3}
   </nav>
   <div class="grow"></div>
   <input id="moduleSearch" class="search" placeholder="Search modules..." oninput="filterModules(this.value)">
+  <a href="subnetting.html" class="btn" style="border-color:#bae6fd;background:#f0f9ff;color:#0369a1">SUBNETTING LAB →</a>
   <a href="module-00.html" class="btn" style="border-color:#fca5a5;background:#fef2f2;color:#b91c1c">MODULE 00 →</a>
   <button class="btn" onclick="toggleTheme()">◐ MODE</button>
   <a href="module-00.html" class="btn red">START CYBERCORE →</a>
@@ -1365,11 +1366,19 @@ function openModule(id){
   document.getElementById('modalTopics').innerHTML=m.topics.map((t,i)=>`<div class="check"><b>${String(i+1).padStart(2,'0')}</b><span>${t}</span></div>`).join('');
   const deepLink = document.getElementById('modalDeepLink');
   if(deepLink){
-    const page = 'module-' + String(id).padStart(2,'0') + '.html';
-    deepLink.href = page;
-    deepLink.textContent = id === 0
-      ? 'OPEN COMPLETE MODULE 00 SETUP & PREREQUISITES →'
-      : 'OPEN MODULE ' + String(id).padStart(2,'0') + ' — ' + m.name.toUpperCase() + ' →';
+    if(id === 0){
+      deepLink.href = 'module-00.html';
+      deepLink.textContent = 'OPEN COMPLETE MODULE 00 SETUP & PREREQUISITES →';
+    } else if(id === 1){
+      deepLink.href = 'module-01.html';
+      deepLink.textContent = 'OPEN MODULE 01 — SECURITY ESSENTIALS & KALI ONBOARDING →';
+    } else if(id === 11 || id === 12){
+      deepLink.href = 'subnetting.html';
+      deepLink.textContent = 'LAUNCH SUBNETTING MASTER LAB (CIDR · FLSM · VLSM) →';
+    } else {
+      deepLink.href = 'module-00.html';
+      deepLink.textContent = 'PREREQUISITE: COMPLETE SETUP COCKPIT (MODULE 00) →';
+    }
     deepLink.className = 'btn red';
     deepLink.onclick = null;
   }

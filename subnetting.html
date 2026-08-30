@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShadowXLab · CYBERCORE · Subnetting Master Lab (CIDR · FLSM · VLSM)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script>(function(){try{var t=localStorage.getItem('sxl-theme')||'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{
+  --bg:#ffffff;--bg-card:#ffffff;--bg-sub:#f6f8fa;--bg-input:#ffffff;--line:#e2e5e8;
+  --ink:#0f172a;--text:#171a1e;--muted:#64748b;--cyber-red:#e21b23;--cyber-red-dark:#b9151c;
+  --blue:#3b82f6;--red:#e21b23;--red2:#b80f15;--green:#059669;
+  --green-dim:rgba(5,150,105,0.1);--cyan:#0284c7;--cyan-dim:rgba(2,132,199,0.1);
+  --amber:#d97706;--amber-dim:rgba(217,119,6,0.1);--shadow:0 8px 24px rgba(0,0,0,0.06);
+  --mono:"IBM Plex Mono",ui-monospace,monospace;--sans:Inter,Segoe UI,Arial,sans-serif;
+}
+[data-theme="dark"]{
+  --bg:#0b0f16;--bg-card:#131a24;--bg-sub:#17202d;--bg-input:#0f1722;--line:#243042;
+  --ink:#e6e9ef;--text:#e6e9ef;--muted:#8b99ad;--cyber-red:#ff3b42;--cyber-red-dark:#e21b23;
+  --blue:#60a5fa;--red:#f04438;--red2:#fda29b;--green:#10b981;
+  --green-dim:rgba(16,185,129,0.15);--cyan:#38bdf8;--cyan-dim:rgba(56,189,248,0.15);
+  --amber:#fbbf24;--amber-dim:rgba(251,191,36,0.15);--shadow:0 8px 24px rgba(0,0,0,0.35);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);transition:background .2s,color .2s}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.top{height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;background:var(--bg-card);z-index:50;backdrop-filter:blur(12px)}
+.topmeta{font-size:11px;color:var(--muted);font-weight:800;font-family:var(--mono)}
+.topactions{display:flex;align-items:center;gap:10px}
+.themetoggle{border:1px solid var(--line);background:var(--bg-card);color:var(--ink);width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:14px;cursor:pointer;padding:0}
+.themetoggle:hover{border-color:var(--red)}
+.btn{border:1px solid var(--line);background:var(--bg-card);color:var(--ink);border-radius:8px;padding:9px 14px;font-weight:700;font-size:12.5px;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--red);color:var(--red)}
+.btn.red{background:linear-gradient(135deg,var(--cyber-red),var(--cyber-red-dark));color:#fff;border-color:var(--cyber-red);box-shadow:0 6px 18px rgba(226,27,35,.22)}
+.btn.red:hover{background:linear-gradient(135deg,#ed232b,#a61117);color:#fff}
+.btn.dark{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 72px)}
+.side{border-right:1px solid var(--line);background:var(--bg-sub);padding:18px 14px;position:sticky;top:72px;height:calc(100vh - 72px);overflow:auto}
+.side h4{font-size:10px;letter-spacing:1.5px;color:var(--muted);margin:14px 8px 6px;text-transform:uppercase;font-family:var(--mono)}
+.nav-btn{padding:9px 12px;border-radius:8px;font-size:12px;margin:3px 0;width:100%;text-align:left;border:0;background:transparent;color:var(--ink);display:block;font-weight:600;transition:all .15s;font-family:var(--sans)}
+.nav-btn.active,.nav-btn:hover{background:var(--bg-card);color:var(--red);box-shadow:var(--shadow)}
+.side .mini{font-size:11px;color:var(--muted);line-height:1.5;padding:12px 8px}
+main{max-width:1440px;width:100%;margin:auto;padding:28px 24px}
+.hero{background:linear-gradient(135deg,var(--bg-sub),var(--bg-card));border:1px solid var(--line);border-radius:16px;padding:26px;margin-bottom:24px;box-shadow:var(--shadow)}
+.ey{font-size:10px;letter-spacing:1.8px;color:var(--red);font-weight:900;text-transform:uppercase;font-family:var(--mono)}
+.hero h1{font-size:clamp(26px,3.5vw,44px);line-height:1.1;letter-spacing:-1.5px;margin:8px 0 10px;font-weight:800}
+.hero p{max-width:880px;color:var(--muted);line-height:1.6;margin:0;font-size:13.5px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{font-size:10px;font-weight:800;border:1px solid var(--line);background:var(--bg-card);padding:5px 9px;border-radius:6px;color:var(--muted);font-family:var(--mono)}
+.section{border:1px solid var(--line);background:var(--bg-card);border-radius:14px;margin:20px 0;overflow:hidden;box-shadow:var(--shadow);scroll-margin-top:80px}
+.sectionhead{padding:16px 20px;border-bottom:1px solid var(--line);background:var(--bg-sub);display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+.sectionhead h2{font-size:16px;margin:0;font-weight:700}
+.sectionhead p{font-size:11.5px;color:var(--muted);margin:3px 0 0}
+.body{padding:20px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+.field{min-width:150px;flex:1}
+.field label{display:block;font-size:10px;font-weight:800;color:var(--muted);margin-bottom:6px;letter-spacing:.05em;text-transform:uppercase;font-family:var(--mono)}
+.field input,.field select{width:100%;border:1px solid var(--line);border-radius:7px;padding:8px 10px;background:var(--bg-input);color:var(--ink)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.four{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:960px){.two,.three,.four{grid-template-columns:1fr}}
+.metric{background:var(--bg-sub);border:1px solid var(--line);border-radius:9px;padding:12px}
+.metric small{display:block;color:var(--muted);font-size:9.5px;font-weight:800;text-transform:uppercase;font-family:var(--mono)}
+.metric b{display:block;font-size:14px;margin-top:3px;font-family:var(--mono);color:var(--ink)}
+.metric.redline{border-left:4px solid var(--red)}
+.binary{overflow:auto;border:1px solid var(--line);border-radius:10px;padding:14px;background:var(--bg-input);margin-top:14px}
+.octets{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+.oct{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg-card)}
+.oct h4{margin:0;padding:8px 10px;background:var(--bg-sub);font-size:10px;font-weight:800;color:var(--muted);font-family:var(--mono)}
+.bits{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;padding:8px}
+.bit{height:30px;display:grid;place-items:center;border:1px solid var(--line);border-radius:4px;font-size:10px;font-weight:800;font-family:var(--mono)}
+.bit.net{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.bit.host{background:var(--bg-sub);color:var(--muted)}
+.legend{display:flex;gap:16px;font-size:11px;color:var(--muted);margin-top:10px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:2px;border:1px solid var(--line);vertical-align:-1px;margin-right:4px}
+.dot.black{background:var(--ink);border-color:var(--ink)}
+.dot.host{background:var(--bg-sub)}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:9px;margin-top:14px}
+.table{width:100%;border-collapse:collapse;font-size:11.5px;min-width:720px;font-family:var(--mono)}
+.table th,.table td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left}
+.table th{background:var(--bg-sub);font-size:9.5px;letter-spacing:.7px;color:var(--muted);font-family:var(--sans);text-transform:uppercase}
+.table tr:last-child td{border-bottom:0}
+.table tr:hover{background:var(--bg-sub)}
+.rangebar{height:40px;display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:14px 0}
+.rangebar .network{background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;font-family:var(--mono)}
+.rangebar .hosts{background:var(--bg-sub);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:var(--mono)}
+.stepcards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}
+@media(max-width:960px){.stepcards{grid-template-columns:1fr}}
+.step{border:1px solid var(--line);background:var(--bg-sub);border-radius:9px;padding:12px}
+.step .n{font-size:9.5px;color:var(--red);font-weight:900;font-family:var(--mono)}
+.step b{display:block;font-size:12px;margin:4px 0}
+.step span{font-size:10.5px;color:var(--muted);line-height:1.4}
+.unanswered-card{border:1px solid var(--line);border-radius:10px;padding:16px;background:var(--bg-sub);margin-bottom:14px}
+.unanswered-card h4{margin:0 0 6px;font-size:13px;font-weight:800;color:var(--ink)}
+.unanswered-card p{margin:0 0 10px;font-size:12px;color:var(--muted);line-height:1.5}
+.unanswered-answer{display:none;margin-top:12px;padding:12px;border-radius:8px;background:var(--green-dim);border:1px solid var(--green);font-size:12px;color:var(--green);font-family:var(--mono);line-height:1.6}
+.unanswered-answer.show{display:block}
+.toast{position:fixed;right:20px;bottom:20px;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;display:none;z-index:50;font-size:12px;font-weight:700;font-family:var(--mono)}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.side{display:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="index.html" class="brand" title="ShadowXLab Home" style="display:flex;align-items:center;gap:14px;text-decoration:none;cursor:pointer">
+    <div style="background:#04070c;padding:4px 10px;border-radius:10px;border:1px solid #1a2332;display:flex;align-items:center;box-shadow:0 4px 14px rgba(0,0,0,0.18)">
+      <img src="assets/logo.png" alt="ShadowXLab Logo" style="height:44px;max-height:46px;width:auto;object-fit:contain;display:block">
+    </div>
+    <div style="border-left:2px solid var(--line);padding-left:12px;display:flex;flex-direction:column;justify-content:center">
+      <div style="font-size:15px;font-weight:900;letter-spacing:.08em;color:var(--text);line-height:1.2">CYBER<span style="color:var(--cyber-red)">CORE</span></div>
+      <div style="font:800 9px var(--mono);letter-spacing:.14em;color:var(--muted);margin-top:2px;white-space:nowrap">
+        EMPOWER <span style="color:var(--blue)">•</span> ILLUMINATE <span style="color:var(--cyber-red)">•</span> UPHOLD
+      </div>
+    </div>
+  </a>
+
+  <div class="topmeta">· SUBNETTING MASTER LAB (CIDR · FLSM · VLSM)</div>
+
+  <div class="topactions">
+    <a href="index.html" class="btn">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> CyberCore Home
+    </a>
+    <button class="themetoggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
+  </div>
+</header>
+
+<div class="layout">
+<aside class="side">
+<h4>SHADOWXLAB · SUBNETTING</h4>
+<button class="nav-btn active" onclick="jumpTo('calculatorSection')">01 · Master Calculator</button>
+<button class="nav-btn" onclick="jumpTo('binarySection')">02 · Binary Boundary</button>
+<button class="nav-btn" onclick="jumpTo('flsmSection')">03 · FLSM Subnetting</button>
+<button class="nav-btn" onclick="jumpTo('vlsmSection')">04 · VLSM Designer</button>
+<button class="nav-btn" onclick="jumpTo('membershipSection')">05 · Host Membership</button>
+<button class="nav-btn" onclick="jumpTo('aggregateSection')">06 · Supernetting</button>
+<button class="nav-btn" onclick="jumpTo('unansweredSection')">07 · Practice Questions</button>
+<div class="mini">Interactive Layer 3 Workbench: Inspect IPv4 network/host boundaries, allocate departments, and calculate subnets in real time.</div>
+</aside>
+
+<main>
+<section class="hero">
+  <div class="ey">SHADOWXLAB · NETWORKING &amp; SECURITY FOUNDATIONS</div>
+  <h1>Subnetting you can actually see.</h1>
+  <p>Work from the 32-bit IP boundary upward. Convert addresses to binary, compute masks and ranges, generate fixed-length subnets, design VLSM departmental plans, test host membership, and practice unprompted self-assessment questions.</p>
+  <div class="chips"><span class="chip">IPv4</span><span class="chip">32-BIT BINARY</span><span class="chip">CIDR</span><span class="chip">FLSM</span><span class="chip">VLSM</span><span class="chip">SUPERNETTING</span><span class="chip">SELF-ASSESSMENT</span></div>
+</section>
+
+<!-- MASTER CALCULATOR -->
+<section class="section" id="calculatorSection">
+<div class="sectionhead"><div><h2>01 · Interactive Subnet Calculator</h2><p>Instant breakdown of network ID, broadcast, mask, wildcard, and usable range.</p></div><button class="btn red" onclick="calculate()">Calculate</button></div>
+<div class="body">
+<div class="controls">
+<div class="field"><label>IPv4 ADDRESS</label><input id="ip" value="192.168.10.77"></div>
+<div class="field"><label>CIDR PREFIX</label><select id="prefix"></select></div>
+<div class="field"><label>MODE</label><select id="mode"><option value="classic">Standard Subnet (/0–/30)</option><option value="point">Point-to-Point (/31)</option><option value="host">Host Route (/32)</option></select></div>
+</div>
+<div class="four" style="margin-top:14px">
+<div class="metric redline"><small>Network Address</small><b id="mNetwork">—</b></div>
+<div class="metric"><small>Broadcast Address</small><b id="mBroadcast">—</b></div>
+<div class="metric"><small>First Usable Host</small><b id="mFirst">—</b></div>
+<div class="metric"><small>Last Usable Host</small><b id="mLast">—</b></div>
+<div class="metric"><small>Subnet Mask</small><b id="mMask">—</b></div>
+<div class="metric"><small>Wildcard Mask</small><b id="mWildcard">—</b></div>
+<div class="metric"><small>Total Addresses</small><b id="mTotal">—</b></div>
+<div class="metric"><small>Usable Hosts</small><b id="mHosts">—</b></div>
+</div>
+<div class="rangebar" id="rangebar"></div>
+<div class="binary">
+<div style="font-size:10px;color:var(--muted);font-weight:800;text-transform:uppercase;font-family:var(--mono)">32-Bit Network / Host Bit Boundary</div>
+<div class="octets" id="octets"></div>
+<div class="legend"><span><i class="dot black"></i>Network Bits (1s in Mask)</span><span><i class="dot host"></i>Host Bits (0s in Mask)</span></div>
+</div>
+</div>
+</section>
+
+<!-- BINARY -->
+<section class="section" id="binarySection">
+<div class="sectionhead"><div><h2>02 · Binary Conversion Workbench</h2><p>Observe how the bitwise AND operation produces the network ID.</p></div></div>
+<div class="body">
+<div class="two">
+<div class="binary"><div style="font-size:10px;color:var(--muted);font-weight:800;font-family:var(--mono)">IP ADDRESS (BINARY)</div><div id="ipBinary" style="font:700 16px var(--mono);margin-top:8px;color:var(--ink)">—</div></div>
+<div class="binary"><div style="font-size:10px;color:var(--muted);font-weight:800;font-family:var(--mono)">SUBNET MASK (BINARY)</div><div id="maskBinary" style="font:700 16px var(--mono);margin-top:8px;color:var(--red)">—</div></div>
+</div>
+<div class="stepcards">
+<div class="step"><div class="n">STEP 01</div><b>Write 32-Bit IP</b><span>Every octet represents 8 binary bits.</span></div>
+<div class="step"><div class="n">STEP 02</div><b>Write Mask</b><span>Prefix length sets exact count of consecutive 1s.</span></div>
+<div class="step"><div class="n">STEP 03</div><b>Bitwise AND</b><span>IP ∧ Mask locks the Network Address.</span></div>
+<div class="step"><div class="n">STEP 04</div><b>Host Boundary</b><span>Host bits = all 0s for Network; all 1s for Broadcast.</span></div>
+<div class="step"><div class="n">STEP 05</div><b>Usable Hosts</b><span>Formula: 2^(32 - prefix) - 2 usable addresses.</span></div>
+</div>
+</div>
+</section>
+
+<!-- FLSM -->
+<section class="section" id="flsmSection">
+<div class="sectionhead"><div><h2>03 · Fixed-Length Subnet Generator (FLSM)</h2><p>Divide any parent network into equal-sized child subnets.</p></div><button class="btn red" onclick="generateFLSM()">Generate Subnets</button></div>
+<div class="body">
+<div class="controls">
+<div class="field"><label>PARENT NETWORK</label><input id="parent" value="192.168.10.0"></div>
+<div class="field"><label>PARENT PREFIX</label><select id="parentPrefix"></select></div>
+<div class="field"><label>NEW CHILD PREFIX</label><select id="newPrefix"></select></div>
+</div>
+<div class="four" style="margin-top:14px">
+<div class="metric"><small>Subnets Created</small><b id="flsmCount">—</b></div>
+<div class="metric"><small>Total Addresses / Subnet</small><b id="flsmSize">—</b></div>
+<div class="metric"><small>Usable Hosts / Subnet</small><b id="flsmHosts">—</b></div>
+<div class="metric"><small>Block Increment</small><b id="flsmBlock">—</b></div>
+</div>
+<div class="tablewrap"><table class="table"><thead><tr><th>#</th><th>Subnet / CIDR</th><th>Network</th><th>First Host</th><th>Last Host</th><th>Broadcast</th><th>Usable</th></tr></thead><tbody id="flsmTable"></tbody></table></div>
+</div>
+</section>
+
+<!-- VLSM -->
+<section class="section" id="vlsmSection">
+<div class="sectionhead"><div><h2>04 · Variable-Length Subnet Mask (VLSM) Designer</h2><p>Allocate custom departmental host requirements with zero wasted space.</p></div><button class="btn red" onclick="buildVLSM()">Design VLSM</button></div>
+<div class="body">
+<div class="two">
+<div>
+<div class="field"><label>AVAILABLE ROOT NETWORK</label><input id="vparent" value="10.20.0.0/24"></div>
+<div class="field" style="margin-top:10px"><label>HOST REQUIREMENTS (Comma-separated)</label><input id="requirements" value="100, 50, 25, 10, 5"></div>
+<div style="margin-top:12px"><button class="btn red" onclick="buildVLSM()">Allocate Largest First</button></div>
+</div>
+<div class="metric"><small>VLSM Golden Rule</small><b style="font-size:12px;margin:4px 0 8px;">Sort requirements from largest to smallest</b><p style="font-size:11.5px;color:var(--muted);line-height:1.5;margin:0;">Always assign the largest departmental block first, lock its boundary, and move the next network increment forward to prevent subnet overlap.</p></div>
+</div>
+<div class="tablewrap"><table class="table"><thead><tr><th>Req.</th><th>Allocated</th><th>CIDR</th><th>Network</th><th>First Host</th><th>Last Host</th><th>Broadcast</th><th>Total</th><th>Waste</th></tr></thead><tbody id="vlsmTable"></tbody></table></div>
+</div>
+</section>
+
+<!-- MEMBERSHIP -->
+<section class="section" id="membershipSection">
+<div class="sectionhead"><div><h2>05 · Host Membership &amp; Boundary Tester</h2><p>Validate if a given host IP resides inside a subnet or strays outside.</p></div></div>
+<div class="body">
+<div class="three">
+<div class="field"><label>SUBNET (e.g. 192.168.10.64/26)</label><input id="testSubnet" value="192.168.10.64/26"></div>
+<div class="field"><label>HOST IP TO TEST</label><input id="testHost" value="192.168.10.77"></div>
+<div style="display:flex;align-items:end"><button class="btn red" style="width:100%" onclick="testMembership()">Test Membership</button></div>
+</div>
+<div id="membershipResult" class="metric" style="margin-top:14px">Enter a subnet and host to test.</div>
+</div>
+</section>
+
+<!-- SUPERNETTING -->
+<section class="section" id="aggregateSection">
+<div class="sectionhead"><div><h2>06 · Supernetting &amp; Route Aggregation</h2><p>Summarize multiple contiguous routing prefixes into a single concise route.</p></div><button class="btn red" onclick="aggregate()">Find Aggregate</button></div>
+<div class="body">
+<div class="field"><label>NETWORKS (One per line)</label><textarea id="aggInput" style="width:100%;height:95px;border:1px solid var(--line);border-radius:8px;padding:10px;font:12px var(--mono);background:var(--bg-input);color:var(--ink)">192.168.0.0/24
+192.168.1.0/24
+192.168.2.0/24
+192.168.3.0/24</textarea></div>
+<div id="aggregateResult" class="metric" style="margin-top:12px">Enter adjacent networks to calculate the summary route.</div>
+</div>
+</section>
+
+<!-- UNANSWERED PRACTICE QUESTIONS -->
+<section class="section" id="unansweredSection">
+<div class="sectionhead">
+  <div>
+    <h2>07 · Independent Calculation &amp; Practice Drills</h2>
+    <p>Solve these questions manually before clicking "Show Verification &amp; Steps" to test your exam and interview readiness.</p>
+  </div>
+</div>
+<div class="body">
+  
+  <div class="unanswered-card">
+    <h4>Drill 1: Usable Hosts &amp; Network Identification</h4>
+    <p>Given the host address <strong>172.20.45.190/20</strong>, determine:<br>
+    1. The Subnet Mask<br>
+    2. The Network Address<br>
+    3. The Broadcast Address<br>
+    4. The Valid Usable Host Range</p>
+    <button class="btn" onclick="toggleAnswer('ans1', this)">Show Verification &amp; Steps</button>
+    <div id="ans1" class="unanswered-answer">
+      <strong>Solution Breakdown:</strong><br>
+      • Prefix /20 = 20 network bits (11111111.11111111.11110000.00000000)<br>
+      • Subnet Mask: <strong>255.255.240.0</strong><br>
+      • Third Octet Block Size: 256 - 240 = <strong>16</strong><br>
+      • Subnet Multiples in Octet 3: 0, 16, 32, 48... 45 falls into the <strong>32</strong> block.<br>
+      • Network Address: <strong>172.20.32.0</strong><br>
+      • Broadcast Address: <strong>172.20.47.255</strong><br>
+      • Usable Host Range: <strong>172.20.32.1 – 172.20.47.254</strong> (4,094 usable hosts).
+    </div>
+  </div>
+
+  <div class="unanswered-card">
+    <h4>Drill 2: Subnet Borrowing &amp; FLSM Design</h4>
+    <p>An enterprise assigns you <strong>192.168.50.0/24</strong> and instructs you to create <strong>at least 12 individual subnets</strong> for distinct store locations.<br>
+    1. How many host bits must be borrowed?<br>
+    2. What is the new CIDR prefix and subnet mask?<br>
+    3. How many usable hosts will each store receive?</p>
+    <button class="btn" onclick="toggleAnswer('ans2', this)">Show Verification &amp; Steps</button>
+    <div id="ans2" class="unanswered-answer">
+      <strong>Solution Breakdown:</strong><br>
+      • 2^n ≥ 12 subnets → Borrow 4 bits (2^4 = 16 subnets created).<br>
+      • New Prefix: /24 + 4 = <strong>/28</strong><br>
+      • Subnet Mask: <strong>255.255.255.240</strong><br>
+      • Remaining Host Bits: 32 - 28 = 4 bits<br>
+      • Usable Hosts per Subnet: 2^4 - 2 = <strong>14 usable hosts</strong>.
+    </div>
+  </div>
+
+  <div class="unanswered-card">
+    <h4>Drill 3: VLSM Departmental Allocation</h4>
+    <p>You have the parent block <strong>10.50.0.0/22</strong> (1,024 total addresses). You must allocate subnets for:<br>
+    • Engineering: <strong>480 hosts</strong><br>
+    • Support: <strong>110 hosts</strong><br>
+    • Marketing: <strong>55 hosts</strong><br>
+    • Point-to-Point WAN Link: <strong>2 hosts</strong><br>
+    List the allocated CIDR prefix and network address for each department.</p>
+    <button class="btn" onclick="toggleAnswer('ans3', this)">Show Verification &amp; Steps</button>
+    <div id="ans3" class="unanswered-answer">
+      <strong>Solution Breakdown (Largest First):</strong><br>
+      1. <strong>Engineering (480 hosts):</strong> Needs 512-block → <strong>/23</strong>. Network: <strong>10.50.0.0/23</strong> (Range: 10.50.0.1 – 10.50.1.254, BC: 10.50.1.255)<br>
+      2. <strong>Support (110 hosts):</strong> Needs 128-block → <strong>/25</strong>. Network: <strong>10.50.2.0/25</strong> (Range: 10.50.2.1 – 10.50.2.126, BC: 10.50.2.127)<br>
+      3. <strong>Marketing (55 hosts):</strong> Needs 64-block → <strong>/26</strong>. Network: <strong>10.50.2.128/26</strong> (Range: 10.50.2.129 – 10.50.2.190, BC: 10.50.2.191)<br>
+      4. <strong>WAN Link (2 hosts):</strong> Needs 4-block → <strong>/30</strong>. Network: <strong>10.50.2.192/30</strong> (Range: 10.50.2.193 – 10.50.2.194, BC: 10.50.2.195).
+    </div>
+  </div>
+
+  <div class="unanswered-card">
+    <h4>Drill 4: Route Aggregation Forensic</h4>
+    <p>A core router receives route advertisements for:<br>
+    • 10.100.16.0/24<br>
+    • 10.100.17.0/24<br>
+    • 10.100.18.0/24<br>
+    • 10.100.19.0/24<br>
+    What is the most concise single summary route that encompasses all four routes?</p>
+    <button class="btn" onclick="toggleAnswer('ans4', this)">Show Verification &amp; Steps</button>
+    <div id="ans4" class="unanswered-answer">
+      <strong>Solution Breakdown:</strong><br>
+      • Binary analysis of Octet 3: 16 (00010000), 17 (00010001), 18 (00010010), 19 (00010011)<br>
+      • The first 6 bits of the 3rd octet match (000100xx).<br>
+      • Common Prefix: 8 + 8 + 6 = <strong>/22</strong><br>
+      • Summarized Route: <strong>10.100.16.0/22</strong> (Covers 10.100.16.0 through 10.100.19.255).
+    </div>
+  </div>
+
+</div>
+</section>
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+for(let i=0;i<=32;i++){let o=document.createElement('option');o.value=i;o.text='/'+i;if(i===24)o.selected=true;$('prefix').appendChild(o)}
+for(let i=8;i<=30;i++){let a=document.createElement('option');a.value=i;a.text='/'+i;if(i===24)a.selected=true;$('parentPrefix').appendChild(a)}
+for(let i=9;i<=30;i++){let a=document.createElement('option');a.value=i;a.text='/'+i;if(i===26)a.selected=true;$('newPrefix').appendChild(a)}
+
+function toast(x){$('toast').textContent=x;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',2200)}
+function toggleTheme(){
+  const cur=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',cur);
+  localStorage.setItem('sxl-theme',cur);
+  $('themeToggle').textContent=cur==='light'?'☀️':'🌙';
+}
+
+function jumpTo(id){
+  const el=document.getElementById(id);
+  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function ipInt(s){let a=s.trim().split('.').map(Number);if(a.length!==4||a.some(n=>!Number.isInteger(n)||n<0||n>255))return null;return (((a[0]*256+a[1])*256+a[2])*256+a[3])>>>0}
+function ipOut(n){return [(n>>>24)&255,(n>>>16)&255,(n>>>8)&255,n&255].join('.')}
+function maskInt(p){return p===0?0:(0xffffffff<<(32-p))>>>0}
+function binary(n){return (n>>>0).toString(2).padStart(32,'0')}
+
+function info(ip,p){
+ let x=ipInt(ip);if(x===null||p<0||p>32)return null;
+ let mask=maskInt(p),network=(x&mask)>>>0,broadcast=(network|(~mask>>>0))>>>0,size=2**(32-p);
+ let usable=p===32?0:p===31?2:Math.max(0,size-2);
+ return {x,mask,network,broadcast,size,usable,first:p===32?network:p===31?network:network+1,last:p===32?network:p===31?broadcast:broadcast-1,p};
+}
+
+function calculate(){
+ let p=Number($('prefix').value);if(!Number.isInteger(p)||p<0||p>32)return;
+ let q=info($('ip').value,p);if(!q){toast('Invalid IPv4 address');return}
+ $('mNetwork').textContent=ipOut(q.network);$('mBroadcast').textContent=q.p===32?'N/A':ipOut(q.broadcast);
+ $('mFirst').textContent=ipOut(q.first);$('mLast').textContent=ipOut(q.last);
+ $('mMask').textContent=ipOut(q.mask);$('mWildcard').textContent=ipOut((~q.mask)>>>0);
+ $('mTotal').textContent=q.size.toLocaleString();$('mHosts').textContent=q.usable.toLocaleString();
+ let netPct=q.p/32*100,hostPct=100-netPct;
+ $('rangebar').innerHTML='<div class="network" style="width:'+netPct+'%">NETWORK · /'+q.p+' ('+q.p+' BITS)</div><div class="hosts" style="width:'+hostPct+'%">HOSTS · '+(32-q.p)+' BITS ('+q.usable.toLocaleString()+' USABLE)</div>';
+ renderOctets(q.x,q.p,q.mask);
+ $('ipBinary').textContent=binary(q.x).match(/.{8}/g).join(' ');
+ $('maskBinary').textContent=binary(q.mask).match(/.{8}/g).join(' ');
+}
+
+function renderOctets(ip,p,mask){
+ let bs=binary(ip),ms=binary(mask),out='';
+ for(let o=0;o<4;o++){
+   out+='<div class="oct"><h4>OCTET '+(o+1)+' · '+parseInt(bs.slice(o*8,o*8+8),2)+'</h4><div class="bits">';
+   for(let b=0;b<8;b++){let i=o*8+b,cl=i<p?'net':'host';out+='<div class="bit '+cl+'">'+bs[i]+'</div>'}
+   out+='</div><div style="padding:0 8px 8px;font:10px ui-monospace,monospace;color:var(--muted)">'+ms.slice(o*8,o*8+8)+'</div></div>';
+ }
+ $('octets').innerHTML=out;
+}
+
+function generateFLSM(){
+ let parentIp=ipInt($('parent').value),pp=Number($('parentPrefix').value),np=Number($('newPrefix').value);
+ if(parentIp===null||np<pp){toast('Child prefix must be ≥ parent prefix');return}
+ let parent=info($('parent').value,pp),count=2**(np-pp),size=2**(32-np),hosts=np===32?1:np===31?2:Math.max(0,size-2);
+ $('flsmCount').textContent=count.toLocaleString();$('flsmSize').textContent=size.toLocaleString();
+ $('flsmHosts').textContent=hosts.toLocaleString();$('flsmBlock').textContent=size.toLocaleString();
+ let rows='',limit=Math.min(count,512);
+ for(let i=0;i<limit;i++){
+   let n=(parent.network+i*size)>>>0,bc=(n+size-1)>>>0;
+   rows+='<tr><td>'+(i+1)+'</td><td>'+ipOut(n)+'/'+np+'</td><td>'+ipOut(n)+'</td><td>'+ipOut(n+(np>=31?0:1))+'</td><td>'+ipOut(n+(np>=31?size-1:size-2))+'</td><td>'+ipOut(bc)+'</td><td>'+hosts.toLocaleString()+'</td></tr>';
+ }
+ $('flsmTable').innerHTML=rows;
+}
+
+function prefixForHosts(h){
+ if(h<=0)return 32;
+ for(let p=32;p>=0;p--){let total=2**(32-p),usable=p===31?2:p===32?1:total-2;if(usable>=h)return p}
+ return null;
+}
+
+function buildVLSM(){
+ let parent=$('vparent').value.trim(),parts=parent.split('/');if(parts.length!==2){toast('Use IP/prefix format');return}
+ let base=ipInt(parts[0]),pp=Number(parts[1]),req=$('requirements').value.split(',').map(x=>Number(x.trim())).filter(x=>x>0).sort((a,b)=>b-a);
+ let parentInfo=info(parts[0],pp);
+ if(base===null||!parentInfo||!req.length){toast('Check VLSM inputs');return}
+ let cursor=parentInfo.network,rows='',used=0;
+ for(let r of req){
+   let p=prefixForHosts(r);if(p===null||p<pp){toast('Requirement cannot fit in root space');return}
+   let size=2**(32-p);cursor=Math.ceil(cursor/size)*size;let end=cursor+size-1;
+   if(end>parentInfo.broadcast){toast('Not enough address space remaining in /'+pp);return}
+   let usable=p===31?2:p===32?1:size-2,waste=usable-r;
+   rows+='<tr><td>'+r+'</td><td>'+usable+'</td><td>/'+p+'</td><td>'+ipOut(cursor)+'</td><td>'+ipOut(cursor+(p>=31?0:1))+'</td><td>'+ipOut(cursor+(p>=31?size-1:size-2))+'</td><td>'+ipOut(end)+'</td><td>'+size+'</td><td>'+waste+'</td></tr>';
+   used+=size;cursor=end+1;
+ }
+ $('vlsmTable').innerHTML=rows;
+}
+
+function testMembership(){
+ let a=$('testSubnet').value.split('/'),q=info(a[0],Number(a[1])),h=ipInt($('testHost').value);
+ if(!q||h===null){toast('Check subnet and host IP');return}
+ let ok=h>=q.network&&h<=q.broadcast,usable=h>q.network&&h<q.broadcast;
+ $('membershipResult').innerHTML='<b style="color:'+(ok?'var(--green)':'var(--red)')+'">'+(ok?'✓ HOST IS INSIDE THE SUBNET BOUNDARY':'✕ HOST IS OUTSIDE THE SUBNET BOUNDARY')+'</b><p style="font-size:11.5px;color:var(--muted);margin:6px 0 0">Subnet: <strong>'+ipOut(q.network)+'/'+q.p+'</strong> · Range: <strong>'+ipOut(q.first)+' – '+ipOut(q.last)+'</strong> · Broadcast: <strong>'+ipOut(q.broadcast)+'</strong><br>Classification: '+(usable?'Valid Usable Host Address.':h===q.network?'Reserved Network ID.':h===q.broadcast?'Reserved Broadcast ID.':'Out of Subnet Scope.')+'</p>';
+}
+
+function commonPrefix(nums){if(!nums.length)return 0;let x=nums[0]>>>0,p=32;for(let n of nums){let y=(x^n)>>>0;if(y)p=Math.min(p,Math.clz32(y))}return p}
+function aggregate(){
+ let lines=$('aggInput').value.split(/\n|,/).map(x=>x.trim()).filter(Boolean),arr=[];
+ if(!lines.length){toast('Enter at least one network');return}
+ for(let text of lines){
+   let z=text.split('/'),p=Number(z[1]);
+   if(z.length!==2||!Number.isInteger(p)||p<0||p>32){toast('Invalid network: '+text);return}
+   let q=info(z[0],p);if(!q){toast('Invalid network: '+text);return}
+   arr.push(q);
+ }
+ let p=commonPrefix(arr.map(x=>x.network));
+ let first=Math.min(...arr.map(x=>x.network)),last=Math.max(...arr.map(x=>x.broadcast));
+ let agg=info(ipOut(first),p);
+ let exact=agg.network===first&&agg.broadcast===last;
+ $('aggregateResult').innerHTML='<b>Summary Route: '+ipOut(agg.network)+'/'+p+'</b><p style="font-size:11.5px;color:var(--muted);margin:6px 0 0">Covers <strong>'+ipOut(agg.network)+' – '+ipOut(agg.broadcast)+'</strong> ('+agg.size.toLocaleString()+' total addresses). '+(exact?'Exact contiguous summarization.':'Smallest common supernet prefix.')+'</p>';
+}
+
+function toggleAnswer(id, btn){
+  const el=document.getElementById(id);
+  if(el){
+    const isOpen=el.classList.toggle('show');
+    btn.textContent=isOpen?'Hide Verification & Steps':'Show Verification & Steps';
+  }
+}
+
+$('ip').addEventListener('input',calculate);
+$('prefix').addEventListener('change',calculate);
+$('parent').addEventListener('input',generateFLSM);
+$('parentPrefix').addEventListener('change',function(){let pp=Number(this.value),np=Number($('newPrefix').value);if(np<pp)$('newPrefix').value=String(pp);generateFLSM()});
+$('newPrefix').addEventListener('change',function(){let pp=Number($('parentPrefix').value);if(Number(this.value)<pp)this.value=String(pp);generateFLSM()});
+
+calculate();
+generateFLSM();
+buildVLSM();
+testMembership();
+</script>
+</body>
+</html>
