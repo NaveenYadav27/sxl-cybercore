@@ -352,12 +352,24 @@ for(let i=8;i<=30;i++){let a=document.createElement('option');a.value=i;a.text='
 for(let i=9;i<=30;i++){let a=document.createElement('option');a.value=i;a.text='/'+i;if(i===26)a.selected=true;$('newPrefix').appendChild(a)}
 
 function toast(x){$('toast').textContent=x;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',2200)}
+function updateThemeIcon(t){
+  const el=$('themeToggle');
+  if(el) el.textContent = t==='dark'?'☀️':'🌙';
+}
 function toggleTheme(){
-  const cur=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+  const cur=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
   document.documentElement.setAttribute('data-theme',cur);
   localStorage.setItem('sxl-theme',cur);
-  $('themeToggle').textContent=cur==='light'?'☀️':'🌙';
+  localStorage.setItem('cybercoreTheme',cur);
+  updateThemeIcon(cur);
 }
+(function(){
+  try{
+    const saved = localStorage.getItem('sxl-theme') || localStorage.getItem('cybercoreTheme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+    document.addEventListener('DOMContentLoaded', ()=> updateThemeIcon(saved));
+  }catch(e){}
+})();
 
 function jumpTo(id){
   const el=document.getElementById(id);

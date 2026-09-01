@@ -56,9 +56,16 @@ button{font:inherit} a{color:inherit}
   z-index:50;
   display:flex;
   align-items:center;
-  gap:16px;
   backdrop-filter:blur(12px);
 }
+.themetoggle{
+  border:1px solid #dfe3e7;background:rgba(255,255,255,.9);color:#1e293b;
+  width:36px;height:36px;min-width:36px;border-radius:50%;
+  display:grid;place-items:center;font-size:16px;cursor:pointer;padding:0;
+  transition:all .18s ease;box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+.themetoggle:hover{border-color:var(--cc-red);transform:scale(1.08)}
+body.darkMode .themetoggle{background:#15191e;color:#f8fafc;border-color:#333a41}
 .brand{
   font-weight:900!important;
   letter-spacing:.08em!important;
@@ -775,7 +782,7 @@ body.darkMode .topnav a{color:#c6cdd3}
   <a href="sxl-network.html" class="btn" style="border-color:#bbf7d0;background:#f0fdf4;color:#15803d">SXL-NETWORK →</a>
   <a href="subnetting.html" class="btn" style="border-color:#bae6fd;background:#f0f9ff;color:#0369a1">SUBNETTING LAB →</a>
   <a href="module-00.html" class="btn" style="border-color:#fca5a5;background:#fef2f2;color:#b91c1c">MODULE 00 →</a>
-  <button class="btn" onclick="toggleTheme()">◐ MODE</button>
+  <button class="themetoggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Theme">🌙</button>
   <a href="module-00.html" class="btn red">START CYBERCORE →</a>
 </header>
 
@@ -1394,11 +1401,31 @@ function filterModules(q){
     card.style.display=!q||hay.includes(q)?'block':'none';
   });
 }
-function toggleTheme(){
-  document.body.classList.toggle('darkMode');
-  localStorage.setItem('cybercoreTheme',document.body.classList.contains('darkMode')?'dark':'light');
+function updateThemeIcon(t){
+  const btn=document.getElementById('themeToggle');
+  if(btn) btn.textContent = (t==='dark') ? '☀️' : '🌙';
 }
-if(localStorage.getItem('cybercoreTheme')==='dark') document.body.classList.add('darkMode');
+function toggleTheme(){
+  const isDark = document.body.classList.toggle('darkMode');
+  const theme = isDark ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('sxl-theme', theme);
+  localStorage.setItem('cybercoreTheme', theme);
+  updateThemeIcon(theme);
+}
+(function(){
+  try{
+    const saved = localStorage.getItem('sxl-theme') || localStorage.getItem('cybercoreTheme') || 'light';
+    if(saved === 'dark'){
+      document.body.classList.add('darkMode');
+      document.documentElement.setAttribute('data-theme','dark');
+    } else {
+      document.body.classList.remove('darkMode');
+      document.documentElement.setAttribute('data-theme','light');
+    }
+    updateThemeIcon(saved);
+  }catch(e){}
+})();
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModule();});
 document.getElementById('moduleModal').addEventListener('click',e=>{if(e.target.id==='moduleModal')closeModule();});
 function updateScroll(){

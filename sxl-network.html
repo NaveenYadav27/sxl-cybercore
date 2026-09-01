@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>(function(){try{var t=localStorage.getItem('sxl-theme')||localStorage.getItem('cybercoreTheme')||'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShadowXLab · SXL-Network — CyberCore Modular IPAM, SOC & Range Suite</title>
@@ -19,6 +20,22 @@
   --r:12px;--rs:8px;--rxs:6px;--sh:0 8px 24px rgba(0,0,0,0.4);
   --mono:'JetBrains Mono','IBM Plex Mono',monospace;
 }
+[data-theme="light"]{
+  --bg:#f1f5f9;--w:#ffffff;--panel:#f8fafc;--line:#e2e8f0;
+  --red:#dc2626;--rl:rgba(220,38,38,0.1);--rd:#991b1b;--rh:#b91c1c;
+  --bl:#0f172a;--g7:#334155;--g6:#475569;--g5:#64748b;--g4:#94a3b8;--g3:#cbd5e1;--g2:#e2e8f0;--g1:#f1f5f9;--g0:#ffffff;
+  --grn:#16a34a;--grnb:rgba(22,163,74,0.1);--amb:#d97706;--ambb:rgba(217,119,6,0.1);
+  --blu:#0284c7;--blub:rgba(2,132,199,0.1);--pur:#7c3aed;--purb:rgba(124,58,237,0.1);
+  --cyn:#0d9488;--cynb:rgba(13,148,136,0.1);--pnk:#db2777;--pnkb:rgba(219,39,119,0.1);
+  --sh:0 4px 16px rgba(0,0,0,0.06);
+}
+.themetoggle{
+  border:1px solid var(--line);background:var(--panel);color:var(--bl);
+  width:36px;height:36px;min-width:36px;border-radius:50%;
+  display:grid;place-items:center;font-size:16px;cursor:pointer;padding:0;
+  transition:all .18s ease;box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+.themetoggle:hover{border-color:var(--red);transform:scale(1.08)}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--bl);overflow:hidden;height:100vh}
 .m{font-family:var(--mono)}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--g3);border-radius:3px}
@@ -186,10 +203,11 @@ tr:hover td{background:rgba(240,68,56,.04)}
       <i class="fas fa-microchip" style="color:var(--red)"></i>
       SHADOWXLAB · <span>CYBERCORE SXL-NETWORK LAB</span>
     </div>
-    <div style="display:flex;gap:8px">
+    <div style="display:flex;gap:8px;align-items:center">
       <a href="index.html" class="btn"><i class="fas fa-home"></i> CyberCore Home</a>
       <a href="subnetting.html" class="btn"><i class="fas fa-calculator"></i> Subnetting Lab</a>
       <a href="module-00.html" class="btn btn-r"><i class="fas fa-rocket"></i> Module 00 Setup</a>
+      <button class="themetoggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Theme">🌙</button>
     </div>
   </div>
 
@@ -721,6 +739,27 @@ function genReply(q){q=q.toLowerCase();
   if(q.indexOf('packet')>=0||q.indexOf('wireshark')>=0)return 'Wireshark dissector decodes Ethernet II, IPv4 headers, TCP handshake flags (SYN/ACK), UDP DNS tunnels, and HTTP payloads.';
   return 'Ask about: Modules, Subnetting, Zero Trust, Nmap Recon, SIEM Triage, Packet Forensics, or VLANs.';
 }
+
+function updateThemeIcon(t){
+  const el=document.getElementById('themeToggle');
+  if(el) el.textContent = t==='dark'?'☀️':'🌙';
+}
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', cur);
+  try {
+    localStorage.setItem('sxl-theme', cur);
+    localStorage.setItem('cybercoreTheme', cur);
+  } catch(e){}
+  updateThemeIcon(cur);
+}
+(function(){
+  try{
+    const saved = localStorage.getItem('sxl-theme') || localStorage.getItem('cybercoreTheme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+    document.addEventListener('DOMContentLoaded', ()=> updateThemeIcon(saved));
+  }catch(e){}
+})();
 
 /* ═══ INIT ═══ */
 aiMsg('Welcome to <strong>ShadowXLab SXL-Network</strong>! Fully aligned with the 40-module CyberCore curriculum. 5 hands-on labs, 4 SOC tools, and full IPAM.');

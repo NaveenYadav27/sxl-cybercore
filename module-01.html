@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script>(function(){try{var t=localStorage.getItem('sxl-theme')||localStorage.getItem('cybercoreTheme');var d=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-theme',t||(d?'dark':'light'))}catch(e){}})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ShadowXLab · CyberCore · Module 01: Security Essentials & Workstation Onboarding</title>
@@ -21,6 +22,22 @@
   --shadow-lg:0 20px 60px rgba(12,18,28,.12);
   --radius:14px;--radius-sm:8px;
 }
+.themetoggle{
+  border:1px solid #dfe3e7;background:rgba(255,255,255,.9);color:#1e293b;
+  width:36px;height:36px;min-width:36px;border-radius:50%;
+  display:grid;place-items:center;font-size:16px;cursor:pointer;padding:0;
+  transition:all .18s ease;box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+.themetoggle:hover{border-color:var(--cyber-red);transform:scale(1.08)}
+[data-theme="dark"] .themetoggle, body.darkMode .themetoggle{background:#15191e;color:#f8fafc;border-color:#333a41}
+html[data-theme="dark"] body{background:#080a0d!important;color:#eef2f5!important}
+html[data-theme="dark"] .top, html[data-theme="dark"] #sidebar{background:rgba(13,16,20,.92)!important;border-color:#292f35!important}
+html[data-theme="dark"] .nav a{color:#e8edf1!important}
+html[data-theme="dark"] .nav a:hover{background:#181c21!important}
+html[data-theme="dark"] .card, html[data-theme="dark"] .hero, html[data-theme="dark"] .stat-box{background:#11151a!important;border-color:#2a3138!important;color:#edf1f4!important}
+html[data-theme="dark"] .btn:not(.red){background:#15191e!important;color:#fff!important;border-color:#333a41!important}
+html[data-theme="dark"] .badge{background:#15191e!important;border-color:#343b42!important;color:#c6cdd3!important}
+html[data-theme="dark"] .gui-window{border-color:#2a3138!important}
 *{box-sizing:border-box} html{scroll-behavior:smooth}
 body{
   margin:0;font-family:var(--sans);color:var(--text);background:#fafbfc;line-height:1.65;
@@ -317,6 +334,7 @@ footer{
   <div class="grow"></div>
   <a href="module-00.html" class="btn sm" style="border-color:#fca5a5;background:#fef2f2;color:#b91c1c">← MODULE 00: PREREQUISITES</a>
   <a href="index.html" class="btn sm">HOME</a>
+  <button class="themetoggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Theme">🌙</button>
   <button class="btn sm red" onclick="document.getElementById('sec-lab').scrollIntoView({behavior:'smooth'})">HANDS-ON LABS →</button>
 </header>
 
@@ -1144,6 +1162,27 @@ function passReadiness(){
       a.classList.toggle('active', a.getAttribute('href') === '#' + current);
     });
   });
+})();
+function updateThemeIcon(t){
+  const btn=document.getElementById('themeToggle');
+  if(btn) btn.textContent = (t==='dark') ? '☀️' : '🌙';
+}
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme') || 'light';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try {
+    localStorage.setItem('sxl-theme', next);
+    localStorage.setItem('cybercoreTheme', next);
+  } catch(e){}
+  updateThemeIcon(next);
+}
+(function(){
+  try{
+    const saved = localStorage.getItem('sxl-theme') || localStorage.getItem('cybercoreTheme') || 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+    updateThemeIcon(saved);
+  }catch(e){}
 })();
 </script>
 </body>
