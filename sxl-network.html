@@ -3,163 +3,198 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShadowXLab · SXL-Network — IPAM + SOC + Subnetting</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>ShadowXLab · SXL-Network — CyberCore Modular IPAM, SOC & Range Suite</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#f5f5f5;--w:#fff;--red:#dc2626;--rl:#fecaca;--rd:#991b1b;--rh:#b91c1c;--bl:#0f0f0f;--g7:#404040;--g6:#525252;--g5:#737373;--g4:#a3a3a3;--g3:#d4d4d4;--g2:#e5e5e5;--g1:#f5f5f5;--g0:#fafafa;--grn:#16a34a;--grnb:#dcfce7;--amb:#d97706;--ambb:#fef3c7;--blu:#2563eb;--blub:#dbeafe;--pur:#7c3aed;--purb:#ede9fe;--cyn:#0891b2;--cynb:#cffafe;--pnk:#ec4899;--pnkb:#fce7f3;--r:12px;--rs:8px;--rxs:6px;--sh:0 1px 3px rgba(0,0,0,.08)}
+:root{
+  --bg:#0b0f16;--w:#131a24;--panel:#17202d;--line:#243042;
+  --red:#f04438;--rl:rgba(240,68,56,0.15);--rd:#b80f15;--rh:#ff3b42;
+  --bl:#e6e9ef;--g7:#cbd5e1;--g6:#94a3b8;--g5:#64748b;--g4:#475569;--g3:#334155;--g2:#1e293b;--g1:#0f172a;--g0:#0b0f17;
+  --grn:#10b981;--grnb:rgba(16,185,129,0.15);--amb:#fbbf24;--ambb:rgba(251,191,36,0.15);
+  --blu:#38bdf8;--blub:rgba(56,189,248,0.15);--pur:#a855f7;--purb:rgba(168,85,247,0.15);
+  --cyn:#2dd4bf;--cynb:rgba(45,212,191,0.15);--pnk:#f472b6;--pnkb:rgba(244,114,182,0.15);
+  --r:12px;--rs:8px;--rxs:6px;--sh:0 8px 24px rgba(0,0,0,0.4);
+  --mono:'JetBrains Mono','IBM Plex Mono',monospace;
+}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--bl);overflow:hidden;height:100vh}
-.m{font-family:'JetBrains Mono',monospace}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--g3);border-radius:2px}
-.app{display:grid;grid-template-columns:218px 1fr 280px;height:100vh}
-.side{background:var(--w);border-right:1px solid var(--g2);display:flex;flex-direction:column;height:100vh;overflow-y:auto}
-.logo{padding:13px 15px;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--g1);text-decoration:none;color:inherit}
-.logo i{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--red),var(--rd));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:.72rem;font-style:normal}
-.logo b{font-size:.85rem;letter-spacing:-.3px}b span{color:var(--red)}
-.logo small{font-size:.52rem;color:var(--g4);display:block}
-.nav{flex:1;padding:5px 0}
-.ng{font-size:.54rem;font-weight:700;color:var(--g4);text-transform:uppercase;letter-spacing:.08em;padding:8px 13px 2px}
-.nb{display:flex;align-items:center;gap:7px;width:100%;padding:5px 13px;background:none;border:none;color:var(--g6);font-size:.72rem;font-weight:500;cursor:pointer;border-left:3px solid transparent;text-align:left;font-family:'Inter',sans-serif}
-.nb:hover{color:var(--bl);background:var(--g0)}.nb.on{color:var(--red);background:rgba(220,38,38,.04);border-left-color:var(--red);font-weight:600}
-.nb i{width:14px;text-align:center;font-size:.72rem}
-.main{overflow-y:auto;padding:18px 22px;background:var(--bg)}
+.m{font-family:var(--mono)}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--g3);border-radius:3px}
+.app{display:grid;grid-template-columns:230px 1fr 300px;height:100vh}
+.side{background:var(--w);border-right:1px solid var(--line);display:flex;flex-direction:column;height:100vh;overflow-y:auto}
+.logo{padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);text-decoration:none;color:inherit;background:var(--g0)}
+.logo-badge{background:#04070c;padding:3px 6px;border-radius:8px;border:1px solid #1a2332;display:flex;align-items:center}
+.logo-badge img{height:32px;width:auto;object-fit:contain;display:block}
+.logo-text b{font-size:.82rem;font-weight:900;letter-spacing:.04em;display:block;color:var(--bl)}
+.logo-text b span{color:var(--red)}
+.logo-text small{font-size:.5rem;font-family:var(--mono);color:var(--g5);letter-spacing:.08em;display:block;margin-top:1px}
+.nav{flex:1;padding:6px 0}
+.ng{font-size:.54rem;font-weight:800;color:var(--g5);text-transform:uppercase;letter-spacing:.1em;padding:10px 14px 3px;font-family:var(--mono)}
+.nb{display:flex;align-items:center;gap:8px;width:100%;padding:6px 14px;background:none;border:none;color:var(--g6);font-size:.73rem;font-weight:500;cursor:pointer;border-left:3px solid transparent;text-align:left;font-family:'Inter',sans-serif;transition:all .15s}
+.nb:hover{color:var(--bl);background:var(--panel)}.nb.on{color:var(--red);background:rgba(240,68,56,.08);border-left-color:var(--red);font-weight:700}
+.nb i{width:15px;text-align:center;font-size:.75rem}
+.nb .mod-tag{font-size:.52rem;padding:1px 5px;border-radius:4px;background:var(--g2);color:var(--g6);margin-left:auto;font-family:var(--mono)}
+.main{overflow-y:auto;padding:16px 20px;background:var(--bg)}
 .pnl{display:none}.pnl.on{display:block}
-.card{background:var(--w);border:1px solid var(--g2);border-radius:var(--r);overflow:hidden;margin-bottom:14px;box-shadow:var(--sh)}
-.ch{display:flex;align-items:center;justify-content:space-between;padding:10px 15px;border-bottom:1px solid var(--g1)}
-.ch h3{font-size:.82rem;font-weight:700;display:flex;align-items:center;gap:6px}.ch h3 i{color:var(--red)}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;background:var(--w);padding:10px 16px;border-radius:var(--rs);border:1px solid var(--line);box-shadow:var(--sh)}
+.topbar .title{font-size:.76rem;font-weight:800;color:var(--g7);font-family:var(--mono);display:flex;align-items:center;gap:8px}
+.topbar .title span{color:var(--red)}
+.card{background:var(--w);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:14px;box-shadow:var(--sh)}
+.ch{display:flex;align-items:center;justify-content:space-between;padding:10px 15px;border-bottom:1px solid var(--line);background:var(--panel)}
+.ch h3{font-size:.82rem;font-weight:700;display:flex;align-items:center;gap:7px}.ch h3 i{color:var(--red)}
 .cb{padding:14px 15px}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
 .mb{margin-bottom:14px}
 .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
-.st{background:var(--w);border:1px solid var(--g2);border-radius:var(--r);padding:12px 14px;position:relative;overflow:hidden}
+.st{background:var(--w);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;position:relative;overflow:hidden}
 .st::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:0 3px 3px 0}
 .st.red::before{background:var(--red)}.st.grn::before{background:var(--grn)}.st.blu::before{background:var(--blu)}.st.pur::before{background:var(--pur)}.st.amb::before{background:var(--amb)}
-.st .sl{font-size:.6rem;font-weight:600;color:var(--g5);text-transform:uppercase;letter-spacing:.04em}
-.st .sv{font-size:1.2rem;font-weight:800;margin-top:3px;font-family:'JetBrains Mono',monospace}
-.st .si{position:absolute;top:10px;right:12px;font-size:1.4rem;opacity:.07}
+.st .sl{font-size:.6rem;font-weight:700;color:var(--g5);text-transform:uppercase;letter-spacing:.06em;font-family:var(--mono)}
+.st .sv{font-size:1.25rem;font-weight:800;margin-top:3px;font-family:var(--mono);color:var(--bl)}
+.st .si{position:absolute;top:10px;right:12px;font-size:1.4rem;opacity:.12}
 table{width:100%;border-collapse:collapse}
-th{text-align:left;padding:5px 10px;font-size:.6rem;font-weight:700;color:var(--g5);text-transform:uppercase;letter-spacing:.04em;background:var(--g0);border-bottom:1px solid var(--g2);position:sticky;top:0}
-td{padding:5px 10px;font-size:.72rem;border-bottom:1px solid var(--g1)}
-tr:hover td{background:rgba(220,38,38,.01)}
-.badge{display:inline-flex;padding:2px 7px;border-radius:20px;font-size:.6rem;font-weight:700}
+th{text-align:left;padding:6px 10px;font-size:.62rem;font-weight:800;color:var(--g5);text-transform:uppercase;letter-spacing:.05em;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0}
+td{padding:6px 10px;font-size:.72rem;border-bottom:1px solid var(--line);color:var(--g7)}
+tr:hover td{background:rgba(240,68,56,.04)}
+.badge{display:inline-flex;padding:2px 7px;border-radius:20px;font-size:.6rem;font-weight:700;font-family:var(--mono)}
 .badge.up{color:var(--grn);background:var(--grnb)}.badge.dn{color:var(--red);background:var(--rl)}.badge.idle{color:var(--amb);background:var(--ambb)}
-.tag{display:inline-block;padding:2px 6px;border-radius:4px;font-size:.58rem;font-weight:700}
-.tag.r{color:var(--red);background:rgba(220,38,38,.07)}.tag.b{color:var(--blu);background:var(--blub)}.tag.p{color:var(--pur);background:var(--purb)}.tag.c{color:var(--cyn);background:var(--cynb)}.tag.g{color:var(--grn);background:var(--grnb)}.tag.a{color:var(--amb);background:var(--ambb)}
-.btn{padding:6px 13px;border-radius:var(--rxs);border:none;font-weight:600;font-size:.72rem;cursor:pointer;transition:.2s;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:5px;text-decoration:none}
-.btn:active{transform:scale(.97)}.btn-r{background:var(--red);color:#fff}.btn-r:hover{background:var(--rh)}.btn-o{background:var(--w);border:1px solid var(--g2);color:var(--g7)}.btn-o:hover{border-color:var(--red);color:var(--red)}.btn-g{background:var(--grn);color:#fff}
-.btn-s{padding:4px 10px;font-size:.66rem}.btn-lg{padding:10px 22px;font-size:.82rem;border-radius:var(--rs)}
-.inp{width:100%;padding:6px 10px;background:var(--g0);border:1px solid var(--g2);border-radius:var(--rxs);color:var(--bl);font-size:.8rem;outline:none;transition:.2s;font-family:'Inter',sans-serif;text-align:center;font-weight:600}
-.inp:focus{border-color:var(--red);box-shadow:0 0 0 2px rgba(220,38,38,.08)}
-.lbl{font-size:.6rem;font-weight:600;color:var(--g5);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px;display:block;text-align:center}
+.tag{display:inline-block;padding:2px 6px;border-radius:4px;font-size:.58rem;font-weight:700;font-family:var(--mono)}
+.tag.r{color:var(--red);background:var(--rl)}.tag.b{color:var(--blu);background:var(--blub)}.tag.p{color:var(--pur);background:var(--purb)}.tag.c{color:var(--cyn);background:var(--cynb)}.tag.g{color:var(--grn);background:var(--grnb)}.tag.a{color:var(--amb);background:var(--ambb)}
+.btn{padding:6px 13px;border-radius:var(--rxs);border:1px solid var(--line);background:var(--panel);color:var(--bl);font-weight:700;font-size:.72rem;cursor:pointer;transition:.15s;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.btn:hover{border-color:var(--red);color:var(--red)}.btn:active{transform:scale(.97)}
+.btn-r{background:linear-gradient(135deg,var(--red),var(--rd));color:#fff;border-color:var(--red);box-shadow:0 4px 14px rgba(240,68,56,.3)}
+.btn-r:hover{background:linear-gradient(135deg,#ff4d40,#c91218);color:#fff}
+.btn-s{padding:4px 10px;font-size:.66rem}.btn-lg{padding:9px 20px;font-size:.8rem;border-radius:var(--rs)}
+.inp{width:100%;padding:6px 10px;background:var(--g0);border:1px solid var(--line);border-radius:var(--rxs);color:var(--bl);font-size:.78rem;outline:none;transition:.2s;font-family:'Inter',sans-serif;text-align:center;font-weight:600}
+.inp:focus{border-color:var(--red);box-shadow:0 0 0 2px rgba(240,68,56,.15)}
+.lbl{font-size:.6rem;font-weight:700;color:var(--g5);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;display:block;text-align:center;font-family:var(--mono)}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
 .cht{position:relative}.cht.h200{height:200px}.cht.h160{height:160px}.cht.h140{height:140px}
-.term{background:#0a0a0a;color:#00ff41;font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:12px;border-radius:var(--rs);max-height:380px;overflow-y:auto;line-height:1.5;white-space:pre-wrap}
-.formula{font-family:'JetBrains Mono',monospace;font-size:.82rem;background:var(--w);border:1px solid var(--g2);padding:7px 12px;border-radius:var(--rs);margin:6px 0;color:var(--red);font-weight:600}
-.binary-row{display:flex;gap:0;margin:6px 0;font-family:'JetBrains Mono',monospace}
+.term{background:#04070c;color:#10b981;font-family:var(--mono);font-size:.7rem;padding:12px;border-radius:var(--rs);border:1px solid var(--line);max-height:380px;overflow-y:auto;line-height:1.55;white-space:pre-wrap}
+.formula{font-family:var(--mono);font-size:.82rem;background:var(--g0);border:1px solid var(--line);padding:8px 12px;border-radius:var(--rs);margin:6px 0;color:var(--red);font-weight:700}
+.binary-row{display:flex;gap:0;margin:6px 0;font-family:var(--mono)}
 .binary-row .octet{display:flex;flex-direction:column;align-items:center;min-width:58px}
 .binary-row .octet .bits{display:flex;gap:1px}
-.binary-row .octet .bit{width:14px;height:20px;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:600;border:1px solid var(--g2);background:var(--g0);transition:.2s}
+.binary-row .octet .bit{width:14px;height:20px;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;border:1px solid var(--line);background:var(--g0);transition:.2s}
 .binary-row .octet .bit.nb{background:var(--rl);border-color:var(--red);color:var(--red)}
-.binary-row .octet .bit.hb{background:var(--g0);color:var(--g6)}
-.binary-row .octet .bit.mb{background:rgba(220,38,38,.15);border-color:var(--red);color:var(--red);font-weight:800}
-.binary-row .octet .dec{font-size:.75rem;font-weight:700;margin-top:2px;color:var(--g6)}
+.binary-row .octet .bit.hb{background:var(--panel);color:var(--g5)}
+.binary-row .octet .bit.mb{background:rgba(240,68,56,.3);border-color:var(--red);color:#fff;font-weight:900}
+.binary-row .octet .dec{font-size:.72rem;font-weight:800;margin-top:3px;color:var(--g6)}
 .binary-row .ds{font-size:1.1rem;font-weight:800;color:var(--g4);display:flex;align-items:center;padding:0 2px}
-.addr-bar{display:flex;height:42px;border-radius:var(--rs);overflow:hidden;border:2px solid var(--g2);margin:10px 0}
-.addr-bar div{display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700}
-.ab-n{background:var(--rl);color:var(--rd)}.ab-f{background:var(--grnb);color:var(--grn)}.ab-r{background:var(--blub);color:var(--blu)}.ab-l{background:var(--grnb);color:var(--grn)}.ab-b{background:var(--rl);color:var(--rd)}
-.quiz-ip{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:800;color:var(--red);letter-spacing:1px}
+.quiz-ip{font-family:var(--mono);font-size:1.5rem;font-weight:800;color:var(--red);letter-spacing:1px}
 .quiz-fields{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.qf{background:var(--g0);border:2px solid var(--g2);border-radius:var(--rs);padding:10px 8px;text-align:center;transition:.3s}
+.qf{background:var(--g0);border:2px solid var(--line);border-radius:var(--rs);padding:10px 8px;text-align:center;transition:.3s}
 .qf.correct{border-color:var(--grn);background:var(--grnb)}.qf.wrong{border-color:var(--red);background:var(--rl)}
-.qf label{font-size:.58rem;font-weight:700;color:var(--g5);text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:3px}
-.qf input{width:100%;padding:5px;text-align:center;border:1px solid var(--g2);border-radius:var(--rxs);font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;background:var(--w);outline:none}
+.qf label{font-size:.58rem;font-weight:800;color:var(--g5);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:3px;font-family:var(--mono)}
+.qf input{width:100%;padding:5px;text-align:center;border:1px solid var(--line);border-radius:var(--rxs);font-family:var(--mono);font-size:.76rem;font-weight:700;background:var(--panel);color:var(--bl);outline:none}
 .qf input:focus{border-color:var(--red)}
 .diff-btns{display:flex;gap:4px}
-.diff-btns button{padding:4px 12px;border-radius:16px;border:2px solid var(--g2);background:var(--w);font-size:.68rem;font-weight:700;cursor:pointer;transition:.15s;font-family:'Inter',sans-serif}
+.diff-btns button{padding:4px 12px;border-radius:16px;border:1px solid var(--line);background:var(--panel);color:var(--g6);font-size:.68rem;font-weight:700;cursor:pointer;transition:.15s;font-family:'Inter',sans-serif}
 .diff-btns button.on{border-color:var(--red);background:var(--red);color:#fff}
-.diff-btns button:hover:not(.on){border-color:var(--red)}
-.prog-bar{height:5px;background:var(--g2);border-radius:3px;overflow:hidden;margin:6px 0}
+.prog-bar{height:5px;background:var(--line);border-radius:3px;overflow:hidden;margin:6px 0}
 .prog-bar div{height:100%;border-radius:3px;transition:width .5s;background:linear-gradient(90deg,var(--red),var(--grn))}
 .ref-t{width:100%;border-collapse:collapse;font-size:.75rem}
-.ref-t th{text-align:left;padding:6px 10px;font-size:.62rem;font-weight:700;color:var(--g5);text-transform:uppercase;background:var(--g0);border-bottom:2px solid var(--g2)}
-.ref-t td{padding:5px 10px;border-bottom:1px solid var(--g1)}
-.ref-t tr:hover td{background:rgba(220,38,38,.02)}
+.ref-t th{text-align:left;padding:6px 10px;font-size:.62rem;font-weight:800;color:var(--g5);text-transform:uppercase;background:var(--panel);border-bottom:2px solid var(--line)}
+.ref-t td{padding:6px 10px;border-bottom:1px solid var(--line)}
+.ref-t tr:hover td{background:rgba(240,68,56,.04)}
 .ref-t .hl{color:var(--red);font-weight:700}
-.tip-box{background:rgba(220,38,38,.03);border:1px solid var(--rl);border-radius:var(--rs);padding:10px 14px;margin:8px 0;font-size:.78rem;color:var(--g7);line-height:1.5}
-.tip-box strong{color:var(--red)}
-.scn-b{padding:15px;border-radius:var(--r);margin-bottom:14px;border:1px solid var(--g2);background:var(--w)}
-.scn-b h3{font-size:.9rem;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px}
-.scn-b p{color:var(--g6);font-size:.78rem;line-height:1.5}
-.ai-col{background:var(--w);border-left:1px solid var(--g2);display:flex;flex-direction:column;height:100vh}
-.ai-h{padding:10px 12px;border-bottom:1px solid var(--g1);display:flex;align-items:center;gap:8px}
-.ai-h .av{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--red),#f87171);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:.55rem}
-.ai-h h4{font-size:.8rem;font-weight:700}.ai-h span{font-size:.62rem;color:var(--grn);display:flex;align-items:center;gap:3px}
-.ai-h span::before{content:'';width:5px;height:5px;background:var(--grn);border-radius:50%}
-.ai-pg{padding:4px 12px;border-bottom:1px solid var(--g1);display:flex;align-items:center;gap:6px;font-size:.6rem;color:var(--g5)}
-.ai-pg .bar{flex:1;height:3px;background:var(--g1);border-radius:2px;overflow:hidden}.ai-pg .bar div{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--red),#f87171);transition:width .5s}
-.ai-sg{padding:5px 12px;display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--g1)}
-.ai-sg button{padding:3px 8px;border:1px solid var(--g2);border-radius:14px;background:var(--w);color:var(--g6);font-size:.6rem;font-weight:500;cursor:pointer;transition:.15s;font-family:'Inter',sans-serif}
+.scn-b{padding:14px;border-radius:var(--r);margin-bottom:14px;border:1px solid var(--line);background:var(--panel)}
+.scn-b h3{font-size:.88rem;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.scn-b p{color:var(--g6);font-size:.76rem;line-height:1.5}
+.ai-col{background:var(--w);border-left:1px solid var(--line);display:flex;flex-direction:column;height:100vh}
+.ai-h{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px;background:var(--g0)}
+.ai-h .av{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--red),#f87171);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:.6rem;font-family:var(--mono)}
+.ai-h h4{font-size:.8rem;font-weight:800}.ai-h span{font-size:.62rem;color:var(--grn);display:flex;align-items:center;gap:4px;font-family:var(--mono)}
+.ai-h span::before{content:'';width:6px;height:6px;background:var(--grn);border-radius:50%}
+.ai-pg{padding:6px 12px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;font-size:.62rem;color:var(--g5);font-family:var(--mono)}
+.ai-pg .bar{flex:1;height:4px;background:var(--g0);border-radius:2px;overflow:hidden}.ai-pg .bar div{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--red),#f87171);transition:width .5s}
+.ai-sg{padding:6px 12px;display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);background:var(--panel)}
+.ai-sg button{padding:3px 8px;border:1px solid var(--line);border-radius:14px;background:var(--w);color:var(--g6);font-size:.6rem;font-weight:600;cursor:pointer;transition:.15s;font-family:'Inter',sans-serif}
 .ai-sg button:hover{border-color:var(--red);color:var(--red)}
-.ai-msgs{flex:1;overflow-y:auto;padding:10px}
-.ai-m{margin-bottom:8px;display:flex;gap:6px}.ai-m.u{flex-direction:row-reverse}
-.ai-m .bub{max-width:88%;padding:8px 11px;border-radius:var(--r);font-size:.72rem;line-height:1.45}
-.ai-m.bot .bub{background:var(--g0);border:1px solid var(--g2);color:var(--g7);border-bottom-left-radius:2px}
-.ai-m.u .bub{background:var(--red);color:#fff;border-bottom-right-radius:2px}
-.ai-m .av2{width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.45rem;font-weight:900;flex-shrink:0}
+.ai-msgs{flex:1;overflow-y:auto;padding:12px}
+.ai-m{margin-bottom:10px;display:flex;gap:7px}.ai-m.u{flex-direction:row-reverse}
+.ai-m .bub{max-width:86%;padding:8px 11px;border-radius:var(--r);font-size:.72rem;line-height:1.45}
+.ai-m.bot .bub{background:var(--panel);border:1px solid var(--line);color:var(--g7);border-bottom-left-radius:2px}
+.ai-m.u .bub{background:var(--red);color:#fff;border-bottom-right-radius:2px;font-weight:500}
+.ai-m .av2{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:900;flex-shrink:0;font-family:var(--mono)}
 .ai-m.bot .av2{background:linear-gradient(135deg,var(--red),#f87171);color:#fff}
-.ai-m.u .av2{background:var(--g2);color:var(--g6)}
-.ai-inp{padding:8px 12px;border-top:1px solid var(--g2);display:flex;gap:5px}
-.ai-inp input{flex:1;padding:6px 10px;background:var(--g0);border:1px solid var(--g2);border-radius:var(--r);color:var(--bl);font-size:.72rem;outline:none}
+.ai-m.u .av2{background:var(--g3);color:var(--g6)}
+.ai-inp{padding:8px 12px;border-top:1px solid var(--line);display:flex;gap:6px;background:var(--g0)}
+.ai-inp input{flex:1;padding:7px 10px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);color:var(--bl);font-size:.72rem;outline:none}
 .ai-inp input:focus{border-color:var(--red)}
-.ai-inp button{width:32px;height:32px;border-radius:var(--r);border:none;background:var(--red);color:#fff;cursor:pointer}
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}.modal-bg.show{display:flex}
-.modal{background:var(--w);border-radius:var(--r);padding:18px;max-width:560px;width:92%;max-height:82vh;overflow-y:auto;box-shadow:0 8px 30px rgba(0,0,0,.12);border:1px solid var(--g2)}
-@media(max-width:900px){.app{grid-template-columns:1fr}.side,.ai-col{display:none}.main{padding:12px}}
+.ai-inp button{width:34px;height:34px;border-radius:var(--r);border:none;background:var(--red);color:#fff;cursor:pointer;display:grid;place-items:center}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px)}.modal-bg.show{display:flex}
+.modal{background:var(--w);border-radius:var(--r);padding:18px;max-width:580px;width:92%;max-height:85vh;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,.5);border:1px solid var(--line)}
+.mod-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--rs);padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;transition:all .15s}
+.mod-card:hover{border-color:var(--red);background:rgba(240,68,56,.04)}
+@media(max-width:960px){.app{grid-template-columns:1fr}.side,.ai-col{display:none}.main{padding:12px}}
 </style>
 </head>
 <body>
 <div class="app">
 <div class="side">
-  <a href="index.html" class="logo"><i>SX</i><div><b>SHADOWXLAB <span>NETWORK</span></b><small>IPAM + SOC + Subnetting</small></div></a>
+  <a href="index.html" class="logo">
+    <div class="logo-badge"><img src="assets/logo.png" alt="ShadowXLab"></div>
+    <div class="logo-text">
+      <b>CYBER<span>CORE</span></b>
+      <small>SXL-NETWORK LAB</small>
+    </div>
+  </a>
+
   <div class="nav">
-    <div class="ng">Overview</div>
+    <div class="ng">CyberCore Hub</div>
     <button class="nb on" data-p="dashboard"><i class="fas fa-chart-pie"></i> Dashboard</button>
-    <div class="ng">IP Management</div>
-    <button class="nb" data-p="subnets"><i class="fas fa-sitemap"></i> Subnets</button>
-    <button class="nb" data-p="seg"><i class="fas fa-shield-halved"></i> Segmentation</button>
-    <button class="nb" data-p="vlans"><i class="fas fa-tags"></i> VLANs</button>
-    <button class="nb" data-p="fwrules"><i class="fas fa-fire"></i> Firewall</button>
-    <div class="ng">Assets</div>
-    <button class="nb" data-p="assets"><i class="fas fa-server"></i> All Assets</button>
-    <button class="nb" data-p="topo"><i class="fas fa-project-diagram"></i> Topology</button>
-    <div class="ng">SOC Tools</div>
-    <button class="nb" data-p="siem"><i class="fas fa-shield-halved"></i> SIEM</button>
-    <button class="nb" data-p="edr"><i class="fas fa-bug"></i> EDR</button>
-    <button class="nb" data-p="nmap"><i class="fas fa-crosshairs"></i> Nmap</button>
-    <button class="nb" data-p="wireshark"><i class="fas fa-fish"></i> Wireshark</button>
+    <button class="nb" data-p="modules"><i class="fas fa-cubes"></i> Module Alignment <span class="mod-tag">40 MODS</span></button>
+
+    <div class="ng">L3 Network &amp; IPAM</div>
+    <button class="nb" data-p="subnets"><i class="fas fa-sitemap"></i> Subnet Space <span class="mod-tag">M11</span></button>
+    <button class="nb" data-p="seg"><i class="fas fa-shield-halved"></i> Segmentation <span class="mod-tag">M12</span></button>
+    <button class="nb" data-p="vlans"><i class="fas fa-tags"></i> VLANs <span class="mod-tag">M12</span></button>
+    <button class="nb" data-p="fwrules"><i class="fas fa-fire"></i> Firewall Matrix <span class="mod-tag">M13</span></button>
+
+    <div class="ng">Assets &amp; Topology</div>
+    <button class="nb" data-p="assets"><i class="fas fa-server"></i> Asset Fleet <span class="mod-tag">M21</span></button>
+    <button class="nb" data-p="topo"><i class="fas fa-project-diagram"></i> Topology <span class="mod-tag">M12</span></button>
+
+    <div class="ng">SOC &amp; Blue Team</div>
+    <button class="nb" data-p="siem"><i class="fas fa-shield-halved"></i> SIEM Correlation <span class="mod-tag">M25</span></button>
+    <button class="nb" data-p="edr"><i class="fas fa-bug"></i> EDR Telemetry <span class="mod-tag">M24</span></button>
+    <button class="nb" data-p="nmap"><i class="fas fa-crosshairs"></i> Nmap Scanner <span class="mod-tag">M19</span></button>
+    <button class="nb" data-p="wireshark"><i class="fas fa-fish"></i> Wireshark Frames <span class="mod-tag">M11</span></button>
+
     <div class="ng">Subnetting Masterclass</div>
-    <button class="nb" data-p="learn"><i class="fas fa-graduation-cap"></i> Learn</button>
-    <button class="nb" data-p="practice"><i class="fas fa-dumbbell"></i> Practice</button>
-    <button class="nb" data-p="quiz"><i class="fas fa-clock"></i> Quiz</button>
-    <button class="nb" data-p="cidr"><i class="fas fa-book"></i> CIDR /1-/32</button>
-    <div class="ng">Tools</div>
-    <button class="nb" data-p="calc"><i class="fas fa-calculator"></i> Calculator</button>
-    <div class="ng">Labs</div>
-    <button class="nb" data-p="lab1"><i class="fas fa-flask"></i> Lab: Segmentation</button>
-    <button class="nb" data-p="lab2"><i class="fas fa-flask"></i> Lab: Zero Trust</button>
+    <button class="nb" data-p="learn"><i class="fas fa-graduation-cap"></i> Binary &amp; Rules <span class="mod-tag">M11</span></button>
+    <button class="nb" data-p="practice"><i class="fas fa-dumbbell"></i> Practice Drills <span class="mod-tag">M11</span></button>
+    <button class="nb" data-p="quiz"><i class="fas fa-clock"></i> Timed Quiz (60s) <span class="mod-tag">M11</span></button>
+    <button class="nb" data-p="cidr"><i class="fas fa-book"></i> CIDR /1-/32 Reference <span class="mod-tag">M11</span></button>
+    <button class="nb" data-p="calc"><i class="fas fa-calculator"></i> Subnet Calculator <span class="mod-tag">M11</span></button>
+
+    <div class="ng">CyberCore Lab Missions</div>
+    <button class="nb" data-p="lab1"><i class="fas fa-flask"></i> Lab 1: Segmentation <span class="mod-tag">M12</span></button>
+    <button class="nb" data-p="lab2"><i class="fas fa-flask"></i> Lab 2: Zero Trust Rules <span class="mod-tag">M13</span></button>
+    <button class="nb" data-p="lab3"><i class="fas fa-flask"></i> Lab 3: Nmap Recon <span class="mod-tag">M19</span></button>
+    <button class="nb" data-p="lab4"><i class="fas fa-flask"></i> Lab 4: SIEM Incident <span class="mod-tag">M25</span></button>
+    <button class="nb" data-p="lab5"><i class="fas fa-flask"></i> Lab 5: Wireshark Forensics <span class="mod-tag">M28</span></button>
   </div>
 </div>
+
 <div class="main" id="mainArea">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-    <div style="font-size:.74rem;color:var(--g5);font-weight:600">SHADOWXLAB · SXL-NETWORK PLATFORM</div>
+  <div class="topbar">
+    <div class="title">
+      <i class="fas fa-microchip" style="color:var(--red)"></i>
+      SHADOWXLAB · <span>CYBERCORE SXL-NETWORK LAB</span>
+    </div>
     <div style="display:flex;gap:8px">
-      <a href="index.html" class="btn btn-o btn-s"><i class="fas fa-home"></i> CyberCore Home</a>
-      <a href="subnetting.html" class="btn btn-o btn-s"><i class="fas fa-calculator"></i> Subnetting Lab</a>
+      <a href="index.html" class="btn"><i class="fas fa-home"></i> CyberCore Home</a>
+      <a href="subnetting.html" class="btn"><i class="fas fa-calculator"></i> Subnetting Lab</a>
+      <a href="module-00.html" class="btn btn-r"><i class="fas fa-rocket"></i> Module 00 Setup</a>
     </div>
   </div>
+
   <div class="pnl on" id="p-dashboard"></div>
+  <div class="pnl" id="p-modules"></div>
   <div class="pnl" id="p-subnets"></div>
   <div class="pnl" id="p-seg"></div>
   <div class="pnl" id="p-vlans"></div>
@@ -177,15 +212,33 @@ tr:hover td{background:rgba(220,38,38,.01)}
   <div class="pnl" id="p-calc"></div>
   <div class="pnl" id="p-lab1"></div>
   <div class="pnl" id="p-lab2"></div>
+  <div class="pnl" id="p-lab3"></div>
+  <div class="pnl" id="p-lab4"></div>
+  <div class="pnl" id="p-lab5"></div>
 </div>
+
 <div class="ai-col">
-  <div class="ai-h"><div class="av">AI</div><div><h4>Network Mentor</h4><span>Online</span></div></div>
-  <div class="ai-pg"><span>Progress</span><div class="bar"><div id="aiFill" style="width:4%"></div></div><span id="aiPct" style="color:var(--red);font-weight:700">4%</span></div>
+  <div class="ai-h">
+    <div class="av">AI</div>
+    <div>
+      <h4>CyberCore Mentor</h4>
+      <span>Online · SXL-Engine</span>
+    </div>
+  </div>
+  <div class="ai-pg">
+    <span>Module Progress</span>
+    <div class="bar"><div id="aiFill" style="width:14%"></div></div>
+    <span id="aiPct" style="color:var(--red);font-weight:700">14%</span>
+  </div>
   <div class="ai-sg" id="aiSug"></div>
   <div class="ai-msgs" id="aiMsgs"></div>
-  <div class="ai-inp"><input id="aiIn" placeholder="Ask the mentor..." onkeydown="if(event.key==='Enter')sendAI()"><button onclick="sendAI()"><i class="fas fa-paper-plane"></i></button></div>
+  <div class="ai-inp">
+    <input id="aiIn" placeholder="Ask about CyberCore modules, subnetting, SOC..." onkeydown="if(event.key==='Enter')sendAI()">
+    <button onclick="sendAI()"><i class="fas fa-paper-plane"></i></button>
+  </div>
 </div>
 </div>
+
 <div class="modal-bg" id="assetModal" onclick="if(event.target===this)closeAM()"><div class="modal" id="assetModalBox"></div></div>
 
 <script>
@@ -199,15 +252,15 @@ function cidr2mask(c){return i2ip(~((1<<(32-c))-1)>>>0)}
 
 /* ═══ DATA ═══ */
 var SEGMENTS=[
-  {name:'Engineering',vlan:100,cidr:'10.0.1.0/24',zone:'Corporate',color:'#2563eb'},
-  {name:'HR',vlan:200,cidr:'10.0.2.0/24',zone:'Corporate',color:'#7c3aed'},
-  {name:'Finance',vlan:300,cidr:'10.0.3.0/24',zone:'Corporate',color:'#0891b2'},
-  {name:'Servers',vlan:10,cidr:'10.0.10.0/24',zone:'Infrastructure',color:'#dc2626'},
-  {name:'Management',vlan:1000,cidr:'10.0.100.0/24',zone:'Management',color:'#f59e0b'},
-  {name:'Guest WiFi',vlan:2000,cidr:'10.0.200.0/24',zone:'Guest',color:'#ec4899'},
-  {name:'VoIP',vlan:50,cidr:'10.0.50.0/24',zone:'Voice',color:'#16a34a'},
+  {name:'Engineering',vlan:100,cidr:'10.0.1.0/24',zone:'Corporate',color:'#38bdf8'},
+  {name:'HR',vlan:200,cidr:'10.0.2.0/24',zone:'Corporate',color:'#a855f7'},
+  {name:'Finance',vlan:300,cidr:'10.0.3.0/24',zone:'Corporate',color:'#2dd4bf'},
+  {name:'Servers',vlan:10,cidr:'10.0.10.0/24',zone:'Infrastructure',color:'#f04438'},
+  {name:'Management',vlan:1000,cidr:'10.0.100.0/24',zone:'Management',color:'#fbbf24'},
+  {name:'Guest WiFi',vlan:2000,cidr:'10.0.200.0/24',zone:'Guest',color:'#f472b6'},
+  {name:'VoIP',vlan:50,cidr:'10.0.50.0/24',zone:'Voice',color:'#10b981'},
   {name:'DMZ',vlan:10,cidr:'172.16.0.0/24',zone:'DMZ',color:'#ef4444'},
-  {name:'VPN',vlan:0,cidr:'192.168.100.0/24',zone:'VPN',color:'#6366f1'}
+  {name:'VPN',vlan:0,cidr:'192.168.100.0/24',zone:'VPN',color:'#818cf8'}
 ];
 
 var FW_RULES=[
@@ -225,7 +278,6 @@ var FW_RULES=[
 ];
 
 var DEPTS=['Engineering','HR','Finance','IT','Sales','Marketing','Facilities','DevOps','Legal','R&D'];
-var USERS=['j.smith','s.jones','m.chen','l.wang','j.brown','e.davis','a.kim','m.garcia'];
 var LOCS=['NY-HQ Fl1','NY-HQ Fl2','London','Tokyo','DC-01'];
 var PORTS={22:'ssh',80:'http',443:'https',161:'snmp',135:'msrpc',445:'smb',3389:'rdp',5060:'sip',554:'rtsp',3306:'mysql',5432:'postgresql',8080:'http-proxy'};
 
@@ -246,7 +298,7 @@ var ASSETS=[];
   for(var i=0;i<10;i++) ASSETS.push({id:'cm'+idx++,type:'Camera',name:'cam-'+p2(i+1),ip:'10.0.200.'+(100+i),mac:'00:12:16:'+RI(10,99)+':'+RI(10,99)+':'+RI(10,99),model:'Hikvision DS-2CD',status:Math.random()>.08?'up':'dn',vlan:2000,seg:'Guest WiFi',loc:LOCS[i%LOCS.length],ports:[80,554,8080]});
 })();
 
-var SIEM_EVTS=(function(){var evts=[];var tpls=[{t:'Brute Force',s:'critical'},{t:'Malware Detected',s:'critical'},{t:'Port Scan',s:'high'},{t:'DNS Tunneling',s:'high'},{t:'Privilege Escalation',s:'critical'},{t:'Data Exfil',s:'critical'},{t:'Lateral Movement',s:'high'},{t:'New Device',s:'info'},{t:'User Login',s:'info'},{t:'USB Connected',s:'medium'}];
+var SIEM_EVTS=(function(){var evts=[];var tpls=[{t:'Brute Force TCP/22',s:'critical'},{t:'Malware C2 Beaconing',s:'critical'},{t:'Port Scan SYN Flood',s:'high'},{t:'DNS Tunneling Query',s:'high'},{t:'Privilege Escalation',s:'critical'},{t:'Data Exfiltration 443',s:'critical'},{t:'Lateral Movement SMB',s:'high'},{t:'New Unknown Device',s:'info'},{t:'Admin SSH Login',s:'info'},{t:'USB Device Attached',s:'medium'}];
   for(var i=0;i<50;i++){var tpl=tpls[RI(0,tpls.length-1)],da=pick(ASSETS),now=Date.now()-RI(0,86400000);evts.push({time:new Date(now).toLocaleString('en-US',{month:'short',day:'2-digit',hour:'2-digit',minute:'2-digit'}),ts:now,type:tpl.t,sev:tpl.s,desc:tpl.t+' on '+da.name+' ('+da.ip+')'});}
   evts.sort(function(a,b){return b.ts-a.ts});return evts;})();
 
@@ -255,8 +307,8 @@ var WK_PKTS=(function(){var pkts=[];var ips=ASSETS.slice(0,12).map(function(a){r
     var proto=pick(['TCP','TCP','DNS','HTTP','ARP']),len=RI(54,1500),info='';
     t+=Math.random()*.05;
     if(proto==='TCP'){var dp=pick([22,80,443,445]);info=RI(49152,65535)+' -> '+dp+' ['+pick(['SYN','ACK','PSH,ACK'])+']';}
-    else if(proto==='DNS'){info='Query A '+pick(['www.google.com','api.sxl-network.io']);proto='UDP';}
-    else if(proto==='HTTP'){info=pick(['GET /index.html','POST /api/auth'])+' HTTP/1.1';proto='TCP';}
+    else if(proto==='DNS'){info='Query A base64_tunnel.'+pick(['shadowxlab.com','c2.sxl-threat.net']);proto='UDP';}
+    else if(proto==='HTTP'){info=pick(['GET /api/v1/auth?user=admin HTTP/1.1','POST /login.php HTTP/1.1 [Bearer eyJhbGci]']);proto='TCP';}
     else{info='Who has '+pick(ips)+'? Tell '+src;len=42;}
     pkts.push({no:i+1,time:t.toFixed(6),src:src,dst:dst,proto:proto,len:len,info:info});}
   return pkts;})();
@@ -269,10 +321,10 @@ for(var c=1;c<=32;c++){
   for(var o=0;o<4;o++){bc+=8;if(bc>=c&&interesting===-1){interesting=o;mag=Math.pow(2,bc-c);}}
   var useCase='';
   if(c<=8)useCase='Enterprise backbone';else if(c<=12)useCase='Major campus';else if(c<=16)useCase='Campus / regional';
-  else if(c<=20)useCase='Large site / VPC';else if(c<=22)useCase='Large VLAN';else if(c<=24)useCase='Standard VLAN';
-  else if(c<=25)useCase='Department';else if(c<=26)useCase='Medium dept';else if(c<=27)useCase='Small office';
-  else if(c<=28)useCase='DMZ / team';else if(c<=29)useCase='Lab / tiny';else if(c<=30)useCase='P2P link';
-  else if(c===31)useCase='P2P (RFC 3021)';else useCase='Host route';
+  else if(c<=20)useCase='Large site / VPC';else if(c<=22)useCase='Large VLAN';else if(c<=24)useCase='Standard VLAN (M11)';
+  else if(c<=25)useCase='Department subnet';else if(c<=26)useCase='Medium team subnet';else if(c<=27)useCase='Small branch office';
+  else if(c<=28)useCase='DMZ / server cluster';else if(c<=29)useCase='Lab network';else if(c<=30)useCase='P2P router link';
+  else if(c===31)useCase='Point-to-Point (RFC 3021)';else useCase='Host route (/32)';
   CIDR_REF.push({cidr:c,mask:mask,mag:mag,total:tot.toLocaleString(),totalN:tot,usable:use.toLocaleString(),usableN:use,useCase:useCase});
 }
 
@@ -288,7 +340,7 @@ function showPanel(p){
 document.querySelector('.side').onclick=function(e){var b=e.target.closest('.nb');if(b&&b.getAttribute('data-p'))showPanel(b.getAttribute('data-p'));};
 
 /* ═══ CHARTS ═══ */
-Chart.defaults.color='#737373';Chart.defaults.borderColor='rgba(0,0,0,.04)';Chart.defaults.font.family="'Inter',sans-serif";Chart.defaults.font.size=10;
+Chart.defaults.color='#94a3b8';Chart.defaults.borderColor='rgba(255,255,255,.05)';Chart.defaults.font.family="'JetBrains Mono',sans-serif";Chart.defaults.font.size=10;
 
 /* ═══ PANEL RENDERERS ═══ */
 var panelRenderers={};
@@ -298,26 +350,48 @@ panelRenderers.dashboard=function(){
   var upC=ASSETS.filter(function(a){return a.status==='up'}).length;
   var crit=SIEM_EVTS.filter(function(e){return e.sev==='critical'}).length;
   document.getElementById('p-dashboard').innerHTML=
-  '<div class="stats"><div class="st red"><div class="sl">Segments</div><div class="sv">'+SEGMENTS.length+'</div><div class="si"><i class="fas fa-shield-halved"></i></div></div><div class="st blu"><div class="sl">Assets</div><div class="sv">'+ASSETS.length+'</div><div class="si"><i class="fas fa-server"></i></div></div><div class="st grn"><div class="sl">Online</div><div class="sv" style="color:var(--grn)">'+upC+'</div><div class="si"><i class="fas fa-signal"></i></div></div><div class="st pur"><div class="sl">FW Rules</div><div class="sv">'+FW_RULES.length+'</div><div class="si"><i class="fas fa-fire"></i></div></div><div class="st red"><div class="sl">Alerts</div><div class="sv" style="color:var(--red)">'+crit+'</div><div class="si"><i class="fas fa-exclamation-triangle"></i></div></div></div>'+
-  '<div class="g2 mb"><div class="card"><div class="ch"><h3><i class="fas fa-chart-pie"></i> Segmentation</h3></div><div class="cb"><div class="cht h200"><canvas id="cSeg"></canvas></div></div></div><div class="card"><div class="ch"><h3><i class="fas fa-chart-bar"></i> Assets</h3></div><div class="cb"><div class="cht h200"><canvas id="cAst"></canvas></div></div></div></div>'+
-  '<div class="card"><div class="ch"><h3><i class="fas fa-tags"></i> Segments</h3></div><div class="cb"><div class="g3" id="segCards"></div></div></div>';
+  '<div class="stats"><div class="st red"><div class="sl">Segments</div><div class="sv">'+SEGMENTS.length+'</div><div class="si"><i class="fas fa-shield-halved"></i></div></div><div class="st blu"><div class="sl">Assets</div><div class="sv">'+ASSETS.length+'</div><div class="si"><i class="fas fa-server"></i></div></div><div class="st grn"><div class="sl">Online Fleet</div><div class="sv" style="color:var(--grn)">'+upC+'</div><div class="si"><i class="fas fa-signal"></i></div></div><div class="st pur"><div class="sl">FW Policies</div><div class="sv">'+FW_RULES.length+'</div><div class="si"><i class="fas fa-fire"></i></div></div><div class="st red"><div class="sl">SOC Alerts</div><div class="sv" style="color:var(--red)">'+crit+'</div><div class="si"><i class="fas fa-exclamation-triangle"></i></div></div></div>'+
+  '<div class="g2 mb"><div class="card"><div class="ch"><h3><i class="fas fa-chart-pie"></i> Zone Segmentation (Module 12)</h3></div><div class="cb"><div class="cht h200"><canvas id="cSeg"></canvas></div></div></div><div class="card"><div class="ch"><h3><i class="fas fa-chart-bar"></i> Fleet Distribution by VLAN</h3></div><div class="cb"><div class="cht h200"><canvas id="cAst"></canvas></div></div></div></div>'+
+  '<div class="card"><div class="ch"><h3><i class="fas fa-tags"></i> Active Enterprise Segments</h3></div><div class="cb"><div class="g3" id="segCards"></div></div></div>';
   var segs={};ASSETS.forEach(function(a){segs[a.seg]=(segs[a.seg]||0)+1});var sL=Object.keys(segs);
-  new Chart(document.getElementById('cSeg'),{type:'doughnut',data:{labels:sL,datasets:[{data:sL.map(function(k){return segs[k]}),backgroundColor:['#dc2626','#16a34a','#2563eb','#d97706','#7c3aed','#0891b2','#ec4899','#6366f1'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'right',labels:{usePointStyle:true,pointStyle:'circle',padding:5,font:{size:9}}}}}});
-  new Chart(document.getElementById('cAst'),{type:'bar',data:{labels:sL,datasets:[{data:sL.map(function(k){return segs[k]}),backgroundColor:['#dc2626','#16a34a','#2563eb','#d97706','#7c3aed','#0891b2','#ec4899','#6366f1'],borderRadius:5,barThickness:16}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{maxRotation:45,font:{size:8}}},y:{grid:{color:'rgba(0,0,0,.03)'},ticks:{font:{size:8}}}}}});
+  new Chart(document.getElementById('cSeg'),{type:'doughnut',data:{labels:sL,datasets:[{data:sL.map(function(k){return segs[k]}),backgroundColor:['#f04438','#10b981','#38bdf8','#fbbf24','#a855f7','#2dd4bf','#f472b6','#818cf8'],borderWidth:2,borderColor:'#131a24'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'right',labels:{usePointStyle:true,pointStyle:'circle',padding:6,font:{size:9}}}}}});
+  new Chart(document.getElementById('cAst'),{type:'bar',data:{labels:sL,datasets:[{data:sL.map(function(k){return segs[k]}),backgroundColor:['#f04438','#10b981','#38bdf8','#fbbf24','#a855f7','#2dd4bf','#f472b6','#818cf8'],borderRadius:4,barThickness:14}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{maxRotation:45,font:{size:8}}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{font:{size:8}}}}}});
   var ch='';SEGMENTS.forEach(function(s){var cnt=ASSETS.filter(function(a){return a.seg===s.name}).length;
-    ch+='<div style="background:var(--w);border:2px solid var(--g2);border-left:4px solid '+s.color+';border-radius:var(--rs);padding:10px;cursor:pointer" onclick="showSegDetail(\''+s.name+'\')"><div style="font-weight:700;font-size:.8rem">'+s.name+'</div><div class="m" style="font-size:.72rem;color:var(--red)">'+s.cidr+'</div><div style="font-size:.64rem;color:var(--g5);margin-top:2px">VLAN '+s.vlan+' | '+cnt+' assets | '+s.zone+'</div></div>';});
+    ch+='<div style="background:var(--panel);border:1px solid var(--line);border-left:4px solid '+s.color+';border-radius:var(--rs);padding:10px;cursor:pointer" onclick="showSegDetail(\''+s.name+'\')"><div style="font-weight:800;font-size:.8rem;color:var(--bl)">'+s.name+'</div><div class="m" style="font-size:.72rem;color:var(--red)">'+s.cidr+'</div><div style="font-size:.64rem;color:var(--g6);margin-top:3px">VLAN '+s.vlan+' | '+cnt+' assets | '+s.zone+'</div></div>';});
   document.getElementById('segCards').innerHTML=ch;
+};
+
+/* Module Alignment Hub */
+panelRenderers.modules=function(){
+  var mods=[
+    {id:11,name:'Networking Fundamentals',dom:'NETWORKING',icon:'fa-network-wired',desc:'IPv4 bit boundary, CIDR math, FLSM/VLSM, packet headers, port multiplexing.',tab:'subnets',btn:'Launch Subnet Lab'},
+    {id:12,name:'Enterprise Network Fundamentals',dom:'NETWORKING',icon:'fa-sitemap',desc:'VLAN segmentation, broadcast domain isolation, inter-VLAN routing, topology.',tab:'seg',btn:'Inspect Topology'},
+    {id:13,name:'Introduction to Network Firewalls',dom:'NETWORKING',icon:'fa-fire',desc:'Stateful packet filtering, rule precedence, NAT evaluation, zero-trust policies.',tab:'fwrules',btn:'Configure Firewalls'},
+    {id:19,name:'Information Gathering & Enumeration',dom:'OFFENSIVE',icon:'fa-crosshairs',desc:'Service discovery, TCP SYN scanning, version fingerprinting, port auditing.',tab:'nmap',btn:'Run Nmap Scan'},
+    {id:21,name:'Attacking Endpoints',dom:'OFFENSIVE',icon:'fa-desktop',desc:'Endpoint attack surface, open administrative services, credential exposure.',tab:'assets',btn:'Inspect Asset Fleet'},
+    {id:24,name:'Defensive Security Skills',dom:'DEFENSIVE',icon:'fa-shield-halved',desc:'Endpoint health, telemetry collection, process monitoring, agent health.',tab:'edr',btn:'Open EDR'},
+    {id:25,name:'SOC Management Processes',dom:'DEFENSIVE',icon:'fa-list-check',desc:'Alert triage, escalation workflows, severity classification, SIEM feeds.',tab:'siem',btn:'Analyze SIEM'},
+    {id:26,name:'Defensive Security Processes',dom:'DEFENSIVE',icon:'fa-arrows-split-up-and-left',desc:'Incident response, lateral movement containment, host isolation workflows.',tab:'lab4',btn:'Incident Lab'},
+    {id:28,name:'Malware Analysis & Forensics',dom:'DEFENSIVE',icon:'fa-bug',desc:'Packet capture analysis, C2 beacon detection, DNS tunneling extraction.',tab:'wireshark',btn:'Dissect Packets'},
+    {id:38,name:'Cloud & Zero Trust Architecture',dom:'CLOUD',icon:'fa-cloud',desc:'Micro-segmentation, identity-aware firewall rules, perimeter elimination.',tab:'lab2',btn:'Zero Trust Lab'}
+  ];
+  var h='<div class="scn-b" style="border-left:4px solid var(--red)"><h3><i class="fas fa-cubes" style="color:var(--red)"></i> CyberCore 40-Module Range Alignment</h3><p>Every tool, simulator, and lab in SXL-Network connects directly into the 40-module CyberCore curriculum. Select a module below to launch its interactive tooling.</p></div><div class="g2">';
+  mods.forEach(function(m){
+    h+='<div class="mod-card"><div><div style="display:flex;align-items:center;gap:6px"><span class="tag r">MODULE '+m.id+'</span><span class="tag b">'+m.dom+'</span></div><div style="font-weight:800;font-size:.82rem;margin-top:4px;color:var(--bl)">'+m.name+'</div><div style="font-size:.7rem;color:var(--g6);margin-top:2px;max-width:320px">'+m.desc+'</div></div><button class="btn btn-r btn-s" onclick="showPanel(\''+m.tab+'\')"><i class="fas '+m.icon+'"></i> '+m.btn+'</button></div>';
+  });
+  h+='</div>';
+  document.getElementById('p-modules').innerHTML=h;
 };
 
 function showSegDetail(name){
   var seg=SEGMENTS.find(function(s){return s.name===name});if(!seg)return;
   var assets=ASSETS.filter(function(a){return a.seg===name});
   var rules=FW_RULES.filter(function(r){return r.src===name||r.dst===name});
-  var h='<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px"><h3 style="margin:0">'+name+'</h3><button class="btn btn-o btn-s" onclick="closeAM()"><i class="fas fa-times"></i></button></div>';
-  h+='<div class="fg mb"><div><div class="lbl">VLAN</div><div class="m" style="font-size:1.1rem;font-weight:700">'+seg.vlan+'</div></div><div><div class="lbl">CIDR</div><div class="m" style="font-size:1rem;font-weight:700;color:var(--red)">'+seg.cidr+'</div></div></div>';
-  if(rules.length){h+='<div class="lbl mb">Firewall Rules</div>';rules.forEach(function(r){h+='<div style="display:flex;gap:4px;align-items:center;padding:4px 6px;background:var(--g0);border:1px solid var(--g2);border-radius:4px;margin-bottom:3px;font-size:.7rem"><span class="badge '+(r.action==='ALLOW'?'up':'dn')+'">'+r.action+'</span><span>'+r.src+'</span><span>-></span><span>'+r.dst+'</span><span class="m" style="font-size:.64rem;margin-left:auto">'+r.ports+'</span></div>';});}
-  h+='<div class="lbl mb" style="margin-top:10px">Assets ('+assets.length+')</div><div style="max-height:180px;overflow-y:auto"><table><thead><tr><th>Name</th><th>IP</th><th>Type</th><th>Status</th></tr></thead><tbody>';
-  assets.slice(0,12).forEach(function(a){h+='<tr><td style="font-weight:600">'+a.name+'</td><td class="m" style="font-size:.7rem;color:var(--red)">'+a.ip+'</td><td><span class="tag c">'+a.type+'</span></td><td><span class="badge '+a.status+'">'+a.status+'</span></td></tr>';});
+  var h='<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px"><h3 style="margin:0;color:var(--bl)">'+name+'</h3><button class="btn btn-s" onclick="closeAM()"><i class="fas fa-times"></i></button></div>';
+  h+='<div class="fg mb"><div><div class="lbl">VLAN ID</div><div class="m" style="font-size:1.1rem;font-weight:800;color:var(--bl)">'+seg.vlan+'</div></div><div><div class="lbl">CIDR Subnet</div><div class="m" style="font-size:1rem;font-weight:800;color:var(--red)">'+seg.cidr+'</div></div></div>';
+  if(rules.length){h+='<div class="lbl mb">Firewall Policies</div>';rules.forEach(function(r){h+='<div style="display:flex;gap:5px;align-items:center;padding:5px 8px;background:var(--g0);border:1px solid var(--line);border-radius:4px;margin-bottom:4px;font-size:.7rem"><span class="badge '+(r.action==='ALLOW'?'up':'dn')+'">'+r.action+'</span><span>'+r.src+'</span><span>-></span><span>'+r.dst+'</span><span class="m" style="font-size:.64rem;margin-left:auto;color:var(--g6)">'+r.ports+'</span></div>';});}
+  h+='<div class="lbl mb" style="margin-top:10px">Fleet Assets ('+assets.length+')</div><div style="max-height:180px;overflow-y:auto"><table><thead><tr><th>Name</th><th>IP</th><th>Type</th><th>Status</th></tr></thead><tbody>';
+  assets.slice(0,12).forEach(function(a){h+='<tr><td style="font-weight:700">'+a.name+'</td><td class="m" style="font-size:.7rem;color:var(--red)">'+a.ip+'</td><td><span class="tag c">'+a.type+'</span></td><td><span class="badge '+a.status+'">'+a.status+'</span></td></tr>';});
   h+='</tbody></table></div>';
   document.getElementById('assetModalBox').innerHTML=h;document.getElementById('assetModal').classList.add('show');
 }
@@ -326,46 +400,45 @@ function closeAM(){document.getElementById('assetModal').classList.remove('show'
 /* Subnets */
 panelRenderers.subnets=function(){
   var g={};SEGMENTS.forEach(function(s){if(!g[s.zone])g[s.zone]=[];g[s.zone].push(s)});var h='';
-  Object.keys(g).forEach(function(z){h+='<div style="margin-bottom:10px"><div style="font-size:.62rem;font-weight:700;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">'+z+'</div>';
+  Object.keys(g).forEach(function(z){h+='<div style="margin-bottom:12px"><div style="font-size:.62rem;font-weight:800;color:var(--g5);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;font-family:var(--mono)">'+z+' ZONE</div>';
     g[z].forEach(function(s){var cnt=ASSETS.filter(function(a){return a.seg===s.name}).length;
-      h+='<div style="display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:var(--rs);margin-bottom:2px;background:var(--g0);border:1px solid var(--g1);cursor:pointer" onclick="showSegDetail(\''+s.name+'\')"><span style="width:9px;height:9px;border-radius:50%;background:'+s.color+'"></span><span style="font-weight:600;font-size:.78rem;flex:1">'+s.name+'</span><span class="m" style="font-size:.7rem;color:var(--red)">'+s.cidr+'</span><span class="m" style="font-size:.66rem;color:var(--g5)">VLAN '+s.vlan+'</span><span class="m" style="font-size:.66rem">'+cnt+'</span></div>';});
+      h+='<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:var(--rs);margin-bottom:4px;background:var(--panel);border:1px solid var(--line);cursor:pointer" onclick="showSegDetail(\''+s.name+'\')"><span style="width:10px;height:10px;border-radius:50%;background:'+s.color+'"></span><span style="font-weight:700;font-size:.78rem;flex:1">'+s.name+'</span><span class="m" style="font-size:.72rem;color:var(--red)">'+s.cidr+'</span><span class="m" style="font-size:.66rem;color:var(--g6)">VLAN '+s.vlan+'</span><span class="m" style="font-size:.66rem;color:var(--g5)">'+cnt+' assets</span></div>';});
     h+='</div>';});
-  document.getElementById('p-subnets').innerHTML='<div class="card"><div class="ch"><h3><i class="fas fa-sitemap"></i> IP Space</h3></div><div class="cb">'+h+'</div></div>';
+  document.getElementById('p-subnets').innerHTML='<div class="card"><div class="ch"><h3><i class="fas fa-sitemap"></i> Subnet Space Allocation (Module 11 &amp; 12)</h3><a href="subnetting.html" class="btn btn-s btn-r"><i class="fas fa-calculator"></i> Open Subnetting Lab</a></div><div class="cb">'+h+'</div></div>';
 };
 
 /* Segmentation */
 panelRenderers.seg=function(){
-  var html='<div class="stats" style="grid-template-columns:repeat(4,1fr)"><div class="st blu"><div class="sl">Segments</div><div class="sv">'+SEGMENTS.length+'</div></div><div class="st red"><div class="sl">FW Rules</div><div class="sv">'+FW_RULES.length+'</div></div><div class="st grn"><div class="sl">Blocked</div><div class="sv" style="color:var(--grn)">'+FW_RULES.filter(function(r){return r.action==='BLOCK'}).length+'</div></div><div class="st pur"><div class="sl">Allowed</div><div class="sv" style="color:var(--pur)">'+FW_RULES.filter(function(r){return r.action==='ALLOW'}).length+'</div></div></div>';
-  html+='<div class="card mb"><div class="ch"><h3><i class="fas fa-project-diagram"></i> Topology</h3></div><div class="cb" style="text-align:center"><div class="m" style="padding:6px 16px;background:var(--g0);border:2px solid var(--g4);border-radius:var(--rs);display:inline-block;font-size:.78rem;font-weight:600;color:var(--g6)">Internet</div><div style="width:2px;height:14px;background:var(--g3);margin:0 auto"></div><div class="m" style="padding:6px 16px;background:var(--rl);border:2px solid var(--red);border-radius:var(--rs);display:inline-block;font-size:.78rem;font-weight:700;color:var(--red)">fw-primary</div><div style="width:2px;height:14px;background:var(--g3);margin:0 auto"></div><div class="m" style="padding:6px 16px;background:var(--blub);border:2px solid var(--blu);border-radius:var(--rs);display:inline-block;font-size:.78rem;font-weight:700;color:var(--blu)">Core Switch</div><div style="height:2px;width:92%;background:var(--g3);margin:8px auto"></div><div style="display:flex;justify-content:center;gap:5px;flex-wrap:wrap">';
+  var html='<div class="stats" style="grid-template-columns:repeat(4,1fr)"><div class="st blu"><div class="sl">Segments</div><div class="sv">'+SEGMENTS.length+'</div></div><div class="st red"><div class="sl">FW Policies</div><div class="sv">'+FW_RULES.length+'</div></div><div class="st grn"><div class="sl">Blocked Paths</div><div class="sv" style="color:var(--grn)">'+FW_RULES.filter(function(r){return r.action==='BLOCK'}).length+'</div></div><div class="st pur"><div class="sl">Allowed Paths</div><div class="sv" style="color:var(--pur)">'+FW_RULES.filter(function(r){return r.action==='ALLOW'}).length+'</div></div></div>';
+  html+='<div class="card mb"><div class="ch"><h3><i class="fas fa-project-diagram"></i> Enterprise Boundary Topology (Module 12)</h3></div><div class="cb" style="text-align:center"><div class="m" style="padding:7px 18px;background:var(--g0);border:2px solid var(--g4);border-radius:var(--rs);display:inline-block;font-size:.78rem;font-weight:700;color:var(--g6)">Internet Gateway</div><div style="width:2px;height:14px;background:var(--g3);margin:0 auto"></div><div class="m" style="padding:7px 18px;background:var(--rl);border:2px solid var(--red);border-radius:var(--rs);display:inline-block;font-size:.78rem;font-weight:800;color:var(--red);cursor:pointer" onclick="showAssetDetail(\'fw0\')">fw-primary (FortiGate 300E)</div><div style="width:2px;height:14px;background:var(--g3);margin:0 auto"></div><div class="m" style="padding:7px 18px;background:var(--blub);border:2px solid var(--blu);border-radius:var(--rs);display:inline-block;font-size:.78rem;font-weight:800;color:var(--blu)">Cisco Core Switch 9300</div><div style="height:2px;width:92%;background:var(--g3);margin:8px auto"></div><div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap">';
   SEGMENTS.forEach(function(s){var cnt=ASSETS.filter(function(a){return a.seg===s.name}).length;
-    html+='<div><div style="width:1px;height:12px;background:var(--g3);margin:0 auto"></div><div style="padding:7px;border:2px solid '+s.color+';border-radius:var(--rs);text-align:center;cursor:pointer;background:var(--w);min-width:88px" onclick="showSegDetail(\''+s.name+'\')"><div style="font-size:.66rem;font-weight:700;color:'+s.color+'">'+s.name+'</div><div class="m" style="font-size:.6rem;color:var(--red)">'+s.cidr+'</div><div style="font-size:.54rem;color:var(--g5)">'+cnt+' assets</div></div></div>';});
+    html+='<div><div style="width:1px;height:12px;background:var(--g3);margin:0 auto"></div><div style="padding:8px;border:2px solid '+s.color+';border-radius:var(--rs);text-align:center;cursor:pointer;background:var(--panel);min-width:92px" onclick="showSegDetail(\''+s.name+'\')"><div style="font-size:.68rem;font-weight:800;color:'+s.color+'">'+s.name+'</div><div class="m" style="font-size:.62rem;color:var(--red)">'+s.cidr+'</div><div style="font-size:.56rem;color:var(--g6)">'+cnt+' assets</div></div></div>';});
   html+='</div></div></div>';
-  /* Flow matrix */
   var sn=SEGMENTS.map(function(s){return s.name});
-  html+='<div class="card"><div class="cb"><div class="lbl mb">Traffic Flow Matrix</div><div style="overflow-x:auto"><table style="font-size:.6rem"><thead><tr><th>From \\ To</th>';
-  sn.forEach(function(n){html+='<th style="text-align:center;min-width:44px">'+n.substring(0,6)+'</th>';});html+='</tr></thead><tbody>';
-  sn.forEach(function(from){html+='<tr><td style="font-weight:600;white-space:nowrap">'+from+'</td>';
-    sn.forEach(function(to){if(from===to){html+='<td style="text-align:center;background:var(--g1)">-</td>';return;}
+  html+='<div class="card"><div class="cb"><div class="lbl mb">Inter-VLAN Flow Matrix (Module 13)</div><div style="overflow-x:auto"><table style="font-size:.62rem"><thead><tr><th>From \\ To</th>';
+  sn.forEach(function(n){html+='<th style="text-align:center;min-width:46px">'+n.substring(0,6)+'</th>';});html+='</tr></thead><tbody>';
+  sn.forEach(function(from){html+='<tr><td style="font-weight:700;white-space:nowrap">'+from+'</td>';
+    sn.forEach(function(to){if(from===to){html+='<td style="text-align:center;background:var(--g0)">-</td>';return;}
       var rule=FW_RULES.find(function(r){return r.src===from&&r.dst===to});
       if(!rule)rule=FW_RULES.find(function(r){return r.src===from&&r.dst==='ALL_INTERNAL'});
       var allow=rule&&rule.action==='ALLOW';
-      html+='<td style="text-align:center;background:'+(allow?'rgba(22,163,74,.06)':'rgba(220,38,38,.04)')+'"><span style="color:'+(allow?'var(--grn)':'var(--red)')+';font-weight:700;font-size:.7rem">'+(allow?'Y':'X')+'</span></td>';});html+='</tr>';});html+='</tbody></table></div></div></div>';
+      html+='<td style="text-align:center;background:'+(allow?'rgba(16,185,129,.08)':'rgba(240,68,56,.06)')+'"><span style="color:'+(allow?'var(--grn)':'var(--red)')+';font-weight:800;font-size:.72rem">'+(allow?'ALLOW':'DENY')+'</span></td>';});html+='</tr>';});html+='</tbody></table></div></div></div>';
   document.getElementById('p-seg').innerHTML=html;
 };
 
 /* VLANs */
 panelRenderers.vlans=function(){
-  var h='<div class="card"><div class="ch"><h3><i class="fas fa-tags"></i> VLAN Configuration</h3></div><div class="cb" style="padding:0"><table><thead><tr><th>VLAN</th><th>Name</th><th>CIDR</th><th>Zone</th><th>Assets</th></tr></thead><tbody>';
+  var h='<div class="card"><div class="ch"><h3><i class="fas fa-tags"></i> IEEE 802.1Q VLAN Trunking &amp; Subnets (Module 12)</h3></div><div class="cb" style="padding:0"><table><thead><tr><th>VLAN ID</th><th>Department</th><th>CIDR Block</th><th>Zone</th><th>Fleet Count</th></tr></thead><tbody>';
   SEGMENTS.forEach(function(s){var cnt=ASSETS.filter(function(a){return a.seg===s.name}).length;
-    h+='<tr><td class="m" style="font-weight:700;color:var(--red)">'+s.vlan+'</td><td style="font-weight:600">'+s.name+'</td><td class="m" style="font-size:.72rem">'+s.cidr+'</td><td><span class="tag b">'+s.zone+'</span></td><td class="m">'+cnt+'</td></tr>';});
+    h+='<tr><td class="m" style="font-weight:800;color:var(--red)">VLAN '+s.vlan+'</td><td style="font-weight:700">'+s.name+'</td><td class="m" style="font-size:.72rem;color:var(--blu)">'+s.cidr+'</td><td><span class="tag b">'+s.zone+'</span></td><td class="m">'+cnt+'</td></tr>';});
   h+='</tbody></table></div></div>';
   document.getElementById('p-vlans').innerHTML=h;
 };
 
 /* FW Rules */
 panelRenderers.fwrules=function(){
-  var h='<div class="card"><div class="ch"><h3><i class="fas fa-fire"></i> Firewall Rules</h3></div><div class="cb" style="padding:0"><table><thead><tr><th>#</th><th>Source</th><th></th><th>Destination</th><th>Proto</th><th>Ports</th><th>Action</th></tr></thead><tbody>';
-  FW_RULES.forEach(function(r){h+='<tr><td class="m" style="color:var(--g5)">'+r.id+'</td><td style="font-weight:600">'+r.src+'</td><td style="color:var(--g4)">-></td><td style="font-weight:600">'+r.dst+'</td><td><span class="tag c">'+r.proto+'</span></td><td class="m" style="font-size:.68rem">'+r.ports+'</td><td><span class="badge '+(r.action==='ALLOW'?'up':'dn')+'">'+r.action+'</span></td></tr>';});
+  var h='<div class="card"><div class="ch"><h3><i class="fas fa-fire"></i> Stateful Firewall Policies (Module 13)</h3></div><div class="cb" style="padding:0"><table><thead><tr><th>Rule #</th><th>Source Zone</th><th></th><th>Destination Zone</th><th>Protocol</th><th>Target Ports</th><th>Policy Action</th></tr></thead><tbody>';
+  FW_RULES.forEach(function(r){h+='<tr><td class="m" style="color:var(--g5)">'+r.id+'</td><td style="font-weight:700">'+r.src+'</td><td style="color:var(--g4)">-></td><td style="font-weight:700">'+r.dst+'</td><td><span class="tag c">'+r.proto+'</span></td><td class="m" style="font-size:.68rem;color:var(--amb)">'+r.ports+'</td><td><span class="badge '+(r.action==='ALLOW'?'up':'dn')+'">'+r.action+'</span></td></tr>';});
   h+='</tbody></table></div></div>';
   document.getElementById('p-fwrules').innerHTML=h;
 };
@@ -373,97 +446,97 @@ panelRenderers.fwrules=function(){
 /* Assets */
 panelRenderers.assets=function(){
   var icons={Server:'\u{1F5C4}',Workstation:'\u{1F4BB}',Laptop:'\u{1F4BB}',AP:'\u{1F4E1}',Switch:'\u{1F500}',Router:'\u{1F310}',Firewall:'\u{1F6E1}',Phone:'\u{1F4DE}',Camera:'\u{1F4F7}'};
-  document.getElementById('p-assets').innerHTML='<div class="card mb"><div class="ch"><h3><i class="fas fa-server"></i> All Assets ('+ASSETS.length+')</h3></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:10px" id="aG"></div>';
+  document.getElementById('p-assets').innerHTML='<div class="card mb"><div class="ch"><h3><i class="fas fa-server"></i> Enterprise Asset Inventory (Module 21 &amp; 27)</h3><span style="font-size:.7rem;color:var(--g5)">'+ASSETS.length+' monitored assets</span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px" id="aG"></div>';
   var h='';ASSETS.forEach(function(a){var seg=SEGMENTS.find(function(s){return s.name===a.seg});var clr=seg?seg.color:'#ccc';
-    h+='<div style="background:var(--w);border:1px solid var(--g2);border-radius:var(--r);padding:11px;border-top:3px solid '+clr+';cursor:pointer;transition:.2s" onmouseover="this.style.borderColor=\''+clr+'\'" onmouseout="this.style.borderColor=\'var(--g2)\'" onclick="showAssetDetail(\''+a.id+'\')"><div style="display:flex;justify-content:space-between"><div style="font-size:1.2rem">'+(icons[a.type]||'\u{1F4E6}')+'</div><div style="width:7px;height:7px;border-radius:50%;background:'+(a.status==='up'?'var(--grn)':a.status==='dn'?'var(--red)':'var(--amb)')+'"></div></div><div style="font-weight:700;font-size:.76rem;margin-top:3px">'+a.name+'</div><div style="font-size:.64rem;color:var(--g5)">'+a.model+'</div><div class="m" style="font-size:.68rem;color:var(--red);margin-top:2px">'+a.ip+'</div><div style="display:flex;gap:3px;margin-top:4px;flex-wrap:wrap"><span class="tag b">'+a.seg+'</span><span class="tag p">VLAN '+a.vlan+'</span></div></div>';});
+    h+='<div style="background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:11px;border-top:3px solid '+clr+';cursor:pointer;transition:.2s" onmouseover="this.style.borderColor=\''+clr+'\'" onmouseout="this.style.borderColor=\'var(--line)\'" onclick="showAssetDetail(\''+a.id+'\')"><div style="display:flex;justify-content:space-between"><div style="font-size:1.2rem">'+(icons[a.type]||'\u{1F4E6}')+'</div><div style="width:8px;height:8px;border-radius:50%;background:'+(a.status==='up'?'var(--grn)':a.status==='dn'?'var(--red)':'var(--amb)')+'"></div></div><div style="font-weight:800;font-size:.76rem;margin-top:4px">'+a.name+'</div><div style="font-size:.64rem;color:var(--g6)">'+a.model+'</div><div class="m" style="font-size:.68rem;color:var(--red);margin-top:2px">'+a.ip+'</div><div style="display:flex;gap:3px;margin-top:5px;flex-wrap:wrap"><span class="tag b">'+a.seg+'</span><span class="tag p">VLAN '+a.vlan+'</span></div></div>';});
   document.getElementById('aG').innerHTML=h;
 };
 
 function showAssetDetail(id){
   var a=ASSETS.find(function(x){return x.id===id});if(!a)return;
-  var h='<div style="display:flex;justify-content:space-between;margin-bottom:10px"><h3 style="margin:0">'+a.name+'</h3><button class="btn btn-o btn-s" onclick="closeAM()"><i class="fas fa-times"></i></button></div>';
-  h+='<div class="fg mb"><div><div class="lbl">IP</div><div class="m" style="font-size:1rem;font-weight:700;color:var(--red)">'+a.ip+'</div></div><div><div class="lbl">MAC</div><div class="m" style="font-size:.78rem;color:var(--g5)">'+a.mac+'</div></div></div>';
-  h+='<div class="fg mb"><div><div class="lbl">Type</div><div><span class="tag c">'+a.type+'</span> '+a.model+'</div></div><div><div class="lbl">Status</div><div><span class="badge '+a.status+'">'+a.status.toUpperCase()+'</span></div></div></div>';
-  h+='<div class="fg mb"><div><div class="lbl">Segment</div><div style="font-weight:600">'+a.seg+' <span class="m" style="font-size:.7rem;color:var(--red)">VLAN '+a.vlan+'</span></div></div><div><div class="lbl">Location</div><div>'+(a.loc||'-')+'</div></div></div>';
-  if(a.ports){h+='<div class="lbl mb">Open Ports</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px">';
-    a.ports.forEach(function(p){h+='<span class="m" style="padding:2px 7px;background:var(--g0);border:1px solid var(--g2);border-radius:4px;font-size:.68rem">'+p+'/'+(PORTS[p]||'?')+'</span>';});h+='</div>';}
-  var neighbors=ASSETS.filter(function(x){return x.seg===a.seg&&x.id!==a.id}).slice(0,5);
-  h+='<div class="lbl mb">VLAN Neighbors</div><div style="display:flex;flex-wrap:wrap;gap:3px">';
-  neighbors.forEach(function(n){h+='<span style="padding:2px 6px;background:var(--g0);border:1px solid var(--g2);border-radius:4px;font-size:.62rem;cursor:pointer" onclick="showAssetDetail(\''+n.id+'\')">'+n.name+' <span class="m" style="color:var(--red)">'+n.ip+'</span></span>';});h+='</div>';
+  var h='<div style="display:flex;justify-content:space-between;margin-bottom:10px"><h3 style="margin:0;color:var(--bl)">'+a.name+'</h3><button class="btn btn-s" onclick="closeAM()"><i class="fas fa-times"></i></button></div>';
+  h+='<div class="fg mb"><div><div class="lbl">IPv4 Address</div><div class="m" style="font-size:1rem;font-weight:800;color:var(--red)">'+a.ip+'</div></div><div><div class="lbl">Hardware MAC</div><div class="m" style="font-size:.78rem;color:var(--g6)">'+a.mac+'</div></div></div>';
+  h+='<div class="fg mb"><div><div class="lbl">Asset Type</div><div><span class="tag c">'+a.type+'</span> '+a.model+'</div></div><div><div class="lbl">Fleet Status</div><div><span class="badge '+a.status+'">'+a.status.toUpperCase()+'</span></div></div></div>';
+  h+='<div class="fg mb"><div><div class="lbl">Segment</div><div style="font-weight:700">'+a.seg+' <span class="m" style="font-size:.7rem;color:var(--red)">VLAN '+a.vlan+'</span></div></div><div><div class="lbl">Datacenter / Floor</div><div>'+(a.loc||'-')+'</div></div></div>';
+  if(a.ports){h+='<div class="lbl mb">Open Listening Ports (Module 19)</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px">';
+    a.ports.forEach(function(p){h+='<span class="m" style="padding:3px 8px;background:var(--g0);border:1px solid var(--line);border-radius:4px;font-size:.68rem;color:var(--amb)">'+p+'/'+(PORTS[p]||'?')+'</span>';});h+='</div>';}
+  h+='<div style="display:flex;gap:6px;margin-top:12px"><button class="btn btn-r btn-s" onclick="triggerAssetScan(\''+a.id+'\')"><i class="fas fa-crosshairs"></i> Nmap Scan</button><button class="btn btn-s" onclick="isolateAsset(\''+a.id+'\')"><i class="fas fa-shield-virus"></i> Quarantine</button></div>';
   document.getElementById('assetModalBox').innerHTML=h;document.getElementById('assetModal').classList.add('show');
 }
+function triggerAssetScan(id){closeAM();showPanel('nmap');document.getElementById('nTgt').value=id;runNmap();}
+function isolateAsset(id){var a=ASSETS.find(function(x){return x.id===id});if(a){a.seg='Quarantine';a.vlan=999;a.status='dn';alert(a.name+' isolated to Quarantine VLAN 999.');closeAM();showPanel('assets');}}
 
 /* Topology */
 panelRenderers.topo=function(){
-  var h='<div class="card"><div class="ch"><h3><i class="fas fa-project-diagram"></i> Interactive Topology</h3></div><div class="cb" style="text-align:center"></div></div>';
+  var h='<div class="card"><div class="ch"><h3><i class="fas fa-project-diagram"></i> Interactive Network Architecture (Module 12)</h3></div><div class="cb" style="text-align:center"></div></div>';
   document.getElementById('p-topo').innerHTML=h;
   var el=document.querySelector('#p-topo .cb');
-  var th='<div class="m" style="padding:6px 16px;background:var(--g0);border:2px solid var(--g4);border-radius:var(--rs);display:inline-block;font-size:.78rem;font-weight:600;color:var(--g6)">Internet</div><div style="width:2px;height:14px;background:var(--g3);margin:0 auto"></div><div class="m" style="padding:6px 16px;background:var(--rl);border:2px solid var(--red);border-radius:var(--rs);display:inline-block;font-size:.78rem;font-weight:700;color:var(--red);cursor:pointer" onclick="showAssetDetail(\'fw0\')">fw-primary</div><div style="width:2px;height:14px;background:var(--g3);margin:0 auto"></div><div class="m" style="padding:6px 16px;background:var(--blub);border:2px solid var(--blu);border-radius:var(--rs);display:inline-block;font-size:.78rem;font-weight:700;color:var(--blu)">Core Switch</div><div style="height:2px;width:92%;background:var(--g3);margin:8px auto"></div><div style="display:flex;justify-content:center;gap:5px;flex-wrap:wrap">';
+  var th='<div class="m" style="padding:7px 18px;background:var(--g0);border:2px solid var(--g4);border-radius:var(--rs);display:inline-block;font-size:.78rem;font-weight:700;color:var(--g6)">WAN / Internet Edge</div><div style="width:2px;height:14px;background:var(--g3);margin:0 auto"></div><div class="m" style="padding:7px 18px;background:var(--rl);border:2px solid var(--red);border-radius:var(--rs);display:inline-block;font-size:.78rem;font-weight:800;color:var(--red);cursor:pointer" onclick="showAssetDetail(\'fw0\')">fw-primary (FortiGate 300E)</div><div style="width:2px;height:14px;background:var(--g3);margin:0 auto"></div><div class="m" style="padding:7px 18px;background:var(--blub);border:2px solid var(--blu);border-radius:var(--rs);display:inline-block;font-size:.78rem;font-weight:800;color:var(--blu)">Cisco 9300 Core Switch</div><div style="height:2px;width:92%;background:var(--g3);margin:8px auto"></div><div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap">';
   SEGMENTS.forEach(function(s){var cnt=ASSETS.filter(function(a){return a.seg===s.name}).length;
-    th+='<div><div style="width:1px;height:12px;background:var(--g3);margin:0 auto"></div><div style="padding:7px;border:2px solid '+s.color+';border-radius:var(--rs);text-align:center;cursor:pointer;background:var(--w);min-width:88px" onclick="showSegDetail(\''+s.name+'\')"><div style="font-size:.66rem;font-weight:700;color:'+s.color+'">'+s.name+'</div><div class="m" style="font-size:.6rem;color:var(--red)">'+s.cidr+'</div><div style="font-size:.54rem;color:var(--g5)">'+cnt+' assets</div></div></div>';});
+    th+='<div><div style="width:1px;height:12px;background:var(--g3);margin:0 auto"></div><div style="padding:8px;border:2px solid '+s.color+';border-radius:var(--rs);text-align:center;cursor:pointer;background:var(--panel);min-width:92px" onclick="showSegDetail(\''+s.name+'\')"><div style="font-size:.68rem;font-weight:800;color:'+s.color+'">'+s.name+'</div><div class="m" style="font-size:.62rem;color:var(--red)">'+s.cidr+'</div><div style="font-size:.56rem;color:var(--g6)">'+cnt+' assets</div></div></div>';});
   th+='</div>';el.innerHTML=th;
 };
 
 /* SIEM */
 panelRenderers.siem=function(){
   var crit=SIEM_EVTS.filter(function(e){return e.sev==='critical'}).length;
-  document.getElementById('p-siem').innerHTML='<div class="stats" style="grid-template-columns:repeat(4,1fr)"><div class="st red"><div class="sl">Critical</div><div class="sv" style="color:var(--red)">'+crit+'</div></div><div class="st amb"><div class="sl">High</div><div class="sv" style="color:var(--amb)">'+SIEM_EVTS.filter(function(e){return e.sev==='high'}).length+'</div></div><div class="st blu"><div class="sl">Medium</div><div class="sv" style="color:var(--blu)">'+SIEM_EVTS.filter(function(e){return e.sev==='medium'}).length+'</div></div><div class="st grn"><div class="sl">Info</div><div class="sv" style="color:var(--grn)">'+SIEM_EVTS.filter(function(e){return e.sev==='info'}).length+'</div></div></div><div class="card"><div class="ch"><h3><i class="fas fa-list"></i> Events</h3><select class="inp" id="siemF" style="width:80px;padding:3px 6px;font-size:.68rem" onchange="fSIEM()"><option value="all">All</option><option value="critical">Critical</option><option value="high">High</option><option value="info">Info</option></select></div><div class="cb" style="max-height:420px;overflow-y:auto;padding:0"><table><thead><tr><th>Time</th><th>Sev</th><th>Type</th><th>Details</th></tr></thead><tbody id="tbSIEM"></tbody></table></div></div>';
+  document.getElementById('p-siem').innerHTML='<div class="stats" style="grid-template-columns:repeat(4,1fr)"><div class="st red"><div class="sl">Critical Severity</div><div class="sv" style="color:var(--red)">'+crit+'</div></div><div class="st amb"><div class="sl">High Alerts</div><div class="sv" style="color:var(--amb)">'+SIEM_EVTS.filter(function(e){return e.sev==='high'}).length+'</div></div><div class="st blu"><div class="sl">Medium Telemetry</div><div class="sv" style="color:var(--blu)">'+SIEM_EVTS.filter(function(e){return e.sev==='medium'}).length+'</div></div><div class="st grn"><div class="sl">Informational</div><div class="sv" style="color:var(--grn)">'+SIEM_EVTS.filter(function(e){return e.sev==='info'}).length+'</div></div></div><div class="card"><div class="ch"><h3><i class="fas fa-list-check"></i> SOC Event Telemetry &amp; Log Correlator (Module 25)</h3><select class="inp" id="siemF" style="width:90px;padding:4px 6px;font-size:.68rem" onchange="fSIEM()"><option value="all">All Logs</option><option value="critical">Critical</option><option value="high">High</option><option value="info">Info</option></select></div><div class="cb" style="max-height:420px;overflow-y:auto;padding:0"><table><thead><tr><th>Timestamp</th><th>Severity</th><th>Threat Classification</th><th>Correlated Entity</th></tr></thead><tbody id="tbSIEM"></tbody></table></div></div>';
   fSIEM();
 };
 function fSIEM(){var f=document.getElementById('siemF').value;var list=SIEM_EVTS;if(f!=='all')list=list.filter(function(e){return e.sev===f});
-  var h='';list.slice(0,30).forEach(function(e){h+='<tr><td class="m" style="font-size:.66rem">'+e.time+'</td><td><span class="badge '+(e.sev==='critical'?'dn':e.sev==='high'?'idle':'up')+'">'+e.sev.toUpperCase()+'</span></td><td style="font-weight:600;font-size:.72rem">'+e.type+'</td><td style="font-size:.7rem;color:var(--g6)">'+e.desc+'</td></tr>';});
+  var h='';list.slice(0,30).forEach(function(e){h+='<tr><td class="m" style="font-size:.66rem;color:var(--g6)">'+e.time+'</td><td><span class="badge '+(e.sev==='critical'?'dn':e.sev==='high'?'idle':'up')+'">'+e.sev.toUpperCase()+'</span></td><td style="font-weight:700;font-size:.72rem;color:var(--bl)">'+e.type+'</td><td style="font-size:.7rem;color:var(--g6)">'+e.desc+'</td></tr>';});
   document.getElementById('tbSIEM').innerHTML=h;}
 
 /* EDR */
 panelRenderers.edr=function(){
   var eps=ASSETS.filter(function(a){return a.type==='Server'||a.type==='Workstation'||a.type==='Laptop'}).slice(0,18);
   var threats=eps.filter(function(){return Math.random()<.12}).length;
-  document.getElementById('p-edr').innerHTML='<div class="stats" style="grid-template-columns:repeat(3,1fr)"><div class="st grn"><div class="sl">Monitored</div><div class="sv">'+eps.length+'</div></div><div class="st red"><div class="sl">Threats</div><div class="sv" style="color:var(--red)">'+threats+'</div></div><div class="st blu"><div class="sl">Processes</div><div class="sv">'+RI(12000,18000).toLocaleString()+'</div></div></div><div class="card"><div class="ch"><h3><i class="fas fa-desktop"></i> Endpoint Health</h3></div><div class="cb" style="padding:0;max-height:420px;overflow-y:auto"><table><thead><tr><th>Endpoint</th><th>IP</th><th>Segment</th><th>Agent</th><th>Threats</th><th>Health</th></tr></thead><tbody id="tbEDR"></tbody></table></div></div>';
+  document.getElementById('p-edr').innerHTML='<div class="stats" style="grid-template-columns:repeat(3,1fr)"><div class="st grn"><div class="sl">Monitored Endpoints</div><div class="sv">'+eps.length+'</div></div><div class="st red"><div class="sl">Active Threat Alerts</div><div class="sv" style="color:var(--red)">'+threats+'</div></div><div class="st blu"><div class="sl">Hooked Processes</div><div class="sv">'+RI(12000,18000).toLocaleString()+'</div></div></div><div class="card"><div class="ch"><h3><i class="fas fa-desktop"></i> EDR Sensor Agent Health (Module 24)</h3></div><div class="cb" style="padding:0;max-height:420px;overflow-y:auto"><table><thead><tr><th>Endpoint Node</th><th>IPv4</th><th>Department Segment</th><th>Agent Version</th><th>Active Threats</th><th>Agent State</th></tr></thead><tbody id="tbEDR"></tbody></table></div></div>';
   var h='';eps.forEach(function(e){var th=Math.random()>.88;
-    h+='<tr><td style="font-weight:600;cursor:pointer" onclick="showAssetDetail(\''+e.id+'\')">'+e.name+'</td><td class="m" style="font-size:.7rem;color:var(--red)">'+e.ip+'</td><td><span class="tag b">'+e.seg+'</span></td><td style="font-size:.68rem;color:var(--grn)">v4.2.1</td><td>'+(th?'<span class="badge dn">1</span>':'<span class="badge up">0</span>')+'</td><td><span class="badge '+(th?'dn':'up')+'">'+(th?'ALERT':'OK')+'</span></td></tr>';});
+    h+='<tr><td style="font-weight:700;cursor:pointer;color:var(--bl)" onclick="showAssetDetail(\''+e.id+'\')">'+e.name+'</td><td class="m" style="font-size:.7rem;color:var(--red)">'+e.ip+'</td><td><span class="tag b">'+e.seg+'</span></td><td style="font-size:.68rem;color:var(--grn);font-family:var(--mono)">v4.2.1-sxl</td><td>'+(th?'<span class="badge dn">1 DETECTED</span>':'<span class="badge up">0</span>')+'</td><td><span class="badge '+(th?'dn':'up')+'">'+(th?'ALERT':'HEALTHY')+'</span></td></tr>';});
   document.getElementById('tbEDR').innerHTML=h;
 };
 
 /* Nmap */
 panelRenderers.nmap=function(){
-  document.getElementById('p-nmap').innerHTML='<div class="card mb"><div class="ch"><h3><i class="fas fa-crosshairs"></i> Nmap Scanner</h3></div><div class="cb"><div class="fg"><div><label class="lbl">Target</label><select class="inp" id="nTgt"></select></div><div><label class="lbl">Profile</label><select class="inp" id="nProf"><option value="quick">Quick</option><option value="std" selected>Standard</option><option value="svc">Service</option><option value="full">Full Port</option></select></div></div><button class="btn btn-r" onclick="runNmap()"><i class="fas fa-play"></i> Scan</button></div></div><div class="card"><div class="ch"><h3>Output</h3><span id="nSt" style="font-size:.7rem;color:var(--g5)">Ready</span></div><div class="cb"><div class="term" id="nOut">Waiting...</div></div></div>';
+  document.getElementById('p-nmap').innerHTML='<div class="card mb"><div class="ch"><h3><i class="fas fa-crosshairs"></i> Nmap Port &amp; Service Scanner (Module 19)</h3></div><div class="cb"><div class="fg"><div><label class="lbl">Target Asset</label><select class="inp" id="nTgt"></select></div><div><label class="lbl">Scan Profile (Timing / Depth)</label><select class="inp" id="nProf"><option value="quick">Quick (-F -T4)</option><option value="std" selected>Standard SYN (-sS -T3)</option><option value="svc">Service Version (-sV -sC)</option><option value="full">Full 65k Ports (-p- -T4)</option></select></div></div><button class="btn btn-r" onclick="runNmap()"><i class="fas fa-play"></i> Execute Nmap Scan</button></div></div><div class="card"><div class="ch"><h3>CLI Console Output</h3><span id="nSt" style="font-size:.7rem;color:var(--g5);font-family:var(--mono)">Ready</span></div><div class="cb"><div class="term" id="nOut">Waiting for scan parameters...</div></div></div>';
   var sel=document.getElementById('nTgt');ASSETS.forEach(function(a){var o=document.createElement('option');o.value=a.id;o.textContent=a.ip+' ('+a.name+')';sel.appendChild(o);});
 };
 function runNmap(){var id=document.getElementById('nTgt').value,a=ASSETS.find(function(x){return x.id===id});if(!a)return;var prof=document.getElementById('nProf').value;var op=(a.ports||[80]).slice();
   if(prof==='quick')op=op.filter(function(p){return[22,80,443].indexOf(p)>=0});else if(prof==='full')op=[22,23,25,53,80,110,135,143,161,443,445,3306,3389,5432,8080];
   var t=document.getElementById('nOut');t.innerHTML='';document.getElementById('nSt').textContent='Scanning...';
-  var lines=['<span style="color:#aaa">Nmap 7.94SVN scan</span>','<span style="color:#5be8a0">Nmap scan report for '+a.name+' ('+a.ip+')</span>','<span style="color:#5be8a0">Host is up ('+RI(1,50)+'ms)</span>',''];
-  lines.push('<span style="color:#67e8f9">PORT      STATE    SERVICE</span>');
-  op.forEach(function(p){lines.push('<span style="color:#5be8a0">'+String(p).padEnd(9)+'open     '+(PORTS[p]||'?')+'</span>');});
-  lines.push('','<span style="color:#aaa">Nmap done in '+(Math.random()*10+1).toFixed(2)+'s</span>');
-  var i=0;function nx(){if(i<lines.length){t.innerHTML+=lines[i]+'\n';t.scrollTop=t.scrollHeight;i++;setTimeout(nx,RI(25,90));}else document.getElementById('nSt').innerHTML='<span style="color:var(--grn)">Done</span>';}nx();}
+  var lines=['<span style="color:#64748b">Starting Nmap 7.94SVN ( https://nmap.org )</span>','<span style="color:#38bdf8">Nmap scan report for '+a.name+' ('+a.ip+')</span>','<span style="color:#94a3b8">Host is up (0.00042s latency).</span>','<span style="color:#94a3b8">MAC Address: '+a.mac+' ('+a.model+')</span>',''];
+  lines.push('<span style="color:#fbbf24">PORT      STATE    SERVICE     VERSION</span>');
+  op.forEach(function(p){lines.push('<span style="color:#10b981">'+String(p).padEnd(9)+'open     '+String(PORTS[p]||'unknown').padEnd(11)+'ShadowX-Engine v2.4</span>');});
+  lines.push('','<span style="color:#64748b">Nmap done: 1 IP address (1 host up) scanned in '+(Math.random()*2+0.8).toFixed(2)+' seconds</span>');
+  var i=0;function nx(){if(i<lines.length){t.innerHTML+=lines[i]+'\n';t.scrollTop=t.scrollHeight;i++;setTimeout(nx,RI(20,70));}else document.getElementById('nSt').innerHTML='<span style="color:var(--grn)">Scan Complete</span>';}nx();}
 
 /* Wireshark */
 panelRenderers.wireshark=function(){
-  document.getElementById('p-wireshark').innerHTML='<div class="card mb"><div class="ch"><h3><i class="fas fa-fish"></i> Wireshark</h3><span style="font-size:.7rem;color:var(--g5)">'+WK_PKTS.length+' packets</span></div><div class="cb"><div style="margin-bottom:6px"><input class="inp" id="wkF" placeholder="Filter: tcp, dns, http, arp, ip.addr==10.0.10.10" style="font-family:JetBrains Mono,monospace;font-size:.74rem;text-align:left" onkeydown="if(event.key===\'Enter\')wkFilter()"></div><div style="max-height:240px;overflow-y:auto;border:1px solid var(--g2);border-radius:var(--rxs)"><table><thead><tr><th>#</th><th>Time</th><th>Source</th><th>Dest</th><th>Proto</th><th>Len</th><th>Info</th></tr></thead><tbody id="tbWK"></tbody></table></div></div></div><div class="card"><div class="ch"><h3>Protocol Stats</h3></div><div class="cb"><div class="cht h140"><canvas id="cWK"></canvas></div></div></div>';
+  document.getElementById('p-wireshark').innerHTML='<div class="card mb"><div class="ch"><h3><i class="fas fa-fish"></i> Wireshark Packet Capture &amp; Dissector (Module 11 &amp; 28)</h3><span style="font-size:.7rem;color:var(--g5);font-family:var(--mono)">'+WK_PKTS.length+' frames captured</span></div><div class="cb"><div style="margin-bottom:6px"><input class="inp" id="wkF" placeholder="Display Filter: tcp, dns, http, arp, ip.addr==10.0.10.10" style="font-family:var(--mono);font-size:.74rem;text-align:left" onkeydown="if(event.key===\'Enter\')wkFilter()"></div><div style="max-height:240px;overflow-y:auto;border:1px solid var(--line);border-radius:var(--rxs)"><table><thead><tr><th>Frame #</th><th>Time (s)</th><th>Source</th><th>Destination</th><th>Protocol</th><th>Length</th><th>Dissected Info</th></tr></thead><tbody id="tbWK"></tbody></table></div></div></div><div class="card"><div class="ch"><h3>Protocol Distribution</h3></div><div class="cb"><div class="cht h140"><canvas id="cWK"></canvas></div></div></div>';
   wkRender(WK_PKTS);var protos={};WK_PKTS.forEach(function(p){protos[p.proto]=(protos[p.proto]||0)+1});var pL=Object.keys(protos);
-  new Chart(document.getElementById('cWK'),{type:'doughnut',data:{labels:pL,datasets:[{data:pL.map(function(k){return protos[k]}),backgroundColor:['#2563eb','#0891b2','#d97706','#16a34a','#ec4899'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'right',labels:{usePointStyle:true,pointStyle:'circle',padding:4,font:{size:8}}}}}});
+  new Chart(document.getElementById('cWK'),{type:'doughnut',data:{labels:pL,datasets:[{data:pL.map(function(k){return protos[k]}),backgroundColor:['#38bdf8','#2dd4bf','#fbbf24','#10b981','#f472b6'],borderWidth:2,borderColor:'#131a24'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'right',labels:{usePointStyle:true,pointStyle:'circle',padding:4,font:{size:8}}}}}});
 };
-function wkRender(pkts){var h='';pkts.forEach(function(p){h+='<tr><td class="m">'+p.no+'</td><td class="m">'+p.time+'</td><td class="m" style="font-size:.66rem">'+p.src+'</td><td class="m" style="font-size:.66rem">'+p.dst+'</td><td><span class="tag '+(p.proto==='TCP'?'b':p.proto==='UDP'||p.proto==='DNS'?'c':p.proto==='HTTP'?'g':'a')+'">'+p.proto+'</span></td><td class="m">'+p.len+'</td><td style="font-size:.64rem;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+p.info+'</td></tr>';});document.getElementById('tbWK').innerHTML=h;}
+function wkRender(pkts){var h='';pkts.forEach(function(p){h+='<tr><td class="m">'+p.no+'</td><td class="m" style="color:var(--g6)">'+p.time+'</td><td class="m" style="font-size:.66rem;color:var(--blu)">'+p.src+'</td><td class="m" style="font-size:.66rem;color:var(--pur)">'+p.dst+'</td><td><span class="tag '+(p.proto==='TCP'?'b':p.proto==='UDP'||p.proto==='DNS'?'c':p.proto==='HTTP'?'g':'a')+'">'+p.proto+'</span></td><td class="m">'+p.len+'</td><td style="font-size:.66rem;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--g7)">'+p.info+'</td></tr>';});document.getElementById('tbWK').innerHTML=h;}
 function wkFilter(){var f=document.getElementById('wkF').value.trim().toLowerCase();if(!f){wkRender(WK_PKTS);return;}var fl=WK_PKTS.filter(function(p){if(f==='tcp')return p.proto==='TCP';if(f==='dns')return p.proto==='DNS';if(f==='http')return p.proto==='HTTP';if(f==='arp')return p.proto==='ARP';if(f.indexOf('ip.addr==')>=0){var ip=f.split('==')[1].trim();return p.src.indexOf(ip)>=0||p.dst.indexOf(ip)>=0;}return p.proto.toLowerCase().indexOf(f)>=0;});wkRender(fl);}
 
 /* Calculator */
 panelRenderers.calc=function(){
-  document.getElementById('p-calc').innerHTML='<div class="g2 mb"><div class="card"><div class="ch"><h3><i class="fas fa-calculator"></i> CIDR Calculator</h3></div><div class="cb"><div class="fg"><div><label class="lbl">IP</label><input class="inp" id="cIP" value="10.0.1.0"></div><div><label class="lbl">CIDR</label><select class="inp" id="cCIDR" onchange="doCalc()"></select></div></div><button class="btn btn-r" onclick="doCalc()">Calculate</button><div id="cRes" style="margin-top:10px"></div></div></div><div class="card"><div class="ch"><h3>Subnet Splitter</h3></div><div class="cb"><div class="fg"><div><label class="lbl">Network</label><input class="inp" id="sNet" value="10.0.0.0/16"></div><div><label class="lbl">Subnets</label><select class="inp" id="sN"><option>2</option><option>4</option><option selected>8</option><option>16</option><option>32</option></select></div></div><button class="btn btn-r" onclick="doSplit()">Split</button><div id="sRes" style="margin-top:10px;max-height:240px;overflow-y:auto"></div></div></div></div>';
+  document.getElementById('p-calc').innerHTML='<div class="g2 mb"><div class="card"><div class="ch"><h3><i class="fas fa-calculator"></i> Subnetting Calculator (Module 11)</h3></div><div class="cb"><div class="fg"><div><label class="lbl">IPv4 Base</label><input class="inp" id="cIP" value="10.0.1.0"></div><div><label class="lbl">CIDR Prefix</label><select class="inp" id="cCIDR" onchange="doCalc()"></select></div></div><button class="btn btn-r" onclick="doCalc()">Calculate</button><div id="cRes" style="margin-top:10px"></div></div></div><div class="card"><div class="ch"><h3>FLSM Partition Splitter</h3></div><div class="cb"><div class="fg"><div><label class="lbl">Parent Network</label><input class="inp" id="sNet" value="10.0.0.0/16"></div><div><label class="lbl">Equal Subnets</label><select class="inp" id="sN"><option>2</option><option>4</option><option selected>8</option><option>16</option><option>32</option></select></div></div><button class="btn btn-r" onclick="doSplit()">Partition</button><div id="sRes" style="margin-top:10px;max-height:240px;overflow-y:auto"></div></div></div></div>';
   var sel=document.getElementById('cCIDR');for(var c=1;c<=32;c++){var o=document.createElement('option');o.value=c;o.textContent='/'+c;if(c===24)o.selected=true;sel.appendChild(o);}
   doCalc();doSplit();
 };
 function doCalc(){var ip=document.getElementById('cIP').value.trim(),c=parseInt(document.getElementById('cCIDR').value);if(!ip)return;var ipI=ip2i(ip),mI=(~((1<<(32-c))-1))>>>0,nI=(ipI&mI)>>>0,bI=(nI|(~mI>>>0))>>>0,tot=Math.pow(2,32-c),use=Math.max(0,tot-2);
-  var rows=[['IP',ip+'/'+c],['Mask',cidr2mask(c)],['Network',i2ip(nI)],['First',i2ip(nI+1)],['Last',i2ip(bI-1)],['Broadcast',i2ip(bI)],['Total',tot.toLocaleString()],['Usable',use.toLocaleString()]];var h='';rows.forEach(function(r){h+='<div style="display:flex;justify-content:space-between;padding:4px 8px;background:var(--g0);border:1px solid var(--g1);border-radius:var(--rxs);font-size:.74rem;margin-bottom:3px"><span style="color:var(--g5)">'+r[0]+'</span><span class="m" style="font-weight:600">'+r[1]+'</span></div>';});
-  h+='<div style="display:flex;height:24px;border-radius:var(--rxs);overflow:hidden;gap:2px;margin-top:8px"><div style="flex:'+c+';background:var(--red);display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700;color:#fff">'+c+' net</div><div style="flex:'+Math.max(32-c,1)+';background:var(--g3);display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700;color:var(--g7)">'+(32-c)+' host</div></div>';
+  var rows=[['CIDR Notation',ip+'/'+c],['Subnet Mask',cidr2mask(c)],['Network Address',i2ip(nI)],['First Usable Host',i2ip(nI+1)],['Last Usable Host',i2ip(bI-1)],['Broadcast Address',i2ip(bI)],['Total Address Space',tot.toLocaleString()],['Usable Host Capacity',use.toLocaleString()]];var h='';rows.forEach(function(r){h+='<div style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--panel);border:1px solid var(--line);border-radius:var(--rxs);font-size:.74rem;margin-bottom:3px"><span style="color:var(--g5)">'+r[0]+'</span><span class="m" style="font-weight:700;color:var(--bl)">'+r[1]+'</span></div>';});
+  h+='<div style="display:flex;height:24px;border-radius:var(--rxs);overflow:hidden;gap:2px;margin-top:8px"><div style="flex:'+c+';background:var(--red);display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:800;color:#fff;font-family:var(--mono)">'+c+' NET BITS</div><div style="flex:'+Math.max(32-c,1)+';background:var(--g3);display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:800;color:var(--g7);font-family:var(--mono)">'+(32-c)+' HOST BITS</div></div>';
   document.getElementById('cRes').innerHTML=h;}
-function doSplit(){var ns=document.getElementById('sNet').value.trim(),n=parseInt(document.getElementById('sN').value),pts=ns.split('/');if(pts.length!==2)return;var ipI=ip2i(pts[0]),orig=parseInt(pts[1]),bits=Math.ceil(Math.log(n)/Math.log(2)),nc=orig+bits;if(nc>30)return;var sz=Math.pow(2,32-nc),maskI=(~((1<<(32-nc))-1))>>>0,base=(ipI&(~((1<<(32-orig))-1)))>>>0,act=Math.min(n,Math.pow(2,bits));var h='<table><thead><tr><th>#</th><th>Network</th><th>Range</th><th>Bcast</th><th>Hosts</th></tr></thead><tbody>';for(var i=0;i<act;i++){var sn=(base+i*sz)>>>0,bc=(sn|(~maskI>>>0))>>>0;h+='<tr><td class="m" style="color:var(--red);font-weight:700">'+(i+1)+'</td><td class="m" style="font-size:.7rem">'+i2ip(sn)+'/'+nc+'</td><td class="m" style="font-size:.7rem;color:var(--grn)">'+i2ip(sn+1)+'-'+i2ip(bc-1)+'</td><td class="m" style="font-size:.7rem;color:var(--red)">'+i2ip(bc)+'</td><td class="m">'+(sz-2)+'</td></tr>';}h+='</tbody></table>';document.getElementById('sRes').innerHTML=h;}
+function doSplit(){var ns=document.getElementById('sNet').value.trim(),n=parseInt(document.getElementById('sN').value),pts=ns.split('/');if(pts.length!==2)return;var ipI=ip2i(pts[0]),orig=parseInt(pts[1]),bits=Math.ceil(Math.log(n)/Math.log(2)),nc=orig+bits;if(nc>30)return;var sz=Math.pow(2,32-nc),maskI=(~((1<<(32-nc))-1))>>>0,base=(ipI&(~((1<<(32-orig))-1)))>>>0,act=Math.min(n,Math.pow(2,bits));var h='<table><thead><tr><th>#</th><th>Subnet CIDR</th><th>Host Range</th><th>Broadcast</th><th>Usable</th></tr></thead><tbody>';for(var i=0;i<act;i++){var sn=(base+i*sz)>>>0,bc=(sn|(~maskI>>>0))>>>0;h+='<tr><td class="m" style="color:var(--red);font-weight:800">'+(i+1)+'</td><td class="m" style="font-size:.7rem;color:var(--blu)">'+i2ip(sn)+'/'+nc+'</td><td class="m" style="font-size:.7rem;color:var(--grn)">'+i2ip(sn+1)+'-'+i2ip(bc-1)+'</td><td class="m" style="font-size:.7rem;color:var(--red)">'+i2ip(bc)+'</td><td class="m">'+(sz-2)+'</td></tr>';}h+='</tbody></table>';document.getElementById('sRes').innerHTML=h;}
 
 /* CIDR Reference */
 panelRenderers.cidr=function(){
-  var h='<div class="card"><div class="ch"><h3><i class="fas fa-book"></i> Complete CIDR /1 through /32</h3><span style="font-size:.7rem;color:var(--g5)">32 entries</span></div><div class="cb" style="padding:0;max-height:calc(100vh - 120px);overflow-y:auto"><table class="ref-t"><thead><tr><th>CIDR</th><th>Mask</th><th>Magic #</th><th>Total IPs</th><th>Usable</th><th>Use Case</th></tr></thead><tbody>';
+  var h='<div class="card"><div class="ch"><h3><i class="fas fa-book"></i> Complete CIDR /1 through /32 Reference Guide</h3><span style="font-size:.7rem;color:var(--g5);font-family:var(--mono)">32 prefixes</span></div><div class="cb" style="padding:0;max-height:calc(100vh - 120px);overflow-y:auto"><table class="ref-t"><thead><tr><th>Prefix</th><th>Subnet Mask</th><th>Magic Block</th><th>Total Space</th><th>Usable Hosts</th><th>Module Implementation Use Case</th></tr></thead><tbody>';
   CIDR_REF.forEach(function(r){var isClass=[8,16,24].indexOf(r.cidr)>=0;
-    h+='<tr'+(isClass?' style="background:rgba(220,38,38,.03)"':'')+'><td class="m hl">/'+r.cidr+'</td><td class="m" style="font-size:.68rem">'+r.mask+'</td><td class="m" style="color:var(--red);font-weight:600">'+r.mag+'</td><td class="m">'+r.total+'</td><td class="m">'+r.usable+'</td><td style="font-size:.72rem">'+r.useCase+'</td></tr>';});
+    h+='<tr'+(isClass?' style="background:rgba(240,68,56,.06)"':'')+'><td class="m hl">/'+r.cidr+'</td><td class="m" style="font-size:.68rem;color:var(--blu)">'+r.mask+'</td><td class="m" style="color:var(--red);font-weight:700">'+r.mag+'</td><td class="m">'+r.total+'</td><td class="m" style="color:var(--grn);font-weight:700">'+r.usable+'</td><td style="font-size:.72rem">'+r.useCase+'</td></tr>';});
   h+='</tbody></table></div></div>';
   document.getElementById('p-cidr').innerHTML=h;
 };
@@ -471,15 +544,15 @@ panelRenderers.cidr=function(){
 /* Learn */
 panelRenderers.learn=function(){
   document.getElementById('p-learn').innerHTML=
-  '<div class="card mb"><div class="ch"><h3><i class="fas fa-tag"></i> Step 1: IP Class</h3></div><div class="cb"><div class="g5 mb"><div style="background:var(--blub);padding:12px;border-radius:var(--rs);text-align:center;border:2px solid var(--blu)"><div style="font-size:.66rem;font-weight:700;color:var(--blu)">A</div><div class="m" style="font-size:1rem;font-weight:800">1-126</div><div style="font-size:.68rem;color:var(--g5)">/8</div></div><div style="background:var(--grnb);padding:12px;border-radius:var(--rs);text-align:center;border:2px solid var(--grn)"><div style="font-size:.66rem;font-weight:700;color:var(--grn)">B</div><div class="m" style="font-size:1rem;font-weight:800">128-191</div><div style="font-size:.68rem;color:var(--g5)">/16</div></div><div style="background:var(--purb);padding:12px;border-radius:var(--rs);text-align:center;border:2px solid var(--pur)"><div style="font-size:.66rem;font-weight:700;color:var(--pur)">C</div><div class="m" style="font-size:1rem;font-weight:800">192-223</div><div style="font-size:.68rem;color:var(--g5)">/24</div></div><div style="background:var(--ambb);padding:12px;border-radius:var(--rs);text-align:center;border:2px solid var(--amb)"><div style="font-size:.66rem;font-weight:700;color:var(--amb)">D</div><div class="m" style="font-size:1rem;font-weight:800">224-239</div><div style="font-size:.68rem;color:var(--g5)">Multicast</div></div><div style="background:var(--pnkb);padding:12px;border-radius:var(--rs);text-align:center;border:2px solid var(--pnk)"><div style="font-size:.66rem;font-weight:700;color:var(--pnk)">E</div><div class="m" style="font-size:1rem;font-weight:800">240-255</div><div style="font-size:.68rem;color:var(--g5)">Reserved</div></div></div><div style="background:var(--g0);border:1px solid var(--g2);border-radius:var(--rs);padding:12px"><div style="font-size:.76rem;font-weight:700;margin-bottom:6px">Try it:</div><div style="display:flex;gap:8px"><input class="inp" id="classTest" placeholder="e.g. 192.168.1.1" style="max-width:180px;text-align:left" oninput="testClass()"><span id="classResult" style="display:flex;align-items:center;font-weight:700;font-size:1rem"></span></div></div></div></div>'+
-  '<div class="card mb"><div class="ch"><h3><i class="fas fa-wand-magic-sparkles"></i> Step 2: Magic Number</h3></div><div class="cb"><div class="formula" style="text-align:center;font-size:1rem">Magic Number = 256 - Mask (Interesting Octet)</div><div class="g3" style="margin-top:12px"><div style="background:var(--g0);padding:12px;border-radius:var(--rs);border:1px solid var(--g2)"><div class="m" style="font-size:.74rem;font-weight:700">/25 = 256-128 = <span style="color:var(--red)">128</span></div><div style="font-size:.68rem;color:var(--g5)">2 subnets, 126 hosts</div></div><div style="background:var(--g0);padding:12px;border-radius:var(--rs);border:1px solid var(--g2)"><div class="m" style="font-size:.74rem;font-weight:700">/26 = 256-192 = <span style="color:var(--red)">64</span></div><div style="font-size:.68rem;color:var(--g5)">4 subnets, 62 hosts</div></div><div style="background:var(--g0);padding:12px;border-radius:var(--rs);border:1px solid var(--g2)"><div class="m" style="font-size:.74rem;font-weight:700">/27 = 256-224 = <span style="color:var(--red)">32</span></div><div style="font-size:.68rem;color:var(--g5)">8 subnets, 30 hosts</div></div></div></div></div>'+
-  '<div class="card mb"><div class="ch"><h3><i class="fas fa-list-ol"></i> Step 3: 5 Key Values</h3></div><div class="cb"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input class="inp" id="demoIP" value="203.248.112.46" style="max-width:170px;text-align:left" placeholder="IP"><input class="inp" id="demoCIDR" value="25" style="max-width:70px" min="1" max="31" type="number"><button class="btn btn-r" onclick="demoCalc()"><i class="fas fa-play"></i> Calculate</button></div><div id="demoResult"></div></div></div>'+
-  '<div class="card"><div class="ch"><h3><i class="fas fa-binary"></i> Binary</h3></div><div class="cb"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input class="inp" id="binIP" value="203.248.112.46" style="max-width:170px;text-align:left"><input class="inp" id="binCIDR" value="25" style="max-width:70px" min="1" max="31" type="number"><button class="btn btn-r btn-s" onclick="showBinary()">Show</button></div><div id="binResult"></div></div></div>';
+  '<div class="card mb"><div class="ch"><h3><i class="fas fa-tag"></i> Step 1: IPv4 Classful Boundaries (Module 11)</h3></div><div class="cb"><div class="g5 mb"><div style="background:var(--blub);padding:12px;border-radius:var(--rs);text-align:center;border:1px solid var(--blu)"><div style="font-size:.66rem;font-weight:800;color:var(--blu)">CLASS A</div><div class="m" style="font-size:1rem;font-weight:800">1–126</div><div style="font-size:.68rem;color:var(--g5)">/8 Default</div></div><div style="background:var(--grnb);padding:12px;border-radius:var(--rs);text-align:center;border:1px solid var(--grn)"><div style="font-size:.66rem;font-weight:800;color:var(--grn)">CLASS B</div><div class="m" style="font-size:1rem;font-weight:800">128–191</div><div style="font-size:.68rem;color:var(--g5)">/16 Default</div></div><div style="background:var(--purb);padding:12px;border-radius:var(--rs);text-align:center;border:1px solid var(--pur)"><div style="font-size:.66rem;font-weight:800;color:var(--pur)">CLASS C</div><div class="m" style="font-size:1rem;font-weight:800">192–223</div><div style="font-size:.68rem;color:var(--g5)">/24 Default</div></div><div style="background:var(--ambb);padding:12px;border-radius:var(--rs);text-align:center;border:1px solid var(--amb)"><div style="font-size:.66rem;font-weight:800;color:var(--amb)">CLASS D</div><div class="m" style="font-size:1rem;font-weight:800">224–239</div><div style="font-size:.68rem;color:var(--g5)">Multicast</div></div><div style="background:var(--pnkb);padding:12px;border-radius:var(--rs);text-align:center;border:1px solid var(--pnk)"><div style="font-size:.66rem;font-weight:800;color:var(--pnk)">CLASS E</div><div class="m" style="font-size:1rem;font-weight:800">240–255</div><div style="font-size:.68rem;color:var(--g5)">Experimental</div></div></div><div style="background:var(--panel);border:1px solid var(--line);border-radius:var(--rs);padding:12px"><div style="font-size:.76rem;font-weight:700;margin-bottom:6px">Test Any IP for Class:</div><div style="display:flex;gap:8px"><input class="inp" id="classTest" placeholder="e.g. 192.168.1.1" style="max-width:180px;text-align:left" oninput="testClass()"><span id="classResult" style="display:flex;align-items:center;font-weight:800;font-size:1rem"></span></div></div></div></div>'+
+  '<div class="card mb"><div class="ch"><h3><i class="fas fa-wand-magic-sparkles"></i> Step 2: The Magic Number Formula</h3></div><div class="cb"><div class="formula" style="text-align:center;font-size:1rem">Magic Number Increment = 256 - Subnet Mask (Interesting Octet)</div><div class="g3" style="margin-top:12px"><div style="background:var(--panel);padding:12px;border-radius:var(--rs);border:1px solid var(--line)"><div class="m" style="font-size:.74rem;font-weight:800">/25 = 256 - 128 = <span style="color:var(--red)">128</span></div><div style="font-size:.68rem;color:var(--g6);margin-top:2px">2 subnets · 126 usable hosts</div></div><div style="background:var(--panel);padding:12px;border-radius:var(--rs);border:1px solid var(--line)"><div class="m" style="font-size:.74rem;font-weight:800">/26 = 256 - 192 = <span style="color:var(--red)">64</span></div><div style="font-size:.68rem;color:var(--g6);margin-top:2px">4 subnets · 62 usable hosts</div></div><div style="background:var(--panel);padding:12px;border-radius:var(--rs);border:1px solid var(--line)"><div class="m" style="font-size:.74rem;font-weight:800">/27 = 256 - 224 = <span style="color:var(--red)">32</span></div><div style="font-size:.68rem;color:var(--g6);margin-top:2px">8 subnets · 30 usable hosts</div></div></div></div></div>'+
+  '<div class="card mb"><div class="ch"><h3><i class="fas fa-list-ol"></i> Step 3: Compute 5 Fundamental Network Values</h3></div><div class="cb"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input class="inp" id="demoIP" value="203.248.112.46" style="max-width:170px;text-align:left" placeholder="IP"><input class="inp" id="demoCIDR" value="25" style="max-width:70px" min="1" max="31" type="number"><button class="btn btn-r" onclick="demoCalc()"><i class="fas fa-play"></i> Compute</button></div><div id="demoResult"></div></div></div>'+
+  '<div class="card"><div class="ch"><h3><i class="fas fa-binary"></i> Step 4: 32-Bit Binary Bit Boundary Visualization</h3></div><div class="cb"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input class="inp" id="binIP" value="203.248.112.46" style="max-width:170px;text-align:left"><input class="inp" id="binCIDR" value="25" style="max-width:70px" min="1" max="31" type="number"><button class="btn btn-r btn-s" onclick="showBinary()">Render Bits</button></div><div id="binResult"></div></div></div>';
   demoCalc();showBinary();
 };
 
 function testClass(){var ip=document.getElementById('classTest').value.trim();var el=document.getElementById('classResult');if(!ip||ip.split('.').length!==4){el.innerHTML='';return;}var first=parseInt(ip.split('.')[0]);var cls,color;
-  if(first>=1&&first<=126){cls='Class A';color='var(--blu)';}else if(first>=128&&first<=191){cls='Class B';color='var(--grn)';}else if(first>=192&&first<=223){cls='Class C';color='var(--pur)';}else if(first>=224&&first<=239){cls='Class D';color='var(--amb)';}else{cls='Class E';color='var(--pnk)';}
+  if(first>=1&&first<=126){cls='Class A (Unicast)';color='var(--blu)';}else if(first>=128&&first<=191){cls='Class B (Unicast)';color='var(--grn)';}else if(first>=192&&first<=223){cls='Class C (Unicast)';color='var(--pur)';}else if(first>=224&&first<=239){cls='Class D (Multicast)';color='var(--amb)';}else{cls='Class E (Experimental)';color='var(--pnk)';}
   el.innerHTML='<span style="color:'+color+'">'+cls+'</span>';}
 
 function demoCalc(){
@@ -492,20 +565,18 @@ function demoCalc(){
   var ipI=ip2i(ip),maskI=(~((1<<(32-c))-1))>>>0,netI=(ipI&maskI)>>>0,bcastI=(netI|(~maskI>>>0))>>>0,firstI=(netI+1)>>>0,lastI=(bcastI-1)>>>0;
   var tot=Math.pow(2,32-c),use=Math.max(0,tot-2);
   var cls=parts[0]>=1&&parts[0]<=126?'A':parts[0]>=128&&parts[0]<=191?'B':parts[0]>=192&&parts[0]<=223?'C':'D/E';
-  var h='<div class="step done"><div class="sn">1</div><h4>Class '+parts[0]+' -> '+cls+'</h4></div>';
-  h+='<div class="step done"><div class="sn">2</div><h4>Magic Number: '+(magicVal>0?'256 - '+maskParts[interesting]+' = '+magicVal:'Default /'+c)+'</h4></div>';
-  h+='<div class="step done"><div class="sn">3</div><h4>5 Key Values</h4><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px">';
-  h+='<div style="border:2px solid var(--red);padding:8px;border-radius:var(--rs);text-align:center"><div style="font-size:.56rem;font-weight:700;color:var(--red)">NETWORK</div><div class="m" style="font-size:.82rem;font-weight:700;margin-top:3px">'+i2ip(netI)+'</div></div>';
-  h+='<div style="border:2px solid var(--grn);padding:8px;border-radius:var(--rs);text-align:center"><div style="font-size:.56rem;font-weight:700;color:var(--grn)">1ST HOST</div><div class="m" style="font-size:.82rem;font-weight:700;margin-top:3px">'+i2ip(firstI)+'</div></div>';
-  h+='<div style="border:2px solid var(--blu);padding:8px;border-radius:var(--rs);text-align:center"><div style="font-size:.56rem;font-weight:700;color:var(--blu)">BROADCAST</div><div class="m" style="font-size:.82rem;font-weight:700;margin-top:3px">'+i2ip(bcastI)+'</div></div>';
-  h+='<div style="border:2px solid var(--grn);padding:8px;border-radius:var(--rs);text-align:center"><div style="font-size:.56rem;font-weight:700;color:var(--grn)">LAST HOST</div><div class="m" style="font-size:.82rem;font-weight:700;margin-top:3px">'+i2ip(lastI)+'</div></div>';
-  h+='<div style="border:2px solid var(--pur);padding:8px;border-radius:var(--rs);text-align:center"><div style="font-size:.56rem;font-weight:700;color:var(--pur)">HOSTS</div><div class="m" style="font-size:.82rem;font-weight:700;margin-top:3px">'+use.toLocaleString()+'</div></div></div></div>';
+  var h='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:12px">';
+  h+='<div style="border:2px solid var(--red);padding:8px;border-radius:var(--rs);text-align:center;background:var(--panel)"><div style="font-size:.56rem;font-weight:800;color:var(--red);font-family:var(--mono)">NETWORK ID</div><div class="m" style="font-size:.82rem;font-weight:800;margin-top:3px;color:var(--bl)">'+i2ip(netI)+'</div></div>';
+  h+='<div style="border:2px solid var(--grn);padding:8px;border-radius:var(--rs);text-align:center;background:var(--panel)"><div style="font-size:.56rem;font-weight:800;color:var(--grn);font-family:var(--mono)">FIRST HOST</div><div class="m" style="font-size:.82rem;font-weight:800;margin-top:3px;color:var(--bl)">'+i2ip(firstI)+'</div></div>';
+  h+='<div style="border:2px solid var(--blu);padding:8px;border-radius:var(--rs);text-align:center;background:var(--panel)"><div style="font-size:.56rem;font-weight:800;color:var(--blu);font-family:var(--mono)">BROADCAST</div><div class="m" style="font-size:.82rem;font-weight:800;margin-top:3px;color:var(--bl)">'+i2ip(bcastI)+'</div></div>';
+  h+='<div style="border:2px solid var(--grn);padding:8px;border-radius:var(--rs);text-align:center;background:var(--panel)"><div style="font-size:.56rem;font-weight:800;color:var(--grn);font-family:var(--mono)">LAST HOST</div><div class="m" style="font-size:.82rem;font-weight:800;margin-top:3px;color:var(--bl)">'+i2ip(lastI)+'</div></div>';
+  h+='<div style="border:2px solid var(--pur);padding:8px;border-radius:var(--rs);text-align:center;background:var(--panel)"><div style="font-size:.56rem;font-weight:800;color:var(--pur);font-family:var(--mono)">USABLE HOSTS</div><div class="m" style="font-size:.82rem;font-weight:800;margin-top:3px;color:var(--bl)">'+use.toLocaleString()+'</div></div></div>';
   document.getElementById('demoResult').innerHTML=h;}
 
 function showBinary(){var ip=document.getElementById('binIP').value.trim();var c=parseInt(document.getElementById('binCIDR').value);if(!ip||ip.split('.').length!==4||isNaN(c)||c<1||c>31)return;var parts=ip.split('.').map(Number);
   var h='<div class="binary-row">';var bi=0;
   for(var o=0;o<4;o++){var bits=parts[o].toString(2).padStart(8,'0');h+='<div class="octet"><div class="bits">';for(var b=0;b<8;b++){var cls=bi<c?'nb':'hb';if(bi===c-1&&c%8!==0)cls='mb';h+='<div class="'+cls+'">'+bits[b]+'</div>';bi++;}h+='</div><div class="dec">('+parts[o]+')</div></div>';if(o<3)h+='<div class="ds">.</div>';}
-  h+='</div><div style="display:flex;gap:14px;margin-top:6px;font-size:.68rem"><div style="display:flex;align-items:center;gap:3px"><span style="width:12px;height:12px;background:var(--rl);border:1px solid var(--red);border-radius:2px;display:inline-block"></span> Network ('+c+')</div><div style="display:flex;align-items:center;gap:3px"><span style="width:12px;height:12px;background:var(--g0);border:1px solid var(--g2);border-radius:2px;display:inline-block"></span> Host ('+(32-c)+')</div><div style="display:flex;align-items:center;gap:3px"><span style="width:12px;height:12px;background:rgba(220,38,38,.15);border:2px solid var(--red);border-radius:2px;display:inline-block"></span> Magic bit</div></div>';
+  h+='</div><div style="display:flex;gap:14px;margin-top:6px;font-size:.68rem;font-family:var(--mono)"><div style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;background:var(--rl);border:1px solid var(--red);border-radius:2px;display:inline-block"></span> Network Bits ('+c+')</div><div style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;background:var(--panel);border:1px solid var(--line);border-radius:2px;display:inline-block"></span> Host Bits ('+(32-c)+')</div><div style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;background:rgba(240,68,56,.3);border:2px solid var(--red);border-radius:2px;display:inline-block"></span> Boundary Bit</div></div>';
   document.getElementById('binResult').innerHTML=h;}
 
 /* Practice */
@@ -515,109 +586,145 @@ function genCIDR2(d){if(d==='easy')return pick([24,25,26,27,28]);if(d==='medium'
 function calcAns(ip,c){var ipI=ip2i(ip),mI=(~((1<<(32-c))-1))>>>0,nI=(ipI&mI)>>>0,bI=(nI|(~mI>>>0))>>>0;return{network:i2ip(nI),first:i2ip(nI+1),broadcast:i2ip(bI),last:i2ip(bI-1),hosts:Math.pow(2,32-c)-2};}
 
 panelRenderers.practice=function(){
-  document.getElementById('p-practice').innerHTML='<div class="card mb"><div class="ch"><h3><i class="fas fa-dumbbell"></i> Practice</h3><div class="diff-btns"><button class="on" onclick="setDiff2(\'easy\',this)">Easy</button><button onclick="setDiff2(\'medium\',this)">Medium</button><button onclick="setDiff2(\'hard\',this)">Hard</button></div></div><div class="cb"><div style="text-align:center"><div style="font-size:.9rem;font-weight:700">Given:</div><div style="margin:10px 0"><span class="quiz-ip" id="pracIP2"></span><span class="m" style="font-size:1.1rem;font-weight:700;color:var(--g5)" id="pracCIDR2"></span></div></div><div class="prog-bar"><div id="pracProg2" style="width:0%"></div></div><div style="font-size:.7rem;color:var(--g5);margin-bottom:12px" id="pracCount2">Q1/10</div><div class="quiz-fields" id="pracFields2"></div><div style="display:flex;gap:6px;margin-top:14px;justify-content:center"><button class="btn btn-r btn-lg" onclick="checkPrac2()"><i class="fas fa-check"></i> Check</button><button class="btn btn-o btn-lg" onclick="showPracAns2()"><i class="fas fa-eye"></i> Answer</button><button class="btn btn-g btn-lg" onclick="nextPrac2()"><i class="fas fa-arrow-right"></i> Next</button></div><div id="pracFB2" style="margin-top:10px"></div></div></div><div class="card" id="pracWalk2" style="display:none"><div class="ch"><h3><i class="fas fa-route"></i> Walkthrough</h3></div><div class="cb" id="pracWalkBody2"></div></div>';
+  document.getElementById('p-practice').innerHTML='<div class="card mb"><div class="ch"><h3><i class="fas fa-dumbbell"></i> Subnetting Drill Engine (Module 11)</h3><div class="diff-btns"><button class="on" onclick="setDiff2(\'easy\',this)">Easy (/24–/28)</button><button onclick="setDiff2(\'medium\',this)">Medium (/22–/30)</button><button onclick="setDiff2(\'hard\',this)">Hard (/8–/30)</button></div></div><div class="cb"><div style="text-align:center"><div style="font-size:.9rem;font-weight:700">Target IP &amp; CIDR:</div><div style="margin:10px 0"><span class="quiz-ip" id="pracIP2"></span><span class="m" style="font-size:1.2rem;font-weight:800;color:var(--g6)" id="pracCIDR2"></span></div></div><div class="prog-bar"><div id="pracProg2" style="width:0%"></div></div><div style="font-size:.7rem;color:var(--g5);margin-bottom:12px;font-family:var(--mono)" id="pracCount2">Q1/10</div><div class="quiz-fields" id="pracFields2"></div><div style="display:flex;gap:8px;margin-top:14px;justify-content:center"><button class="btn btn-r btn-lg" onclick="checkPrac2()"><i class="fas fa-check"></i> Verify</button><button class="btn btn-lg" onclick="showPracAns2()"><i class="fas fa-eye"></i> Reveal Solution</button><button class="btn btn-lg" onclick="nextPrac2()"><i class="fas fa-arrow-right"></i> Next Drill</button></div><div id="pracFB2" style="margin-top:10px"></div></div></div><div class="card" id="pracWalk2" style="display:none"><div class="ch"><h3><i class="fas fa-route"></i> Step-by-Step Breakdown</h3></div><div class="cb" id="pracWalkBody2"></div></div>';
   genPracQ2();
 };
 function setDiff2(d,btn){pracDiff=d;pracGScore=0;pracGTotal=0;pracStreak=0;pracIdx=0;document.querySelectorAll('.diff-btns button').forEach(function(b){b.classList.remove('on')});btn.classList.add('on');genPracQ2();}
 function genPracQ2(){var ip=genIP2(pracDiff),c=genCIDR2(pracDiff);pracQ={ip:ip,cidr:c,ans:calcAns(ip,c)};document.getElementById('pracIP2').textContent=ip;document.getElementById('pracCIDR2').textContent='/'+c;document.getElementById('pracCount2').textContent='Q'+(pracIdx+1)+'/10';document.getElementById('pracProg2').style.width=(pracIdx/10*100)+'%';document.getElementById('pracFB2').innerHTML='';document.getElementById('pracWalk2').style.display='none';
-  var fields=['network','first','broadcast','last','hosts'];var labels=['Network','1st Host','Broadcast','Last Host','Hosts'];var h='';for(var i=0;i<5;i++){h+='<div class="qf" id="pf-'+fields[i]+'"><label>'+labels[i]+'</label><input id="pi-'+fields[i]+'" placeholder="'+(fields[i]==='hosts'?'#':'IP')+'"></div>';}document.getElementById('pracFields2').innerHTML=h;}
+  var fields=['network','first','broadcast','last','hosts'];var labels=['Network ID','1st Host','Broadcast','Last Host','Usable Hosts'];var h='';for(var i=0;i<5;i++){h+='<div class="qf" id="pf-'+fields[i]+'"><label>'+labels[i]+'</label><input id="pi-'+fields[i]+'" placeholder="'+(fields[i]==='hosts'?'# hosts':'e.g. 10.0.1.0')+'"></div>';}document.getElementById('pracFields2').innerHTML=h;}
 function checkPrac2(){var fields=['network','first','broadcast','last','hosts'];var ans=pracQ.ans;var correct=0;fields.forEach(function(f){var val=document.getElementById('pi-'+f).value.trim().toLowerCase();var el=document.getElementById('pf-'+f);if(val===String(ans[f]).toLowerCase()){el.className='qf correct';correct++;}else{el.className='qf wrong';}});pracGTotal++;if(correct===5)pracGScore++;pracStreak=correct===5?pracStreak+1:0;
-  document.getElementById('pracFB2').innerHTML='<div style="text-align:center;padding:8px;background:'+(correct===5?'var(--grnb)':'rgba(220,38,38,.05)')+';border-radius:var(--rs)"><strong style="color:'+(correct===5?'var(--grn)':'var(--red)')+'">'+correct+'/5 | Score '+pracGScore+'/'+pracGTotal+' | Streak '+pracStreak+'</strong></div>';
+  document.getElementById('pracFB2').innerHTML='<div style="text-align:center;padding:8px;background:'+(correct===5?'var(--grnb)':'rgba(240,68,56,.1)')+';border-radius:var(--rs)"><strong style="color:'+(correct===5?'var(--grn)':'var(--red)')+';font-family:var(--mono)">'+correct+'/5 Correct | Session: '+pracGScore+'/'+pracGTotal+' | Streak: '+pracStreak+'</strong></div>';
   showWalk2(pracQ.ip,pracQ.cidr,ans);}
 function showPracAns2(){var fields=['network','first','broadcast','last','hosts'];fields.forEach(function(f){document.getElementById('pi-'+f).value=pracQ.ans[f];});pracGTotal++;showWalk2(pracQ.ip,pracQ.cidr,pracQ.ans);}
 function showWalk2(ip,c,ans){var parts=ip.split('.').map(Number);var bc=0,interesting=3;for(var o=0;o<4;o++){bc+=8;if(bc>=c){interesting=o;break;}}var mp=cidr2mask(c).split('.').map(Number);var mag=256-mp[interesting];if(c%8===0)mag=0;
-  var h='<div class="step done"><div class="sn">1</div><h4>Class '+(parts[0]<=126?'A':parts[0]<=191?'B':parts[0]<=223?'C':'D/E')+'</h4></div><div class="step done"><div class="sn">2</div><h4>Magic: '+(mag>0?'256 - '+mp[interesting]+' = '+mag:'Default /'+c)+'</h4></div><div class="step done"><div class="sn">3</div><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:6px">';
-  h+='<div style="border:2px solid var(--red);padding:6px;border-radius:var(--rs);text-align:center"><div style="font-size:.54rem;font-weight:700;color:var(--red)">NET</div><div class="m" style="font-size:.74rem;font-weight:700">'+ans.network+'</div></div>';
-  h+='<div style="border:2px solid var(--grn);padding:6px;border-radius:var(--rs);text-align:center"><div style="font-size:.54rem;font-weight:700;color:var(--grn)">1ST</div><div class="m" style="font-size:.74rem;font-weight:700">'+ans.first+'</div></div>';
-  h+='<div style="border:2px solid var(--blu);padding:6px;border-radius:var(--rs);text-align:center"><div style="font-size:.54rem;font-weight:700;color:var(--blu)">BCAST</div><div class="m" style="font-size:.74rem;font-weight:700">'+ans.broadcast+'</div></div>';
-  h+='<div style="border:2px solid var(--grn);padding:6px;border-radius:var(--rs);text-align:center"><div style="font-size:.54rem;font-weight:700;color:var(--grn)">LAST</div><div class="m" style="font-size:.74rem;font-weight:700">'+ans.last+'</div></div>';
-  h+='<div style="border:2px solid var(--pur);padding:6px;border-radius:var(--rs);text-align:center"><div style="font-size:.54rem;font-weight:700;color:var(--pur)">HOSTS</div><div class="m" style="font-size:.74rem;font-weight:700">'+ans.hosts+'</div></div></div></div>';
+  var h='<div class="step done"><div class="sn">1</div><h4>Classful Root: '+(parts[0]<=126?'Class A':parts[0]<=191?'Class B':parts[0]<=223?'Class C':'Class D/E')+'</h4></div><div class="step done"><div class="sn">2</div><h4>Magic Increment: '+(mag>0?'256 - '+mp[interesting]+' = '+mag:'Default Boundary')+'</h4></div><div class="step done"><div class="sn">3</div><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:6px">';
+  h+='<div style="border:2px solid var(--red);padding:6px;border-radius:var(--rs);text-align:center;background:var(--panel)"><div style="font-size:.54rem;font-weight:800;color:var(--red)">NET ID</div><div class="m" style="font-size:.74rem;font-weight:800">'+ans.network+'</div></div>';
+  h+='<div style="border:2px solid var(--grn);padding:6px;border-radius:var(--rs);text-align:center;background:var(--panel)"><div style="font-size:.54rem;font-weight:800;color:var(--grn)">1ST</div><div class="m" style="font-size:.74rem;font-weight:800">'+ans.first+'</div></div>';
+  h+='<div style="border:2px solid var(--blu);padding:6px;border-radius:var(--rs);text-align:center;background:var(--panel)"><div style="font-size:.54rem;font-weight:800;color:var(--blu)">BCAST</div><div class="m" style="font-size:.74rem;font-weight:800">'+ans.broadcast+'</div></div>';
+  h+='<div style="border:2px solid var(--grn);padding:6px;border-radius:var(--rs);text-align:center;background:var(--panel)"><div style="font-size:.54rem;font-weight:800;color:var(--grn)">LAST</div><div class="m" style="font-size:.74rem;font-weight:800">'+ans.last+'</div></div>';
+  h+='<div style="border:2px solid var(--pur);padding:6px;border-radius:var(--rs);text-align:center;background:var(--panel)"><div style="font-size:.54rem;font-weight:800;color:var(--pur)">HOSTS</div><div class="m" style="font-size:.74rem;font-weight:800">'+ans.hosts+'</div></div></div></div>';
   document.getElementById('pracWalkBody2').innerHTML=h;document.getElementById('pracWalk2').style.display='block';}
 function nextPrac2(){pracIdx++;if(pracIdx>=10)pracIdx=0;genPracQ2();}
 
 /* Quiz */
 var qzRun=false,qzTimer=null,qzCorr=0,qzWrong=0,qzBest=0,qzStreak=0,qzQ={},qzDone=false;
 panelRenderers.quiz=function(){
-  document.getElementById('p-quiz').innerHTML='<div class="card"><div class="ch"><h3><i class="fas fa-clock"></i> Timed Quiz (60s)</h3><div style="display:flex;gap:6px;align-items:center"><span class="m" style="font-size:1.2rem;font-weight:800;color:var(--red)" id="qzTimer2">60</span><span style="font-size:.66rem;color:var(--g5)">sec</span><button class="btn btn-r btn-s" onclick="startQz()" id="qzStart2"><i class="fas fa-play"></i> Start</button></div></div><div class="cb"><div style="text-align:center;padding:16px"><div style="font-size:1rem;font-weight:700;margin-bottom:6px" id="qzStatus2">Press Start</div><div class="g5" style="margin-top:16px;max-width:560px;margin-left:auto;margin-right:auto"><div style="background:var(--g0);padding:10px;border-radius:var(--rs);text-align:center"><div style="font-size:.58rem;color:var(--g5)">CORRECT</div><div class="m" style="font-size:1.2rem;font-weight:800;color:var(--grn)" id="qzC2">0</div></div><div style="background:var(--g0);padding:10px;border-radius:var(--rs);text-align:center"><div style="font-size:.58rem;color:var(--g5)">WRONG</div><div class="m" style="font-size:1.2rem;font-weight:800;color:var(--red)" id="qzW2">0</div></div><div style="background:var(--g0);padding:10px;border-radius:var(--rs);text-align:center"><div style="font-size:.58rem;color:var(--g5)">SPEED</div><div class="m" style="font-size:1.2rem;font-weight:800;color:var(--blu)" id="qzSp2">0s</div></div><div style="background:var(--g0);padding:10px;border-radius:var(--rs);text-align:center"><div style="font-size:.58rem;color:var(--g5)">BEST</div><div class="m" style="font-size:1.2rem;font-weight:800;color:var(--amb)" id="qzBs2">0</div></div><div style="background:var(--g0);padding:10px;border-radius:var(--rs);text-align:center"><div style="font-size:.58rem;color:var(--g5)">STREAK</div><div class="m" style="font-size:1.2rem;font-weight:800;color:var(--pur)" id="qzSt2">0</div></div></div></div><div id="qzBody2" style="display:none"><div style="text-align:center;margin:8px 0"><span class="quiz-ip" id="qzIP2"></span><span class="m" style="font-size:1.1rem;font-weight:700;color:var(--g5)" id="qzCIDR2"></span></div><div class="quiz-fields" id="qzFields2"></div><div style="text-align:center;margin-top:12px"><button class="btn btn-r btn-lg" onclick="checkQz()"><i class="fas fa-check"></i> Submit</button></div><div id="qzFB2" style="text-align:center;margin-top:8px"></div></div></div></div>';
+  document.getElementById('p-quiz').innerHTML='<div class="card"><div class="ch"><h3><i class="fas fa-clock"></i> 60-Second Timed Calculation Exam</h3><div style="display:flex;gap:6px;align-items:center"><span class="m" style="font-size:1.2rem;font-weight:800;color:var(--red)" id="qzTimer2">60</span><span style="font-size:.66rem;color:var(--g5);font-family:var(--mono)">sec</span><button class="btn btn-r btn-s" onclick="startQz()" id="qzStart2"><i class="fas fa-play"></i> Start Clock</button></div></div><div class="cb"><div style="text-align:center;padding:14px"><div style="font-size:1rem;font-weight:800;margin-bottom:6px" id="qzStatus2">Press Start Clock to Begin</div><div class="g5" style="margin-top:14px;max-width:580px;margin-left:auto;margin-right:auto"><div style="background:var(--panel);padding:10px;border-radius:var(--rs);text-align:center;border:1px solid var(--line)"><div style="font-size:.58rem;color:var(--g5);font-family:var(--mono)">CORRECT</div><div class="m" style="font-size:1.2rem;font-weight:800;color:var(--grn)" id="qzC2">0</div></div><div style="background:var(--panel);padding:10px;border-radius:var(--rs);text-align:center;border:1px solid var(--line)"><div style="font-size:.58rem;color:var(--g5);font-family:var(--mono)">MISTAKES</div><div class="m" style="font-size:1.2rem;font-weight:800;color:var(--red)" id="qzW2">0</div></div><div style="background:var(--panel);padding:10px;border-radius:var(--rs);text-align:center;border:1px solid var(--line)"><div style="font-size:.58rem;color:var(--g5);font-family:var(--mono)">PACE</div><div class="m" style="font-size:1.2rem;font-weight:800;color:var(--blu)" id="qzSp2">0s</div></div><div style="background:var(--panel);padding:10px;border-radius:var(--rs);text-align:center;border:1px solid var(--line)"><div style="font-size:.58rem;color:var(--g5);font-family:var(--mono)">HIGH SCORE</div><div class="m" style="font-size:1.2rem;font-weight:800;color:var(--amb)" id="qzBs2">0</div></div><div style="background:var(--panel);padding:10px;border-radius:var(--rs);text-align:center;border:1px solid var(--line)"><div style="font-size:.58rem;color:var(--g5);font-family:var(--mono)">STREAK</div><div class="m" style="font-size:1.2rem;font-weight:800;color:var(--pur)" id="qzSt2">0</div></div></div></div><div id="qzBody2" style="display:none"><div style="text-align:center;margin:8px 0"><span class="quiz-ip" id="qzIP2"></span><span class="m" style="font-size:1.2rem;font-weight:800;color:var(--g6)" id="qzCIDR2"></span></div><div class="quiz-fields" id="qzFields2"></div><div style="text-align:center;margin-top:12px"><button class="btn btn-r btn-lg" onclick="checkQz()"><i class="fas fa-check"></i> Submit Rapid Answer</button></div><div id="qzFB2" style="text-align:center;margin-top:8px"></div></div></div></div>';
 };
-function startQz(){if(qzTimer)clearInterval(qzTimer);qzRun=true;qzCorr=0;qzWrong=0;qzStreak=0;qzDone=false;document.getElementById('qzTimer2').textContent='60';document.getElementById('qzC2').textContent='0';document.getElementById('qzW2').textContent='0';document.getElementById('qzBody2').style.display='block';document.getElementById('qzStart2').textContent='Restart';document.getElementById('qzStatus2').textContent='GO!';genQzQ();
-  var st=Date.now();qzTimer=setInterval(function(){var v=Math.max(0,60-Math.floor((Date.now()-st)/1000));document.getElementById('qzTimer2').textContent=v;if(v<=0){clearInterval(qzTimer);qzRun=false;document.getElementById('qzStatus2').textContent='Time Up!';document.getElementById('qzBody2').style.display='none';if(qzCorr>qzBest){qzBest=qzCorr;document.getElementById('qzBs2').textContent=qzBest;}}},100);}
+function startQz(){if(qzTimer)clearInterval(qzTimer);qzRun=true;qzCorr=0;qzWrong=0;qzStreak=0;qzDone=false;document.getElementById('qzTimer2').textContent='60';document.getElementById('qzC2').textContent='0';document.getElementById('qzW2').textContent='0';document.getElementById('qzBody2').style.display='block';document.getElementById('qzStart2').textContent='Restart';document.getElementById('qzStatus2').textContent='EXAM IN PROGRESS';genQzQ();
+  var st=Date.now();qzTimer=setInterval(function(){var v=Math.max(0,60-Math.floor((Date.now()-st)/1000));document.getElementById('qzTimer2').textContent=v;if(v<=0){clearInterval(qzTimer);qzRun=false;document.getElementById('qzStatus2').textContent='TIME EXPIRED!';document.getElementById('qzBody2').style.display='none';if(qzCorr>qzBest){qzBest=qzCorr;document.getElementById('qzBs2').textContent=qzBest;}}},100);}
 function genQzQ(){var ip=genIP2(pracDiff),c=genCIDR2(pracDiff);qzQ={ip:ip,cidr:c,ans:calcAns(ip,c),st:Date.now()};qzDone=false;document.getElementById('qzIP2').textContent=ip;document.getElementById('qzCIDR2').textContent='/'+c;document.getElementById('qzFB2').innerHTML='';
-  var fields=['network','first','broadcast','last','hosts'];var labels=['Network','1st Host','Broadcast','Last Host','Hosts'];var h='';for(var i=0;i<5;i++){h+='<div class="qf" id="qf-'+fields[i]+'"><label>'+labels[i]+'</label><input id="qi-'+fields[i]+'" placeholder="'+(fields[i]==='hosts'?'#':'IP')+'" onkeydown="if(event.key===\'Enter\')checkQz()"></div>';}
+  var fields=['network','first','broadcast','last','hosts'];var labels=['Network ID','1st Host','Broadcast','Last Host','Usable Hosts'];var h='';for(var i=0;i<5;i++){h+='<div class="qf" id="qf-'+fields[i]+'"><label>'+labels[i]+'</label><input id="qi-'+fields[i]+'" placeholder="'+(fields[i]==='hosts'?'#':'IP')+'" onkeydown="if(event.key===\'Enter\')checkQz()"></div>';}
   document.getElementById('qzFields2').innerHTML=h;}
 function checkQz(){if(qzDone||!qzRun)return;qzDone=true;var fields=['network','first','broadcast','last','hosts'];var ans=qzQ.ans;var correct=0;var el=((Date.now()-qzQ.st)/1000).toFixed(1);
   fields.forEach(function(f){var val=document.getElementById('qi-'+f).value.trim().toLowerCase();var e=document.getElementById('qf-'+f);if(val===String(ans[f]).toLowerCase()){e.className='qf correct';correct++;}else{e.className='qf wrong';}});
   if(correct===5){qzCorr++;qzStreak++;}else{qzWrong++;qzStreak=0;}
   document.getElementById('qzC2').textContent=qzCorr;document.getElementById('qzW2').textContent=qzWrong;document.getElementById('qzSp2').textContent=el+'s';document.getElementById('qzSt2').textContent=qzStreak;
-  document.getElementById('qzFB2').innerHTML='<span style="color:'+(correct===5?'var(--grn)':'var(--red)')+';font-weight:700">'+correct+'/5 - '+el+'s</span>';
-  setTimeout(function(){if(qzRun)genQzQ();},correct===5?500:1000);}
+  document.getElementById('qzFB2').innerHTML='<span style="color:'+(correct===5?'var(--grn)':'var(--red)')+';font-weight:800;font-family:var(--mono)">'+correct+'/5 Correct in '+el+'s</span>';
+  setTimeout(function(){if(qzRun)genQzQ();},correct===5?400:900);}
 
-/* Labs */
+/* Labs 1-5 */
 panelRenderers.lab1=function(){
-  document.getElementById('p-lab1').innerHTML='<div class="scn-b" style="border-left:4px solid var(--red)"><h3><i class="fas fa-flask" style="color:var(--red)"></i> Lab: Department Segmentation</h3><p>Design VLANs for 5 departments. Parent: 10.0.0.0/16</p></div><div class="card mb"><div class="ch"><h3>Your Design</h3></div><div class="cb" id="lab1F"></div></div><div class="card"><div class="ch"><h3>Score</h3><button class="btn btn-r" onclick="checkL1()"><i class="fas fa-check"></i> Submit</button></div><div class="cb" id="lab1R"><div style="text-align:center;padding:16px;color:var(--g4)">Design and submit</div></div></div>';
-  var depts=[{n:'Engineering',h:80,v:100},{n:'HR',h:30,v:200},{n:'Finance',h:20,v:300},{n:'Servers',h:15,v:10},{n:'Guest',h:100,v:2000}];var fh='';depts.forEach(function(d,i){fh+='<div style="background:var(--g0);border:1px solid var(--g2);border-radius:var(--rs);padding:10px;margin-bottom:8px"><label style="font-size:.74rem;font-weight:600;display:block;margin-bottom:4px">'+d.n+' ('+d.h+' hosts, VLAN '+d.v+')</label><div class="fg"><div><label class="lbl" style="font-size:.56rem">CIDR</label><input class="inp" id="l1c'+i+'" placeholder="10.0.x.0/24"></div><div><label class="lbl" style="font-size:.56rem">VLAN</label><input class="inp" id="l1v'+i+'" value="'+d.v+'"></div></div></div>';});
-  fh+='<div style="background:var(--g0);border:1px solid var(--g2);border-radius:var(--rs);padding:10px"><label style="font-size:.74rem;font-weight:600;display:block;margin-bottom:4px">Firewall: Guest->Internal</label><div class="fg"><div><label class="lbl" style="font-size:.56rem">Action</label><select class="inp" id="l1a"><option value="BLOCK">BLOCK</option><option value="ALLOW">ALLOW</option></select></div><div><label class="lbl" style="font-size:.56rem">Destination</label><select class="inp" id="l1d"><option value="ALL_INTERNAL">ALL_INTERNAL</option><option value="Servers">Servers</option></select></div></div></div>';
+  document.getElementById('p-lab1').innerHTML='<div class="scn-b" style="border-left:4px solid var(--red)"><h3><i class="fas fa-flask" style="color:var(--red)"></i> Lab 1: Department Subnet Allocation (Module 12)</h3><p>Partition parent space <strong>10.0.0.0/16</strong> across 5 enterprise departments with zero overlapping CIDR blocks.</p></div><div class="card mb"><div class="ch"><h3>Your Subnet Allocation Plan</h3></div><div class="cb" id="lab1F"></div></div><div class="card"><div class="ch"><h3>Automated Grading Engine</h3><button class="btn btn-r" onclick="checkL1()"><i class="fas fa-check"></i> Submit Plan for Verification</button></div><div class="cb" id="lab1R"><div style="text-align:center;padding:16px;color:var(--g5)">Enter your subnet prefixes and click submit.</div></div></div>';
+  var depts=[{n:'Engineering',h:80,v:100},{n:'HR',h:30,v:200},{n:'Finance',h:20,v:300},{n:'Servers',h:15,v:10},{n:'Guest',h:100,v:2000}];var fh='';depts.forEach(function(d,i){fh+='<div style="background:var(--panel);border:1px solid var(--line);border-radius:var(--rs);padding:10px;margin-bottom:8px"><label style="font-size:.74rem;font-weight:700;display:block;margin-bottom:4px;color:var(--bl)">'+d.n+' ('+d.h+' hosts needed, Target VLAN '+d.v+')</label><div class="fg"><div><label class="lbl">Assigned CIDR Subnet</label><input class="inp" id="l1c'+i+'" placeholder="e.g. 10.0.1.0/25"></div><div><label class="lbl">VLAN Tag ID</label><input class="inp" id="l1v'+i+'" value="'+d.v+'"></div></div></div>';});
+  fh+='<div style="background:var(--panel);border:1px solid var(--line);border-radius:var(--rs);padding:10px"><label style="font-size:.74rem;font-weight:700;display:block;margin-bottom:4px;color:var(--bl)">Firewall Policy: Guest to Internal</label><div class="fg"><div><label class="lbl">Policy Action</label><select class="inp" id="l1a"><option value="BLOCK">BLOCK (Drop)</option><option value="ALLOW">ALLOW</option></select></div><div><label class="lbl">Target Scope</label><select class="inp" id="l1d"><option value="ALL_INTERNAL">ALL_INTERNAL</option><option value="Servers">Servers</option></select></div></div></div>';
   document.getElementById('lab1F').innerHTML=fh;
 };
 function checkL1(){var score=0,fb=[];var req=[{n:'Engineering',h:80},{n:'HR',h:30},{n:'Finance',h:20},{n:'Servers',h:15},{n:'Guest',h:100}];var expV=[100,200,300,10,2000];
   for(var i=0;i<5;i++){var c=document.getElementById('l1c'+i).value.trim();var v=parseInt(document.getElementById('l1v'+i).value);
-    if(c){var pts=c.split('/');if(pts.length===2){var cidr=parseInt(pts[1]);var use=Math.pow(2,32-cidr)-2;if(use>=req[i].h)score+=12;else{fb.push(req[i].n+': too small ('+use+' hosts, need '+req[i].h+')');score+=3;}if(v===expV[i])score+=8;else fb.push(req[i].n+': wrong VLAN');}}
-    else{fb.push(req[i].n+': no CIDR');}}
+    if(c){var pts=c.split('/');if(pts.length===2){var cidr=parseInt(pts[1]);var use=Math.pow(2,32-cidr)-2;if(use>=req[i].h)score+=12;else{fb.push(req[i].n+': prefix /'+cidr+' yields '+use+' hosts, need at least '+req[i].h);score+=3;}if(v===expV[i])score+=8;else fb.push(req[i].n+': unexpected VLAN tag');}}
+    else{fb.push(req[i].n+': missing CIDR prefix');}}
   var act=document.getElementById('l1a').value;var dst=document.getElementById('l1d').value;
-  if(act==='BLOCK'&&dst==='ALL_INTERNAL')score+=10;else fb.push('Firewall: should BLOCK Guest->ALL_INTERNAL');
+  if(act==='BLOCK'&&dst==='ALL_INTERNAL')score+=10;else fb.push('Firewall: Guest zone must explicitly BLOCK ALL_INTERNAL traffic');
   score=Math.max(0,Math.min(100,score));var color=score>=80?'var(--grn)':score>=60?'var(--amb)':'var(--red)';
-  var h='<div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--g0);border:2px solid var(--g2);border-radius:var(--r)"><div class="m" style="font-size:2rem;font-weight:900;color:'+color+'">'+score+'</div><div><div style="font-weight:700">/100</div></div></div>';
-  if(fb.length){h+='<div style="margin-top:10px;padding:10px;background:rgba(220,38,38,.04);border:1px solid var(--rl);border-radius:var(--rs)"><div style="font-weight:700;color:var(--red);margin-bottom:4px;font-size:.78rem">Feedback</div>';fb.forEach(function(f){h+='<div style="font-size:.72rem;color:var(--g6)">- '+f+'</div>';});h+='</div>';}
-  h+='<div style="margin-top:10px;padding:10px;background:rgba(22,163,74,.04);border:1px solid var(--grnb);border-radius:var(--rs)"><div style="font-weight:700;color:var(--grn);margin-bottom:4px;font-size:.78rem">Reference</div><div style="font-size:.72rem;color:var(--g6)">Eng: /25 (126h), HR: /27 (30h), Fin: /27 (30h), Srv: /28 (14h), Guest: /25 (126h)</div></div>';
+  var h='<div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--panel);border:2px solid var(--line);border-radius:var(--r)"><div class="m" style="font-size:2rem;font-weight:900;color:'+color+'">'+score+'</div><div><div style="font-weight:800;color:var(--bl)">Score: '+score+'/100</div><div style="font-size:.66rem;color:var(--g6)">Evaluation against Module 12 requirements</div></div></div>';
+  if(fb.length){h+='<div style="margin-top:10px;padding:10px;background:rgba(240,68,56,.1);border:1px solid var(--rl);border-radius:var(--rs)"><div style="font-weight:800;color:var(--red);margin-bottom:4px;font-size:.78rem">Feedback Points</div>';fb.forEach(function(f){h+='<div style="font-size:.72rem;color:var(--g6)">• '+f+'</div>';});h+='</div>';}
+  h+='<div style="margin-top:10px;padding:10px;background:rgba(16,185,129,.1);border:1px solid var(--grnb);border-radius:var(--rs)"><div style="font-weight:800;color:var(--grn);margin-bottom:4px;font-size:.78rem">Optimal Solution Blueprint</div><div style="font-size:.72rem;color:var(--g6)">Eng: 10.0.0.0/25 (126 hosts), Guest: 10.0.0.128/25 (126 hosts), HR: 10.0.1.0/27 (30 hosts), Finance: 10.0.1.32/27 (30 hosts), Servers: 10.0.1.64/28 (14 hosts).</div></div>';
   document.getElementById('lab1R').innerHTML=h;}
 
 panelRenderers.lab2=function(){
-  document.getElementById('p-lab2').innerHTML='<div class="scn-b" style="border-left:4px solid var(--pur)"><h3><i class="fas fa-flask" style="color:var(--pur)"></i> Lab: Zero Trust Firewall Rules</h3><p>Configure 6 firewall rules for zero-trust segmentation.</p></div><div class="card mb"><div class="ch"><h3>Reference Rules</h3></div><div class="cb"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:.72rem;color:var(--g6)"><div style="background:var(--g0);padding:8px;border-radius:var(--rs)">1. Eng->Srv: ALLOW TCP 22,80,443</div><div style="background:var(--g0);padding:8px;border-radius:var(--rs)">2. HR->Srv: ALLOW TCP 80,443</div><div style="background:var(--g0);padding:8px;border-radius:var(--rs)">3. VoIP->VoIP: ALLOW UDP 5060</div><div style="background:var(--g0);padding:8px;border-radius:var(--rs)">4. Guest->ALL: BLOCK</div><div style="background:var(--g0);padding:8px;border-radius:var(--rs)">5. Mgmt->ALL: ALLOW 22,80,443</div><div style="background:var(--g0);padding:8px;border-radius:var(--rs)">6. Eng->HR: BLOCK</div></div></div></div><div class="card mb"><div class="ch"><h3>Configure</h3></div><div class="cb" id="lab2F"></div></div><div class="card"><div class="ch"><h3>Score</h3><button class="btn btn-r" onclick="checkL2()"><i class="fas fa-check"></i> Submit</button></div><div class="cb" id="lab2R"><div style="text-align:center;padding:16px;color:var(--g4)">Configure and submit</div></div></div>';
+  document.getElementById('p-lab2').innerHTML='<div class="scn-b" style="border-left:4px solid var(--pur)"><h3><i class="fas fa-flask" style="color:var(--pur)"></i> Lab 2: Zero Trust Micro-Segmentation (Module 13 &amp; 38)</h3><p>Establish 6 strict least-privilege firewall rules to isolate lateral attacker movement across segments.</p></div><div class="card mb"><div class="ch"><h3>Required Policy Matrix</h3></div><div class="cb"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:.72rem;color:var(--g6)"><div style="background:var(--panel);padding:8px;border-radius:var(--rs)">1. Engineering -> Servers: ALLOW TCP 22,80,443</div><div style="background:var(--panel);padding:8px;border-radius:var(--rs)">2. HR -> Servers: ALLOW TCP 80,443</div><div style="background:var(--panel);padding:8px;border-radius:var(--rs)">3. VoIP -> VoIP: ALLOW UDP 5060</div><div style="background:var(--panel);padding:8px;border-radius:var(--rs)">4. Guest WiFi -> ALL_INTERNAL: BLOCK</div><div style="background:var(--panel);padding:8px;border-radius:var(--rs)">5. Management -> ALL_INTERNAL: ALLOW TCP 22,80,443</div><div style="background:var(--panel);padding:8px;border-radius:var(--rs)">6. Engineering -> HR: BLOCK</div></div></div></div><div class="card mb"><div class="ch"><h3>Configure Rules</h3></div><div class="cb" id="lab2F"></div></div><div class="card"><div class="ch"><h3>Score</h3><button class="btn btn-r" onclick="checkL2()"><i class="fas fa-check"></i> Submit Ruleset</button></div><div class="cb" id="lab2R"><div style="text-align:center;padding:16px;color:var(--g5)">Configure and submit for grading.</div></div></div>';
   var segOpts='';SEGMENTS.forEach(function(s){segOpts+='<option value="'+s.name+'">'+s.name+'</option>';});segOpts+='<option value="ALL_INTERNAL">ALL_INTERNAL</option>';
-  var fh='';for(var i=0;i<6;i++){fh+='<div style="background:var(--g0);border:1px solid var(--g2);border-radius:var(--rs);padding:8px;margin-bottom:6px"><div style="font-size:.68rem;font-weight:700;margin-bottom:4px">Rule '+(i+1)+'</div><div class="fg"><div><select class="inp" id="l2s'+i+'">'+segOpts+'</select></div><div><select class="inp" id="l2d'+i+'">'+segOpts+'</select></div></div><div class="fg"><div><select class="inp" id="l2a'+i+'"><option value="ALLOW">ALLOW</option><option value="BLOCK">BLOCK</option></select></div><div><input class="inp" id="l2p'+i+'" placeholder="ports (e.g. 22,80,443)"></div></div></div>';}
+  var fh='';for(var i=0;i<6;i++){fh+='<div style="background:var(--panel);border:1px solid var(--line);border-radius:var(--rs);padding:8px;margin-bottom:6px"><div style="font-size:.68rem;font-weight:800;margin-bottom:4px;color:var(--bl)">Rule '+(i+1)+'</div><div class="fg"><div><select class="inp" id="l2s'+i+'">'+segOpts+'</select></div><div><select class="inp" id="l2d'+i+'">'+segOpts+'</select></div></div><div class="fg"><div><select class="inp" id="l2a'+i+'"><option value="ALLOW">ALLOW</option><option value="BLOCK">BLOCK</option></select></div><div><input class="inp" id="l2p'+i+'" placeholder="Ports (e.g. 22,80,443)"></div></div></div>';}
   document.getElementById('lab2F').innerHTML=fh;
 };
 function checkL2(){var expected=[{s:'Engineering',d:'Servers',a:'ALLOW',p:'22,80,443'},{s:'HR',d:'Servers',a:'ALLOW',p:'80,443'},{s:'VoIP',d:'VoIP',a:'ALLOW',p:'5060'},{s:'Guest WiFi',d:'ALL_INTERNAL',a:'BLOCK'},{s:'Management',d:'ALL_INTERNAL',a:'ALLOW',p:'22,80,443'},{s:'Engineering',d:'HR',a:'BLOCK'}];
   var score=0,fb=[];for(var i=0;i<6;i++){var s=document.getElementById('l2s'+i).value;var d=document.getElementById('l2d'+i).value;var a=document.getElementById('l2a'+i).value;var p=document.getElementById('l2p'+i).value.trim();var e=expected[i];
-    if(s===e.s)score+=5;else fb.push('Rule '+(i+1)+': wrong source');if(d===e.d)score+=5;else fb.push('Rule '+(i+1)+': wrong dest');if(a===e.a)score+=5;else fb.push('Rule '+(i+1)+': wrong action');if(e.p&&p===e.p)score+=2;else if(e.p)fb.push('Rule '+(i+1)+': wrong ports');else score+=2;}
+    if(s===e.s)score+=5;else fb.push('Rule '+(i+1)+': source mismatch');if(d===e.d)score+=5;else fb.push('Rule '+(i+1)+': destination mismatch');if(a===e.a)score+=5;else fb.push('Rule '+(i+1)+': action mismatch');if(e.p&&p===e.p)score+=2;else if(e.p)fb.push('Rule '+(i+1)+': ports mismatch');else score+=2;}
   score=Math.min(100,score);var color=score>=80?'var(--grn)':score>=60?'var(--amb)':'var(--red)';
-  var h='<div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--g0);border:2px solid var(--g2);border-radius:var(--r)"><div class="m" style="font-size:2rem;font-weight:900;color:'+color+'">'+score+'</div><div><div style="font-weight:700">/100</div></div></div>';
-  if(fb.length){h+='<div style="margin-top:8px;padding:8px;background:rgba(220,38,38,.04);border:1px solid var(--rl);border-radius:var(--rs)"><div style="font-weight:700;color:var(--red);margin-bottom:3px;font-size:.76rem">Feedback</div>';fb.forEach(function(f){h+='<div style="font-size:.7rem;color:var(--g6)">- '+f+'</div>';});h+='</div>';}
+  var h='<div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--panel);border:2px solid var(--line);border-radius:var(--r)"><div class="m" style="font-size:2rem;font-weight:900;color:'+color+'">'+score+'</div><div><div style="font-weight:800;color:var(--bl)">Score: '+score+'/100</div></div></div>';
+  if(fb.length){h+='<div style="margin-top:8px;padding:8px;background:rgba(240,68,56,.1);border:1px solid var(--rl);border-radius:var(--rs)"><div style="font-weight:800;color:var(--red);margin-bottom:3px;font-size:.76rem">Feedback</div>';fb.forEach(function(f){h+='<div style="font-size:.7rem;color:var(--g6)">• '+f+'</div>';});h+='</div>';}
   document.getElementById('lab2R').innerHTML=h;}
+
+panelRenderers.lab3=function(){
+  document.getElementById('p-lab3').innerHTML='<div class="scn-b" style="border-left:4px solid var(--blu)"><h3><i class="fas fa-crosshairs" style="color:var(--blu)"></i> Lab 3: Port Enumeration &amp; Reconnaissance (Module 19)</h3><p>Audit server target <strong>srv-db-01 (10.0.10.12)</strong>. Discover all listening ports and extract the unauthenticated database service port.</p></div><div class="card mb"><div class="ch"><h3>Recon Mission Input</h3></div><div class="cb"><div class="fg"><div><label class="lbl">Discovered Database Port</label><input class="inp" id="l3Port" placeholder="e.g. 3306"></div><div><label class="lbl">Service Protocol Name</label><input class="inp" id="l3Svc" placeholder="e.g. mysql"></div></div><div class="fg"><div><label class="lbl">SSH Administrative Port</label><input class="inp" id="l3SSH" placeholder="e.g. 22"></div><div><label class="lbl">Recommended Remediation Action</label><select class="inp" id="l3Rem"><option value="firewall">Bind to localhost + Firewall restrict to VLAN 1000</option><option value="open">Leave open to all internal subnets</option></select></div></div><button class="btn btn-r" onclick="checkL3()"><i class="fas fa-check"></i> Submit Recon Audit</button></div></div><div class="card"><div class="ch"><h3>Score</h3></div><div class="cb" id="lab3R"><div style="text-align:center;padding:16px;color:var(--g5)">Submit your findings for verification.</div></div></div>';
+};
+function checkL3(){var p=document.getElementById('l3Port').value.trim(),s=document.getElementById('l3Svc').value.trim().toLowerCase(),ssh=document.getElementById('l3SSH').value.trim(),rem=document.getElementById('l3Rem').value;
+  var score=0,fb=[];
+  if(p==='3306'||p==='5432')score+=30;else fb.push('Database Port: 10.0.10.12 exposes MySQL on port 3306');
+  if(s==='mysql'||s==='postgresql')score+=30;else fb.push('Service Protocol: MySQL service');
+  if(ssh==='22')score+=20;else fb.push('SSH Port: standard port 22');
+  if(rem==='firewall')score+=20;else fb.push('Remediation: restrict database ports strictly to authorized application servers');
+  var color=score>=80?'var(--grn)':score>=60?'var(--amb)':'var(--red)';
+  document.getElementById('lab3R').innerHTML='<div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--panel);border:2px solid var(--line);border-radius:var(--r)"><div class="m" style="font-size:2rem;font-weight:900;color:'+color+'">'+score+'</div><div><div style="font-weight:800;color:var(--bl)">Score: '+score+'/100</div><div style="font-size:.66rem;color:var(--g6)">Module 19 Verification Assessment</div></div></div>';
+}
+
+panelRenderers.lab4=function(){
+  document.getElementById('p-lab4').innerHTML='<div class="scn-b" style="border-left:4px solid var(--amb)"><h3><i class="fas fa-list-check" style="color:var(--amb)"></i> Lab 4: SOC Incident Response &amp; Lateral Movement Triage (Module 25 &amp; 26)</h3><p>An attacker breached workstation <strong>eng-01 (10.0.1.11)</strong> via phishing and attempted lateral pivot over SMB (445) into the core database <strong>10.0.10.12</strong>. Isolate the threat.</p></div><div class="card mb"><div class="ch"><h3>Incident Response Actions</h3></div><div class="cb"><div class="fg"><div><label class="lbl">Compromised Source IP</label><input class="inp" id="l4Src" placeholder="e.g. 10.0.1.11"></div><div><label class="lbl">Attacked Service Port</label><input class="inp" id="l4DstP" placeholder="e.g. 445"></div></div><div class="fg"><div><label class="lbl">Immediate Containment Action</label><select class="inp" id="l4Act"><option value="quarantine">Isolate eng-01 to Quarantine VLAN 999 &amp; Drop TCP 445</option><option value="reboot">Reboot workstation</option></select></div><div><label class="lbl">SIEM Triage Severity</label><select class="inp" id="l4Sev"><option value="critical">CRITICAL (Active Lateral Movement)</option><option value="info">INFO</option></select></div></div><button class="btn btn-r" onclick="checkL4()"><i class="fas fa-shield-virus"></i> Execute Containment</button></div></div><div class="card"><div class="ch"><h3>Incident Outcome</h3></div><div class="cb" id="lab4R"><div style="text-align:center;padding:16px;color:var(--g5)">Execute incident response workflow to verify containment.</div></div></div>';
+};
+function checkL4(){var src=document.getElementById('l4Src').value.trim(),p=document.getElementById('l4DstP').value.trim(),act=document.getElementById('l4Act').value,sev=document.getElementById('l4Sev').value;
+  var score=0;
+  if(src==='10.0.1.11')score+=30;
+  if(p==='445'||p==='3306')score+=30;
+  if(act==='quarantine')score+=20;
+  if(sev==='critical')score+=20;
+  var color=score>=80?'var(--grn)':score>=60?'var(--amb)':'var(--red)';
+  document.getElementById('lab4R').innerHTML='<div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--panel);border:2px solid var(--line);border-radius:var(--r)"><div class="m" style="font-size:2rem;font-weight:900;color:'+color+'">'+score+'</div><div><div style="font-weight:800;color:var(--bl)">Score: '+score+'/100</div><div style="font-size:.66rem;color:var(--g6)">Incident Contained Successfully</div></div></div>';
+}
+
+panelRenderers.lab5=function(){
+  document.getElementById('p-lab5').innerHTML='<div class="scn-b" style="border-left:4px solid var(--grn)"><h3><i class="fas fa-fish" style="color:var(--grn)"></i> Lab 5: Wireshark Packet Forensics &amp; C2 Detection (Module 28)</h3><p>Analyze captured frames to extract covert DNS tunnel data and cleartext authentication credentials.</p></div><div class="card mb"><div class="ch"><h3>Forensic Inspection Form</h3></div><div class="cb"><div class="fg"><div><label class="lbl">Covert Tunnel Protocol</label><input class="inp" id="l5P" placeholder="e.g. DNS or UDP"></div><div><label class="lbl">Cleartext HTTP URI Path</label><input class="inp" id="l5URI" placeholder="e.g. /api/v1/auth"></div></div><button class="btn btn-r" onclick="checkL5()"><i class="fas fa-check"></i> Submit Forensic Findings</button></div></div><div class="card"><div class="ch"><h3>Score</h3></div><div class="cb" id="lab5R"><div style="text-align:center;padding:16px;color:var(--g5)">Submit packet analysis findings.</div></div></div>';
+};
+function checkL5(){var p=document.getElementById('l5P').value.trim().toUpperCase(),uri=document.getElementById('l5URI').value.trim();
+  var score=0;
+  if(p==='DNS'||p==='UDP')score+=50;
+  if(uri.indexOf('auth')>=0||uri.indexOf('login')>=0)score+=50;
+  var color=score>=80?'var(--grn)':score>=60?'var(--amb)':'var(--red)';
+  document.getElementById('lab5R').innerHTML='<div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--panel);border:2px solid var(--line);border-radius:var(--r)"><div class="m" style="font-size:2rem;font-weight:900;color:'+color+'">'+score+'</div><div><div style="font-weight:800;color:var(--bl)">Score: '+score+'/100</div><div style="font-size:.66rem;color:var(--g6)">Forensic Packet Artifacts Verified</div></div></div>';
+}
 
 /* ═══ AI PANEL ═══ */
 var aiChat=[];
 function aiGuide(p){
   var msgs={dashboard:'Dashboard overview: '+SEGMENTS.length+' segments, '+ASSETS.length+' assets, '+SIEM_EVTS.filter(function(e){return e.sev==='critical'}).length+' critical alerts.',
-  subnets:'IP Space by zone.',seg:'Topology + flow matrix. Click segments.',vlans:'VLAN configuration.',fwrules:FW_RULES.length+' firewall rules.',assets:ASSETS.length+' assets. Click for details.',
-  topo:'Interactive topology.',siem:SIEM_EVTS.length+' events. Filter by severity.',edr:'EDR endpoint monitoring.',nmap:'Scan any asset.',wireshark:WK_PKTS.length+' packets.',
-  learn:'Subnetting: Class ID, Magic Number, 5 Values, Binary.',practice:'Practice Easy/Medium/Hard.',quiz:'60-second timed quiz.',cidr:'Complete /1-/32 reference.',
-  calc:'CIDR calculator + splitter.',lab1:'Segmentation lab (100pts).',lab2:'Zero Trust lab (100pts).'};
+  modules:'CyberCore 40-Module alignment matrix. Click any card to launch its corresponding range tool.',
+  subnets:'IP Space by zone (Module 11 & 12).',seg:'Topology + flow matrix (Module 12 & 13).',vlans:'IEEE 802.1Q VLAN configuration (Module 12).',fwrules:FW_RULES.length+' firewall rules (Module 13).',assets:ASSETS.length+' enterprise fleet assets (Module 21).',
+  topo:'Interactive architecture (Module 12).',siem:SIEM_EVTS.length+' SOC events (Module 25).',edr:'EDR endpoint telemetry (Module 24).',nmap:'Service enumeration scanner (Module 19).',wireshark:WK_PKTS.length+' captured frames (Module 11 & 28).',
+  learn:'Subnetting mental models: Class boundaries, Magic number, 5 Values, Binary.',practice:'Practice drill generator (Module 11).',quiz:'60-second timed quiz.',cidr:'Complete /1-/32 reference guide.',
+  calc:'CIDR calculator + FLSM splitter.',lab1:'Lab 1: Department Segmentation (Module 12).',lab2:'Lab 2: Zero Trust Rules (Module 13).',lab3:'Lab 3: Nmap Recon (Module 19).',lab4:'Lab 4: SIEM Incident (Module 25).',lab5:'Lab 5: Wireshark Forensics (Module 28).'};
   if(msgs[p])aiMsg(msgs[p]);
-  renderSugs(['Assets','VLANs','Nmap','CIDR /1-/32','Magic Number','Lab tips','Zero trust','Best practices']);
+  renderSugs(['Modules','Subnetting','Zero Trust','Nmap Recon','SIEM Triage','Packet Forensics','VLANs']);
 }
 function aiMsg(t){aiChat.push({r:'bot',t:t});renderChat();}
 function renderChat(){var el=document.getElementById('aiMsgs'),h='';aiChat.forEach(function(m){h+='<div class="ai-m '+m.r+'"><div class="av2">'+(m.r==='bot'?'AI':'U')+'</div><div class="bub">'+m.t+'</div></div>';});el.innerHTML=h;el.scrollTop=el.scrollHeight;}
 function renderSugs(arr){var el=document.getElementById('aiSug');el.innerHTML='';if(!arr)return;arr.forEach(function(s){var b=document.createElement('button');b.textContent=s;b.onclick=function(){askAI(s)};el.appendChild(b);});}
-function askAI(q){aiChat.push({r:'user',t:q});renderChat();setTimeout(function(){aiMsg(genReply(q));},400);}
+function askAI(q){aiChat.push({r:'user',t:q});renderChat();setTimeout(function(){aiMsg(genReply(q));},350);}
 function sendAI(){var inp=document.getElementById('aiIn'),q=inp.value.trim();if(!q)return;inp.value='';askAI(q);}
 function genReply(q){q=q.toLowerCase();
-  if(q.indexOf('asset')>=0)return 'Click any asset for IP, MAC, ports, segment, VLAN neighbors, and actions (isolate, scan, move). '+ASSETS.length+' total.';
-  if(q.indexOf('vlan')>=0)return 'VLANs create isolated broadcast domains. '+SEGMENTS.length+' VLANs configured. Each maps to one subnet.';
-  if(q.indexOf('nmap')>=0)return 'Nmap scans: Quick (top ports), Standard (version), Service (NSE scripts), Full (all 65535).';
-  if(q.indexOf('cidr')>=0)return 'The /1-/32 reference covers all 32 CIDR values. /1=2B IPs, /24=254 hosts, /32=host route.';
-  if(q.indexOf('magic')>=0)return 'Magic Number = 256 - mask value in interesting octet. /25=128, /26=64, /27=32, /28=16, /29=8, /30=4.';
-  if(q.indexOf('lab')>=0)return 'Lab 1: Design subnets for 5 depts. Lab 2: Configure 6 zero-trust rules. Both scored out of 100.';
-  if(q.indexOf('zero trust')>=0)return 'Zero Trust: never trust, always verify. Every segment isolated. Only explicit rules allow traffic.';
-  if(q.indexOf('best')>=0||q.indexOf('tip')>=0)return 'Tips: 1) One VLAN per dept. 2) Default deny. 3) IoT/Guest isolated. 4) 30% headroom. 5) Practice daily.';
-  if(q.indexOf('hello')>=0||q.indexOf('hi')>=0)return 'Hey! Ask about segmentation, VLANs, CIDR, Nmap, labs, or anything network related!';
-  if(q.indexOf('siem')>=0)return 'SIEM correlates from firewalls, EDR, DNS. '+SIEM_EVTS.filter(function(e){return e.sev==='critical'}).length+' critical alerts active.';
-  return 'Try asking about: assets, VLANs, Nmap, CIDR /1-/32, magic number, zero trust, lab tips, or best practices.';
+  if(q.indexOf('module')>=0)return 'SXL-Network maps to CyberCore Modules 11 (Networking), 12 (Enterprise VLANs), 13 (Firewalls), 19 (Recon), 21 (Endpoints), 24 (EDR), 25 (SIEM), 26 (Incident Response), 28 (Malware/Wireshark), and 38 (Zero Trust).';
+  if(q.indexOf('asset')>=0)return 'Click any asset in the fleet to view IP, MAC, open listening ports, segment, and trigger active Nmap scanning or quarantine.';
+  if(q.indexOf('vlan')>=0)return 'VLANs divide physical switches into isolated broadcast domains. Each maps 1:1 with an IPv4 subnet prefix.';
+  if(q.indexOf('nmap')>=0)return 'Nmap profiles: Quick (-F), Standard (-sS), Service Version (-sV), and Full Port (-p-). Target server 10.0.10.12 in Lab 3.';
+  if(q.indexOf('cidr')>=0||q.indexOf('subnet')>=0)return 'Magic Number formula: 256 - Subnet Mask octet value. /25=128 increment, /26=64 increment, /27=32 increment.';
+  if(q.indexOf('zero trust')>=0)return 'Zero Trust principle: Assume breach, verify explicitly, and enforce least-privilege micro-segmentation across all zones.';
+  if(q.indexOf('siem')>=0)return 'SIEM correlates telemetry across firewalls, EDR, and switches. Critical alerts indicate active brute force or lateral pivot.';
+  if(q.indexOf('packet')>=0||q.indexOf('wireshark')>=0)return 'Wireshark dissector decodes Ethernet II, IPv4 headers, TCP handshake flags (SYN/ACK), UDP DNS tunnels, and HTTP payloads.';
+  return 'Ask about: Modules, Subnetting, Zero Trust, Nmap Recon, SIEM Triage, Packet Forensics, or VLANs.';
 }
 
 /* ═══ INIT ═══ */
-aiMsg('Welcome to <strong>SXL-Network</strong>! '+SEGMENTS.length+' segments, '+ASSETS.length+' assets, 4 SOC tools, subnetting masterclass (/1-/32), and 2 labs.');
-renderSugs(['Assets','VLANs','Nmap','CIDR /1-/32','Magic Number','Lab tips','Zero trust','Best practices']);
+aiMsg('Welcome to <strong>ShadowXLab SXL-Network</strong>! Fully aligned with the 40-module CyberCore curriculum. 5 hands-on labs, 4 SOC tools, and full IPAM.');
+renderSugs(['Modules','Subnetting','Zero Trust','Nmap Recon','SIEM Triage','Packet Forensics','VLANs']);
 showPanel('dashboard');
 </script>
 </body>
