@@ -39,14 +39,15 @@
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--bl);overflow:hidden;height:100vh}
 .m{font-family:var(--mono)}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--g3);border-radius:3px}
-.app{display:grid;grid-template-columns:230px 1fr 300px;height:100vh}
+.app{display:grid;grid-template-columns:260px 1fr 300px;height:100vh}
 .side{background:var(--w);border-right:1px solid var(--line);display:flex;flex-direction:column;height:100vh;overflow-y:auto}
-.logo{padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);text-decoration:none;color:inherit;background:var(--g0)}
-.logo-badge{background:#04070c;padding:3px 6px;border-radius:8px;border:1px solid #1a2332;display:flex;align-items:center}
-.logo-badge img{height:32px;width:auto;object-fit:contain;display:block}
-.logo-text b{font-size:.82rem;font-weight:900;letter-spacing:.04em;display:block;color:var(--bl)}
+.logo{padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);text-decoration:none;color:inherit;background:var(--g0)}
+.logo-badge{background:#04070c;padding:5px 10px;border-radius:10px;border:1px solid #1a2332;display:flex;align-items:center;box-shadow:0 4px 14px rgba(0,0,0,0.25);flex-shrink:0}
+.logo-badge img{height:36px;max-height:38px;width:auto;object-fit:contain;display:block}
+.logo-text{display:flex;flex-direction:column;justify-content:center;min-width:0;overflow:hidden}
+.logo-text b{font-size:.85rem;font-weight:900;letter-spacing:.04em;display:block;color:var(--bl);white-space:nowrap}
 .logo-text b span{color:var(--red)}
-.logo-text small{font-size:.5rem;font-family:var(--mono);color:var(--g5);letter-spacing:.08em;display:block;margin-top:1px}
+.logo-text small{font-size:.52rem;font-family:var(--mono);color:var(--g5);letter-spacing:.08em;display:block;margin-top:2px;white-space:nowrap}
 .nav{flex:1;padding:6px 0}
 .ng{font-size:.54rem;font-weight:800;color:var(--g5);text-transform:uppercase;letter-spacing:.1em;padding:10px 14px 3px;font-family:var(--mono)}
 .nb{display:flex;align-items:center;gap:8px;width:100%;padding:6px 14px;background:none;border:none;color:var(--g6);font-size:.73rem;font-weight:500;cursor:pointer;border-left:3px solid transparent;text-align:left;font-family:'Inter',sans-serif;transition:all .15s}
