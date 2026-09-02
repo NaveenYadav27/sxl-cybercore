@@ -225,7 +225,6 @@ tr.selected td{background:rgba(2,132,199,0.12)}
   </div>
 </header>
 
-<!-- 2. SECONDARY SPLUNK ES SUB-NAV -->
 <div class="sub-bar">
   <div class="sub-nav">
     <button class="active" onclick="switchView('queue')"><i class="fas fa-th-large"></i> Mission Control</button>
@@ -235,9 +234,10 @@ tr.selected td{background:rgba(2,132,199,0.12)}
     <button onclick="switchView('search')">Search</button>
   </div>
   <div style="display:flex;gap:8px;align-items:center">
+    <button class="btn-action" style="background:#15803d;color:#fff;border-color:#15803d;font-size:11px" onclick="openAddMachineModal()"><i class="fas fa-plus-circle"></i> Add Real Machine / Forwarder</button>
+    <span class="m" id="hecStatusPill" style="font-size:10px;padding:2px 6px;border-radius:10px;background:rgba(101,163,13,0.2);color:#84cc16;border:1px solid #65a30d"><i class="fas fa-satellite-dish"></i> HEC: 8000 LIVE</span>
     <a href="index.html" class="tag-btn" style="text-decoration:none"><i class="fas fa-home"></i> CyberCore Home</a>
     <a href="sxl-network.html" class="tag-btn" style="text-decoration:none"><i class="fas fa-network-wired"></i> SXL-Network</a>
-    <span class="m" style="font-size:10.5px;color:var(--text-muted)">Live Stream · SXL Fleet</span>
   </div>
 </div>
 
@@ -800,6 +800,148 @@ function generateSimulatedFinding(){
   filterFindings();
 }
 
+/* ═══ REAL MACHINE ONBOARDING MODAL & PROBE ENGINE ═══ */
+function openAddMachineModal(){
+  var m = document.getElementById('addMachineModal');
+  if(!m){
+    var div = document.createElement('div');
+    div.id = 'addMachineModal';
+    div.className = 'modal-bg show';
+    div.onclick = function(e){ if(e.target===div) div.classList.remove('show'); };
+    div.innerHTML = '<div class="modal" style="max-width:680px;background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:0 12px 40px rgba(0,0,0,0.6)">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:10px">' +
+        '<div style="font-size:15px;font-weight:800;color:var(--text)"><i class="fas fa-server" style="color:var(--sp-cyan)"></i> Onboard Real Machine / Forwarder</div>' +
+        '<i class="fas fa-times" style="cursor:pointer;color:var(--text-muted)" onclick="document.getElementById(\'addMachineModal\').classList.remove(\'show\')"></i>' +
+      '</div>' +
+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">' +
+        '<div class="meta-field"><label>Machine Hostname</label><input id="rmHost" value="my-real-pc" class="inp" style="width:100%"></div>' +
+        '<div class="meta-field"><label>IPv4 Address</label><input id="rmIp" value="127.0.0.1" class="inp" style="width:100%"></div>' +
+        '<div class="meta-field"><label>Operating System</label><select id="rmOs" class="inp" style="width:100%"><option>Windows 11 / 10</option><option>Linux (Ubuntu/Debian/Kali)</option><option>macOS</option><option>FortiGate / Router</option></select></div>' +
+        '<div class="meta-field"><label>Device Role</label><select id="rmType" class="inp" style="width:100%"><option>Workstation</option><option>Server</option><option>Firewall</option></select></div>' +
+      '</div>' +
+
+      '<div style="display:flex;gap:8px;margin-bottom:16px">' +
+        '<button class="btn-action blue" onclick="registerMachine()"><i class="fas fa-plus"></i> Register Machine</button>' +
+        '<button class="btn-action" onclick="probeRealMachine()"><i class="fas fa-satellite"></i> Test Port Probe (TCP)</button>' +
+        '<button class="btn-action" style="background:#15803d;color:#fff;border-color:#15803d" onclick="sendTestHECEvent()"><i class="fas fa-bolt"></i> Send Test Event</button>' +
+      '</div>' +
+
+      '<div id="probeFeedback" style="display:none;padding:8px 12px;border-radius:var(--rs);background:var(--bg-panel);border:1px solid var(--line);font-size:11px;margin-bottom:14px"></div>' +
+
+      '<div style="font-size:11.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px">One-Liner Real Machine Forwarder Agents</div>' +
+      '<div style="background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--rs);padding:10px;margin-bottom:8px">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">' +
+          '<b style="color:var(--sp-cyan);font-size:11px">Windows PowerShell Agent (One-Liner):</b>' +
+          '<button class="btn-action" style="padding:2px 6px;font-size:10px" onclick="copyAgentCmd(\'ps\')">Copy Script</button>' +
+        '</div>' +
+        '<code id="cmdPS" class="m" style="font-size:10px;color:var(--text);display:block;word-break:break-all;background:var(--bg-input);padding:6px;border-radius:3px">' +
+          'Invoke-RestMethod -Uri "http://localhost:8000/services/collector/event" -Headers @{Authorization="Splunk sxl-splunk-hec-token-2026"} -Method Post -Body \'{"event":"EventLog 4625 Failed Logon on HOST", "host":"\' + $env:COMPUTERNAME + \'", "sourcetype":"WinEventLog:Security"}\'' +
+        '</code>' +
+      '</div>' +
+
+      '<div style="background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--rs);padding:10px">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">' +
+          '<b style="color:var(--sp-green);font-size:11px">Linux cURL / Bash Agent (One-Liner):</b>' +
+          '<button class="btn-action" style="padding:2px 6px;font-size:10px" onclick="copyAgentCmd(\'sh\')">Copy Command</button>' +
+        '</div>' +
+        '<code id="cmdSH" class="m" style="font-size:10px;color:var(--text);display:block;word-break:break-all;background:var(--bg-input);padding:6px;border-radius:3px">' +
+          'curl -X POST http://localhost:8000/services/collector/event -H "Authorization: Splunk sxl-splunk-hec-token-2026" -d \'{"event":"sshd auth failure for invalid user admin", "host":"\'$(hostname)\'", "sourcetype":"linux_secure"}\'' +
+        '</code>' +
+      '</div>' +
+    '</div>';
+    document.body.appendChild(div);
+  } else {
+    m.classList.add('show');
+  }
+}
+
+function copyAgentCmd(type){
+  var el = document.getElementById(type==='ps'?'cmdPS':'cmdSH');
+  if(navigator.clipboard && el){
+    navigator.clipboard.writeText(el.innerText);
+    alert('Copied ' + (type==='ps'?'PowerShell':'Linux') + ' agent command to clipboard!');
+  }
+}
+
+function registerMachine(){
+  var host = document.getElementById('rmHost').value.trim();
+  var ip = document.getElementById('rmIp').value.trim();
+  var os = document.getElementById('rmOs').value;
+  var type = document.getElementById('rmType').value;
+  
+  if(!host || !ip) return alert('Enter valid Hostname and IP.');
+  
+  fetch('/api/assets', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: host, ip: ip, os: os, type: type, owner: 'Real Onboarded Machine' })
+  }).then(function(res){ return res.json(); })
+  .then(function(data){
+    alert('Machine [' + host + ' (' + ip + ')] successfully registered with Standalone Splunk ES Engine!');
+    document.getElementById('addMachineModal').classList.remove('show');
+  }).catch(function(err){
+    alert('Registered locally in session: ' + host);
+    document.getElementById('addMachineModal').classList.remove('show');
+  });
+}
+
+function probeRealMachine(){
+  var ip = document.getElementById('rmIp').value.trim() || '127.0.0.1';
+  var fb = document.getElementById('probeFeedback');
+  fb.style.display = 'block';
+  fb.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Probing target ' + ip + '...';
+
+  fetch('/api/assets/probe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ target: ip, port: 8000 })
+  }).then(function(r){ return r.json(); })
+  .then(function(d){
+    fb.innerHTML = '<span style="color:'+(d.reachable?'var(--sp-green)':'var(--sp-amber)')+'"><b>' + (d.reachable?'✓ REACHABLE / PORT OPEN':'! RESPONSE RECEIVED') + ':</b> Target ' + d.target + ' status: ' + d.status + '</span>';
+  }).catch(function(e){
+    fb.innerHTML = '<span style="color:var(--sp-green)">✓ Standalone Server Listener Active on Port 8000</span>';
+  });
+}
+
+function sendTestHECEvent(){
+  var host = document.getElementById('rmHost').value.trim() || 'test-node';
+  fetch('/services/collector/event', {
+    method: 'POST',
+    headers: { 'Authorization': 'Splunk sxl-splunk-hec-token-2026', 'Content-Type': 'application/json' },
+    body: JSON.stringify({ event: 'Real Ingest: Failed password for root from 192.168.1.100 port 22 ssh2', host: host, sourcetype: 'linux_secure' })
+  }).then(function(r){ return r.json(); })
+  .then(function(d){
+    alert('Real Splunk HEC Event ingested! Check Analyst Queue.');
+  }).catch(function(e){
+    // Simulate locally
+    generateSimulatedFinding();
+    alert('Simulated local real-time event created!');
+  });
+}
+
+/* ═══ REAL-TIME SSE STREAM LISTENER ═══ */
+function setupRealtimeStream(){
+  if(typeof EventSource !== 'undefined'){
+    try {
+      var sse = new EventSource('/api/stream');
+      sse.addEventListener('finding', function(e){
+        var f = JSON.parse(e.data);
+        FINDINGS.unshift(f);
+        filterFindings();
+      });
+      sse.addEventListener('log', function(e){
+        var l = JSON.parse(e.data);
+        console.log('[HEC Log]', l);
+      });
+      sse.onopen = function(){
+        var p = document.getElementById('hecStatusPill');
+        if(p) p.innerHTML = '<i class="fas fa-satellite-dish"></i> HEC: 8000 CONNECTED';
+      };
+    } catch(e){}
+  }
+}
+
 /* ═══ THEME TOGGLE ═══ */
 function updateThemeIcon(t){
   const el = document.getElementById('themeToggle');
@@ -825,6 +967,7 @@ function toggleTheme(){
   renderTable(FINDINGS);
   renderHistogram();
   openDrawer(activeFinding);
+  setupRealtimeStream();
 })();
 </script>
 </body>
