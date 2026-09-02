@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Splunk Cloud · Enterprise Security (Mission Control)</title>
+<title>Splunk Enterprise Security (Mission Control)</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -197,12 +197,12 @@ tr.selected td{background:rgba(2,132,199,0.12)}
 <!-- 1. SPLUNK TOP APP BAR -->
 <header class="top-bar">
   <div style="display:flex;align-items:center;gap:14px">
-    <a href="index.html" class="brand" title="ShadowXLab Splunk ES">
-      <b>splunk<span>></span>cloud</b>
+    <a href="index.html" class="brand" title="ShadowXLab Splunk Enterprise Security">
+      <b>splunk<span>></span> enterprise security</b>
     </a>
     <div class="top-menus">
       <button class="menu-btn active">Apps <i class="fas fa-caret-down" style="font-size:9px"></i></button>
-      <button class="menu-btn"><span class="badge-count">7</span> Messages <i class="fas fa-caret-down" style="font-size:9px"></i></button>
+      <button class="menu-btn"><span class="badge-count" id="msgBadge">0</span> Messages <i class="fas fa-caret-down" style="font-size:9px"></i></button>
       <button class="menu-btn">Settings <i class="fas fa-caret-down" style="font-size:9px"></i></button>
       <button class="menu-btn">Activity <i class="fas fa-caret-down" style="font-size:9px"></i></button>
       <div class="search-find">
@@ -219,12 +219,13 @@ tr.selected td{background:rgba(2,132,199,0.12)}
       <i class="fas fa-caret-down" style="font-size:9px"></i>
     </div>
     <div style="font-size:11px;color:#94a3b8;cursor:pointer"><i class="fas fa-question-circle"></i> Support &amp; Services <i class="fas fa-caret-down" style="font-size:9px"></i></div>
-    <div style="position:relative;cursor:pointer"><i class="fas fa-bell" style="color:#cbd5e1"></i><span style="position:absolute;top:-5px;right:-5px;background:#38bdf8;color:#000;font-size:8px;font-weight:900;padding:1px 4px;border-radius:10px">2</span></div>
+    <div style="position:relative;cursor:pointer"><i class="fas fa-bell" style="color:#cbd5e1"></i><span style="position:absolute;top:-5px;right:-5px;background:#38bdf8;color:#000;font-size:8px;font-weight:900;padding:1px 4px;border-radius:10px">0</span></div>
     <button class="themetoggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Theme">🌙</button>
     <a href="sxl-network.html" class="es-badge" style="text-decoration:none" title="Return to SXL-Network Range"><i class="fas fa-lock"></i> Enterprise Security</a>
   </div>
 </header>
 
+<!-- 2. SECONDARY SPLUNK ES SUB-NAV -->
 <div class="sub-bar">
   <div class="sub-nav">
     <button class="active" onclick="switchView('queue')"><i class="fas fa-th-large"></i> Mission Control</button>
@@ -519,42 +520,34 @@ tr.selected td{background:rgba(2,132,199,0.12)}
 </div>
 
 <script>
-/* ═══ SXL-NETWORK & SPLUNK REAL DATASET ═══ */
-var FINDINGS = [
-  {id:'ES-00001',title:'Excessive failed logins',type:'finding',entity:'win-hp-64861',entityType:'system',icon:'fa-desktop',risk:70,fin:1,intCount:7,time:'Today, 9:45 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'medium',status:'new',mitre:'T1110',domain:'access',desc:'Excessive authentication failures detected targeting win-hp-64861.'},
-  {id:'MC-00005',title:'Multiple findings from the same entity [bstoll@splunktshirtcompany.com]',type:'investigation',entity:'bstoll@splunktshirtcompany.com',entityType:'user',icon:'fa-user',risk:420,fin:4,intCount:36,time:'Today, 9:42 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'medium',status:'new',mitre:'T1078',domain:'identity',desc:'Aggregate risk score threshold exceeded for user bstoll with 4 intermediate findings.'},
-  {id:'ES-00003',title:'24 hour risk threshold exceed for entity [172.16.0.149]',type:'finding',entity:'172.16.0.149',entityType:'system',icon:'fa-server',risk:140,fin:1,intCount:4,time:'Today, 9:40 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'high',status:'new',mitre:'T1046',domain:'network',desc:'Entity 172.16.0.149 exceeded 100 risk score points in the last 24 hours.'},
-  {id:'ES-00004',title:'Unusual volume of network activity detected on 54.230.147.59',type:'finding',entity:'54.230.147.59',entityType:'system',icon:'fa-globe',risk:60,fin:1,intCount:2,time:'Today, 9:40 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'medium',status:'new',mitre:'T1030',domain:'network',desc:'An unusual volume of network activity was detected. 54.230.147.59 has generated 34 MB of outbound network traffic in the past day, which is anomalous.'},
-  {id:'ES-00005',title:'Excessive failed logins',type:'finding',entity:'NY_APP_002',entityType:'system',icon:'fa-desktop',risk:75,fin:1,intCount:11,time:'Today, 9:35 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'medium',status:'new',mitre:'T1110',domain:'access',desc:'11 failed login attempts in 2 minutes on application node NY_APP_002.'},
-  {id:'ES-00006',title:'Unusual volume of network activity detected on 52.216.133.181',type:'finding',entity:'52.216.133.181',entityType:'system',icon:'fa-server',risk:35,fin:1,intCount:5,time:'Today, 9:35 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'low',status:'new',mitre:'T1030',domain:'network',desc:'Outbound S3 sync spike detected from server subnet.'},
-  {id:'ES-00007',title:'Unusual volume of network activity detected on 52.218.196.122',type:'finding',entity:'52.218.196.122',entityType:'system',icon:'fa-server',risk:20,fin:1,intCount:4,time:'Today, 9:27 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'low',status:'new',mitre:'T1030',domain:'network',desc:'Spike in egress packets to AWS region us-west-2.'},
-  {id:'ES-00008',title:'Multiple findings from the same entity [mickey.perre@splunktshirtcompany.com]',type:'investigation',entity:'mickey.perre@splunktshirtcompany.com',entityType:'user',icon:'fa-user',risk:120,fin:6,intCount:25,time:'Today, 9:27 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'high',status:'new',mitre:'T1078',domain:'identity',desc:'6 intermediate findings correlated across Endpoint and Network domains.'},
-  {id:'ES-00009',title:'Multiple findings from the same entity [hayley.jensen@splunktshirtcompany.com]',type:'investigation',entity:'hayley.jensen@splunktshirtcompany.com',entityType:'user',icon:'fa-user',risk:150,fin:5,intCount:16,time:'Today, 9:23 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'high',status:'new',mitre:'T1078',domain:'identity',desc:'Suspicious privilege escalation combined with off-hours VPN login.'},
-  {id:'ES-00010',title:'Excessive failed logins',type:'finding',entity:'macbook-46743',entityType:'system',icon:'fa-laptop',risk:50,fin:1,intCount:2,time:'Today, 9:23 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'low',status:'new',mitre:'T1110',domain:'access',desc:'Local workstation failed password challenge.'},
-  {id:'ES-00011',title:'24 hour risk threshold exceed for entity [macbook-44591]',type:'finding',entity:'macbook-44591',entityType:'system',icon:'fa-laptop',risk:90,fin:1,intCount:3,time:'Today, 9:19 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'medium',status:'new',mitre:'T1059',domain:'endpoint',desc:'Encoded PowerShell execution on macOS developer workstation.'},
-  {id:'ES-00012',title:'Unusual volume of network activity detected on 34.215.24.225',type:'finding',entity:'34.215.24.225',entityType:'system',icon:'fa-globe',risk:55,fin:1,intCount:3,time:'Today, 9:19 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'medium',status:'new',mitre:'T1030',domain:'network',desc:'High bandwidth egress flow across firewall policy rule 9.'},
-  {id:'ES-00013',title:'24 hour risk threshold exceed for entity [win-hp-85570]',type:'finding',entity:'win-hp-85570',entityType:'system',icon:'fa-desktop',risk:65,fin:1,intCount:5,time:'Today, 9:19 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'medium',status:'new',mitre:'T1046',domain:'network',desc:'Port scan detected sweep targeting servers VLAN 10.'},
-  {id:'ES-00014',title:'Unusual volume of network activity detected on 172.16.0.127',type:'finding',entity:'172.16.0.127',entityType:'system',icon:'fa-server',risk:60,fin:1,intCount:3,time:'Today, 9:15 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'medium',status:'new',mitre:'T1030',domain:'network',desc:'DMZ node streaming unexpected UDP payloads.'},
-  {id:'ES-00015',title:'Excessive failed logins',type:'finding',entity:'win-lenovo-15752',entityType:'system',icon:'fa-laptop',risk:70,fin:1,intCount:8,time:'Today, 9:15 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'low',status:'new',mitre:'T1110',domain:'access',desc:'Failed Kerberos ticket request storm.'},
-  {id:'ES-00016',title:'Multiple findings from the same entity [fyodor@splunktshirtcompany.com]',type:'finding',entity:'fyodor@splunktshirtcompany.com',entityType:'user',icon:'fa-user',risk:130,fin:5,intCount:20,time:'Today, 9:12 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'high',status:'new',mitre:'T1059',domain:'endpoint',desc:'Encoded PowerShell execution, failed logins, and suspicious C2 beacon.'}
-];
-
-var OBSERVABLES = [
-  {type:'hash',name:'586EF56F4D8963DD546163AC31C865D7',score:'TI HIGH',scoreClass:'risk-100',time:'04/15/2023, 2:22 AM',tags:['commodity','threattype/commodity','credentialharvesting','informationstealer','malware/mofksys','maliciousconfidence/high']},
-  {type:'hash',name:'A7C89F546E8203BBD45C9812401FB882',score:'TI HIGH',scoreClass:'risk-100',time:'04/15/2023, 2:22 AM',tags:['trojan','c2/beacon','threattype/execution']},
-  {type:'ip',name:'107.77.211.7',score:'TI MED',scoreClass:'risk-80',time:'04/14/2023, 10:09 PM',tags:['botnet','scanner','alienvault_high']},
-  {type:'ip',name:'185.192.69.97',score:'TI HIGH',scoreClass:'risk-100',time:'04/14/2023, 10:09 PM',tags:['c2_server','bulletproof_host','russia_vpn']},
-  {type:'ip',name:'185.217.117.107',score:'TI HIGH',scoreClass:'risk-100',time:'04/14/2023, 10:09 PM',tags:['malicious_domain','phishing_drop']},
-  {type:'ip',name:'199.66.91.253',score:'TI MED',scoreClass:'risk-60',time:'04/14/2023, 10:09 PM',tags:['tor_exit_node','untrusted_asn']},
-  {type:'user',name:'fyodor@splunktshirtcompany.com',score:'HIGH',scoreClass:'risk-80',time:'04/14/2023, 10:09 PM',tags:['compromised_account','privilege_escalation']},
-  {type:'file',name:'*C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -enc',score:'HIGH',scoreClass:'risk-80',time:'04/14/2023, 10:09 PM',tags:['encoded_command','defense_evasion']}
-];
-
-var activeFinding = FINDINGS[3]; // default 54.230.147.59
+/* ═══ SPLUNK ENTERPRISE SECURITY (ON-PREM REAL-TIME ENGINE) ═══ */
+var FINDINGS = [];
+var OBSERVABLES = [];
+var activeFinding = null;
 
 /* ═══ RENDER FINDINGS TABLE ═══ */
 function renderTable(data){
   var tb = document.getElementById('findingsBody');
+  var sc = document.getElementById('selCount');
+  if(sc) sc.textContent = data.length + ' findings';
+
+  if(!data || data.length === 0){
+    tb.innerHTML = '<tr>' +
+      '<td colspan="15" style="text-align:center;padding:50px 20px;color:var(--text-muted)">' +
+        '<i class="fas fa-satellite-dish" style="font-size:32px;color:var(--sp-cyan);margin-bottom:12px;display:block"></i>' +
+        '<div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px">No Findings Ingested Yet · Clean Triage State</div>' +
+        '<div style="font-size:11.5px;max-width:540px;margin:0 auto;line-height:1.5;color:var(--text-muted)">' +
+          'Your Splunk Enterprise Security on-premise standalone engine is running and ready. Forward real telemetry from your Windows/Linux machines or click <b style="color:var(--text)">[ + Add Real Machine / Forwarder ]</b> or <b style="color:var(--sp-cyan)">[ + Simulate Ingestion ]</b> to trigger live detections.' +
+        '</div>' +
+        '<div style="display:flex;justify-content:center;gap:8px;margin-top:16px">' +
+          '<button class="btn-action blue" onclick="openAddMachineModal()"><i class="fas fa-server"></i> Add Real Machine</button>' +
+          '<button class="btn-action" onclick="generateSimulatedFinding()"><i class="fas fa-bolt"></i> Send Sample Event</button>' +
+        '</div>' +
+      '</td>' +
+    '</tr>';
+    return;
+  }
+
   tb.innerHTML = data.map(function(f,i){
     var riskCls = f.risk>=400?'risk-400':f.risk>=100?'risk-100':f.risk>=80?'risk-80':f.risk>=60?'risk-60':f.risk>=40?'risk-40':'risk-20';
     var urgCls = f.urgency==='critical'?'urg-crit':f.urgency==='high'?'urg-high':f.urgency==='medium'?'urg-med':'urg-low';
@@ -598,8 +591,13 @@ function selectFindingRow(id){
 /* ═══ DETAIL DRAWER (IMAGE 2) ═══ */
 function openDrawer(f){
   var d = document.getElementById('detailDrawer');
-  d.classList.add('open');
   var b = document.getElementById('drawerBody');
+  if(!f){
+    d.classList.remove('open');
+    b.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--text-muted)"><i class="fas fa-hand-pointer" style="font-size:26px;margin-bottom:10px;display:block;color:var(--sp-cyan)"></i><div style="font-weight:700;color:var(--text);margin-bottom:4px">No Finding Selected</div><div style="font-size:11px">Click on any finding in the Analyst Queue to inspect detection properties and trigger SOAR playbooks.</div></div>';
+    return;
+  }
+  d.classList.add('open');
   
   var riskCls = f.risk>=100?'risk-100':f.risk>=60?'risk-80':'risk-40';
   b.innerHTML = '<div style="margin-bottom:12px">' +
@@ -711,13 +709,15 @@ function addNote(){
 var histChart = null;
 function renderHistogram(){
   var ctx = document.getElementById('cHist');
+  if(!ctx) return;
   if(histChart) histChart.destroy();
+  var counts = FINDINGS.length > 0 ? [1, 2, 4, FINDINGS.length, Math.round(FINDINGS.length * 1.2), FINDINGS.length, FINDINGS.length] : [0, 0, 0, 0, 0, 0, 0];
   histChart = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: ['8:00 PM','12:00 AM','4:00 AM','8:00 AM','12:00 PM','4:00 PM','Now'],
       datasets: [{
-        data: [15, 8, 22, 65, 140, 95, 160],
+        data: counts,
         backgroundColor: '#0284c7',
         borderRadius: 2
       }]
@@ -728,7 +728,7 @@ function renderHistogram(){
       plugins: { legend: { display: false } },
       scales: {
         x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 9 } } },
-        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: { size: 9 } } }
+        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: { size: 9 }, stepSize: 1, beginAtZero: true } }
       }
     }
   });
@@ -778,7 +778,7 @@ function runSOARPlaybook(){
 
 function generateSimulatedFinding(){
   var newId = 'ES-000' + (FINDINGS.length + 1);
-  FINDINGS.unshift({
+  var f = {
     id: newId,
     title: 'Ransomware Encryptor Heuristic Detection on srv-db-01',
     type: 'finding',
@@ -796,8 +796,12 @@ function generateSimulatedFinding(){
     mitre: 'T1486',
     domain: 'threat',
     desc: 'High velocity file encryption attempt blocked by FortiEDR.'
-  });
+  };
+  FINDINGS.unshift(f);
+  activeFinding = f;
   filterFindings();
+  renderHistogram();
+  openDrawer(f);
 }
 
 /* ═══ REAL MACHINE ONBOARDING MODAL & PROBE ENGINE ═══ */

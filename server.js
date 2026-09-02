@@ -17,54 +17,11 @@ const HTTP_PORT = process.env.PORT || 8000;
 const SYSLOG_PORT = 1514;
 const HEC_TOKEN = 'sxl-splunk-hec-token-2026';
 
-// State Stores
+// State Stores (Clean On-Premises State - Zero Preloaded Data)
 let sseClients = [];
 let ingestedLogs = [];
-let registeredAssets = [
-  { id: 'dev-01', name: 'localhost-host', ip: '127.0.0.1', mac: '00:50:56:c0:00:01', os: 'Windows / Host OS', status: 'online', type: 'Workstation', risk: 10, owner: 'Local Operator' },
-  { id: 'srv-01', name: 'srv-web-prod', ip: '10.0.10.10', mac: '00:1a:2b:44:90:10', os: 'Ubuntu 22.04 LTS', status: 'online', type: 'Server', risk: 80, owner: 'Infrastructure Lead' }
-];
-
-let liveFindings = [
-  {
-    id: 'ES-00001',
-    title: 'Excessive failed logins',
-    type: 'finding',
-    entity: 'win-hp-64861',
-    entityType: 'system',
-    icon: 'fa-desktop',
-    risk: 70,
-    fin: 1,
-    intCount: 7,
-    time: 'Today, 9:45 AM',
-    disposition: 'Undetermined',
-    owner: 'Unassigned',
-    urgency: 'medium',
-    status: 'new',
-    mitre: 'T1110',
-    domain: 'access',
-    desc: 'Excessive authentication failures detected targeting win-hp-64861.'
-  },
-  {
-    id: 'MC-00005',
-    title: 'Multiple findings from the same entity [bstoll@splunktshirtcompany.com]',
-    type: 'investigation',
-    entity: 'bstoll@splunktshirtcompany.com',
-    entityType: 'user',
-    icon: 'fa-user',
-    risk: 420,
-    fin: 4,
-    intCount: 36,
-    time: 'Today, 9:42 AM',
-    disposition: 'Undetermined',
-    owner: 'Unassigned',
-    urgency: 'medium',
-    status: 'new',
-    mitre: 'T1078',
-    domain: 'identity',
-    desc: 'Aggregate risk score threshold exceeded for user bstoll with 4 intermediate findings.'
-  }
-];
+let registeredAssets = [];
+let liveFindings = [];
 
 // Broadcast event to connected SSE clients
 function broadcastSSE(type, data) {
