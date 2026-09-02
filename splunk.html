@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShadowXLab · Splunk Enterprise Security (ES) SOC Suite</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script>(function(){try{var t=localStorage.getItem('sxl-theme')||localStorage.getItem('cybercoreTheme')||'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0b0f16;--w:#131a24;--panel:#17202d;--line:#243042;--text:#e6e9ef;
+  --sp-green:#65a30d;--sp-green-dim:rgba(101,163,13,0.15);--sp-orange:#f97316;
+  --red:#f04438;--rl:rgba(240,68,56,0.15);--rd:#b80f15;--rh:#ff3b42;
+  --bl:#e6e9ef;--g7:#cbd5e1;--g6:#94a3b8;--g5:#64748b;--g4:#475569;--g3:#334155;--g2:#1e293b;--g1:#0f172a;--g0:#0b0f17;
+  --grn:#10b981;--grnb:rgba(16,185,129,0.15);--amb:#fbbf24;--ambb:rgba(251,191,36,0.15);
+  --blu:#38bdf8;--blub:rgba(56,189,248,0.15);--pur:#a855f7;--purb:rgba(168,85,247,0.15);
+  --cyn:#2dd4bf;--cynb:rgba(45,212,191,0.15);--pnk:#f472b6;--pnkb:rgba(244,114,182,0.15);
+  --r:10px;--rs:6px;--rxs:4px;--sh:0 8px 24px rgba(0,0,0,0.4);
+  --mono:'JetBrains Mono','IBM Plex Mono',monospace;
+}
+[data-theme="light"]{
+  --bg:#f1f5f9;--w:#ffffff;--panel:#f8fafc;--line:#e2e8f0;--text:#0f172a;
+  --sp-green:#4d7c0f;--sp-green-dim:rgba(77,124,15,0.12);--sp-orange:#ea580c;
+  --red:#dc2626;--rl:rgba(220,38,38,0.1);--rd:#991b1b;--rh:#b91c1c;
+  --bl:#0f172a;--g7:#334155;--g6:#475569;--g5:#64748b;--g4:#94a3b8;--g3:#cbd5e1;--g2:#e2e8f0;--g1:#f1f5f9;--g0:#ffffff;
+  --grn:#16a34a;--grnb:rgba(22,163,74,0.1);--amb:#d97706;--ambb:rgba(217,119,6,0.1);
+  --blu:#0284c7;--blub:rgba(2,132,199,0.1);--pur:#7c3aed;--purb:rgba(124,58,237,0.1);
+  --cyn:#0d9488;--cynb:rgba(13,148,136,0.1);--pnk:#db2777;--pnkb:rgba(219,39,119,0.1);
+  --sh:0 4px 16px rgba(0,0,0,0.06);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;height:100vh}
+.m{font-family:var(--mono)}
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--g3);border-radius:3px}
+
+/* SPLUNK HEADER */
+.sp-header{background:#000000;color:#ffffff;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid #222;z-index:100;position:sticky;top:0}
+.sp-brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
+.sp-brand b{font-family:var(--mono);font-size:.9rem;letter-spacing:-.3px}
+.sp-brand b span{color:var(--sp-green)}
+.sp-brand .es-pill{background:#333;color:#fbbf24;font-size:.58rem;font-weight:800;padding:2px 6px;border-radius:4px;font-family:var(--mono);letter-spacing:.05em}
+.sp-top-nav{display:flex;align-items:center;gap:4px}
+.sp-tab{padding:6px 12px;font-size:.72rem;font-weight:600;color:#94a3b8;border-radius:4px;cursor:pointer;transition:all .15s;background:transparent;border:none;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.sp-tab:hover{color:#ffffff;background:#1e293b}.sp-tab.active{color:#ffffff;background:#334155;font-weight:700}
+.sp-actions{display:flex;align-items:center;gap:8px}
+
+.themetoggle{
+  border:1px solid var(--line);background:var(--panel);color:var(--text);
+  width:32px;height:32px;min-width:32px;border-radius:50%;
+  display:grid;place-items:center;font-size:14px;cursor:pointer;padding:0;
+  transition:all .18s ease;box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+.themetoggle:hover{border-color:var(--red);transform:scale(1.08)}
+
+/* APP LAYOUT */
+.sp-app{display:grid;grid-template-columns:220px 1fr;height:calc(100vh - 44px)}
+.sp-side{background:var(--w);border-right:1px solid var(--line);display:flex;flex-direction:column;height:100%;overflow-y:auto}
+.sp-main{overflow-y:auto;padding:16px 20px;background:var(--bg)}
+.sp-pnl{display:none}.sp-pnl.on{display:block}
+
+/* SIDEBAR NAV */
+.nav-group{font-size:.56rem;font-weight:800;color:var(--g5);text-transform:uppercase;letter-spacing:.1em;padding:12px 14px 4px;font-family:var(--mono)}
+.snb{display:flex;align-items:center;gap:8px;width:100%;padding:7px 14px;background:none;border:none;color:var(--g6);font-size:.73rem;font-weight:600;cursor:pointer;border-left:3px solid transparent;text-align:left;transition:all .15s}
+.snb:hover{color:var(--text);background:var(--panel)}.snb.on{color:var(--sp-green);background:var(--sp-green-dim);border-left-color:var(--sp-green);font-weight:700}
+.snb i{width:16px;text-align:center;font-size:.75rem}
+.snb .count{font-size:.55rem;padding:1px 6px;border-radius:10px;background:var(--g2);color:var(--g6);margin-left:auto;font-family:var(--mono)}
+
+/* CARDS & PANELS */
+.card{background:var(--w);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:14px;box-shadow:var(--sh)}
+.ch{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--panel)}
+.ch h3{font-size:.82rem;font-weight:800;display:flex;align-items:center;gap:7px}
+.cb{padding:14px}
+.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
+.stat-box{background:var(--w);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;position:relative;overflow:hidden}
+.stat-box::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:0 3px 3px 0}
+.stat-box.red::before{background:var(--red)}.stat-box.grn::before{background:var(--grn)}.stat-box.blu::before{background:var(--blu)}.stat-box.pur::before{background:var(--pur)}.stat-box.amb::before{background:var(--amb)}
+.stat-box .sl{font-size:.58rem;font-weight:800;color:var(--g5);text-transform:uppercase;letter-spacing:.06em;font-family:var(--mono)}
+.stat-box .sv{font-size:1.3rem;font-weight:900;margin-top:2px;font-family:var(--mono);color:var(--text)}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:7px 10px;font-size:.62rem;font-weight:800;color:var(--g5);text-transform:uppercase;letter-spacing:.05em;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;font-family:var(--mono)}
+td{padding:6px 10px;font-size:.72rem;border-bottom:1px solid var(--line);color:var(--g7)}
+tr:hover td{background:rgba(101,163,13,0.04);cursor:pointer}
+
+/* BADGES & TAGS */
+.urgency{display:inline-flex;padding:2px 7px;border-radius:4px;font-size:.6rem;font-weight:800;font-family:var(--mono);text-transform:uppercase}
+.urgency.critical{background:var(--rl);color:var(--red);border:1px solid var(--red)}
+.urgency.high{background:var(--ambb);color:var(--amb);border:1px solid var(--amb)}
+.urgency.medium{background:var(--blub);color:var(--blu);border:1px solid var(--blu)}
+.urgency.low{background:var(--grnb);color:var(--grn);border:1px solid var(--grn)}
+.urgency.info{background:var(--purb);color:var(--pur);border:1px solid var(--pur)}
+.status-pill{display:inline-flex;padding:2px 6px;border-radius:12px;font-size:.58rem;font-weight:700;font-family:var(--mono)}
+.status-pill.new{background:rgba(240,68,56,.15);color:var(--red)}
+.status-pill.in_progress{background:rgba(56,189,248,.15);color:var(--blu)}
+.status-pill.pending{background:rgba(251,191,36,.15);color:var(--amb)}
+.status-pill.resolved{background:rgba(16,185,129,.15);color:var(--grn)}
+
+/* SPL SEARCH BAR */
+.spl-bar{display:flex;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:var(--rs);padding:6px 10px;align-items:center;box-shadow:var(--sh)}
+.spl-icon{color:var(--sp-green);font-family:var(--mono);font-size:.9rem;font-weight:900}
+.spl-input{flex:1;background:transparent;border:none;outline:none;font-family:var(--mono);font-size:.78rem;color:var(--text);font-weight:600}
+.spl-btn{background:var(--sp-green);color:#fff;border:none;padding:6px 16px;border-radius:var(--rxs);font-family:var(--mono);font-size:.72rem;font-weight:800;cursor:pointer;transition:all .15s}
+.spl-btn:hover{background:#4d7c0f}
+
+/* BUTTONS */
+.btn{padding:5px 11px;border-radius:var(--rxs);border:1px solid var(--line);background:var(--panel);color:var(--text);font-weight:700;font-size:.7rem;cursor:pointer;transition:.15s;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:5px;text-decoration:none}
+.btn:hover{border-color:var(--sp-green);color:var(--sp-green)}.btn:active{transform:scale(.97)}
+.btn-g{background:linear-gradient(135deg,var(--sp-green),#4d7c0f);color:#fff;border-color:var(--sp-green)}
+.btn-r{background:linear-gradient(135deg,var(--red),var(--rd));color:#fff;border-color:var(--red)}
+.inp{padding:6px 8px;background:var(--g0);border:1px solid var(--line);border-radius:var(--rxs);color:var(--text);font-size:.74rem;outline:none;font-family:var(--mono)}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}.modal-bg.show{display:flex}
+.modal{background:var(--w);border-radius:var(--r);padding:20px;max-width:680px;width:92%;max-height:86vh;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,.6);border:1px solid var(--line)}
+
+/* MITRE MATRIX */
+.mitre-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mitre-box{background:var(--panel);border:1px solid var(--line);border-radius:var(--rs);padding:10px}
+.mitre-box h4{font-size:.66rem;color:var(--sp-green);font-family:var(--mono);margin-bottom:6px;font-weight:800}
+.mitre-item{padding:4px 6px;border-radius:4px;background:var(--g0);border:1px solid var(--line);font-size:.64rem;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center}
+</style>
+</head>
+<body>
+
+<!-- SPLUNK GLOBAL BAR -->
+<header class="sp-header">
+  <div style="display:flex;align-items:center;gap:16px">
+    <a href="index.html" class="sp-brand" title="ShadowXLab Splunk ES">
+      <b>splunk<span>></span></b>
+      <span class="es-pill">ENTERPRISE SECURITY</span>
+    </a>
+    <div class="sp-top-nav">
+      <button class="sp-tab active" onclick="showPanel('notables')"><i class="fas fa-shield-alt"></i> Incident Review</button>
+      <button class="sp-tab" onclick="showPanel('posture')"><i class="fas fa-chart-line"></i> Security Posture</button>
+      <button class="sp-tab" onclick="showPanel('search')"><i class="fas fa-search"></i> Search &amp; Reporting</button>
+      <button class="sp-tab" onclick="showPanel('rba')"><i class="fas fa-fire"></i> Risk Analysis (RBA)</button>
+      <button class="sp-tab" onclick="showPanel('threat')"><i class="fas fa-crosshairs"></i> Threat Intel</button>
+    </div>
+  </div>
+
+  <div class="sp-actions">
+    <div style="font-size:.66rem;font-family:var(--mono);color:#94a3b8;display:flex;align-items:center;gap:6px">
+      <span style="width:7px;height:7px;border-radius:50%;background:var(--sp-green);display:inline-block"></span>
+      <span>REAL-TIME SXL LOG AGGREGATION</span>
+    </div>
+    <a href="sxl-network.html" class="btn" style="background:#1e293b;color:#38bdf8;border-color:#334155;font-size:.66rem"><i class="fas fa-sitemap"></i> SXL-Network</a>
+    <a href="index.html" class="btn" style="background:#1e293b;color:#ffffff;border-color:#334155;font-size:.66rem"><i class="fas fa-home"></i> Home</a>
+    <button class="themetoggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Theme">🌙</button>
+  </div>
+</header>
+
+<div class="sp-app">
+  <!-- SIDEBAR -->
+  <aside class="sp-side">
+    <div class="nav-group">Incident Response</div>
+    <button class="snb on" data-p="notables"><i class="fas fa-bell"></i> Incident Review <span class="count" id="cNotables">50</span></button>
+    <button class="snb" data-p="posture"><i class="fas fa-chart-pie"></i> Security Posture <span class="count">SOC 24/7</span></button>
+    <button class="snb" data-p="search"><i class="fas fa-terminal"></i> SPL Search &amp; Query <span class="count">CLI</span></button>
+    
+    <div class="nav-group">Security Domains</div>
+    <button class="snb" data-p="access"><i class="fas fa-user-lock"></i> Access &amp; Identity <span class="count">M25</span></button>
+    <button class="snb" data-p="endpoint"><i class="fas fa-desktop"></i> Endpoint Telemetry <span class="count">M24</span></button>
+    <button class="snb" data-p="network"><i class="fas fa-network-wired"></i> Network Traffic <span class="count">M11/12</span></button>
+    <button class="snb" data-p="threat"><i class="fas fa-biohazard"></i> Threat Intelligence <span class="count">IOC</span></button>
+    
+    <div class="nav-group">Risk &amp; Automation</div>
+    <button class="snb" data-p="rba"><i class="fas fa-tachometer-alt"></i> Risk Analysis (RBA) <span class="count">Risk Scores</span></button>
+    <button class="snb" data-p="soar"><i class="fas fa-robot"></i> SOAR Playbooks <span class="count">4 Auto</span></button>
+    <button class="snb" data-p="assets"><i class="fas fa-server"></i> Asset &amp; Identity DB <span class="count" id="cAssets">0</span></button>
+  </aside>
+
+  <!-- MAIN VIEWPORT -->
+  <main class="sp-main">
+    
+    <!-- 1. INCIDENT REVIEW (NOTABLE EVENTS) -->
+    <div class="sp-pnl on" id="p-notables">
+      <div class="stats-grid">
+        <div class="stat-box red"><div class="sl">Critical Urgency</div><div class="sv" id="sCrit">0</div></div>
+        <div class="stat-box amb"><div class="sl">High Urgency</div><div class="sv" id="sHigh">0</div></div>
+        <div class="stat-box blu"><div class="sl">In Progress</div><div class="sv" id="sProg">0</div></div>
+        <div class="stat-box pur"><div class="sl">New / Unassigned</div><div class="sv" id="sNew">0</div></div>
+        <div class="stat-box grn"><div class="sl">MTTR (Resolution)</div><div class="sv">18.4m</div></div>
+      </div>
+
+      <div class="card">
+        <div class="ch">
+          <h3><i class="fas fa-shield-alt" style="color:var(--sp-green)"></i> Incident Review — Notable Events Worklist</h3>
+          <div style="display:flex;gap:6px;align-items:center">
+            <select class="inp" id="fUrgency" onchange="renderNotablesTable()"><option value="all">All Urgencies</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="info">Info</option></select>
+            <select class="inp" id="fStatus" onchange="renderNotablesTable()"><option value="all">All Statuses</option><option value="new">New</option><option value="in_progress">In Progress</option><option value="resolved">Resolved</option></select>
+            <button class="btn btn-g" onclick="generateLiveNotable()"><i class="fas fa-plus"></i> Simulate Threat</button>
+          </div>
+        </div>
+        <div class="cb" style="padding:0;max-height:calc(100vh - 240px);overflow-y:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Urgency</th>
+                <th>Notable Event Title</th>
+                <th>Entity / Target</th>
+                <th>Domain</th>
+                <th>Status</th>
+                <th>Assignee</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tbNotables"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. SECURITY POSTURE -->
+    <div class="sp-pnl" id="p-posture">
+      <div class="card mb">
+        <div class="ch"><h3><i class="fas fa-chart-line"></i> Security Posture Velocity &amp; Threat Ingestion</h3></div>
+        <div class="cb"><div style="height:190px"><canvas id="cPosture"></canvas></div></div>
+      </div>
+      <div class="card mb">
+        <div class="ch"><h3><i class="fas fa-th" style="color:var(--sp-green)"></i> MITRE ATT&amp;CK Matrix Correlation Mapping</h3></div>
+        <div class="cb"><div class="mitre-grid" id="mitreGrid"></div></div>
+      </div>
+    </div>
+
+    <!-- 3. SEARCH & REPORTING (SPL CONSOLE) -->
+    <div class="sp-pnl" id="p-search">
+      <div class="spl-bar mb">
+        <span class="spl-icon">SPL></span>
+        <input class="spl-input" id="splInput" value="index=siem | search severity=critical | stats count by type, dest_ip" placeholder="e.g. index=network | stats count by dest_port">
+        <button class="spl-btn" onclick="runSPL()"><i class="fas fa-search"></i> Search</button>
+      </div>
+
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+        <span style="font-size:.66rem;color:var(--g5);font-family:var(--mono);align-self:center">SPL Shortcuts:</span>
+        <button class="btn" onclick="setSPL('index=siem | stats count by type')">index=siem by type</button>
+        <button class="btn" onclick="setSPL('index=network | stats count by proto')">index=network by proto</button>
+        <button class="btn" onclick="setSPL('sourcetype=fortigate | search action=BLOCK')">Blocked FW Traffic</button>
+        <button class="btn" onclick="setSPL('index=endpoint | table host, ip, status, vlan')">Host Fleet Table</button>
+        <button class="btn" onclick="setSPL('index=packets | search proto=DNS')">DNS Tunnel Inspection</button>
+      </div>
+
+      <div class="card mb">
+        <div class="ch">
+          <h3><i class="fas fa-chart-bar"></i> Timeline Event Distribution</h3>
+          <span class="m" id="splStats" style="font-size:.68rem;color:var(--g5)">0 events matched</span>
+        </div>
+        <div class="cb"><div style="height:120px"><canvas id="cSPL"></canvas></div></div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3><i class="fas fa-table"></i> Query Results</h3><button class="btn btn-g" onclick="exportResults()"><i class="fas fa-download"></i> Export CSV</button></div>
+        <div class="cb" style="padding:0;max-height:280px;overflow-y:auto"><table id="splResultsTable"><thead><tr><th>Result Data</th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- 4. ACCESS & IDENTITY DOMAIN -->
+    <div class="sp-pnl" id="p-access">
+      <div class="card mb"><div class="ch"><h3><i class="fas fa-user-lock"></i> Identity &amp; Access Investigation (Module 25)</h3></div><div class="cb" id="accessCards"></div></div>
+    </div>
+
+    <!-- 5. ENDPOINT TELEMETRY DOMAIN -->
+    <div class="sp-pnl" id="p-endpoint">
+      <div class="card mb"><div class="ch"><h3><i class="fas fa-desktop"></i> EDR Sensor Agent Health (Module 24)</h3></div><div class="cb" style="padding:0" id="endpointTable"></div></div>
+    </div>
+
+    <!-- 6. NETWORK TRAFFIC DOMAIN -->
+    <div class="sp-pnl" id="p-network">
+      <div class="card mb"><div class="ch"><h3><i class="fas fa-network-wired"></i> Network Layer 3 Traffic Inspection (Module 11 &amp; 12)</h3></div><div class="cb" style="padding:0" id="networkTable"></div></div>
+    </div>
+
+    <!-- 7. THREAT INTELLIGENCE -->
+    <div class="sp-pnl" id="p-threat">
+      <div class="card mb"><div class="ch"><h3><i class="fas fa-biohazard"></i> Threat Intelligence &amp; IOC Matching Center</h3></div><div class="cb" id="threatTable"></div></div>
+    </div>
+
+    <!-- 8. RISK ANALYSIS (RBA) -->
+    <div class="sp-pnl" id="p-rba">
+      <div class="card mb"><div class="ch"><h3><i class="fas fa-tachometer-alt"></i> Risk-Based Alerting (RBA) Attributions</h3></div><div class="cb" style="padding:0" id="rbaTable"></div></div>
+    </div>
+
+    <!-- 9. SOAR AUTOMATED PLAYBOOKS -->
+    <div class="sp-pnl" id="p-soar">
+      <div class="card mb"><div class="ch"><h3><i class="fas fa-robot"></i> SOAR Automated Response Playbooks</h3></div><div class="cb" id="soarCards"></div></div>
+    </div>
+
+    <!-- 10. ASSET & IDENTITY DB -->
+    <div class="sp-pnl" id="p-assets">
+      <div class="card mb"><div class="ch"><h3><i class="fas fa-server"></i> Asset &amp; Identity Database (SXL-Network Fleet)</h3></div><div class="cb" style="padding:0" id="assetDbTable"></div></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- NOTABLE EVENT DETAIL MODAL -->
+<div class="modal-bg" id="eventModal" onclick="if(event.target===this)closeEM()"><div class="modal" id="eventModalBox"></div></div>
+
+<script>
+/* ═══ SXL-NETWORK SHARED DATASET ═══ */
+var SEGMENTS=[
+  {name:'Engineering',vlan:100,cidr:'10.0.1.0/24',zone:'Corporate',color:'#38bdf8'},
+  {name:'HR',vlan:200,cidr:'10.0.2.0/24',zone:'Corporate',color:'#a855f7'},
+  {name:'Finance',vlan:300,cidr:'10.0.3.0/24',zone:'Corporate',color:'#2dd4bf'},
+  {name:'Servers',vlan:10,cidr:'10.0.10.0/24',zone:'Infrastructure',color:'#f04438'},
+  {name:'Management',vlan:1000,cidr:'10.0.100.0/24',zone:'Management',color:'#fbbf24'},
+  {name:'Guest WiFi',vlan:2000,cidr:'10.0.200.0/24',zone:'Guest',color:'#f472b6'},
+  {name:'VoIP',vlan:50,cidr:'10.0.50.0/24',zone:'Voice',color:'#10b981'},
+  {name:'DMZ',vlan:10,cidr:'172.16.0.0/24',zone:'DMZ',color:'#ef4444'},
+  {name:'VPN',vlan:0,cidr:'192.168.100.0/24',zone:'VPN',color:'#818cf8'}
+];
+
+var ASSETS=[];
+(function(){
+  var idx=0;
+  var srvNames=['srv-web-01','srv-web-02','srv-db-01','srv-db-02','srv-app-01','srv-dns-01','srv-dhcp-01','srv-mail-01','srv-proxy-01','srv-ci-01'];
+  srvNames.forEach(function(n,i){ASSETS.push({id:'s'+idx++,type:'Server',name:n,ip:'10.0.10.'+(10+i),mac:'00:1a:2b:44:90:'+(10+i),os:'Ubuntu 22.04 LTS',status:'up',vlan:10,seg:'Servers',ports:[22,80,443,3306],risk:180+i*15,owner:'Infrastructure Lead'});});
+  ['Engineering','HR','Finance','Sales','Marketing'].forEach(function(d){
+    for(var j=0;j<5;j++){
+      var vl=d==='Engineering'?100:d==='HR'?200:d==='Finance'?300:100;
+      var net=d==='HR'?'10.0.2':d==='Finance'?'10.0.3':'10.0.1';
+      ASSETS.push({id:'e'+idx++,type:'Workstation',name:d.toLowerCase().substring(0,3)+'-0'+(j+1),ip:net+'.'+(j+11),mac:'aa:bb:cc:'+(j+20)+':40',os:'Windows 11 Enterprise',status:'up',vlan:vl,seg:d,ports:[135,445,3389],risk:40+j*25,owner:d+' User '+(j+1)});
+    }
+  });
+  ASSETS.push({id:'fw0',type:'Firewall',name:'fw-primary',ip:'10.0.100.20',mac:'00:0c:29:ff:10:01',os:'FortiOS 7.4',status:'up',vlan:1000,seg:'Management',ports:[22,443],risk:20,owner:'SecOps Team'});
+  ASSETS.push({id:'rt0',type:'Router',name:'rt-core',ip:'10.255.0.1',mac:'00:0a:95:11:00:01',os:'Cisco IOS-XE',status:'up',vlan:0,seg:'Management',ports:[22,161],risk:10,owner:'Network Ops'});
+})();
+
+var NOTABLES=[
+  {id:'N-101',time:'1 min ago',urgency:'critical',title:'Brute Force Authentication Storm Detected',target:'srv-web-01 (10.0.10.10)',domain:'Access',status:'new',assignee:'Analyst Tier-1',src:'192.168.100.45',mitre:'T1110 - Brute Force',disposition:'Unassigned',risk:90,raw:'May 24 14:02:11 sshd[4912]: Failed password for invalid user admin from 192.168.100.45 port 54102 ssh2'},
+  {id:'N-102',time:'4 mins ago',urgency:'critical',title:'Covert DNS Tunneling Beacon Exfiltration',target:'eng-01 (10.0.1.11)',domain:'Threat',status:'in_progress',assignee:'SOC Lead',src:'10.0.1.11',mitre:'T1071.004 - DNS Tunnel',disposition:'True Positive',risk:95,raw:'named[884]: query: YmFzZTY0X3R1bm5lbC5zaGFkb3d4bGFi.c2.sxl-threat.net IN A + (10.0.1.11)'},
+  {id:'N-103',time:'12 mins ago',urgency:'high',title:'Lateral Movement Pivot over SMB (445)',target:'srv-db-01 (10.0.10.12)',domain:'Network',status:'new',assignee:'Analyst Tier-2',src:'10.0.1.11',mitre:'T1021.002 - SMB/Admin Shares',disposition:'Unassigned',risk:85,raw:'FortiGate-FW: date=2026-05-24 time=14:00:10 srcip=10.0.1.11 dstip=10.0.10.12 dstport=445 action=ALLOW'},
+  {id:'N-104',time:'25 mins ago',urgency:'high',title:'Nmap TCP SYN Port Scan Fleet Sweep',target:'10.0.10.0/24 (Servers VLAN)',domain:'Network',status:'in_progress',assignee:'Analyst Tier-1',src:'10.0.1.13',mitre:'T1046 - Network Service Scanning',disposition:'True Positive',risk:75,raw:'Suricata[102]: SCAN SYN scan detected from 10.0.1.13 targeting ports 22,80,443,3306,5432'},
+  {id:'N-105',time:'42 mins ago',urgency:'medium',title:'Privilege Escalation via Sudo NOPASSWD',target:'srv-ci-01 (10.0.10.19)',domain:'Endpoint',status:'resolved',assignee:'Analyst Tier-2',src:'10.0.10.19',mitre:'T1548.003 - Sudo/Elevation',disposition:'Benign - Admin Task',risk:50,raw:'sudo: devops_lead : TTY=pts/2 ; PWD=/home/devops ; USER=root ; COMMAND=/bin/systemctl restart nginx'},
+  {id:'N-106',time:'1 hr ago',urgency:'info',title:'FortiGate Policy Denied Guest to Internal',target:'10.0.200.45 -> 10.0.10.10',domain:'Network',status:'resolved',assignee:'Automation',src:'10.0.200.45',mitre:'T1046 - Network Discovery',disposition:'Benign Policy Drop',risk:10,raw:'FortiGate-FW: srcip=10.0.200.45 dstip=10.0.10.10 dstport=80 action=BLOCK policyid=4'}
+];
+
+/* ═══ SPL ENGINE ═══ */
+function runSPL(){
+  var q = document.getElementById('splInput').value.trim();
+  var resTable = document.getElementById('splResultsTable');
+  var statsLabel = document.getElementById('splStats');
+  
+  var rows = [];
+  var chartLabels = ['14:00','14:05','14:10','14:15','14:20','14:25','14:30'];
+  var chartData = [12, 28, 45, 18, 52, 34, 40];
+
+  if(q.indexOf('index=siem') >= 0 || q.indexOf('notables') >= 0){
+    rows = NOTABLES.map(function(n){ return [n.time, n.urgency.toUpperCase(), n.title, n.target, n.src, n.mitre]; });
+    resTable.innerHTML = '<thead><tr><th>Time</th><th>Urgency</th><th>Event Title</th><th>Target</th><th>Source IP</th><th>MITRE</th></tr></thead><tbody>' +
+      rows.map(function(r){ return '<tr><td class="m">'+r[0]+'</td><td><span class="urgency '+r[1].toLowerCase()+'">'+r[1]+'</span></td><td style="font-weight:700">'+r[2]+'</td><td class="m" style="color:var(--blu)">'+r[3]+'</td><td class="m" style="color:var(--red)">'+r[4]+'</td><td><span class="tag p">'+r[5]+'</span></td></tr>'; }).join('') + '</tbody>';
+  } else if(q.indexOf('index=network') >= 0 || q.indexOf('packets') >= 0){
+    rows = [
+      ['14:02:11','10.0.1.11','10.0.10.12','TCP','445','ALLOW [SMB2 Session Setup]'],
+      ['14:02:15','10.0.1.11','8.8.8.8','UDP','53','QUERY A base64_tunnel.sxl.net'],
+      ['14:02:18','10.0.2.14','10.0.10.10','TCP','443','ALLOW [TLSv1.3 Handshake]'],
+      ['14:02:22','10.0.200.5','10.0.10.10','TCP','80','BLOCK [Drop by Firewall]'],
+      ['14:02:25','10.0.1.13','10.0.10.14','TCP','3306','ALLOW [MySQL Connect]']
+    ];
+    resTable.innerHTML = '<thead><tr><th>Time</th><th>Source</th><th>Destination</th><th>Proto</th><th>Port</th><th>Payload Dissection</th></tr></thead><tbody>' +
+      rows.map(function(r){ return '<tr><td class="m">'+r[0]+'</td><td class="m" style="color:var(--blu)">'+r[1]+'</td><td class="m" style="color:var(--pur)">'+r[2]+'</td><td><span class="tag c">'+r[3]+'</span></td><td class="m">'+r[4]+'</td><td style="color:var(--g6)">'+r[5]+'</td></tr>'; }).join('') + '</tbody>';
+  } else {
+    rows = ASSETS.slice(0,10).map(function(a){ return [a.name, a.ip, a.type, a.os, a.seg, 'VLAN '+a.vlan, a.risk]; });
+    resTable.innerHTML = '<thead><tr><th>Asset Name</th><th>IPv4</th><th>Type</th><th>OS</th><th>Segment</th><th>VLAN</th><th>Risk Score</th></tr></thead><tbody>' +
+      rows.map(function(r){ return '<tr><td style="font-weight:700">'+r[0]+'</td><td class="m" style="color:var(--red)">'+r[1]+'</td><td><span class="tag b">'+r[2]+'</span></td><td>'+r[3]+'</td><td>'+r[4]+'</td><td class="m">'+r[5]+'</td><td class="m" style="color:var(--amb);font-weight:800">'+r[6]+'</td></tr>'; }).join('') + '</tbody>';
+  }
+
+  statsLabel.textContent = rows.length + ' events matched (0.042 seconds)';
+  renderSPLChart(chartLabels, chartData);
+}
+
+function setSPL(q){ document.getElementById('splInput').value = q; runSPL(); }
+
+var splChart = null;
+function renderSPLChart(labels, data){
+  var ctx = document.getElementById('cSPL');
+  if(splChart) splChart.destroy();
+  splChart = new Chart(ctx, {
+    type: 'bar',
+    data: { labels: labels, datasets: [{ data: data, backgroundColor: '#65a30d', borderRadius: 3 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { font: { size: 8 } } }, y: { grid: { color: 'rgba(255,255,255,.05)' }, ticks: { font: { size: 8 } } } } }
+  });
+}
+
+/* ═══ NOTABLES TAB RENDERING ═══ */
+function renderNotablesTable(){
+  var fu = document.getElementById('fUrgency').value;
+  var fs = document.getElementById('fStatus').value;
+  var list = NOTABLES.filter(function(n){
+    if(fu !== 'all' && n.urgency !== fu) return false;
+    if(fs !== 'all' && n.status !== fs) return false;
+    return true;
+  });
+
+  var crit = NOTABLES.filter(function(n){return n.urgency==='critical'}).length;
+  var high = NOTABLES.filter(function(n){return n.urgency==='high'}).length;
+  var prog = NOTABLES.filter(function(n){return n.status==='in_progress'}).length;
+  var nw = NOTABLES.filter(function(n){return n.status==='new'}).length;
+
+  document.getElementById('sCrit').textContent = crit;
+  document.getElementById('sHigh').textContent = high;
+  document.getElementById('sProg').textContent = prog;
+  document.getElementById('sNew').textContent = nw;
+  document.getElementById('cNotables').textContent = NOTABLES.length;
+  document.getElementById('cAssets').textContent = ASSETS.length;
+
+  var h = list.map(function(n){
+    return '<tr>' +
+      '<td class="m" style="font-size:.68rem;color:var(--g5)">'+n.time+'</td>' +
+      '<td><span class="urgency '+n.urgency+'">'+n.urgency+'</span></td>' +
+      '<td style="font-weight:700;color:var(--text)" onclick="openEventModal(\''+n.id+'\')">'+n.title+'</td>' +
+      '<td class="m" style="color:var(--blu)">'+n.target+'</td>' +
+      '<td><span class="tag b">'+n.domain+'</span></td>' +
+      '<td><span class="status-pill '+n.status+'">'+n.status.replace('_',' ').toUpperCase()+'</span></td>' +
+      '<td style="font-size:.68rem">'+n.assignee+'</td>' +
+      '<td><button class="btn btn-g btn-s" onclick="openEventModal(\''+n.id+'\')"><i class="fas fa-search"></i> Triage</button></td>' +
+    '</tr>';
+  }).join('');
+
+  document.getElementById('tbNotables').innerHTML = h;
+}
+
+function openEventModal(id){
+  var n = NOTABLES.find(function(x){return x.id===id});
+  if(!n) return;
+  var h = '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px">' +
+    '<div><span class="urgency '+n.urgency+'">'+n.urgency.toUpperCase()+'</span><h3 style="margin:4px 0 0;font-size:1.05rem;color:var(--text)">'+n.title+'</h3></div>' +
+    '<button class="btn" onclick="closeEM()"><i class="fas fa-times"></i></button>' +
+  '</div>' +
+  '<div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:12px">' +
+    '<div class="stat-box red"><div class="sl">Risk Score</div><div class="sv" style="font-size:1.1rem;color:var(--red)">'+n.risk+'/100</div></div>' +
+    '<div class="stat-box blu"><div class="sl">Security Domain</div><div class="sv" style="font-size:1rem;color:var(--blu)">'+n.domain+'</div></div>' +
+    '<div class="stat-box pur"><div class="sl">MITRE ATT&CK</div><div class="sv" style="font-size:.8rem;color:var(--pur)">'+n.mitre+'</div></div>' +
+  '</div>' +
+  '<div style="background:var(--panel);border:1px solid var(--line);border-radius:var(--rs);padding:10px;margin-bottom:10px">' +
+    '<div style="font-size:.6rem;font-weight:800;color:var(--g5);text-transform:uppercase;font-family:var(--mono)">Raw Log Payload</div>' +
+    '<div class="m" style="font-size:.68rem;color:var(--sp-green);margin-top:4px;word-break:break-all">'+n.raw+'</div>' +
+  '</div>' +
+  '<div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">' +
+    '<div><label class="lbl" style="text-align:left">Update Status</label><select class="inp" id="emStatus" style="width:100%"><option value="new" '+(n.status==='new'?'selected':'')+'>New</option><option value="in_progress" '+(n.status==='in_progress'?'selected':'')+'>In Progress</option><option value="resolved" '+(n.status==='resolved'?'selected':'')+'>Resolved</option></select></div>' +
+    '<div><label class="lbl" style="text-align:left">Assignee</label><select class="inp" id="emAssignee" style="width:100%"><option>Analyst Tier-1</option><option>Analyst Tier-2</option><option>SOC Lead</option></select></div>' +
+  '</div>' +
+  '<div style="display:flex;gap:6px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:12px">' +
+    '<button class="btn btn-r" onclick="triggerSOAR(\'isolate\',\''+n.target+'\')"><i class="fas fa-shield-virus"></i> SOAR: Quarantine Target</button>' +
+    '<button class="btn btn-g" onclick="triggerSOAR(\'block\',\''+n.src+'\')"><i class="fas fa-ban"></i> SOAR: Block IP on FW</button>' +
+    '<button class="btn" onclick="saveEventModal(\''+n.id+'\')"><i class="fas fa-save"></i> Save Triage</button>' +
+  '</div>';
+  document.getElementById('eventModalBox').innerHTML = h;
+  document.getElementById('eventModal').classList.add('show');
+}
+function closeEM(){ document.getElementById('eventModal').classList.remove('show'); }
+function saveEventModal(id){
+  var n = NOTABLES.find(function(x){return x.id===id});
+  if(n){
+    n.status = document.getElementById('emStatus').value;
+    n.assignee = document.getElementById('emAssignee').value;
+    closeEM();
+    renderNotablesTable();
+  }
+}
+function triggerSOAR(action, target){
+  alert('SOAR Playbook Executed: ' + (action==='isolate'?'Quarantined host ':'Blocked IP ') + target + ' across FortiGate FW policies.');
+  closeEM();
+  renderNotablesTable();
+}
+
+function generateLiveNotable(){
+  var types = [
+    {t:'Ransomware Encryptor Signature Match',u:'critical',m:'T1486 Data Encrypted',r:'FortiEDR: Ransomware payload stopped on host'},
+    {t:'SSH Password Spraying on Linux Bastion',u:'high',m:'T1110.003 Password Spray',r:'sshd: 25 failed attempts in 60s from external IP'},
+    {t:'C2 Reverse Shell Beacon over TCP/4444',u:'critical',m:'T1059 Command Shell',r:'Zeek: TCP 4444 connection established out of DMZ'}
+  ];
+  var tpl = pick(types);
+  var targetAsset = pick(ASSETS);
+  var newId = 'N-' + (100 + NOTABLES.length + 1);
+  NOTABLES.unshift({
+    id: newId,
+    time: 'Just now',
+    urgency: tpl.u,
+    title: tpl.t,
+    target: targetAsset.name + ' (' + targetAsset.ip + ')',
+    domain: 'Threat',
+    status: 'new',
+    assignee: 'Analyst Tier-1',
+    src: '192.168.100.' + RI(10, 99),
+    mitre: tpl.m,
+    disposition: 'Unassigned',
+    risk: 92,
+    raw: tpl.r
+  });
+  renderNotablesTable();
+}
+
+/* ═══ NAVIGATION & PANELS ═══ */
+function showPanel(p){
+  document.querySelectorAll('.sp-pnl').forEach(function(x){x.classList.remove('on')});
+  var el = document.getElementById('p-' + p);
+  if(el) el.classList.add('on');
+  document.querySelectorAll('.snb').forEach(function(b){b.classList.remove('on'); if(b.getAttribute('data-p')===p) b.classList.add('on');});
+  document.querySelectorAll('.sp-tab').forEach(function(t){t.classList.remove('active');});
+  
+  if(p==='posture') renderPosture();
+  if(p==='search') runSPL();
+  if(p==='endpoint') renderEndpoints();
+  if(p==='network') renderNetwork();
+  if(p==='threat') renderThreat();
+  if(p==='rba') renderRBA();
+  if(p==='soar') renderSOAR();
+  if(p==='assets') renderAssetDb();
+  if(p==='access') renderAccess();
+}
+document.querySelector('.sp-side').onclick = function(e){
+  var b = e.target.closest('.snb');
+  if(b && b.getAttribute('data-p')) showPanel(b.getAttribute('data-p'));
+};
+
+/* ═══ POSTURE MATRIX ═══ */
+var postureChart = null;
+function renderPosture(){
+  var ctx = document.getElementById('cPosture');
+  if(postureChart) postureChart.destroy();
+  postureChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['00:00','04:00','08:00','12:00','16:00','20:00','Now'],
+      datasets: [
+        { label: 'Critical Threat Volume', data: [8, 14, 28, 42, 65, 38, 52], borderColor: '#f04438', backgroundColor: 'rgba(240,68,56,0.1)', fill: true, tension: 0.3 },
+        { label: 'Mitigated Incidents', data: [6, 12, 24, 38, 59, 35, 48], borderColor: '#10b981', backgroundColor: 'transparent', borderDash: [4,4] }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false } }, y: { grid: { color: 'rgba(255,255,255,.05)' } } } }
+  });
+
+  var mGrid = [
+    {t:'Initial Access',items:['T1190 Exploit Public App','T1566 Phishing Link','T1133 External Remote']},
+    {t:'Execution',items:['T1059 Command Shell','T1204 User Execution','T1053 Scheduled Task']},
+    {t:'Persistence',items:['T1547 Boot Autostart','T1078 Valid Accounts','T1543 System Process']},
+    {t:'Lateral Movement',items:['T1021 SMB / RDP','T1550 Use Alternate Auth','T1080 Taint Shared']}
+  ];
+  document.getElementById('mitreGrid').innerHTML = mGrid.map(function(c){
+    return '<div class="mitre-box"><h4>'+c.t.toUpperCase()+'</h4>' +
+      c.items.map(function(i){ return '<div class="mitre-item"><span>'+i+'</span><span class="badge '+(Math.random()>.4?'up':'dn')+'">'+(Math.random()>.4?'DETECTED':'ALERT')+'</span></div>'; }).join('') +
+    '</div>';
+  }).join('');
+}
+
+function renderEndpoints(){
+  document.getElementById('endpointTable').innerHTML = '<table><thead><tr><th>Endpoint Name</th><th>IPv4 Address</th><th>OS Version</th><th>EDR Sensor</th><th>Telemetry State</th><th>Risk Attribution</th></tr></thead><tbody>' +
+    ASSETS.slice(0,14).map(function(a){ return '<tr><td style="font-weight:700">'+a.name+'</td><td class="m" style="color:var(--blu)">'+a.ip+'</td><td>'+a.os+'</td><td><span class="badge up">v4.2-sensor</span></td><td><span class="status-pill '+(a.status==='up'?'resolved':'new')+'">'+a.status.toUpperCase()+'</span></td><td class="m" style="color:var(--amb);font-weight:800">'+a.risk+' pts</td></tr>'; }).join('') + '</tbody></table>';
+}
+
+function renderNetwork(){
+  document.getElementById('networkTable').innerHTML = '<table><thead><tr><th>Segment Name</th><th>VLAN ID</th><th>CIDR Space</th><th>Zone</th><th>Firewall Policy Scope</th><th>Active Fleet</th></tr></thead><tbody>' +
+    SEGMENTS.map(function(s){ return '<tr><td style="font-weight:700">'+s.name+'</td><td class="m" style="color:var(--red);font-weight:800">VLAN '+s.vlan+'</td><td class="m" style="color:var(--blu)">'+s.cidr+'</td><td><span class="tag b">'+s.zone+'</span></td><td>Stateful FortiGate Inspection</td><td class="m">'+ASSETS.filter(function(a){return a.seg===s.name}).length+' assets</td></tr>'; }).join('') + '</tbody></table>';
+}
+
+function renderThreat(){
+  var iocs = [
+    {type:'IPv4 Address',val:'185.220.101.5',source:'AlienVault OTX',conf:'98%',match:'3 Matches in Network logs'},
+    {type:'Domain C2',val:'c2.sxl-threat.net',source:'ShadowXLab Threat Feed',conf:'100%',match:'1 DNS Tunneling Beacon'},
+    {type:'SHA-256 Hash',val:'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',source:'CISA KEV',conf:'95%',match:'0 Fleet Matches'},
+    {type:'User Agent',val:'Mozilla/5.0 (Hydra Brute Force)',source:'Emerging Threats',conf:'90%',match:'14 Attempts logged'}
+  ];
+  document.getElementById('threatTable').innerHTML = '<table><thead><tr><th>Indicator Type</th><th>IOC Value</th><th>Threat Feed Source</th><th>Confidence</th><th>Fleet Matches</th></tr></thead><tbody>' +
+    iocs.map(function(i){ return '<tr><td><span class="tag c">'+i.type+'</span></td><td class="m" style="color:var(--red);font-weight:700">'+i.val+'</td><td>'+i.source+'</td><td class="m" style="color:var(--grn)">'+i.conf+'</td><td style="font-weight:700;color:var(--amb)">'+i.match+'</td></tr>'; }).join('') + '</tbody></table>';
+}
+
+function renderRBA(){
+  document.getElementById('rbaTable').innerHTML = '<table><thead><tr><th>Risk Object</th><th>Entity Type</th><th>Aggregate Risk Score</th><th>Primary Threat Driver</th><th>Recommended SOC Action</th></tr></thead><tbody>' +
+    ASSETS.slice(0,10).map(function(a){ return '<tr><td style="font-weight:700">'+a.name+'</td><td><span class="tag b">'+a.type+'</span></td><td class="m" style="color:var(--red);font-size:.9rem;font-weight:900">'+a.risk+'</td><td>Multiple Failed Logins &amp; SYN Sweeps</td><td><button class="btn btn-r btn-s" onclick="triggerSOAR(\'isolate\',\''+a.name+'\')">Execute Quarantine</button></td></tr>'; }).join('') + '</tbody></table>';
+}
+
+function renderSOAR(){
+  var pb = [
+    {n:'Playbook: Ransomware Host Micro-Isolation',d:'Immediately changes switchport VLAN to 999 Quarantine and revokes Kerberos tokens.',t:'M26 Incident Response'},
+    {n:'Playbook: FortiGate Dynamic IP Blocklist',d:'Injects malicious source IP into FortiGate dynamic address group drop policy.',t:'M13 Firewalls'},
+    {n:'Playbook: Active Directory Credential Reset',d:'Forces password reset and kills active sessions on compromised accounts.',t:'M25 SOC Operations'},
+    {n:'Playbook: PCAP Automated Frame Forensics',d:'Extracts full payload streams and runs ClamAV + YARA heuristic scans.',t:'M28 Malware Forensics'}
+  ];
+  document.getElementById('soarCards').innerHTML = pb.map(function(p,i){
+    return '<div style="background:var(--panel);border:1px solid var(--line);border-radius:var(--rs);padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">' +
+      '<div><div style="font-weight:800;color:var(--text);font-size:.82rem">'+p.n+'</div><div style="font-size:.7rem;color:var(--g6);margin-top:2px">'+p.d+'</div><span class="tag p" style="margin-top:4px">'+p.t+'</span></div>' +
+      '<button class="btn btn-g" onclick="alert(\'Executed '+p.n+' across all fleet entities!\')"><i class="fas fa-play"></i> Run Playbook</button>' +
+    '</div>';
+  }).join('');
+}
+
+function renderAssetDb(){
+  document.getElementById('assetDbTable').innerHTML = '<table><thead><tr><th>Asset Name</th><th>IPv4</th><th>MAC Address</th><th>OS Platform</th><th>Zone Segment</th><th>Criticality</th></tr></thead><tbody>' +
+    ASSETS.map(function(a){ return '<tr><td style="font-weight:700">'+a.name+'</td><td class="m" style="color:var(--blu)">'+a.ip+'</td><td class="m" style="font-size:.66rem">'+a.mac+'</td><td>'+a.os+'</td><td><span class="tag b">'+a.seg+'</span></td><td><span class="badge '+(a.type==='Server'?'dn':'up')+'">'+(a.type==='Server'?'CRITICAL':'STANDARD')+'</span></td></tr>'; }).join('') + '</tbody></table>';
+}
+
+function renderAccess(){
+  document.getElementById('accessCards').innerHTML = '<table><thead><tr><th>User Principal</th><th>Role / Department</th><th>Assigned Asset</th><th>Authentication State</th><th>MFA Status</th></tr></thead><tbody>' +
+    ASSETS.slice(0,10).map(function(a,i){ return '<tr><td style="font-weight:700">'+a.owner.toLowerCase().replace(/ /g,'.')+'@shadowxlab.com</td><td>'+a.seg+' Team</td><td class="m">'+a.name+'</td><td><span class="status-pill resolved">ACTIVE (KERBEROS)</span></td><td><span class="badge up">FIDO2 ENFORCED</span></td></tr>'; }).join('') + '</tbody></table>';
+}
+
+function exportResults(){
+  alert('Exported Splunk query results to CSV (shadowxlab_splunk_export.csv).');
+}
+
+/* ═══ UNIVERSAL THEME TOGGLE ═══ */
+function updateThemeIcon(t){
+  const el = document.getElementById('themeToggle');
+  if(el) el.textContent = t === 'dark' ? '☀️' : '🌙';
+}
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', cur);
+  try {
+    localStorage.setItem('sxl-theme', cur);
+    localStorage.setItem('cybercoreTheme', cur);
+  } catch(e){}
+  updateThemeIcon(cur);
+}
+
+/* Init */
+(function(){
+  try{
+    const saved = localStorage.getItem('sxl-theme') || localStorage.getItem('cybercoreTheme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+    updateThemeIcon(saved);
+  }catch(e){}
+  renderNotablesTable();
+  runSPL();
+})();
+</script>
+</body>
+</html>
