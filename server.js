@@ -205,26 +205,31 @@ function processIncomingLog(rawLog, host, sourcetype) {
     broadcastSSE('finding', finding);
   }
 
-  // Update Asset last seen
-  const existingAsset = registeredAssets.find(a => a.name === host || a.ip === host);
-  if (existingAsset) {
-    existingAsset.status = 'online';
-    existingAsset.lastSeen = new Date().toISOString();
+  // Update Asset last seen or auto-register new machine
+  let asset = registeredAssets.find(a => a.name === host || a.ip === host);
+  if (asset) {
+    asset.status = 'online';
+    asset.lastSeen = new Date().toLocaleTimeString();
+    if (sourcetype.includes('Win')) asset.os = 'Windows 11 / 10';
   } else if (host && host !== 'unknown-host') {
-    registeredAssets.push({
-      id: 'auto-' + (registeredAssets.length + 1),
+    asset = {
+      id: 'asset-' + (registeredAssets.length + 1),
       name: host,
-      ip: host.includes('.') ? host : 'DHCP-Auto',
+      ip: host.includes('.') ? host : '127.0.0.1 (Local Forwarder)',
       mac: 'Auto-Discovered',
-      os: sourcetype.includes('Win') ? 'Windows' : 'Linux / Unix',
+      os: sourcetype.includes('Win') ? 'Windows 11 / 10' : 'Linux / Unix',
       status: 'online',
-      type: 'Workstation',
-      risk: finding ? finding.risk : 10,
-      owner: 'Auto-Registered Forwarder'
-    });
+      type: 'Workstation / Server',
+      risk: finding ? finding.risk : 15,
+      owner: 'Live Universal Forwarder',
+      lastSeen: new Date().toLocaleTimeString()
+    };
+    registeredAssets.push(asset);
   }
 
   broadcastSSE('log', logEntry);
+  broadcastSSE('assets', registeredAssets);
+  if (asset) broadcastSSE('machine_online', asset);
   broadcastSSE('stats', { totalLogs: ingestedLogs.length, totalFindings: liveFindings.length, totalAssets: registeredAssets.length });
   return logEntry;
 }

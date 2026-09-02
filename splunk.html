@@ -281,7 +281,23 @@ tr.selected td{background:rgba(2,132,199,0.12)}
         <select class="select-btn" id="savedViewsSelect"><option>Select...</option><option>High Risk Findings</option><option>Unassigned Tier-1</option></select>
         <button class="btn-action" onclick="toggleTimeline()"><i class="fas fa-chart-bar"></i> Charts</button>
         <button class="btn-action" onclick="toggleTimeline()"><i class="fas fa-stream"></i> Timeline</button>
-        <button class="btn-action" onclick="generateSimulatedFinding()"><i class="fas fa-plus"></i></button>
+      </div>
+    </div>
+
+    <!-- LIVE FORWARDER FLEET STATUS BAR -->
+    <div id="liveFleetStatusBar" style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--rs);margin-bottom:12px;font-size:11px">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="font-weight:800;color:var(--text);display:flex;align-items:center;gap:6px">
+          <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block"></span>
+          Live Forwarder Fleet:
+        </span>
+        <span id="liveFleetPillList" style="display:flex;gap:6px;flex-wrap:wrap">
+          <span style="color:var(--text-muted)">Waiting for real forwarder connection...</span>
+        </span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="m" style="color:var(--sp-cyan);font-size:10.5px" id="liveFleetEventRate">0 events ingested</span>
+        <button class="btn-action" style="padding:2px 8px;font-size:10.5px" onclick="openAddMachineModal()"><i class="fas fa-plus"></i> Forwarder Guide</button>
       </div>
     </div>
 
@@ -1796,10 +1812,51 @@ function sendTestHECEvent(){
 
 /* ═══ REAL-TIME SSE STREAM LISTENER & LOG RENDERER ═══ */
 var INGESTED_LOGS = [];
+var CONNECTED_MACHINES = {};
+
+function updateFleetUI(){
+  var pillList = document.getElementById('liveFleetPillList');
+  var evRate = document.getElementById('liveFleetEventRate');
+  var hosts = Object.keys(CONNECTED_MACHINES);
+
+  if(evRate) evRate.textContent = INGESTED_LOGS.length + ' events ingested';
+
+  if(pillList){
+    if(hosts.length === 0){
+      pillList.innerHTML = '<span style="color:var(--text-muted)">Waiting for real forwarder connection... Run <code class="m" style="color:var(--sp-cyan)">.\\agent-windows.ps1</code></span>';
+    } else {
+      pillList.innerHTML = hosts.map(function(h){
+        var m = CONNECTED_MACHINES[h];
+        return '<span style="padding:2px 8px;border-radius:12px;background:rgba(34,197,94,0.15);border:1px solid #22c55e;color:#86efac;font-weight:700;display:inline-flex;align-items:center;gap:5px">' +
+          '<span style="width:6px;height:6px;border-radius:50%;background:#22c55e;display:inline-block"></span>' +
+          h + ' (' + (m.os || 'Online') + ')' +
+        '</span>';
+      }).join('');
+    }
+  }
+
+  var dashHosts = document.getElementById('dashActiveHosts');
+  if(dashHosts) dashHosts.textContent = hosts.length;
+
+  // Refresh config assets and data inputs if open
+  if(document.getElementById('viewConfigure').style.display !== 'none') renderConfigAssets();
+  if(document.getElementById('viewDataInputs').style.display !== 'none') renderDataInputs();
+}
+
 function renderLiveLog(l){
   INGESTED_LOGS.unshift(l);
   if(INGESTED_LOGS.length > 200) INGESTED_LOGS.pop();
   
+  if(l.host && l.host !== 'unknown' && l.host !== 'unknown-host'){
+    CONNECTED_MACHINES[l.host] = {
+      name: l.host,
+      lastSeen: l.time || new Date().toLocaleTimeString(),
+      sourcetype: l.sourcetype,
+      os: (l.sourcetype||'').includes('Win') || (l.raw||'').includes('CpuLoad') ? 'Windows 11 / 10' : 'Linux / Unix'
+    };
+    updateFleetUI();
+  }
+
   var cnt = document.getElementById('liveLogCount');
   if(cnt) cnt.textContent = INGESTED_LOGS.length + ' events';
 
@@ -1836,6 +1893,12 @@ function setupRealtimeStream(){
       sse.addEventListener('init', function(e){
         try {
           var d = JSON.parse(e.data);
+          if(d.assets && d.assets.length > 0){
+            d.assets.forEach(function(a){
+              if(a.name) CONNECTED_MACHINES[a.name] = a;
+            });
+            updateFleetUI();
+          }
           if(d.findings && d.findings.length > 0){
             FINDINGS = d.findings;
             filterFindings();
@@ -1865,12 +1928,32 @@ function setupRealtimeStream(){
         } catch(err){}
       });
 
+      sse.addEventListener('assets', function(e){
+        try {
+          var assets = JSON.parse(e.data);
+          assets.forEach(function(a){
+            if(a.name) CONNECTED_MACHINES[a.name] = a;
+          });
+          updateFleetUI();
+        } catch(err){}
+      });
+
+      sse.addEventListener('machine_online', function(e){
+        try {
+          var a = JSON.parse(e.data);
+          if(a.name) CONNECTED_MACHINES[a.name] = a;
+          updateFleetUI();
+        } catch(err){}
+      });
+
       sse.addEventListener('reset', function(e){
         INGESTED_LOGS = [];
         FINDINGS = [];
+        CONNECTED_MACHINES = {};
         activeFinding = null;
         renderTable(FINDINGS);
         renderHistogram();
+        updateFleetUI();
         closeDrawer();
         var tb = document.getElementById('liveEventsBody');
         if(tb) tb.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:12px;color:var(--text-muted)">Logs cleared. Waiting for new telemetry...</td></tr>';
