@@ -785,7 +785,7 @@ tr.selected td{background:rgba(2,132,199,0.12)}
         <button class="btn-action" style="padding:2px 6px;font-size:10px" onclick="copyAgentCmd('ps')">Copy Script</button>
       </div>
       <code id="cmdPS" class="m" style="font-size:10px;color:var(--text);display:block;word-break:break-all;background:var(--bg-input);padding:6px;border-radius:3px">
-        Invoke-RestMethod -Uri "http://localhost:8000/services/collector/event" -Headers @{Authorization="Splunk sxl-splunk-hec-token-2026"} -Method Post -Body '{"event":"EventLog 4625 Failed Logon on HOST", "host":"' + $env:COMPUTERNAME + '", "sourcetype":"WinEventLog:Security"}'
+        $b = @{event="EventLog 4625 Failed Logon on $env:COMPUTERNAME"; host=$env:COMPUTERNAME; sourcetype="WinEventLog:Security"} | ConvertTo-Json; Invoke-RestMethod -Uri "http://localhost:8000/services/collector/event" -Headers @{Authorization="Splunk sxl-splunk-hec-token-2026"} -Method Post -Body $b
       </code>
     </div>
 
