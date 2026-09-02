@@ -340,6 +340,27 @@ tr.selected td{background:rgba(2,132,199,0.12)}
         </table>
       </div>
     </div>
+
+    <!-- REAL-TIME MACHINE TELEMETRY & EVENT STREAM -->
+    <div style="margin-top:12px;background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden">
+      <div style="padding:8px 12px;background:var(--bg-card);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:11.5px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:6px">
+          <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block"></span>
+          Live Machine Telemetry & Event Stream (<span id="liveLogCount" style="color:var(--sp-cyan)">0 events</span>)
+        </div>
+        <div style="font-size:10.5px;color:var(--text-muted)">
+          Listening on HEC port 8000 & Syslog 1514
+        </div>
+      </div>
+      <div class="table-scroll" style="max-height:160px">
+        <table style="font-size:11px" id="liveEventsTable">
+          <thead><tr><th style="width:90px">Time</th><th style="width:130px">Host</th><th style="width:130px">Sourcetype</th><th>_raw Message</th></tr></thead>
+          <tbody id="liveEventsBody">
+            <tr><td colspan="4" style="text-align:center;padding:12px;color:var(--text-muted)">Waiting for real telemetry... Run <code class="m" style="color:var(--sp-cyan)">.\agent-windows.ps1</code> to stream live events</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
   <!-- SLIDE-OUT DETAIL DRAWER (IMAGE 2) -->
@@ -1397,7 +1418,40 @@ function sendTestHECEvent(){
   });
 }
 
-/* ═══ REAL-TIME SSE STREAM LISTENER ═══ */
+/* ═══ REAL-TIME SSE STREAM LISTENER & LOG RENDERER ═══ */
+var INGESTED_LOGS = [];
+function renderLiveLog(l){
+  INGESTED_LOGS.unshift(l);
+  if(INGESTED_LOGS.length > 200) INGESTED_LOGS.pop();
+  
+  var cnt = document.getElementById('liveLogCount');
+  if(cnt) cnt.textContent = INGESTED_LOGS.length + ' events';
+
+  var tb = document.getElementById('liveEventsBody');
+  if(tb){
+    if(INGESTED_LOGS.length === 1 || tb.children.length === 0 || tb.innerText.includes('Waiting for real telemetry')){
+      tb.innerHTML = '';
+    }
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td class="m" style="color:var(--text-muted)">' + (l.time || 'Just now') + '</td>' +
+      '<td style="color:var(--sp-cyan);font-weight:700">' + (l.host || 'unknown') + '</td>' +
+      '<td class="m">' + (l.sourcetype || 'syslog') + '</td>' +
+      '<td class="m" style="color:var(--text);font-size:10.5px">' + (l.raw || '') + '</td>';
+    tb.insertBefore(tr, tb.firstChild);
+    if(tb.children.length > 50) tb.removeChild(tb.lastChild);
+  }
+
+  var sTb = document.getElementById('splResultBody');
+  if(sTb){
+    var sTr = document.createElement('tr');
+    sTr.innerHTML = '<td class="m" style="color:var(--text-muted)">' + (l.time || 'Just now') + '</td>' +
+      '<td style="color:var(--sp-cyan);font-weight:700">' + (l.host || 'unknown') + '</td>' +
+      '<td class="m">' + (l.sourcetype || 'syslog') + '</td>' +
+      '<td class="m" style="color:var(--text);font-size:10.5px">' + (l.raw || '') + '</td>';
+    sTb.insertBefore(sTr, sTb.firstChild);
+  }
+}
+
 function setupRealtimeStream(){
   if(typeof EventSource !== 'undefined'){
     try {
@@ -1410,6 +1464,9 @@ function setupRealtimeStream(){
             FINDINGS = d.findings;
             filterFindings();
             renderHistogram();
+          }
+          if(d.logs && d.logs.length > 0){
+            d.logs.slice().reverse().forEach(renderLiveLog);
           }
         } catch(err){}
       });
@@ -1428,15 +1485,7 @@ function setupRealtimeStream(){
       sse.addEventListener('log', function(e){
         try {
           var l = JSON.parse(e.data);
-          var tb = document.getElementById('splResultBody');
-          if(tb){
-            var tr = document.createElement('tr');
-            tr.innerHTML = '<td class="m" style="color:var(--text-muted)">' + l.time + '</td>' +
-              '<td style="color:var(--sp-cyan);font-weight:700">' + l.host + '</td>' +
-              '<td class="m">' + l.sourcetype + '</td>' +
-              '<td class="m" style="color:var(--text);font-size:10.5px">' + l.raw + '</td>';
-            tb.insertBefore(tr, tb.firstChild);
-          }
+          renderLiveLog(l);
         } catch(err){}
       });
 
@@ -1452,6 +1501,12 @@ function setupRealtimeStream(){
       FINDINGS = res.findings;
       filterFindings();
       renderHistogram();
+    }
+  }).catch(function(e){});
+
+  fetch('/api/logs').then(function(r){ return r.json(); }).then(function(res){
+    if(res && res.logs && res.logs.length > 0){
+      res.logs.slice().reverse().forEach(renderLiveLog);
     }
   }).catch(function(e){});
 }

@@ -302,7 +302,7 @@ const server = http.createServer((req, res) => {
       'Cache-Control': 'no-cache',
       'Connection': 'keep-alive'
     });
-    res.write(`event: init\ndata: ${JSON.stringify({ status: 'connected', hecToken: HEC_TOKEN, assets: registeredAssets, findings: liveFindings })}\n\n`);
+    res.write(`event: init\ndata: ${JSON.stringify({ status: 'connected', hecToken: HEC_TOKEN, assets: registeredAssets, findings: liveFindings, logs: ingestedLogs.slice(0, 50) })}\n\n`);
     sseClients.push(res);
     req.on('close', () => {
       sseClients = sseClients.filter(c => c !== res);
@@ -311,6 +311,11 @@ const server = http.createServer((req, res) => {
   }
 
   // 3. REST APIs
+  if (pathname === '/api/logs') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify({ logs: ingestedLogs }));
+  }
+
   if (pathname === '/api/findings') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     return res.end(JSON.stringify({ findings: liveFindings }));
