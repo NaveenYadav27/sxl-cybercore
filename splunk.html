@@ -190,6 +190,13 @@ tr.selected td{background:rgba(2,132,199,0.12)}
 /* ACTIVITY TIMELINE ITEM */
 .act-item{padding:10px 12px;border-left:3px solid var(--sp-cyan);background:var(--bg-panel);border-radius:0 var(--rs) var(--rs) 0;margin-bottom:8px;font-size:11.5px}
 .act-meta{display:flex;justify-content:space-between;color:var(--text-muted);font-size:10px;margin-bottom:4px}
+
+/* MODAL STYLES */
+.modal-bg{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.75);z-index:99999;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-bg.show{display:flex !important}
+.modal{background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:0 16px 48px rgba(0,0,0,0.8);max-width:680px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.inp{background:var(--bg-input);border:1px solid var(--line);border-radius:var(--rs);padding:6px 9px;color:var(--text);font-size:12px;outline:none}
+.inp:focus{border-color:var(--sp-cyan)}
 </style>
 </head>
 <body>
@@ -338,7 +345,7 @@ tr.selected td{background:rgba(2,132,199,0.12)}
   <!-- SLIDE-OUT DETAIL DRAWER (IMAGE 2) -->
   <div class="detail-drawer" id="detailDrawer">
     <div class="drawer-head">
-      <button class="btn-action blue" onclick="openFullInvestigation(activeFinding.id)"><i class="fas fa-play"></i> Start investigation</button>
+      <button class="btn-action blue" onclick="openFullInvestigation()"><i class="fas fa-play"></i> Start investigation</button>
       <div style="display:flex;gap:6px;align-items:center">
         <i class="fas fa-ellipsis-v" style="cursor:pointer;color:var(--text-muted);padding:4px"></i>
         <i class="fas fa-chevron-left" style="cursor:pointer;color:var(--text-muted);padding:4px" onclick="navFinding(-1)"></i>
@@ -748,6 +755,52 @@ tr.selected td{background:rgba(2,132,199,0.12)}
 
 </div>
 
+<!-- 4. ONBOARD REAL MACHINE / FORWARDER MODAL -->
+<div id="addMachineModal" class="modal-bg" onclick="if(event.target===this)closeAddMachineModal()">
+  <div class="modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:10px">
+      <div style="font-size:15px;font-weight:800;color:var(--text)"><i class="fas fa-server" style="color:var(--sp-cyan)"></i> Onboard Real Machine / Forwarder</div>
+      <i class="fas fa-times" style="cursor:pointer;color:var(--text-muted);font-size:14px;padding:4px" onclick="closeAddMachineModal()"></i>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+      <div class="meta-field"><label>Machine Hostname</label><input id="rmHost" value="my-real-pc" class="inp" style="width:100%"></div>
+      <div class="meta-field"><label>IPv4 Address</label><input id="rmIp" value="127.0.0.1" class="inp" style="width:100%"></div>
+      <div class="meta-field"><label>Operating System</label><select id="rmOs" class="inp" style="width:100%"><option>Windows 11 / 10</option><option>Linux (Ubuntu/Debian/Kali)</option><option>macOS</option><option>FortiGate / Router</option></select></div>
+      <div class="meta-field"><label>Device Role</label><select id="rmType" class="inp" style="width:100%"><option>Workstation</option><option>Server</option><option>Firewall</option></select></div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <button class="btn-action blue" onclick="registerMachine()"><i class="fas fa-plus"></i> Register Machine</button>
+      <button class="btn-action" onclick="probeRealMachine()"><i class="fas fa-satellite"></i> Test Port Probe (TCP)</button>
+      <button class="btn-action" style="background:#15803d;color:#fff;border-color:#15803d" onclick="sendTestHECEvent()"><i class="fas fa-bolt"></i> Send Test Event</button>
+    </div>
+
+    <div id="probeFeedback" style="display:none;padding:8px 12px;border-radius:var(--rs);background:var(--bg-panel);border:1px solid var(--line);font-size:11px;margin-bottom:14px"></div>
+
+    <div style="font-size:11.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px">One-Liner Real Machine Forwarder Agents</div>
+    <div style="background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--rs);padding:10px;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <b style="color:var(--sp-cyan);font-size:11px">Windows PowerShell Agent (One-Liner):</b>
+        <button class="btn-action" style="padding:2px 6px;font-size:10px" onclick="copyAgentCmd('ps')">Copy Script</button>
+      </div>
+      <code id="cmdPS" class="m" style="font-size:10px;color:var(--text);display:block;word-break:break-all;background:var(--bg-input);padding:6px;border-radius:3px">
+        Invoke-RestMethod -Uri "http://localhost:8000/services/collector/event" -Headers @{Authorization="Splunk sxl-splunk-hec-token-2026"} -Method Post -Body '{"event":"EventLog 4625 Failed Logon on HOST", "host":"' + $env:COMPUTERNAME + '", "sourcetype":"WinEventLog:Security"}'
+      </code>
+    </div>
+
+    <div style="background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--rs);padding:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <b style="color:var(--sp-green);font-size:11px">Linux cURL / Bash Agent (One-Liner):</b>
+        <button class="btn-action" style="padding:2px 6px;font-size:10px" onclick="copyAgentCmd('sh')">Copy Command</button>
+      </div>
+      <code id="cmdSH" class="m" style="font-size:10px;color:var(--text);display:block;word-break:break-all;background:var(--bg-input);padding:6px;border-radius:3px">
+        curl -X POST http://localhost:8000/services/collector/event -H "Authorization: Splunk sxl-splunk-hec-token-2026" -d '{"event":"sshd auth failure for invalid user admin", "host":"'$(hostname)'", "sourcetype":"linux_secure"}'
+      </code>
+    </div>
+  </div>
+</div>
+
 <script>
 var FINDINGS = [];
 var OBSERVABLES = [];
@@ -801,11 +854,36 @@ function renderTable(data){
 }
 
 function filterFindings(){
-  var q = document.getElementById('queueSearchInp').value.toLowerCase().trim();
+  var inp = document.getElementById('queueSearchInp');
+  var q = inp ? inp.value.toLowerCase().trim() : '';
   var filtered = FINDINGS.filter(function(f){
     return !q || f.title.toLowerCase().indexOf(q)>=0 || f.entity.toLowerCase().indexOf(q)>=0 || f.id.toLowerCase().indexOf(q)>=0;
   });
   renderTable(filtered);
+}
+
+function clearFilters(){
+  var inp = document.getElementById('queueSearchInp');
+  if(inp) inp.value = '';
+  filterFindings();
+}
+
+function toggleSelectAll(chk){
+  var rows = document.querySelectorAll('#findingsBody input[type="checkbox"]');
+  rows.forEach(function(r){ r.checked = chk.checked; });
+}
+
+function zoomHist(action){
+  renderHistogram();
+}
+
+function navFinding(dir){
+  if(FINDINGS.length === 0) return;
+  var curIdx = activeFinding ? FINDINGS.findIndex(function(x){return x.id===activeFinding.id}) : -1;
+  var nextIdx = curIdx + dir;
+  if(nextIdx < 0) nextIdx = FINDINGS.length - 1;
+  if(nextIdx >= FINDINGS.length) nextIdx = 0;
+  selectFindingRow(FINDINGS[nextIdx].id);
 }
 
 function selectFindingRow(id){
@@ -1241,56 +1319,17 @@ function generateSimulatedFinding(){
 /* ═══ REAL MACHINE ONBOARDING MODAL & PROBE ENGINE ═══ */
 function openAddMachineModal(){
   var m = document.getElementById('addMachineModal');
-  if(!m){
-    var div = document.createElement('div');
-    div.id = 'addMachineModal';
-    div.className = 'modal-bg show';
-    div.onclick = function(e){ if(e.target===div) div.classList.remove('show'); };
-    div.innerHTML = '<div class="modal" style="max-width:680px;background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:0 12px 40px rgba(0,0,0,0.6)">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:10px">' +
-        '<div style="font-size:15px;font-weight:800;color:var(--text)"><i class="fas fa-server" style="color:var(--sp-cyan)"></i> Onboard Real Machine / Forwarder</div>' +
-        '<i class="fas fa-times" style="cursor:pointer;color:var(--text-muted)" onclick="document.getElementById(\'addMachineModal\').classList.remove(\'show\')"></i>' +
-      '</div>' +
-
-      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">' +
-        '<div class="meta-field"><label>Machine Hostname</label><input id="rmHost" value="my-real-pc" class="inp" style="width:100%"></div>' +
-        '<div class="meta-field"><label>IPv4 Address</label><input id="rmIp" value="127.0.0.1" class="inp" style="width:100%"></div>' +
-        '<div class="meta-field"><label>Operating System</label><select id="rmOs" class="inp" style="width:100%"><option>Windows 11 / 10</option><option>Linux (Ubuntu/Debian/Kali)</option><option>macOS</option><option>FortiGate / Router</option></select></div>' +
-        '<div class="meta-field"><label>Device Role</label><select id="rmType" class="inp" style="width:100%"><option>Workstation</option><option>Server</option><option>Firewall</option></select></div>' +
-      '</div>' +
-
-      '<div style="display:flex;gap:8px;margin-bottom:16px">' +
-        '<button class="btn-action blue" onclick="registerMachine()"><i class="fas fa-plus"></i> Register Machine</button>' +
-        '<button class="btn-action" onclick="probeRealMachine()"><i class="fas fa-satellite"></i> Test Port Probe (TCP)</button>' +
-        '<button class="btn-action" style="background:#15803d;color:#fff;border-color:#15803d" onclick="sendTestHECEvent()"><i class="fas fa-bolt"></i> Send Test Event</button>' +
-      '</div>' +
-
-      '<div id="probeFeedback" style="display:none;padding:8px 12px;border-radius:var(--rs);background:var(--bg-panel);border:1px solid var(--line);font-size:11px;margin-bottom:14px"></div>' +
-
-      '<div style="font-size:11.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px">One-Liner Real Machine Forwarder Agents</div>' +
-      '<div style="background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--rs);padding:10px;margin-bottom:8px">' +
-        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">' +
-          '<b style="color:var(--sp-cyan);font-size:11px">Windows PowerShell Agent (One-Liner):</b>' +
-          '<button class="btn-action" style="padding:2px 6px;font-size:10px" onclick="copyAgentCmd(\'ps\')">Copy Script</button>' +
-        '</div>' +
-        '<code id="cmdPS" class="m" style="font-size:10px;color:var(--text);display:block;word-break:break-all;background:var(--bg-input);padding:6px;border-radius:3px">' +
-          'Invoke-RestMethod -Uri "http://localhost:8000/services/collector/event" -Headers @{Authorization="Splunk sxl-splunk-hec-token-2026"} -Method Post -Body \'{"event":"EventLog 4625 Failed Logon on HOST", "host":"\' + $env:COMPUTERNAME + \'", "sourcetype":"WinEventLog:Security"}\'' +
-        '</code>' +
-      '</div>' +
-
-      '<div style="background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--rs);padding:10px">' +
-        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">' +
-          '<b style="color:var(--sp-green);font-size:11px">Linux cURL / Bash Agent (One-Liner):</b>' +
-          '<button class="btn-action" style="padding:2px 6px;font-size:10px" onclick="copyAgentCmd(\'sh\')">Copy Command</button>' +
-        '</div>' +
-        '<code id="cmdSH" class="m" style="font-size:10px;color:var(--text);display:block;word-break:break-all;background:var(--bg-input);padding:6px;border-radius:3px">' +
-          'curl -X POST http://localhost:8000/services/collector/event -H "Authorization: Splunk sxl-splunk-hec-token-2026" -d \'{"event":"sshd auth failure for invalid user admin", "host":"\'$(hostname)\'", "sourcetype":"linux_secure"}\'' +
-        '</code>' +
-      '</div>' +
-    '</div>';
-    document.body.appendChild(div);
-  } else {
+  if(m){
     m.classList.add('show');
+    m.style.display = 'flex';
+  }
+}
+
+function closeAddMachineModal(){
+  var m = document.getElementById('addMachineModal');
+  if(m){
+    m.classList.remove('show');
+    m.style.display = 'none';
   }
 }
 
