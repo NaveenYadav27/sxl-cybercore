@@ -1402,21 +1402,58 @@ function setupRealtimeStream(){
   if(typeof EventSource !== 'undefined'){
     try {
       var sse = new EventSource('/api/stream');
+
+      sse.addEventListener('init', function(e){
+        try {
+          var d = JSON.parse(e.data);
+          if(d.findings && d.findings.length > 0){
+            FINDINGS = d.findings;
+            filterFindings();
+            renderHistogram();
+          }
+        } catch(err){}
+      });
+
       sse.addEventListener('finding', function(e){
-        var f = JSON.parse(e.data);
-        FINDINGS.unshift(f);
-        filterFindings();
+        try {
+          var f = JSON.parse(e.data);
+          if(!FINDINGS.some(function(x){ return x.id === f.id; })){
+            FINDINGS.unshift(f);
+            filterFindings();
+            renderHistogram();
+          }
+        } catch(err){}
       });
+
       sse.addEventListener('log', function(e){
-        var l = JSON.parse(e.data);
-        console.log('[HEC Log]', l);
+        try {
+          var l = JSON.parse(e.data);
+          var tb = document.getElementById('splResultBody');
+          if(tb){
+            var tr = document.createElement('tr');
+            tr.innerHTML = '<td class="m" style="color:var(--text-muted)">' + l.time + '</td>' +
+              '<td style="color:var(--sp-cyan);font-weight:700">' + l.host + '</td>' +
+              '<td class="m">' + l.sourcetype + '</td>' +
+              '<td class="m" style="color:var(--text);font-size:10.5px">' + l.raw + '</td>';
+            tb.insertBefore(tr, tb.firstChild);
+          }
+        } catch(err){}
       });
+
       sse.onopen = function(){
         var p = document.getElementById('hecStatusPill');
         if(p) p.innerHTML = '<i class="fas fa-satellite-dish"></i> HEC: 8000 CONNECTED';
       };
     } catch(e){}
   }
+
+  fetch('/api/findings').then(function(r){ return r.json(); }).then(function(res){
+    if(res && res.findings && res.findings.length > 0){
+      FINDINGS = res.findings;
+      filterFindings();
+      renderHistogram();
+    }
+  }).catch(function(e){});
 }
 
 /* ═══ THEME TOGGLE ═══ */

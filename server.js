@@ -47,6 +47,7 @@ function processIncomingLog(rawLog, host, sourcetype) {
   if (ingestedLogs.length > 500) ingestedLogs.pop();
 
   // Threat Detection Rules
+  // Threat & Telemetry Detection Rules
   const lower = rawLog.toLowerCase();
   let finding = null;
 
@@ -110,29 +111,93 @@ function processIncomingLog(rawLog, host, sourcetype) {
       domain: 'network',
       desc: `Port scanning activity detected originating from or targeting [${host}].`
     };
-  } else {
-    // Standard Info finding if flagged
-    if (lower.includes('denied') || lower.includes('drop') || lower.includes('block')) {
+  } else if (lower.includes('agent online') || lower.includes('connected to splunk')) {
+    finding = {
+      id: 'ES-' + String(1000 + liveFindings.length + 1).slice(-4),
+      title: 'Real-time Agent Online: Host [' + (host || 'Host') + '] Connected',
+      type: 'finding',
+      entity: host || '127.0.0.1',
+      entityType: 'system',
+      icon: 'fa-satellite-dish',
+      risk: 30,
+      fin: 1,
+      intCount: 1,
+      time: 'Just now',
+      disposition: 'Undetermined',
+      owner: 'Unassigned',
+      urgency: 'low',
+      status: 'new',
+      mitre: 'T1082 - System Information Discovery',
+      domain: 'endpoint',
+      desc: `Live Splunk forwarder agent registered on ${host}. Streaming real-time system metrics.`
+    };
+  } else if (lower.includes('cpuload=')) {
+    const cpuMatch = rawLog.match(/cpuload=(\d+)/i);
+    const cpuVal = cpuMatch ? parseInt(cpuMatch[1], 10) : 0;
+    if (cpuVal >= 70) {
       finding = {
         id: 'ES-' + String(1000 + liveFindings.length + 1).slice(-4),
-        title: 'Real-time: Firewall Policy Drop on ' + (host || 'Host'),
-        type: 'finding',
+        title: `High Compute Burst (${cpuVal}% CPU) on Host ${host || 'Host'}`,
+        type: 'investigation',
         entity: host || '127.0.0.1',
         entityType: 'system',
-        icon: 'fa-shield-alt',
-        risk: 40,
+        icon: 'fa-microchip',
+        risk: 95,
         fin: 1,
         intCount: 1,
         time: 'Just now',
         disposition: 'Undetermined',
         owner: 'Unassigned',
-        urgency: 'low',
+        urgency: 'high',
         status: 'new',
-        mitre: 'T1046 - Discovery',
-        domain: 'network',
-        desc: `Firewall dropped traffic: ${rawLog.substring(0, 140)}`
+        mitre: 'T1496 - Resource Hijacking',
+        domain: 'endpoint',
+        desc: `High compute usage detected on ${host}: ${rawLog}`
       };
+    } else {
+      const hasRecentFinding = liveFindings.some(f => f.entity === host && f.title.includes('Telemetry Stream'));
+      if (!hasRecentFinding) {
+        finding = {
+          id: 'ES-' + String(1000 + liveFindings.length + 1).slice(-4),
+          title: `Active Telemetry Stream from Real Host [${host}]`,
+          type: 'finding',
+          entity: host || '127.0.0.1',
+          entityType: 'system',
+          icon: 'fa-server',
+          risk: 25,
+          fin: 1,
+          intCount: 1,
+          time: 'Just now',
+          disposition: 'Undetermined',
+          owner: 'Unassigned',
+          urgency: 'low',
+          status: 'new',
+          mitre: 'T1082 - System Discovery',
+          domain: 'endpoint',
+          desc: `Real system telemetry live stream: ${rawLog}`
+        };
+      }
     }
+  } else if (lower.includes('denied') || lower.includes('drop') || lower.includes('block')) {
+    finding = {
+      id: 'ES-' + String(1000 + liveFindings.length + 1).slice(-4),
+      title: 'Real-time: Firewall Policy Drop on ' + (host || 'Host'),
+      type: 'finding',
+      entity: host || '127.0.0.1',
+      entityType: 'system',
+      icon: 'fa-shield-alt',
+      risk: 40,
+      fin: 1,
+      intCount: 1,
+      time: 'Just now',
+      disposition: 'Undetermined',
+      owner: 'Unassigned',
+      urgency: 'low',
+      status: 'new',
+      mitre: 'T1046 - Discovery',
+      domain: 'network',
+      desc: `Firewall dropped traffic: ${rawLog.substring(0, 140)}`
+    };
   }
 
   if (finding) {
