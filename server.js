@@ -311,6 +311,14 @@ const server = http.createServer((req, res) => {
   }
 
   // 3. REST APIs
+  if (pathname === '/api/logs/reset' && (req.method === 'POST' || req.method === 'GET')) {
+    ingestedLogs = [];
+    liveFindings = [];
+    broadcastSSE('reset', { message: 'Logs reset to clean state' });
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify({ success: true, message: 'Logs and simulated findings cleared.' }));
+  }
+
   if (pathname === '/api/logs') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     return res.end(JSON.stringify({ logs: ingestedLogs }));

@@ -303,10 +303,11 @@ tr.selected td{background:rgba(2,132,199,0.12)}
         <button class="btn-action" onclick="assignToMe()">Assign to Me</button>
         <button class="btn-action" onclick="runSOARPlaybook()">Run Playbook</button>
         <button class="btn-action" onclick="openFullInvestigation('MC-00005')">Add to Investigation</button>
+        <button class="btn-action" style="color:var(--sp-red);border-color:rgba(240,68,56,0.3)" onclick="resetLogsOnly()"><i class="fas fa-trash-alt"></i> Reset Logs Only</button>
         <button class="btn-action">More <i class="fas fa-caret-down" style="font-size:9px"></i></button>
       </div>
       <div style="display:flex;align-items:center;gap:10px;font-size:11px;color:var(--text-muted)">
-        <span>Last refresh at 5:30 PM <i class="fas fa-sync" style="cursor:pointer" onclick="filterFindings()"></i></span>
+        <span>Last refresh <i class="fas fa-sync" style="cursor:pointer" onclick="filterFindings()"></i></span>
         <select class="select-btn" style="padding:2px 6px;font-size:11px"><option>Auto-refresh on</option><option>Auto-refresh off</option></select>
         <span>&lt; Prev <b>1</b> 2 3 .. 30 Next &gt;</span>
         <select class="select-btn" style="padding:2px 6px;font-size:11px"><option>Show 20</option><option>Show 50</option></select>
@@ -348,8 +349,9 @@ tr.selected td{background:rgba(2,132,199,0.12)}
           <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block"></span>
           Live Machine Telemetry & Event Stream (<span id="liveLogCount" style="color:var(--sp-cyan)">0 events</span>)
         </div>
-        <div style="font-size:10.5px;color:var(--text-muted)">
-          Listening on HEC port 8000 & Syslog 1514
+        <div style="display:flex;align-items:center;gap:8px">
+          <button class="btn-action" style="padding:2px 8px;font-size:10.5px;color:var(--sp-red);border-color:rgba(240,68,56,0.3)" onclick="resetLogsOnly()"><i class="fas fa-trash-alt"></i> Reset Logs Only</button>
+          <span style="font-size:10.5px;color:var(--text-muted)">Listening on HEC port 8000 & Syslog 1514</span>
         </div>
       </div>
       <div class="table-scroll" style="max-height:160px">
@@ -1489,6 +1491,21 @@ function setupRealtimeStream(){
         } catch(err){}
       });
 
+      sse.addEventListener('reset', function(e){
+        INGESTED_LOGS = [];
+        FINDINGS = [];
+        activeFinding = null;
+        renderTable(FINDINGS);
+        renderHistogram();
+        closeDrawer();
+        var tb = document.getElementById('liveEventsBody');
+        if(tb) tb.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:12px;color:var(--text-muted)">Logs cleared. Waiting for new telemetry...</td></tr>';
+        var cnt = document.getElementById('liveLogCount');
+        if(cnt) cnt.textContent = '0 events';
+        var sTb = document.getElementById('splResultBody');
+        if(sTb) sTb.innerHTML = '';
+      });
+
       sse.onopen = function(){
         var p = document.getElementById('hecStatusPill');
         if(p) p.innerHTML = '<i class="fas fa-satellite-dish"></i> HEC: 8000 CONNECTED';
@@ -1509,6 +1526,32 @@ function setupRealtimeStream(){
       res.logs.slice().reverse().forEach(renderLiveLog);
     }
   }).catch(function(e){});
+}
+
+/* ═══ RESET LOGS ONLY (SIMULATOR & LIVE INGEST) ═══ */
+function resetLogsOnly(){
+  if(!confirm('Reset logs and simulated events only? (Configured assets and settings will remain preserved)')) return;
+  fetch('/api/logs/reset', { method: 'POST' }).then(function(r){ return r.json(); }).then(function(res){
+    INGESTED_LOGS = [];
+    FINDINGS = [];
+    activeFinding = null;
+    renderTable(FINDINGS);
+    renderHistogram();
+    closeDrawer();
+    var tb = document.getElementById('liveEventsBody');
+    if(tb) tb.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:12px;color:var(--text-muted)">Logs cleared. Waiting for new telemetry...</td></tr>';
+    var cnt = document.getElementById('liveLogCount');
+    if(cnt) cnt.textContent = '0 events';
+    var sTb = document.getElementById('splResultBody');
+    if(sTb) sTb.innerHTML = '';
+  }).catch(function(e){
+    INGESTED_LOGS = [];
+    FINDINGS = [];
+    activeFinding = null;
+    renderTable(FINDINGS);
+    renderHistogram();
+    closeDrawer();
+  });
 }
 
 /* ═══ THEME TOGGLE ═══ */
