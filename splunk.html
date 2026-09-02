@@ -3,605 +3,804 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShadowXLab · Splunk Enterprise Security (ES) SOC Suite</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Splunk Cloud · Enterprise Security (Mission Control)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script>(function(){try{var t=localStorage.getItem('sxl-theme')||localStorage.getItem('cybercoreTheme')||'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#0b0f16;--w:#131a24;--panel:#17202d;--line:#243042;--text:#e6e9ef;
-  --sp-green:#65a30d;--sp-green-dim:rgba(101,163,13,0.15);--sp-orange:#f97316;
-  --red:#f04438;--rl:rgba(240,68,56,0.15);--rd:#b80f15;--rh:#ff3b42;
-  --bl:#e6e9ef;--g7:#cbd5e1;--g6:#94a3b8;--g5:#64748b;--g4:#475569;--g3:#334155;--g2:#1e293b;--g1:#0f172a;--g0:#0b0f17;
-  --grn:#10b981;--grnb:rgba(16,185,129,0.15);--amb:#fbbf24;--ambb:rgba(251,191,36,0.15);
-  --blu:#38bdf8;--blub:rgba(56,189,248,0.15);--pur:#a855f7;--purb:rgba(168,85,247,0.15);
-  --cyn:#2dd4bf;--cynb:rgba(45,212,191,0.15);--pnk:#f472b6;--pnkb:rgba(244,114,182,0.15);
-  --r:10px;--rs:6px;--rxs:4px;--sh:0 8px 24px rgba(0,0,0,0.4);
-  --mono:'JetBrains Mono','IBM Plex Mono',monospace;
+  --bg-top:#000000;
+  --bg-subtop:#171c24;
+  --bg-main:#0b0e14;
+  --bg-card:#131822;
+  --bg-panel:#19202c;
+  --bg-input:#0f131a;
+  --line:#263040;
+  --line-subtle:#1c2430;
+  --text:#e2e8f0;
+  --text-muted:#8896aa;
+  --text-dim:#556477;
+  
+  --sp-green:#65a30d;
+  --sp-cyan:#00d2c4;
+  --sp-cyan-dim:rgba(0,210,196,0.14);
+  --sp-purple:#9e59d9;
+  --sp-purple-dim:rgba(158,89,217,0.16);
+  --sp-blue:#38bdf8;
+  --sp-red:#f04438;
+  --sp-red-dim:rgba(240,68,56,0.15);
+  --sp-amber:#f59e0b;
+  --sp-amber-dim:rgba(245,158,11,0.15);
+  
+  --r:6px;--rs:4px;
+  --mono:'JetBrains Mono','SFMono-Regular',Consolas,monospace;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
 }
 [data-theme="light"]{
-  --bg:#f1f5f9;--w:#ffffff;--panel:#f8fafc;--line:#e2e8f0;--text:#0f172a;
-  --sp-green:#4d7c0f;--sp-green-dim:rgba(77,124,15,0.12);--sp-orange:#ea580c;
-  --red:#dc2626;--rl:rgba(220,38,38,0.1);--rd:#991b1b;--rh:#b91c1c;
-  --bl:#0f172a;--g7:#334155;--g6:#475569;--g5:#64748b;--g4:#94a3b8;--g3:#cbd5e1;--g2:#e2e8f0;--g1:#f1f5f9;--g0:#ffffff;
-  --grn:#16a34a;--grnb:rgba(22,163,74,0.1);--amb:#d97706;--ambb:rgba(217,119,6,0.1);
-  --blu:#0284c7;--blub:rgba(2,132,199,0.1);--pur:#7c3aed;--purb:rgba(124,58,237,0.1);
-  --cyn:#0d9488;--cynb:rgba(13,148,136,0.1);--pnk:#db2777;--pnkb:rgba(219,39,119,0.1);
-  --sh:0 4px 16px rgba(0,0,0,0.06);
+  --bg-top:#1e293b;
+  --bg-subtop:#f8fafc;
+  --bg-main:#f1f5f9;
+  --bg-card:#ffffff;
+  --bg-panel:#f8fafc;
+  --bg-input:#ffffff;
+  --line:#cbd5e1;
+  --line-subtle:#e2e8f0;
+  --text:#0f172a;
+  --text-muted:#64748b;
+  --text-dim:#94a3b8;
+  
+  --sp-green:#4d7c0f;
+  --sp-cyan:#0d9488;
+  --sp-cyan-dim:rgba(13,148,136,0.12);
+  --sp-purple:#7c3aed;
+  --sp-purple-dim:rgba(124,58,237,0.12);
+  --sp-blue:#0284c7;
+  --sp-red:#dc2626;
+  --sp-red-dim:rgba(220,38,38,0.1);
+  --sp-amber:#d97706;
+  --sp-amber-dim:rgba(217,119,6,0.12);
 }
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;height:100vh}
+
+body{font-family:var(--sans);background:var(--bg-main);color:var(--text);overflow:hidden;height:100vh;font-size:12.5px;line-height:1.4}
 .m{font-family:var(--mono)}
-::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--g3);border-radius:3px}
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
 
-/* SPLUNK HEADER */
-.sp-header{background:#000000;color:#ffffff;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid #222;z-index:100;position:sticky;top:0}
-.sp-brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
-.sp-brand b{font-family:var(--mono);font-size:.9rem;letter-spacing:-.3px}
-.sp-brand b span{color:var(--sp-green)}
-.sp-brand .es-pill{background:#333;color:#fbbf24;font-size:.58rem;font-weight:800;padding:2px 6px;border-radius:4px;font-family:var(--mono);letter-spacing:.05em}
-.sp-top-nav{display:flex;align-items:center;gap:4px}
-.sp-tab{padding:6px 12px;font-size:.72rem;font-weight:600;color:#94a3b8;border-radius:4px;cursor:pointer;transition:all .15s;background:transparent;border:none;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
-.sp-tab:hover{color:#ffffff;background:#1e293b}.sp-tab.active{color:#ffffff;background:#334155;font-weight:700}
-.sp-actions{display:flex;align-items:center;gap:8px}
+/* TOP APP BAR */
+.top-bar{background:var(--bg-top);color:#fff;height:38px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;z-index:200;border-bottom:1px solid #222}
+.brand{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13.5px;font-weight:800;color:#fff;text-decoration:none;letter-spacing:-.2px}
+.brand span{color:var(--sp-green)}
+.brand small{color:#64748b;font-weight:400;font-size:11px}
+.top-menus{display:flex;align-items:center;gap:2px}
+.menu-btn{background:none;border:none;color:#94a3b8;padding:6px 9px;font-size:11.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px;border-radius:var(--rs);transition:.15s}
+.menu-btn:hover{color:#fff;background:#1e293b}
+.menu-btn.active{color:#fff;background:#334155}
+.badge-count{background:#38bdf8;color:#04070c;font-size:9.5px;font-weight:800;padding:1px 5px;border-radius:10px}
+.search-find{background:#11161f;border:1px solid #2b3544;border-radius:var(--rs);padding:3px 9px;color:#cbd5e1;font-size:11px;display:flex;align-items:center;gap:6px;width:140px}
+.search-find input{background:none;border:none;outline:none;color:#fff;font-size:11px;width:100%}
 
-.themetoggle{
-  border:1px solid var(--line);background:var(--panel);color:var(--text);
-  width:32px;height:32px;min-width:32px;border-radius:50%;
-  display:grid;place-items:center;font-size:14px;cursor:pointer;padding:0;
-  transition:all .18s ease;box-shadow:0 2px 8px rgba(0,0,0,.06);
-}
-.themetoggle:hover{border-color:var(--red);transform:scale(1.08)}
+/* SECONDARY NAV */
+.sub-bar{background:var(--bg-subtop);border-bottom:1px solid var(--line);height:38px;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.sub-nav{display:flex;align-items:center;gap:4px}
+.sub-nav a, .sub-nav button{background:none;border:none;color:var(--text-muted);padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none;border-radius:var(--rs);transition:.15s}
+.sub-nav a:hover, .sub-nav button:hover{color:var(--text);background:var(--bg-card)}
+.sub-nav a.active, .sub-nav button.active{color:var(--text);background:var(--bg-card);border-bottom:2px solid var(--sp-cyan);border-radius:0;font-weight:700}
+.es-badge{background:#15803d;color:#ffffff;font-size:10px;font-weight:800;padding:2px 8px;border-radius:var(--rs);display:inline-flex;align-items:center;gap:5px;letter-spacing:.02em}
 
-/* APP LAYOUT */
-.sp-app{display:grid;grid-template-columns:220px 1fr;height:calc(100vh - 44px)}
-.sp-side{background:var(--w);border-right:1px solid var(--line);display:flex;flex-direction:column;height:100%;overflow-y:auto}
-.sp-main{overflow-y:auto;padding:16px 20px;background:var(--bg)}
-.sp-pnl{display:none}.sp-pnl.on{display:block}
+.themetoggle{border:1px solid var(--line);background:var(--bg-card);color:var(--text);width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:12px;cursor:pointer}
+.themetoggle:hover{border-color:var(--sp-cyan)}
 
-/* SIDEBAR NAV */
-.nav-group{font-size:.56rem;font-weight:800;color:var(--g5);text-transform:uppercase;letter-spacing:.1em;padding:12px 14px 4px;font-family:var(--mono)}
-.snb{display:flex;align-items:center;gap:8px;width:100%;padding:7px 14px;background:none;border:none;color:var(--g6);font-size:.73rem;font-weight:600;cursor:pointer;border-left:3px solid transparent;text-align:left;transition:all .15s}
-.snb:hover{color:var(--text);background:var(--panel)}.snb.on{color:var(--sp-green);background:var(--sp-green-dim);border-left-color:var(--sp-green);font-weight:700}
-.snb i{width:16px;text-align:center;font-size:.75rem}
-.snb .count{font-size:.55rem;padding:1px 6px;border-radius:10px;background:var(--g2);color:var(--g6);margin-left:auto;font-family:var(--mono)}
+/* MAIN LAYOUT */
+.app-container{display:flex;height:calc(100vh - 76px);overflow:hidden;position:relative}
+.main-content{flex:1;overflow-y:auto;padding:14px 18px;display:flex;flex-direction:column}
+.detail-drawer{width:460px;background:var(--bg-card);border-left:1px solid var(--line);height:100%;overflow-y:auto;display:none;flex-direction:column;box-shadow:-8px 0 24px rgba(0,0,0,0.3);position:relative;z-index:90}
+.detail-drawer.open{display:flex}
 
-/* CARDS & PANELS */
-.card{background:var(--w);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:14px;box-shadow:var(--sh)}
-.ch{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--panel)}
-.ch h3{font-size:.82rem;font-weight:800;display:flex;align-items:center;gap:7px}
-.cb{padding:14px}
-.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
-.stat-box{background:var(--w);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;position:relative;overflow:hidden}
-.stat-box::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:0 3px 3px 0}
-.stat-box.red::before{background:var(--red)}.stat-box.grn::before{background:var(--grn)}.stat-box.blu::before{background:var(--blu)}.stat-box.pur::before{background:var(--pur)}.stat-box.amb::before{background:var(--amb)}
-.stat-box .sl{font-size:.58rem;font-weight:800;color:var(--g5);text-transform:uppercase;letter-spacing:.06em;font-family:var(--mono)}
-.stat-box .sv{font-size:1.3rem;font-weight:900;margin-top:2px;font-family:var(--mono);color:var(--text)}
+/* PAGE HEADER */
+.page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.page-title{font-size:18px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:10px}
+.filter-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.search-box{display:flex;align-items:center;gap:6px;background:var(--bg-input);border:1px solid var(--line);border-radius:var(--rs);padding:5px 9px;min-width:260px}
+.search-box input{background:none;border:none;outline:none;color:var(--text);font-size:12px;width:100%}
+.select-btn{background:var(--bg-card);border:1px solid var(--line);border-radius:var(--rs);padding:5px 9px;color:var(--text);font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.tag-btn{background:var(--bg-card);border:1px solid var(--line);border-radius:14px;padding:3px 9px;color:var(--text-muted);font-size:11px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.tag-btn b{color:var(--text)}
 
-/* TABLES */
-table{width:100%;border-collapse:collapse}
-th{text-align:left;padding:7px 10px;font-size:.62rem;font-weight:800;color:var(--g5);text-transform:uppercase;letter-spacing:.05em;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;font-family:var(--mono)}
-td{padding:6px 10px;font-size:.72rem;border-bottom:1px solid var(--line);color:var(--g7)}
-tr:hover td{background:rgba(101,163,13,0.04);cursor:pointer}
+/* TIMELINE HISTOGRAM */
+.histogram-box{background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:8px 12px;margin-bottom:12px}
+.histogram-tools{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.tool-btn{background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--rs);padding:3px 8px;font-size:11px;color:var(--text-muted);cursor:pointer;font-weight:600}
+.tool-btn:hover{color:var(--text);border-color:var(--sp-cyan)}
 
-/* BADGES & TAGS */
-.urgency{display:inline-flex;padding:2px 7px;border-radius:4px;font-size:.6rem;font-weight:800;font-family:var(--mono);text-transform:uppercase}
-.urgency.critical{background:var(--rl);color:var(--red);border:1px solid var(--red)}
-.urgency.high{background:var(--ambb);color:var(--amb);border:1px solid var(--amb)}
-.urgency.medium{background:var(--blub);color:var(--blu);border:1px solid var(--blu)}
-.urgency.low{background:var(--grnb);color:var(--grn);border:1px solid var(--grn)}
-.urgency.info{background:var(--purb);color:var(--pur);border:1px solid var(--pur)}
-.status-pill{display:inline-flex;padding:2px 6px;border-radius:12px;font-size:.58rem;font-weight:700;font-family:var(--mono)}
-.status-pill.new{background:rgba(240,68,56,.15);color:var(--red)}
-.status-pill.in_progress{background:rgba(56,189,248,.15);color:var(--blu)}
-.status-pill.pending{background:rgba(251,191,36,.15);color:var(--amb)}
-.status-pill.resolved{background:rgba(16,185,129,.15);color:var(--grn)}
+/* BATCH ACTIONS BAR */
+.batch-bar{background:var(--bg-card);border:1px solid var(--line);border-radius:var(--rs);padding:6px 10px;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.btn-action{background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--rs);padding:5px 10px;font-size:11.5px;font-weight:600;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:.15s}
+.btn-action:hover{border-color:var(--sp-cyan);color:var(--sp-cyan)}
+.btn-action.blue{background:#0284c7;color:#fff;border-color:#0284c7}
+.btn-action.blue:hover{background:#0369a1}
 
-/* SPL SEARCH BAR */
-.spl-bar{display:flex;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:var(--rs);padding:6px 10px;align-items:center;box-shadow:var(--sh)}
-.spl-icon{color:var(--sp-green);font-family:var(--mono);font-size:.9rem;font-weight:900}
-.spl-input{flex:1;background:transparent;border:none;outline:none;font-family:var(--mono);font-size:.78rem;color:var(--text);font-weight:600}
-.spl-btn{background:var(--sp-green);color:#fff;border:none;padding:6px 16px;border-radius:var(--rxs);font-family:var(--mono);font-size:.72rem;font-weight:800;cursor:pointer;transition:all .15s}
-.spl-btn:hover{background:#4d7c0f}
+/* DATA TABLE */
+.table-wrap{background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;flex:1;display:flex;flex-direction:column}
+.table-scroll{overflow:auto;flex:1;max-height:calc(100vh - 310px)}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th{background:var(--bg-panel);color:var(--text-muted);font-weight:700;font-size:11px;padding:7px 9px;border-bottom:1px solid var(--line);text-align:left;position:sticky;top:0;z-index:10;white-space:nowrap}
+td{padding:6px 9px;border-bottom:1px solid var(--line-subtle);color:var(--text);white-space:nowrap;vertical-align:middle}
+tr:hover td{background:rgba(0,210,196,0.04)}
+tr.selected td{background:rgba(2,132,199,0.12)}
 
-/* BUTTONS */
-.btn{padding:5px 11px;border-radius:var(--rxs);border:1px solid var(--line);background:var(--panel);color:var(--text);font-weight:700;font-size:.7rem;cursor:pointer;transition:.15s;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:5px;text-decoration:none}
-.btn:hover{border-color:var(--sp-green);color:var(--sp-green)}.btn:active{transform:scale(.97)}
-.btn-g{background:linear-gradient(135deg,var(--sp-green),#4d7c0f);color:#fff;border-color:var(--sp-green)}
-.btn-r{background:linear-gradient(135deg,var(--red),var(--rd));color:#fff;border-color:var(--red)}
-.inp{padding:6px 8px;background:var(--g0);border:1px solid var(--line);border-radius:var(--rxs);color:var(--text);font-size:.74rem;outline:none;font-family:var(--mono)}
+/* BADGES & PILLS */
+.type-badge{display:inline-flex;align-items:center;gap:4px;padding:1px 6px;border-radius:3px;font-size:9.5px;font-weight:800;font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase}
+.type-badge.finding{background:var(--sp-cyan-dim);color:var(--sp-cyan);border:1px solid rgba(0,210,196,0.3)}
+.type-badge.investigation{background:var(--sp-purple-dim);color:var(--sp-purple);border:1px solid rgba(158,89,217,0.3)}
 
-/* MODAL */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}.modal-bg.show{display:flex}
-.modal{background:var(--w);border-radius:var(--r);padding:20px;max-width:680px;width:92%;max-height:86vh;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,.6);border:1px solid var(--line)}
+.risk-pill{display:inline-block;padding:2px 7px;border-radius:3px;font-weight:800;font-family:var(--mono);font-size:11px;color:#fff;text-align:center;min-width:32px}
+.risk-400{background:#b91c1c}
+.risk-100{background:#dc2626}
+.risk-80{background:#ea580c}
+.risk-60{background:#f59e0b;color:#04070c}
+.risk-40{background:#ca8a04;color:#04070c}
+.risk-20{background:#65a30d}
 
-/* MITRE MATRIX */
-.mitre-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.mitre-box{background:var(--panel);border:1px solid var(--line);border-radius:var(--rs);padding:10px}
-.mitre-box h4{font-size:.66rem;color:var(--sp-green);font-family:var(--mono);margin-bottom:6px;font-weight:800}
-.mitre-item{padding:4px 6px;border-radius:4px;background:var(--g0);border:1px solid var(--line);font-size:.64rem;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center}
+.urg-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px}
+.urg-crit{background:var(--sp-red);box-shadow:0 0 6px var(--sp-red)}
+.urg-high{background:#ea580c}
+.urg-med{background:#f59e0b}
+.urg-low{background:#65a30d}
+
+/* DRAWER DETAIL STYLING */
+.drawer-head{padding:14px;border-bottom:1px solid var(--line);background:var(--bg-panel);display:flex;align-items:center;justify-content:space-between}
+.drawer-body{padding:16px;flex:1;overflow-y:auto}
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.meta-field label{font-size:10px;font-weight:800;color:var(--text-muted);text-transform:uppercase;margin-bottom:3px;display:block}
+.meta-field select, .meta-field input{width:100%;background:var(--bg-input);border:1px solid var(--line);border-radius:var(--rs);padding:5px 7px;color:var(--text);font-size:11.5px}
+.kv-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--line-subtle);font-size:11px}
+.kv-key{color:var(--text-muted);font-weight:600}
+.kv-val{color:var(--text);font-family:var(--mono);text-align:right;max-width:240px;word-break:break-all}
+
+/* FULL INVESTIGATION WORKSPACE (VIEW 3 & 4) */
+.inv-workspace{display:none;flex-direction:column;height:100%;width:100%;background:var(--bg-main);overflow-y:auto}
+.inv-workspace.active{display:flex}
+.inv-top{padding:10px 16px;background:var(--bg-card);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.inv-tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);background:var(--bg-subtop);padding:0 16px}
+.inv-tab{background:none;border:none;color:var(--text-muted);padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent}
+.inv-tab.active{color:var(--sp-cyan);border-bottom-color:var(--sp-cyan);font-weight:700}
+
+/* MITRE MATRIX BAR */
+.mitre-bar{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;padding:10px 16px;background:var(--bg-card);border-bottom:1px solid var(--line)}
+.mitre-col{background:var(--bg-panel);border:1px solid var(--line);border-radius:var(--rs);padding:6px 8px}
+.mitre-col-title{font-size:9.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px;display:flex;justify-content:space-between}
+.mitre-pill{background:#11161f;border:1px solid var(--line);padding:3px 5px;border-radius:3px;font-size:9.5px;margin-bottom:3px;color:var(--text-dim);display:flex;justify-content:space-between}
+.mitre-pill.active{background:var(--sp-purple-dim);border-color:var(--sp-purple);color:#fff;font-weight:700}
+
+/* OBSERVABLES 3-COL LAYOUT */
+.obs-layout{display:grid;grid-template-columns:260px 1fr 280px;gap:12px;padding:14px 16px;flex:1}
+.obs-panel{background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);display:flex;flex-direction:column;overflow:hidden}
+.obs-item{padding:7px 10px;border-bottom:1px solid var(--line-subtle);display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:11.5px}
+.obs-item:hover, .obs-item.active{background:rgba(0,210,196,0.06)}
+.tag-pill{font-size:9px;padding:2px 6px;border-radius:3px;background:var(--bg-panel);border:1px solid var(--line);color:var(--text-muted);display:inline-block;margin:2px}
+
+/* NOTE EDITOR */
+.note-box{background:var(--bg-input);border:1px solid var(--line);border-radius:var(--rs);padding:8px}
+.note-tools{display:flex;gap:6px;border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:6px;color:var(--text-muted);font-size:11px}
+.note-tools i{cursor:pointer;padding:2px 4px;border-radius:2px}
+.note-tools i:hover{color:var(--text);background:var(--line)}
+.note-area{width:100%;height:70px;background:none;border:none;outline:none;color:var(--text);font-size:11.5px;resize:none;font-family:var(--sans)}
+
+/* ACTIVITY TIMELINE ITEM */
+.act-item{padding:10px 12px;border-left:3px solid var(--sp-cyan);background:var(--bg-panel);border-radius:0 var(--rs) var(--rs) 0;margin-bottom:8px;font-size:11.5px}
+.act-meta{display:flex;justify-content:space-between;color:var(--text-muted);font-size:10px;margin-bottom:4px}
 </style>
 </head>
 <body>
 
-<!-- SPLUNK GLOBAL BAR -->
-<header class="sp-header">
-  <div style="display:flex;align-items:center;gap:16px">
-    <a href="index.html" class="sp-brand" title="ShadowXLab Splunk ES">
-      <b>splunk<span>></span></b>
-      <span class="es-pill">ENTERPRISE SECURITY</span>
+<!-- 1. SPLUNK TOP APP BAR -->
+<header class="top-bar">
+  <div style="display:flex;align-items:center;gap:14px">
+    <a href="index.html" class="brand" title="ShadowXLab Splunk ES">
+      <b>splunk<span>></span>cloud</b>
     </a>
-    <div class="sp-top-nav">
-      <button class="sp-tab active" onclick="showPanel('notables')"><i class="fas fa-shield-alt"></i> Incident Review</button>
-      <button class="sp-tab" onclick="showPanel('posture')"><i class="fas fa-chart-line"></i> Security Posture</button>
-      <button class="sp-tab" onclick="showPanel('search')"><i class="fas fa-search"></i> Search &amp; Reporting</button>
-      <button class="sp-tab" onclick="showPanel('rba')"><i class="fas fa-fire"></i> Risk Analysis (RBA)</button>
-      <button class="sp-tab" onclick="showPanel('threat')"><i class="fas fa-crosshairs"></i> Threat Intel</button>
+    <div class="top-menus">
+      <button class="menu-btn active">Apps <i class="fas fa-caret-down" style="font-size:9px"></i></button>
+      <button class="menu-btn"><span class="badge-count">7</span> Messages <i class="fas fa-caret-down" style="font-size:9px"></i></button>
+      <button class="menu-btn">Settings <i class="fas fa-caret-down" style="font-size:9px"></i></button>
+      <button class="menu-btn">Activity <i class="fas fa-caret-down" style="font-size:9px"></i></button>
+      <div class="search-find">
+        <i class="fas fa-search" style="font-size:10px;color:#64748b"></i>
+        <input placeholder="Find">
+      </div>
     </div>
   </div>
 
-  <div class="sp-actions">
-    <div style="font-size:.66rem;font-family:var(--mono);color:#94a3b8;display:flex;align-items:center;gap:6px">
-      <span style="width:7px;height:7px;border-radius:50%;background:var(--sp-green);display:inline-block"></span>
-      <span>REAL-TIME SXL LOG AGGREGATION</span>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:#94a3b8">
+      <i class="fas fa-check-circle" style="color:var(--sp-green)"></i>
+      <span style="font-weight:700;color:#cbd5e1">TDIR Admin</span>
+      <i class="fas fa-caret-down" style="font-size:9px"></i>
     </div>
-    <a href="sxl-network.html" class="btn" style="background:#1e293b;color:#38bdf8;border-color:#334155;font-size:.66rem"><i class="fas fa-sitemap"></i> SXL-Network</a>
-    <a href="index.html" class="btn" style="background:#1e293b;color:#ffffff;border-color:#334155;font-size:.66rem"><i class="fas fa-home"></i> Home</a>
+    <div style="font-size:11px;color:#94a3b8;cursor:pointer"><i class="fas fa-question-circle"></i> Support &amp; Services <i class="fas fa-caret-down" style="font-size:9px"></i></div>
+    <div style="position:relative;cursor:pointer"><i class="fas fa-bell" style="color:#cbd5e1"></i><span style="position:absolute;top:-5px;right:-5px;background:#38bdf8;color:#000;font-size:8px;font-weight:900;padding:1px 4px;border-radius:10px">2</span></div>
     <button class="themetoggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Theme">🌙</button>
+    <a href="sxl-network.html" class="es-badge" style="text-decoration:none" title="Return to SXL-Network Range"><i class="fas fa-lock"></i> Enterprise Security</a>
   </div>
 </header>
 
-<div class="sp-app">
-  <!-- SIDEBAR -->
-  <aside class="sp-side">
-    <div class="nav-group">Incident Response</div>
-    <button class="snb on" data-p="notables"><i class="fas fa-bell"></i> Incident Review <span class="count" id="cNotables">50</span></button>
-    <button class="snb" data-p="posture"><i class="fas fa-chart-pie"></i> Security Posture <span class="count">SOC 24/7</span></button>
-    <button class="snb" data-p="search"><i class="fas fa-terminal"></i> SPL Search &amp; Query <span class="count">CLI</span></button>
-    
-    <div class="nav-group">Security Domains</div>
-    <button class="snb" data-p="access"><i class="fas fa-user-lock"></i> Access &amp; Identity <span class="count">M25</span></button>
-    <button class="snb" data-p="endpoint"><i class="fas fa-desktop"></i> Endpoint Telemetry <span class="count">M24</span></button>
-    <button class="snb" data-p="network"><i class="fas fa-network-wired"></i> Network Traffic <span class="count">M11/12</span></button>
-    <button class="snb" data-p="threat"><i class="fas fa-biohazard"></i> Threat Intelligence <span class="count">IOC</span></button>
-    
-    <div class="nav-group">Risk &amp; Automation</div>
-    <button class="snb" data-p="rba"><i class="fas fa-tachometer-alt"></i> Risk Analysis (RBA) <span class="count">Risk Scores</span></button>
-    <button class="snb" data-p="soar"><i class="fas fa-robot"></i> SOAR Playbooks <span class="count">4 Auto</span></button>
-    <button class="snb" data-p="assets"><i class="fas fa-server"></i> Asset &amp; Identity DB <span class="count" id="cAssets">0</span></button>
-  </aside>
-
-  <!-- MAIN VIEWPORT -->
-  <main class="sp-main">
-    
-    <!-- 1. INCIDENT REVIEW (NOTABLE EVENTS) -->
-    <div class="sp-pnl on" id="p-notables">
-      <div class="stats-grid">
-        <div class="stat-box red"><div class="sl">Critical Urgency</div><div class="sv" id="sCrit">0</div></div>
-        <div class="stat-box amb"><div class="sl">High Urgency</div><div class="sv" id="sHigh">0</div></div>
-        <div class="stat-box blu"><div class="sl">In Progress</div><div class="sv" id="sProg">0</div></div>
-        <div class="stat-box pur"><div class="sl">New / Unassigned</div><div class="sv" id="sNew">0</div></div>
-        <div class="stat-box grn"><div class="sl">MTTR (Resolution)</div><div class="sv">18.4m</div></div>
-      </div>
-
-      <div class="card">
-        <div class="ch">
-          <h3><i class="fas fa-shield-alt" style="color:var(--sp-green)"></i> Incident Review — Notable Events Worklist</h3>
-          <div style="display:flex;gap:6px;align-items:center">
-            <select class="inp" id="fUrgency" onchange="renderNotablesTable()"><option value="all">All Urgencies</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="info">Info</option></select>
-            <select class="inp" id="fStatus" onchange="renderNotablesTable()"><option value="all">All Statuses</option><option value="new">New</option><option value="in_progress">In Progress</option><option value="resolved">Resolved</option></select>
-            <button class="btn btn-g" onclick="generateLiveNotable()"><i class="fas fa-plus"></i> Simulate Threat</button>
-          </div>
-        </div>
-        <div class="cb" style="padding:0;max-height:calc(100vh - 240px);overflow-y:auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Timestamp</th>
-                <th>Urgency</th>
-                <th>Notable Event Title</th>
-                <th>Entity / Target</th>
-                <th>Domain</th>
-                <th>Status</th>
-                <th>Assignee</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="tbNotables"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2. SECURITY POSTURE -->
-    <div class="sp-pnl" id="p-posture">
-      <div class="card mb">
-        <div class="ch"><h3><i class="fas fa-chart-line"></i> Security Posture Velocity &amp; Threat Ingestion</h3></div>
-        <div class="cb"><div style="height:190px"><canvas id="cPosture"></canvas></div></div>
-      </div>
-      <div class="card mb">
-        <div class="ch"><h3><i class="fas fa-th" style="color:var(--sp-green)"></i> MITRE ATT&amp;CK Matrix Correlation Mapping</h3></div>
-        <div class="cb"><div class="mitre-grid" id="mitreGrid"></div></div>
-      </div>
-    </div>
-
-    <!-- 3. SEARCH & REPORTING (SPL CONSOLE) -->
-    <div class="sp-pnl" id="p-search">
-      <div class="spl-bar mb">
-        <span class="spl-icon">SPL></span>
-        <input class="spl-input" id="splInput" value="index=siem | search severity=critical | stats count by type, dest_ip" placeholder="e.g. index=network | stats count by dest_port">
-        <button class="spl-btn" onclick="runSPL()"><i class="fas fa-search"></i> Search</button>
-      </div>
-
-      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
-        <span style="font-size:.66rem;color:var(--g5);font-family:var(--mono);align-self:center">SPL Shortcuts:</span>
-        <button class="btn" onclick="setSPL('index=siem | stats count by type')">index=siem by type</button>
-        <button class="btn" onclick="setSPL('index=network | stats count by proto')">index=network by proto</button>
-        <button class="btn" onclick="setSPL('sourcetype=fortigate | search action=BLOCK')">Blocked FW Traffic</button>
-        <button class="btn" onclick="setSPL('index=endpoint | table host, ip, status, vlan')">Host Fleet Table</button>
-        <button class="btn" onclick="setSPL('index=packets | search proto=DNS')">DNS Tunnel Inspection</button>
-      </div>
-
-      <div class="card mb">
-        <div class="ch">
-          <h3><i class="fas fa-chart-bar"></i> Timeline Event Distribution</h3>
-          <span class="m" id="splStats" style="font-size:.68rem;color:var(--g5)">0 events matched</span>
-        </div>
-        <div class="cb"><div style="height:120px"><canvas id="cSPL"></canvas></div></div>
-      </div>
-
-      <div class="card">
-        <div class="ch"><h3><i class="fas fa-table"></i> Query Results</h3><button class="btn btn-g" onclick="exportResults()"><i class="fas fa-download"></i> Export CSV</button></div>
-        <div class="cb" style="padding:0;max-height:280px;overflow-y:auto"><table id="splResultsTable"><thead><tr><th>Result Data</th></tr></thead><tbody></tbody></table></div>
-      </div>
-    </div>
-
-    <!-- 4. ACCESS & IDENTITY DOMAIN -->
-    <div class="sp-pnl" id="p-access">
-      <div class="card mb"><div class="ch"><h3><i class="fas fa-user-lock"></i> Identity &amp; Access Investigation (Module 25)</h3></div><div class="cb" id="accessCards"></div></div>
-    </div>
-
-    <!-- 5. ENDPOINT TELEMETRY DOMAIN -->
-    <div class="sp-pnl" id="p-endpoint">
-      <div class="card mb"><div class="ch"><h3><i class="fas fa-desktop"></i> EDR Sensor Agent Health (Module 24)</h3></div><div class="cb" style="padding:0" id="endpointTable"></div></div>
-    </div>
-
-    <!-- 6. NETWORK TRAFFIC DOMAIN -->
-    <div class="sp-pnl" id="p-network">
-      <div class="card mb"><div class="ch"><h3><i class="fas fa-network-wired"></i> Network Layer 3 Traffic Inspection (Module 11 &amp; 12)</h3></div><div class="cb" style="padding:0" id="networkTable"></div></div>
-    </div>
-
-    <!-- 7. THREAT INTELLIGENCE -->
-    <div class="sp-pnl" id="p-threat">
-      <div class="card mb"><div class="ch"><h3><i class="fas fa-biohazard"></i> Threat Intelligence &amp; IOC Matching Center</h3></div><div class="cb" id="threatTable"></div></div>
-    </div>
-
-    <!-- 8. RISK ANALYSIS (RBA) -->
-    <div class="sp-pnl" id="p-rba">
-      <div class="card mb"><div class="ch"><h3><i class="fas fa-tachometer-alt"></i> Risk-Based Alerting (RBA) Attributions</h3></div><div class="cb" style="padding:0" id="rbaTable"></div></div>
-    </div>
-
-    <!-- 9. SOAR AUTOMATED PLAYBOOKS -->
-    <div class="sp-pnl" id="p-soar">
-      <div class="card mb"><div class="ch"><h3><i class="fas fa-robot"></i> SOAR Automated Response Playbooks</h3></div><div class="cb" id="soarCards"></div></div>
-    </div>
-
-    <!-- 10. ASSET & IDENTITY DB -->
-    <div class="sp-pnl" id="p-assets">
-      <div class="card mb"><div class="ch"><h3><i class="fas fa-server"></i> Asset &amp; Identity Database (SXL-Network Fleet)</h3></div><div class="cb" style="padding:0" id="assetDbTable"></div></div>
-    </div>
-
-  </main>
+<!-- 2. SECONDARY SPLUNK ES SUB-NAV -->
+<div class="sub-bar">
+  <div class="sub-nav">
+    <button class="active" onclick="switchView('queue')"><i class="fas fa-th-large"></i> Mission Control</button>
+    <button onclick="switchView('analytics')">Analytics <i class="fas fa-caret-down" style="font-size:9px"></i></button>
+    <button onclick="switchView('security')">Security content <i class="fas fa-caret-down" style="font-size:9px"></i></button>
+    <button onclick="switchView('configure')">Configure <i class="fas fa-caret-down" style="font-size:9px"></i></button>
+    <button onclick="switchView('search')">Search</button>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <a href="index.html" class="tag-btn" style="text-decoration:none"><i class="fas fa-home"></i> CyberCore Home</a>
+    <a href="sxl-network.html" class="tag-btn" style="text-decoration:none"><i class="fas fa-network-wired"></i> SXL-Network</a>
+    <span class="m" style="font-size:10.5px;color:var(--text-muted)">Live Stream · SXL Fleet</span>
+  </div>
 </div>
 
-<!-- NOTABLE EVENT DETAIL MODAL -->
-<div class="modal-bg" id="eventModal" onclick="if(event.target===this)closeEM()"><div class="modal" id="eventModalBox"></div></div>
+<!-- 3. MAIN WORKSPACE CONTAINER -->
+<div class="app-container">
+
+  <!-- VIEW A: ANALYST QUEUE (MISSION CONTROL) -->
+  <div class="main-content" id="viewQueue">
+    <div class="page-head">
+      <div class="page-title">Analyst queue</div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <div style="font-size:11px;color:var(--text-muted)">Saved views</div>
+        <select class="select-btn" id="savedViewsSelect"><option>Select...</option><option>High Risk Findings</option><option>Unassigned Tier-1</option></select>
+        <button class="btn-action" onclick="toggleTimeline()"><i class="fas fa-chart-bar"></i> Charts</button>
+        <button class="btn-action" onclick="toggleTimeline()"><i class="fas fa-stream"></i> Timeline</button>
+        <button class="btn-action" onclick="generateSimulatedFinding()"><i class="fas fa-plus"></i></button>
+      </div>
+    </div>
+
+    <!-- FILTER ROW -->
+    <div class="filter-row">
+      <div class="search-box">
+        <i class="fas fa-search" style="color:var(--text-muted);font-size:11px"></i>
+        <input id="queueSearchInp" placeholder="Search findings & investigations" oninput="filterFindings()">
+      </div>
+      <select class="select-btn" id="timeFilter" onchange="filterFindings()">
+        <option>Last 24 hours</option>
+        <option>Last 7 days</option>
+        <option>Last 30 days</option>
+        <option>All time</option>
+      </select>
+      <div class="tag-btn">Time Range: <b>24 hours</b> <i class="fas fa-times" style="font-size:9px;cursor:pointer"></i></div>
+      <button class="btn-action" style="padding:3px 8px;font-size:11px" onclick="clearFilters()">Clear all</button>
+      <button class="btn-action" style="padding:3px 8px;font-size:11px">Save</button>
+    </div>
+
+    <!-- INTERACTIVE HISTOGRAM TIMELINE (IMAGE 2) -->
+    <div class="histogram-box" id="histogramBox">
+      <div class="histogram-tools">
+        <div style="display:flex;gap:6px">
+          <button class="tool-btn" onclick="zoomHist('in')">Zoom To Selection</button>
+          <button class="tool-btn" onclick="zoomHist('out')">Zoom Out</button>
+          <button class="tool-btn" onclick="zoomHist('reset')">Deselect</button>
+        </div>
+        <div class="m" style="font-size:10px;color:var(--text-muted)">Events per Hour · Peak 160</div>
+      </div>
+      <div style="height:70px"><canvas id="cHist"></canvas></div>
+    </div>
+
+    <!-- BATCH ACTION BAR -->
+    <div class="batch-bar">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-weight:700;font-size:11.5px;color:var(--text)" id="selCount">1 selected</span>
+        <button class="btn-action" onclick="alert('Bulk edit properties')">Edit</button>
+        <button class="btn-action" onclick="assignToMe()">Assign to Me</button>
+        <button class="btn-action" onclick="runSOARPlaybook()">Run Playbook</button>
+        <button class="btn-action" onclick="openFullInvestigation('MC-00005')">Add to Investigation</button>
+        <button class="btn-action">More <i class="fas fa-caret-down" style="font-size:9px"></i></button>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;font-size:11px;color:var(--text-muted)">
+        <span>Last refresh at 5:30 PM <i class="fas fa-sync" style="cursor:pointer" onclick="filterFindings()"></i></span>
+        <select class="select-btn" style="padding:2px 6px;font-size:11px"><option>Auto-refresh on</option><option>Auto-refresh off</option></select>
+        <span>&lt; Prev <b>1</b> 2 3 .. 30 Next &gt;</span>
+        <select class="select-btn" style="padding:2px 6px;font-size:11px"><option>Show 20</option><option>Show 50</option></select>
+      </div>
+    </div>
+
+    <!-- DATA TABLE (IMAGE 1 & 2) -->
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table id="findingsTable">
+          <thead>
+            <tr>
+              <th style="width:24px"><input type="checkbox" id="chkAll" onchange="toggleSelectAll(this)"></th>
+              <th style="width:20px"></th>
+              <th>Title <i class="fas fa-caret-down"></i></th>
+              <th>ID</th>
+              <th>Type <i class="fas fa-caret-down"></i></th>
+              <th>Entity <i class="fas fa-caret-down"></i></th>
+              <th>Risk... <i class="fas fa-caret-down"></i></th>
+              <th>Fin...</th>
+              <th>Int...</th>
+              <th>Time <i class="fas fa-caret-down"></i></th>
+              <th>Disposition <i class="fas fa-caret-down"></i></th>
+              <th>Owner <i class="fas fa-caret-down"></i></th>
+              <th>Urgency <i class="fas fa-caret-down"></i></th>
+              <th>Status <i class="fas fa-caret-down"></i></th>
+              <th style="width:20px"></th>
+            </tr>
+          </thead>
+          <tbody id="findingsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE-OUT DETAIL DRAWER (IMAGE 2) -->
+  <div class="detail-drawer" id="detailDrawer">
+    <div class="drawer-head">
+      <button class="btn-action blue" onclick="openFullInvestigation(activeFinding.id)"><i class="fas fa-play"></i> Start investigation</button>
+      <div style="display:flex;gap:6px;align-items:center">
+        <i class="fas fa-ellipsis-v" style="cursor:pointer;color:var(--text-muted);padding:4px"></i>
+        <i class="fas fa-chevron-left" style="cursor:pointer;color:var(--text-muted);padding:4px" onclick="navFinding(-1)"></i>
+        <i class="fas fa-chevron-right" style="cursor:pointer;color:var(--text-muted);padding:4px" onclick="navFinding(1)"></i>
+        <i class="fas fa-times" style="cursor:pointer;color:var(--text-muted);padding:4px" onclick="closeDrawer()"></i>
+      </div>
+    </div>
+
+    <div class="drawer-body" id="drawerBody">
+      <!-- Dynamic populated -->
+    </div>
+  </div>
+
+  <!-- VIEW B: FULL INVESTIGATION WORKSPACE (IMAGE 3 & 4) -->
+  <div class="inv-workspace" id="viewInvestigation">
+    <div class="inv-top">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="btn-action" onclick="switchView('queue')"><i class="fas fa-arrow-left"></i> Queue</button>
+        <span class="m" style="background:#1e293b;padding:2px 6px;border-radius:3px;font-size:11px;color:#38bdf8" id="invBadgeId">MC-00005</span>
+        <h3 style="font-size:14px;font-weight:800;color:var(--text)" id="invTitle">ATT&CK tactic threshold exceeded over previous 7 days for user=fyodor@splunktshirtcompany.com</h3>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-action blue" onclick="alert('Investigation marked as Resolved and archived.')"><i class="fas fa-check"></i> Close Investigation</button>
+        <button class="btn-action"><i class="fas fa-ellipsis-v"></i></button>
+      </div>
+    </div>
+
+    <div class="inv-tabs">
+      <button class="inv-tab active" onclick="switchInvTab('overview')">Overview</button>
+      <button class="inv-tab" onclick="switchInvTab('response')">Response</button>
+      <button class="inv-tab" onclick="switchInvTab('events')">Events</button>
+      <button class="inv-tab" onclick="switchInvTab('search')">Search</button>
+      <button class="inv-tab" onclick="switchInvTab('intelligence')">Intelligence</button>
+      <button class="inv-tab" onclick="switchInvTab('automation')">Automation</button>
+    </div>
+
+    <!-- 1. OVERVIEW SUBTAB (IMAGE 3) -->
+    <div id="invSubOverview" style="display:flex;flex-direction:column;flex:1">
+      <!-- MITRE ATT&CK MATRIX STRIP -->
+      <div class="mitre-bar">
+        <div class="mitre-col"><div class="mitre-col-title">Reconnaissance <i class="fas fa-external-link-alt" style="font-size:8px"></i></div><div class="mitre-pill">0 of 10 Techniques (0%)</div></div>
+        <div class="mitre-col"><div class="mitre-col-title">Resource Dev <i class="fas fa-external-link-alt" style="font-size:8px"></i></div><div class="mitre-pill">0 of 8 Techniques (0%)</div></div>
+        <div class="mitre-col"><div class="mitre-col-title">Initial Access <i class="fas fa-external-link-alt" style="font-size:8px"></i></div><div class="mitre-pill active">▼ Phishing<br><small style="font-size:8.5px">Spearphishing Link</small></div></div>
+        <div class="mitre-col"><div class="mitre-col-title">Execution <i class="fas fa-external-link-alt" style="font-size:8px"></i></div><div class="mitre-pill active">▼ Command &amp; Script<br><small style="font-size:8.5px">PowerShell</small></div></div>
+        <div class="mitre-col"><div class="mitre-col-title">Persistence <i class="fas fa-external-link-alt" style="font-size:8px"></i></div><div class="mitre-pill">0 of 71 Techniques (0%)</div></div>
+        <div class="mitre-col"><div class="mitre-col-title">Privilege Esc <i class="fas fa-external-link-alt" style="font-size:8px"></i></div><div class="mitre-pill">0 of 41 Techniques (0%)</div></div>
+        <div class="mitre-col"><div class="mitre-col-title">Defense Evasion <i class="fas fa-external-link-alt" style="font-size:8px"></i></div><div class="mitre-pill">0 of 89 Techniques (0%)</div></div>
+        <div class="mitre-col"><div class="mitre-col-title">Discovery <i class="fas fa-external-link-alt" style="font-size:8px"></i></div><div class="mitre-pill">0 of 33 Techniques (0%)</div></div>
+        <div class="mitre-col"><div class="mitre-col-title">Lateral Movement <i class="fas fa-external-link-alt" style="font-size:8px"></i></div><div class="mitre-pill active">▼ Remote Services<br><small style="font-size:8.5px">SMB / Admin Shares</small></div></div>
+      </div>
+
+      <!-- MAIN SPLIT WORKSPACE -->
+      <div style="display:grid;grid-template-columns:1fr 340px;flex:1;overflow:hidden">
+        <!-- LEFT: ENTITY PROFILE + INTERMEDIATE FINDINGS GRAPH -->
+        <div style="padding:16px;overflow-y:auto">
+          <!-- Entity Profile -->
+          <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin-bottom:14px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <div style="font-size:13px;font-weight:800;color:var(--text)">
+                <i class="fas fa-user" style="color:var(--sp-cyan)"></i> fyodor@splunktshirtcompany.com
+                <span style="font-size:11px;color:var(--text-muted);margin-left:8px">Intermediate findings count: <b style="color:var(--text)">19</b></span>
+              </div>
+              <div style="display:flex;gap:4px">
+                <button class="btn-action" style="padding:2px 6px;font-size:10px">Timeline</button>
+                <button class="btn-action" style="padding:2px 6px;font-size:10px">Threat topology</button>
+              </div>
+            </div>
+            <div class="m" style="font-size:10.5px;color:var(--text-muted);display:flex;gap:12px;flex-wrap:wrap">
+              <span>Priority: <b style="color:var(--sp-red)">Critical</b></span>
+              <span>Identity: <b>fyodor</b></span>
+              <span>First Name: <b>fyodor</b></span>
+              <span>Last Name: <b>malteskesko</b></span>
+              <span>Email: <b>fyodor@splunktshirtcompany.com</b></span>
+              <span>Business Unit: <b>americas</b></span>
+              <span>Category: <b>technical</b></span>
+            </div>
+          </div>
+
+          <!-- Interactive Findings Graph Canvas -->
+          <div style="background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:14px">
+            <div style="font-size:11.5px;font-weight:800;color:var(--text-muted);margin-bottom:10px;text-transform:uppercase">
+              <i class="fas fa-project-diagram" style="color:var(--sp-cyan)"></i> Intermediate Findings Sequence Map
+            </div>
+            <div style="height:210px"><canvas id="cThreatMap"></canvas></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: INVESTIGATION METADATA & ACTIVITY STREAM -->
+        <div style="background:var(--bg-card);border-left:1px solid var(--line);padding:14px;overflow-y:auto">
+          <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:10px;display:flex;justify-content:space-between">
+            <span><i class="fas fa-info-circle"></i> Info</span>
+            <span class="type-badge investigation">INVESTIGATION</span>
+          </div>
+
+          <div class="kv-row"><span class="kv-key">ID</span><span class="kv-val">MC-00005</span></div>
+          <div class="kv-row"><span class="kv-key">Time</span><span class="kv-val">May 30th, 2024 10:22 PM</span></div>
+          <div class="kv-row"><span class="kv-key">Reference ID</span><span class="kv-val">C659804F-187E-4936-93F6-8DDB747B107C@@notable</span></div>
+          <div class="kv-row"><span class="kv-key">Investigation type</span><span class="kv-val">default</span></div>
+          <div class="kv-row" style="margin-bottom:12px"><span class="kv-key">Description</span><span class="kv-val" style="font-family:var(--sans)">ATT&amp;CK tactic threshold exceeded for user over 7 days</span></div>
+
+          <!-- Notes & SOAR Stream -->
+          <div style="font-size:11.5px;font-weight:800;color:var(--text);margin-bottom:8px;display:flex;justify-content:space-between">
+            <span><i class="fas fa-sticky-note"></i> Notes (4)</span>
+            <span style="color:var(--sp-cyan);font-size:10.5px;cursor:pointer">+ Add Note</span>
+          </div>
+
+          <!-- Note Form -->
+          <div class="note-box" style="margin-bottom:12px">
+            <div class="note-tools">
+              <i class="fas fa-bold"></i><i class="fas fa-italic"></i><i class="fas fa-strikethrough"></i><i class="fas fa-list-ul"></i><i class="fas fa-code"></i><i class="fas fa-link"></i>
+            </div>
+            <textarea class="note-area" id="noteInput" placeholder="Enter investigation note or SOAR playbook command..."></textarea>
+            <div style="display:flex;justify-content:flex-end;margin-top:6px">
+              <button class="btn-action blue" style="padding:3px 8px;font-size:11px" onclick="addNote()">Save Note</button>
+            </div>
+          </div>
+
+          <div id="notesStream">
+            <div class="act-item">
+              <div class="act-meta"><span><b>SOAR Admin</b></span><span>May 30, 10:23 PM</span></div>
+              <div><b>ES Comment:</b> Splunk SOAR found a possible base64 encoded string and decoded it into PowerShell execution beacon.</div>
+            </div>
+            <div class="act-item" style="border-left-color:var(--sp-red)">
+              <div class="act-meta"><span><b>SOAR Admin</b></span><span>May 30, 10:23 PM</span></div>
+              <div><span style="background:#b91c1c;color:#fff;padding:1px 5px;border-radius:2px;font-family:var(--mono);font-size:9.5px">MD5</span> <code style="color:var(--sp-cyan)">586ef56f4d8963dd546163ac31c865d7</code> — <b style="color:var(--sp-red)">HIGH RISK</b></div>
+            </div>
+            <div class="act-item">
+              <div class="act-meta"><span><b>SOAR Admin</b></span><span>May 30, 10:23 PM</span></div>
+              <div>Splunk Enterprise Security has detected that user <code style="color:var(--sp-blue)">fyodor@splunktshirtcompany.com</code> generated 196.0 points of risk.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. INTELLIGENCE SUBTAB (IMAGE 4) -->
+    <div id="invSubIntelligence" class="obs-layout" style="display:none">
+      <!-- Col 1: Observables List -->
+      <div class="obs-panel">
+        <div style="padding:10px 12px;border-bottom:1px solid var(--line);font-weight:800;font-size:12px;display:flex;justify-content:space-between">
+          <span>Observables (25)</span>
+          <span style="font-size:10px;color:var(--text-muted)">1 - 10 of 25</span>
+        </div>
+        <div style="padding:8px 10px;border-bottom:1px solid var(--line)">
+          <div class="search-box"><i class="fas fa-search" style="font-size:10px;color:var(--text-muted)"></i><input placeholder="Search observables"></div>
+        </div>
+        <div style="overflow-y:auto;flex:1" id="obsList"></div>
+      </div>
+
+      <!-- Col 2: Observable Overview -->
+      <div class="obs-panel" style="padding:14px;overflow-y:auto" id="obsDetail">
+        <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:12px"><i class="fas fa-microscope" style="color:var(--sp-cyan)"></i> Observable overview</div>
+        <div class="kv-row"><span class="kv-key">Observable Type</span><span class="kv-val" id="odType">MD5</span></div>
+        <div class="kv-row"><span class="kv-key">Last intel report</span><span class="kv-val" id="odTime">Apr 15th, 2023 2:22 AM</span></div>
+        <div class="kv-row"><span class="kv-key">Enclaves</span><span class="kv-val">N/A</span></div>
+        <div class="kv-row"><span class="kv-key">Priority Score</span><span class="kv-val" style="color:var(--sp-red);font-weight:800">HIGH <span class="tag-pill" style="background:#b91c1c;color:#fff">TI ☵</span></span></div>
+        <div style="margin:12px 0 6px"><span class="kv-key">Tags:</span></div>
+        <div id="odTags" style="margin-bottom:14px"></div>
+
+        <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:8px">Intel report summaries</div>
+        <table style="font-size:11px">
+          <thead><tr><th>Source</th><th>Pass Thru Score</th><th>Normalized Score</th></tr></thead>
+          <tbody id="odSources"></tbody>
+        </table>
+      </div>
+
+      <!-- Col 3: Side Info & Notes -->
+      <div class="obs-panel" style="padding:14px;overflow-y:auto">
+        <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:10px"><i class="fas fa-sliders-h"></i> Investigation Info</div>
+        <div class="meta-field"><label>Owner</label><select><option>lly thomson</option><option>TDIR Admin</option></select></div>
+        <div class="meta-field" style="margin-top:8px"><label>Status</label><select><option>In Progress</option><option>New</option><option>Resolved</option></select></div>
+        <div class="meta-field" style="margin-top:8px"><label>Urgency</label><select><option>Critical</option><option>High</option><option>Medium</option></select></div>
+        <div class="meta-field" style="margin-top:8px"><label>Disposition</label><select><option>Undetermined</option><option>True Positive</option><option>False Positive</option></select></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
 
 <script>
-/* ═══ SXL-NETWORK SHARED DATASET ═══ */
-var SEGMENTS=[
-  {name:'Engineering',vlan:100,cidr:'10.0.1.0/24',zone:'Corporate',color:'#38bdf8'},
-  {name:'HR',vlan:200,cidr:'10.0.2.0/24',zone:'Corporate',color:'#a855f7'},
-  {name:'Finance',vlan:300,cidr:'10.0.3.0/24',zone:'Corporate',color:'#2dd4bf'},
-  {name:'Servers',vlan:10,cidr:'10.0.10.0/24',zone:'Infrastructure',color:'#f04438'},
-  {name:'Management',vlan:1000,cidr:'10.0.100.0/24',zone:'Management',color:'#fbbf24'},
-  {name:'Guest WiFi',vlan:2000,cidr:'10.0.200.0/24',zone:'Guest',color:'#f472b6'},
-  {name:'VoIP',vlan:50,cidr:'10.0.50.0/24',zone:'Voice',color:'#10b981'},
-  {name:'DMZ',vlan:10,cidr:'172.16.0.0/24',zone:'DMZ',color:'#ef4444'},
-  {name:'VPN',vlan:0,cidr:'192.168.100.0/24',zone:'VPN',color:'#818cf8'}
+/* ═══ SXL-NETWORK & SPLUNK REAL DATASET ═══ */
+var FINDINGS = [
+  {id:'ES-00001',title:'Excessive failed logins',type:'finding',entity:'win-hp-64861',entityType:'system',icon:'fa-desktop',risk:70,fin:1,intCount:7,time:'Today, 9:45 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'medium',status:'new',mitre:'T1110',domain:'access',desc:'Excessive authentication failures detected targeting win-hp-64861.'},
+  {id:'MC-00005',title:'Multiple findings from the same entity [bstoll@splunktshirtcompany.com]',type:'investigation',entity:'bstoll@splunktshirtcompany.com',entityType:'user',icon:'fa-user',risk:420,fin:4,intCount:36,time:'Today, 9:42 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'medium',status:'new',mitre:'T1078',domain:'identity',desc:'Aggregate risk score threshold exceeded for user bstoll with 4 intermediate findings.'},
+  {id:'ES-00003',title:'24 hour risk threshold exceed for entity [172.16.0.149]',type:'finding',entity:'172.16.0.149',entityType:'system',icon:'fa-server',risk:140,fin:1,intCount:4,time:'Today, 9:40 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'high',status:'new',mitre:'T1046',domain:'network',desc:'Entity 172.16.0.149 exceeded 100 risk score points in the last 24 hours.'},
+  {id:'ES-00004',title:'Unusual volume of network activity detected on 54.230.147.59',type:'finding',entity:'54.230.147.59',entityType:'system',icon:'fa-globe',risk:60,fin:1,intCount:2,time:'Today, 9:40 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'medium',status:'new',mitre:'T1030',domain:'network',desc:'An unusual volume of network activity was detected. 54.230.147.59 has generated 34 MB of outbound network traffic in the past day, which is anomalous.'},
+  {id:'ES-00005',title:'Excessive failed logins',type:'finding',entity:'NY_APP_002',entityType:'system',icon:'fa-desktop',risk:75,fin:1,intCount:11,time:'Today, 9:35 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'medium',status:'new',mitre:'T1110',domain:'access',desc:'11 failed login attempts in 2 minutes on application node NY_APP_002.'},
+  {id:'ES-00006',title:'Unusual volume of network activity detected on 52.216.133.181',type:'finding',entity:'52.216.133.181',entityType:'system',icon:'fa-server',risk:35,fin:1,intCount:5,time:'Today, 9:35 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'low',status:'new',mitre:'T1030',domain:'network',desc:'Outbound S3 sync spike detected from server subnet.'},
+  {id:'ES-00007',title:'Unusual volume of network activity detected on 52.218.196.122',type:'finding',entity:'52.218.196.122',entityType:'system',icon:'fa-server',risk:20,fin:1,intCount:4,time:'Today, 9:27 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'low',status:'new',mitre:'T1030',domain:'network',desc:'Spike in egress packets to AWS region us-west-2.'},
+  {id:'ES-00008',title:'Multiple findings from the same entity [mickey.perre@splunktshirtcompany.com]',type:'investigation',entity:'mickey.perre@splunktshirtcompany.com',entityType:'user',icon:'fa-user',risk:120,fin:6,intCount:25,time:'Today, 9:27 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'high',status:'new',mitre:'T1078',domain:'identity',desc:'6 intermediate findings correlated across Endpoint and Network domains.'},
+  {id:'ES-00009',title:'Multiple findings from the same entity [hayley.jensen@splunktshirtcompany.com]',type:'investigation',entity:'hayley.jensen@splunktshirtcompany.com',entityType:'user',icon:'fa-user',risk:150,fin:5,intCount:16,time:'Today, 9:23 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'high',status:'new',mitre:'T1078',domain:'identity',desc:'Suspicious privilege escalation combined with off-hours VPN login.'},
+  {id:'ES-00010',title:'Excessive failed logins',type:'finding',entity:'macbook-46743',entityType:'system',icon:'fa-laptop',risk:50,fin:1,intCount:2,time:'Today, 9:23 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'low',status:'new',mitre:'T1110',domain:'access',desc:'Local workstation failed password challenge.'},
+  {id:'ES-00011',title:'24 hour risk threshold exceed for entity [macbook-44591]',type:'finding',entity:'macbook-44591',entityType:'system',icon:'fa-laptop',risk:90,fin:1,intCount:3,time:'Today, 9:19 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'medium',status:'new',mitre:'T1059',domain:'endpoint',desc:'Encoded PowerShell execution on macOS developer workstation.'},
+  {id:'ES-00012',title:'Unusual volume of network activity detected on 34.215.24.225',type:'finding',entity:'34.215.24.225',entityType:'system',icon:'fa-globe',risk:55,fin:1,intCount:3,time:'Today, 9:19 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'medium',status:'new',mitre:'T1030',domain:'network',desc:'High bandwidth egress flow across firewall policy rule 9.'},
+  {id:'ES-00013',title:'24 hour risk threshold exceed for entity [win-hp-85570]',type:'finding',entity:'win-hp-85570',entityType:'system',icon:'fa-desktop',risk:65,fin:1,intCount:5,time:'Today, 9:19 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'medium',status:'new',mitre:'T1046',domain:'network',desc:'Port scan detected sweep targeting servers VLAN 10.'},
+  {id:'ES-00014',title:'Unusual volume of network activity detected on 172.16.0.127',type:'finding',entity:'172.16.0.127',entityType:'system',icon:'fa-server',risk:60,fin:1,intCount:3,time:'Today, 9:15 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'medium',status:'new',mitre:'T1030',domain:'network',desc:'DMZ node streaming unexpected UDP payloads.'},
+  {id:'ES-00015',title:'Excessive failed logins',type:'finding',entity:'win-lenovo-15752',entityType:'system',icon:'fa-laptop',risk:70,fin:1,intCount:8,time:'Today, 9:15 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'low',status:'new',mitre:'T1110',domain:'access',desc:'Failed Kerberos ticket request storm.'},
+  {id:'ES-00016',title:'Multiple findings from the same entity [fyodor@splunktshirtcompany.com]',type:'finding',entity:'fyodor@splunktshirtcompany.com',entityType:'user',icon:'fa-user',risk:130,fin:5,intCount:20,time:'Today, 9:12 AM',disposition:'Undetermined',owner:'Unassigned',urgency:'high',status:'new',mitre:'T1059',domain:'endpoint',desc:'Encoded PowerShell execution, failed logins, and suspicious C2 beacon.'}
 ];
 
-var ASSETS=[];
-(function(){
-  var idx=0;
-  var srvNames=['srv-web-01','srv-web-02','srv-db-01','srv-db-02','srv-app-01','srv-dns-01','srv-dhcp-01','srv-mail-01','srv-proxy-01','srv-ci-01'];
-  srvNames.forEach(function(n,i){ASSETS.push({id:'s'+idx++,type:'Server',name:n,ip:'10.0.10.'+(10+i),mac:'00:1a:2b:44:90:'+(10+i),os:'Ubuntu 22.04 LTS',status:'up',vlan:10,seg:'Servers',ports:[22,80,443,3306],risk:180+i*15,owner:'Infrastructure Lead'});});
-  ['Engineering','HR','Finance','Sales','Marketing'].forEach(function(d){
-    for(var j=0;j<5;j++){
-      var vl=d==='Engineering'?100:d==='HR'?200:d==='Finance'?300:100;
-      var net=d==='HR'?'10.0.2':d==='Finance'?'10.0.3':'10.0.1';
-      ASSETS.push({id:'e'+idx++,type:'Workstation',name:d.toLowerCase().substring(0,3)+'-0'+(j+1),ip:net+'.'+(j+11),mac:'aa:bb:cc:'+(j+20)+':40',os:'Windows 11 Enterprise',status:'up',vlan:vl,seg:d,ports:[135,445,3389],risk:40+j*25,owner:d+' User '+(j+1)});
-    }
-  });
-  ASSETS.push({id:'fw0',type:'Firewall',name:'fw-primary',ip:'10.0.100.20',mac:'00:0c:29:ff:10:01',os:'FortiOS 7.4',status:'up',vlan:1000,seg:'Management',ports:[22,443],risk:20,owner:'SecOps Team'});
-  ASSETS.push({id:'rt0',type:'Router',name:'rt-core',ip:'10.255.0.1',mac:'00:0a:95:11:00:01',os:'Cisco IOS-XE',status:'up',vlan:0,seg:'Management',ports:[22,161],risk:10,owner:'Network Ops'});
-})();
-
-var NOTABLES=[
-  {id:'N-101',time:'1 min ago',urgency:'critical',title:'Brute Force Authentication Storm Detected',target:'srv-web-01 (10.0.10.10)',domain:'Access',status:'new',assignee:'Analyst Tier-1',src:'192.168.100.45',mitre:'T1110 - Brute Force',disposition:'Unassigned',risk:90,raw:'May 24 14:02:11 sshd[4912]: Failed password for invalid user admin from 192.168.100.45 port 54102 ssh2'},
-  {id:'N-102',time:'4 mins ago',urgency:'critical',title:'Covert DNS Tunneling Beacon Exfiltration',target:'eng-01 (10.0.1.11)',domain:'Threat',status:'in_progress',assignee:'SOC Lead',src:'10.0.1.11',mitre:'T1071.004 - DNS Tunnel',disposition:'True Positive',risk:95,raw:'named[884]: query: YmFzZTY0X3R1bm5lbC5zaGFkb3d4bGFi.c2.sxl-threat.net IN A + (10.0.1.11)'},
-  {id:'N-103',time:'12 mins ago',urgency:'high',title:'Lateral Movement Pivot over SMB (445)',target:'srv-db-01 (10.0.10.12)',domain:'Network',status:'new',assignee:'Analyst Tier-2',src:'10.0.1.11',mitre:'T1021.002 - SMB/Admin Shares',disposition:'Unassigned',risk:85,raw:'FortiGate-FW: date=2026-05-24 time=14:00:10 srcip=10.0.1.11 dstip=10.0.10.12 dstport=445 action=ALLOW'},
-  {id:'N-104',time:'25 mins ago',urgency:'high',title:'Nmap TCP SYN Port Scan Fleet Sweep',target:'10.0.10.0/24 (Servers VLAN)',domain:'Network',status:'in_progress',assignee:'Analyst Tier-1',src:'10.0.1.13',mitre:'T1046 - Network Service Scanning',disposition:'True Positive',risk:75,raw:'Suricata[102]: SCAN SYN scan detected from 10.0.1.13 targeting ports 22,80,443,3306,5432'},
-  {id:'N-105',time:'42 mins ago',urgency:'medium',title:'Privilege Escalation via Sudo NOPASSWD',target:'srv-ci-01 (10.0.10.19)',domain:'Endpoint',status:'resolved',assignee:'Analyst Tier-2',src:'10.0.10.19',mitre:'T1548.003 - Sudo/Elevation',disposition:'Benign - Admin Task',risk:50,raw:'sudo: devops_lead : TTY=pts/2 ; PWD=/home/devops ; USER=root ; COMMAND=/bin/systemctl restart nginx'},
-  {id:'N-106',time:'1 hr ago',urgency:'info',title:'FortiGate Policy Denied Guest to Internal',target:'10.0.200.45 -> 10.0.10.10',domain:'Network',status:'resolved',assignee:'Automation',src:'10.0.200.45',mitre:'T1046 - Network Discovery',disposition:'Benign Policy Drop',risk:10,raw:'FortiGate-FW: srcip=10.0.200.45 dstip=10.0.10.10 dstport=80 action=BLOCK policyid=4'}
+var OBSERVABLES = [
+  {type:'hash',name:'586EF56F4D8963DD546163AC31C865D7',score:'TI HIGH',scoreClass:'risk-100',time:'04/15/2023, 2:22 AM',tags:['commodity','threattype/commodity','credentialharvesting','informationstealer','malware/mofksys','maliciousconfidence/high']},
+  {type:'hash',name:'A7C89F546E8203BBD45C9812401FB882',score:'TI HIGH',scoreClass:'risk-100',time:'04/15/2023, 2:22 AM',tags:['trojan','c2/beacon','threattype/execution']},
+  {type:'ip',name:'107.77.211.7',score:'TI MED',scoreClass:'risk-80',time:'04/14/2023, 10:09 PM',tags:['botnet','scanner','alienvault_high']},
+  {type:'ip',name:'185.192.69.97',score:'TI HIGH',scoreClass:'risk-100',time:'04/14/2023, 10:09 PM',tags:['c2_server','bulletproof_host','russia_vpn']},
+  {type:'ip',name:'185.217.117.107',score:'TI HIGH',scoreClass:'risk-100',time:'04/14/2023, 10:09 PM',tags:['malicious_domain','phishing_drop']},
+  {type:'ip',name:'199.66.91.253',score:'TI MED',scoreClass:'risk-60',time:'04/14/2023, 10:09 PM',tags:['tor_exit_node','untrusted_asn']},
+  {type:'user',name:'fyodor@splunktshirtcompany.com',score:'HIGH',scoreClass:'risk-80',time:'04/14/2023, 10:09 PM',tags:['compromised_account','privilege_escalation']},
+  {type:'file',name:'*C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -enc',score:'HIGH',scoreClass:'risk-80',time:'04/14/2023, 10:09 PM',tags:['encoded_command','defense_evasion']}
 ];
 
-/* ═══ SPL ENGINE ═══ */
-function runSPL(){
-  var q = document.getElementById('splInput').value.trim();
-  var resTable = document.getElementById('splResultsTable');
-  var statsLabel = document.getElementById('splStats');
-  
-  var rows = [];
-  var chartLabels = ['14:00','14:05','14:10','14:15','14:20','14:25','14:30'];
-  var chartData = [12, 28, 45, 18, 52, 34, 40];
+var activeFinding = FINDINGS[3]; // default 54.230.147.59
 
-  if(q.indexOf('index=siem') >= 0 || q.indexOf('notables') >= 0){
-    rows = NOTABLES.map(function(n){ return [n.time, n.urgency.toUpperCase(), n.title, n.target, n.src, n.mitre]; });
-    resTable.innerHTML = '<thead><tr><th>Time</th><th>Urgency</th><th>Event Title</th><th>Target</th><th>Source IP</th><th>MITRE</th></tr></thead><tbody>' +
-      rows.map(function(r){ return '<tr><td class="m">'+r[0]+'</td><td><span class="urgency '+r[1].toLowerCase()+'">'+r[1]+'</span></td><td style="font-weight:700">'+r[2]+'</td><td class="m" style="color:var(--blu)">'+r[3]+'</td><td class="m" style="color:var(--red)">'+r[4]+'</td><td><span class="tag p">'+r[5]+'</span></td></tr>'; }).join('') + '</tbody>';
-  } else if(q.indexOf('index=network') >= 0 || q.indexOf('packets') >= 0){
-    rows = [
-      ['14:02:11','10.0.1.11','10.0.10.12','TCP','445','ALLOW [SMB2 Session Setup]'],
-      ['14:02:15','10.0.1.11','8.8.8.8','UDP','53','QUERY A base64_tunnel.sxl.net'],
-      ['14:02:18','10.0.2.14','10.0.10.10','TCP','443','ALLOW [TLSv1.3 Handshake]'],
-      ['14:02:22','10.0.200.5','10.0.10.10','TCP','80','BLOCK [Drop by Firewall]'],
-      ['14:02:25','10.0.1.13','10.0.10.14','TCP','3306','ALLOW [MySQL Connect]']
-    ];
-    resTable.innerHTML = '<thead><tr><th>Time</th><th>Source</th><th>Destination</th><th>Proto</th><th>Port</th><th>Payload Dissection</th></tr></thead><tbody>' +
-      rows.map(function(r){ return '<tr><td class="m">'+r[0]+'</td><td class="m" style="color:var(--blu)">'+r[1]+'</td><td class="m" style="color:var(--pur)">'+r[2]+'</td><td><span class="tag c">'+r[3]+'</span></td><td class="m">'+r[4]+'</td><td style="color:var(--g6)">'+r[5]+'</td></tr>'; }).join('') + '</tbody>';
-  } else {
-    rows = ASSETS.slice(0,10).map(function(a){ return [a.name, a.ip, a.type, a.os, a.seg, 'VLAN '+a.vlan, a.risk]; });
-    resTable.innerHTML = '<thead><tr><th>Asset Name</th><th>IPv4</th><th>Type</th><th>OS</th><th>Segment</th><th>VLAN</th><th>Risk Score</th></tr></thead><tbody>' +
-      rows.map(function(r){ return '<tr><td style="font-weight:700">'+r[0]+'</td><td class="m" style="color:var(--red)">'+r[1]+'</td><td><span class="tag b">'+r[2]+'</span></td><td>'+r[3]+'</td><td>'+r[4]+'</td><td class="m">'+r[5]+'</td><td class="m" style="color:var(--amb);font-weight:800">'+r[6]+'</td></tr>'; }).join('') + '</tbody>';
-  }
-
-  statsLabel.textContent = rows.length + ' events matched (0.042 seconds)';
-  renderSPLChart(chartLabels, chartData);
-}
-
-function setSPL(q){ document.getElementById('splInput').value = q; runSPL(); }
-
-var splChart = null;
-function renderSPLChart(labels, data){
-  var ctx = document.getElementById('cSPL');
-  if(splChart) splChart.destroy();
-  splChart = new Chart(ctx, {
-    type: 'bar',
-    data: { labels: labels, datasets: [{ data: data, backgroundColor: '#65a30d', borderRadius: 3 }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { font: { size: 8 } } }, y: { grid: { color: 'rgba(255,255,255,.05)' }, ticks: { font: { size: 8 } } } } }
-  });
-}
-
-/* ═══ NOTABLES TAB RENDERING ═══ */
-function renderNotablesTable(){
-  var fu = document.getElementById('fUrgency').value;
-  var fs = document.getElementById('fStatus').value;
-  var list = NOTABLES.filter(function(n){
-    if(fu !== 'all' && n.urgency !== fu) return false;
-    if(fs !== 'all' && n.status !== fs) return false;
-    return true;
-  });
-
-  var crit = NOTABLES.filter(function(n){return n.urgency==='critical'}).length;
-  var high = NOTABLES.filter(function(n){return n.urgency==='high'}).length;
-  var prog = NOTABLES.filter(function(n){return n.status==='in_progress'}).length;
-  var nw = NOTABLES.filter(function(n){return n.status==='new'}).length;
-
-  document.getElementById('sCrit').textContent = crit;
-  document.getElementById('sHigh').textContent = high;
-  document.getElementById('sProg').textContent = prog;
-  document.getElementById('sNew').textContent = nw;
-  document.getElementById('cNotables').textContent = NOTABLES.length;
-  document.getElementById('cAssets').textContent = ASSETS.length;
-
-  var h = list.map(function(n){
-    return '<tr>' +
-      '<td class="m" style="font-size:.68rem;color:var(--g5)">'+n.time+'</td>' +
-      '<td><span class="urgency '+n.urgency+'">'+n.urgency+'</span></td>' +
-      '<td style="font-weight:700;color:var(--text)" onclick="openEventModal(\''+n.id+'\')">'+n.title+'</td>' +
-      '<td class="m" style="color:var(--blu)">'+n.target+'</td>' +
-      '<td><span class="tag b">'+n.domain+'</span></td>' +
-      '<td><span class="status-pill '+n.status+'">'+n.status.replace('_',' ').toUpperCase()+'</span></td>' +
-      '<td style="font-size:.68rem">'+n.assignee+'</td>' +
-      '<td><button class="btn btn-g btn-s" onclick="openEventModal(\''+n.id+'\')"><i class="fas fa-search"></i> Triage</button></td>' +
+/* ═══ RENDER FINDINGS TABLE ═══ */
+function renderTable(data){
+  var tb = document.getElementById('findingsBody');
+  tb.innerHTML = data.map(function(f,i){
+    var riskCls = f.risk>=400?'risk-400':f.risk>=100?'risk-100':f.risk>=80?'risk-80':f.risk>=60?'risk-60':f.risk>=40?'risk-40':'risk-20';
+    var urgCls = f.urgency==='critical'?'urg-crit':f.urgency==='high'?'urg-high':f.urgency==='medium'?'urg-med':'urg-low';
+    var isSel = activeFinding && activeFinding.id === f.id;
+    return '<tr class="'+(isSel?'selected':'')+'" onclick="selectFindingRow(\''+f.id+'\')">' +
+      '<td><input type="checkbox" '+(isSel?'checked':'')+'></td>' +
+      '<td><i class="fas fa-chevron-right" style="color:var(--text-dim);font-size:9px"></i></td>' +
+      '<td style="font-weight:700;color:var(--text)">'+f.title+'</td>' +
+      '<td class="m" style="font-size:10.5px;color:var(--text-muted)">'+f.id+'</td>' +
+      '<td><span class="type-badge '+f.type+'">'+f.type.toUpperCase()+'</span></td>' +
+      '<td><i class="fas '+f.icon+'" style="color:var(--text-muted);margin-right:4px"></i> '+f.entity+'</td>' +
+      '<td><span class="risk-pill '+riskCls+'">'+f.risk+'</span></td>' +
+      '<td class="m" style="color:var(--text-muted)">'+(f.fin||'-')+'</td>' +
+      '<td class="m" style="color:var(--text-muted)">'+(f.intCount||'-')+'</td>' +
+      '<td style="color:var(--text-muted);font-size:10.5px">'+f.time+'</td>' +
+      '<td>'+f.disposition+'</td>' +
+      '<td>'+f.owner+'</td>' +
+      '<td><span class="urg-dot '+urgCls+'"></span>'+f.urgency.charAt(0).toUpperCase()+f.urgency.slice(1)+'</td>' +
+      '<td><span class="urg-dot" style="background:#38bdf8"></span>'+f.status.charAt(0).toUpperCase()+f.status.slice(1)+'</td>' +
+      '<td><i class="fas fa-ellipsis-v" style="color:var(--text-dim);cursor:pointer"></i></td>' +
     '</tr>';
   }).join('');
-
-  document.getElementById('tbNotables').innerHTML = h;
 }
 
-function openEventModal(id){
-  var n = NOTABLES.find(function(x){return x.id===id});
-  if(!n) return;
-  var h = '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px">' +
-    '<div><span class="urgency '+n.urgency+'">'+n.urgency.toUpperCase()+'</span><h3 style="margin:4px 0 0;font-size:1.05rem;color:var(--text)">'+n.title+'</h3></div>' +
-    '<button class="btn" onclick="closeEM()"><i class="fas fa-times"></i></button>' +
-  '</div>' +
-  '<div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:12px">' +
-    '<div class="stat-box red"><div class="sl">Risk Score</div><div class="sv" style="font-size:1.1rem;color:var(--red)">'+n.risk+'/100</div></div>' +
-    '<div class="stat-box blu"><div class="sl">Security Domain</div><div class="sv" style="font-size:1rem;color:var(--blu)">'+n.domain+'</div></div>' +
-    '<div class="stat-box pur"><div class="sl">MITRE ATT&CK</div><div class="sv" style="font-size:.8rem;color:var(--pur)">'+n.mitre+'</div></div>' +
-  '</div>' +
-  '<div style="background:var(--panel);border:1px solid var(--line);border-radius:var(--rs);padding:10px;margin-bottom:10px">' +
-    '<div style="font-size:.6rem;font-weight:800;color:var(--g5);text-transform:uppercase;font-family:var(--mono)">Raw Log Payload</div>' +
-    '<div class="m" style="font-size:.68rem;color:var(--sp-green);margin-top:4px;word-break:break-all">'+n.raw+'</div>' +
-  '</div>' +
-  '<div class="stats-grid" style="grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">' +
-    '<div><label class="lbl" style="text-align:left">Update Status</label><select class="inp" id="emStatus" style="width:100%"><option value="new" '+(n.status==='new'?'selected':'')+'>New</option><option value="in_progress" '+(n.status==='in_progress'?'selected':'')+'>In Progress</option><option value="resolved" '+(n.status==='resolved'?'selected':'')+'>Resolved</option></select></div>' +
-    '<div><label class="lbl" style="text-align:left">Assignee</label><select class="inp" id="emAssignee" style="width:100%"><option>Analyst Tier-1</option><option>Analyst Tier-2</option><option>SOC Lead</option></select></div>' +
-  '</div>' +
-  '<div style="display:flex;gap:6px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:12px">' +
-    '<button class="btn btn-r" onclick="triggerSOAR(\'isolate\',\''+n.target+'\')"><i class="fas fa-shield-virus"></i> SOAR: Quarantine Target</button>' +
-    '<button class="btn btn-g" onclick="triggerSOAR(\'block\',\''+n.src+'\')"><i class="fas fa-ban"></i> SOAR: Block IP on FW</button>' +
-    '<button class="btn" onclick="saveEventModal(\''+n.id+'\')"><i class="fas fa-save"></i> Save Triage</button>' +
-  '</div>';
-  document.getElementById('eventModalBox').innerHTML = h;
-  document.getElementById('eventModal').classList.add('show');
-}
-function closeEM(){ document.getElementById('eventModal').classList.remove('show'); }
-function saveEventModal(id){
-  var n = NOTABLES.find(function(x){return x.id===id});
-  if(n){
-    n.status = document.getElementById('emStatus').value;
-    n.assignee = document.getElementById('emAssignee').value;
-    closeEM();
-    renderNotablesTable();
-  }
-}
-function triggerSOAR(action, target){
-  alert('SOAR Playbook Executed: ' + (action==='isolate'?'Quarantined host ':'Blocked IP ') + target + ' across FortiGate FW policies.');
-  closeEM();
-  renderNotablesTable();
-}
-
-function generateLiveNotable(){
-  var types = [
-    {t:'Ransomware Encryptor Signature Match',u:'critical',m:'T1486 Data Encrypted',r:'FortiEDR: Ransomware payload stopped on host'},
-    {t:'SSH Password Spraying on Linux Bastion',u:'high',m:'T1110.003 Password Spray',r:'sshd: 25 failed attempts in 60s from external IP'},
-    {t:'C2 Reverse Shell Beacon over TCP/4444',u:'critical',m:'T1059 Command Shell',r:'Zeek: TCP 4444 connection established out of DMZ'}
-  ];
-  var tpl = pick(types);
-  var targetAsset = pick(ASSETS);
-  var newId = 'N-' + (100 + NOTABLES.length + 1);
-  NOTABLES.unshift({
-    id: newId,
-    time: 'Just now',
-    urgency: tpl.u,
-    title: tpl.t,
-    target: targetAsset.name + ' (' + targetAsset.ip + ')',
-    domain: 'Threat',
-    status: 'new',
-    assignee: 'Analyst Tier-1',
-    src: '192.168.100.' + RI(10, 99),
-    mitre: tpl.m,
-    disposition: 'Unassigned',
-    risk: 92,
-    raw: tpl.r
+function filterFindings(){
+  var q = document.getElementById('queueSearchInp').value.toLowerCase().trim();
+  var filtered = FINDINGS.filter(function(f){
+    return !q || f.title.toLowerCase().indexOf(q)>=0 || f.entity.toLowerCase().indexOf(q)>=0 || f.id.toLowerCase().indexOf(q)>=0;
   });
-  renderNotablesTable();
+  renderTable(filtered);
 }
 
-/* ═══ NAVIGATION & PANELS ═══ */
-function showPanel(p){
-  document.querySelectorAll('.sp-pnl').forEach(function(x){x.classList.remove('on')});
-  var el = document.getElementById('p-' + p);
-  if(el) el.classList.add('on');
-  document.querySelectorAll('.snb').forEach(function(b){b.classList.remove('on'); if(b.getAttribute('data-p')===p) b.classList.add('on');});
-  document.querySelectorAll('.sp-tab').forEach(function(t){t.classList.remove('active');});
+function selectFindingRow(id){
+  var f = FINDINGS.find(function(x){return x.id===id});
+  if(!f) return;
+  activeFinding = f;
+  renderTable(FINDINGS);
+  openDrawer(f);
+}
+
+/* ═══ DETAIL DRAWER (IMAGE 2) ═══ */
+function openDrawer(f){
+  var d = document.getElementById('detailDrawer');
+  d.classList.add('open');
+  var b = document.getElementById('drawerBody');
   
-  if(p==='posture') renderPosture();
-  if(p==='search') runSPL();
-  if(p==='endpoint') renderEndpoints();
-  if(p==='network') renderNetwork();
-  if(p==='threat') renderThreat();
-  if(p==='rba') renderRBA();
-  if(p==='soar') renderSOAR();
-  if(p==='assets') renderAssetDb();
-  if(p==='access') renderAccess();
-}
-document.querySelector('.sp-side').onclick = function(e){
-  var b = e.target.closest('.snb');
-  if(b && b.getAttribute('data-p')) showPanel(b.getAttribute('data-p'));
-};
+  var riskCls = f.risk>=100?'risk-100':f.risk>=60?'risk-80':'risk-40';
+  b.innerHTML = '<div style="margin-bottom:12px">' +
+    '<span class="type-badge '+f.type+'" style="margin-bottom:6px"><i class="fas fa-crosshairs"></i> '+f.type.toUpperCase()+'</span>' +
+    '<h2 style="font-size:15px;font-weight:800;color:var(--text);margin-top:4px">'+f.title+'</h2>' +
+    '<p style="color:var(--text-muted);font-size:11.5px;margin-top:6px;line-height:1.45">'+f.desc+'</p>' +
+  '</div>' +
 
-/* ═══ POSTURE MATRIX ═══ */
-var postureChart = null;
-function renderPosture(){
-  var ctx = document.getElementById('cPosture');
-  if(postureChart) postureChart.destroy();
-  postureChart = new Chart(ctx, {
+  '<div class="meta-grid">' +
+    '<div class="meta-field"><label>Owner</label><select id="dOwner"><option '+(f.owner==='Unassigned'?'selected':'')+'>unassigned</option><option '+(f.owner==='TDIR Admin'?'selected':'')+'>TDIR Admin</option></select></div>' +
+    '<div class="meta-field"><label>Status</label><select id="dStatus"><option '+(f.status==='new'?'selected':'')+'>New</option><option '+(f.status==='in_progress'?'selected':'')+'>In Progress</option><option '+(f.status==='resolved'?'selected':'')+'>Resolved</option></select></div>' +
+    '<div class="meta-field"><label>Urgency</label><select id="dUrgency"><option '+(f.urgency==='medium'?'selected':'')+'>Medium</option><option '+(f.urgency==='high'?'selected':'')+'>High</option><option '+(f.urgency==='critical'?'selected':'')+'>Critical</option></select></div>' +
+    '<div class="meta-field"><label>Sensitivity</label><select><option>Unassigned</option><option>Restricted</option></select></div>' +
+  '</div>' +
+
+  '<div class="meta-field" style="margin-bottom:14px"><label>Disposition</label><select id="dDisp"><option>Undetermined</option><option>True Positive - Suspicious Activity</option><option>False Positive - Normal Baseline</option></select></div>' +
+
+  '<div style="font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px;border-top:1px solid var(--line);padding-top:10px">Finding Properties</div>' +
+  '<div class="kv-row"><span class="kv-key">Time</span><span class="kv-val">'+f.time+'</span></div>' +
+  '<div class="kv-row"><span class="kv-key">Reference ID</span><span class="kv-val">8af84749-970a-4295-93ef-dbf6f6eec2fb@@notable</span></div>' +
+  '<div class="kv-row"><span class="kv-key">Detection</span><span class="kv-val" style="color:var(--sp-cyan)">Network - Outbound Anomaly Rule ↗</span></div>' +
+  '<div class="kv-row"><span class="kv-key">Annotation framework</span><span class="kv-val">mitre_attack</span></div>' +
+  '<div class="kv-row"><span class="kv-key">Annotations</span><span class="kv-val">'+f.mitre+'</span></div>' +
+  '<div class="kv-row"><span class="kv-key">Entity</span><span class="kv-val">'+f.entity+'</span></div>' +
+  '<div class="kv-row"><span class="kv-key">Entity type</span><span class="kv-val">'+f.entityType+'</span></div>' +
+  '<div class="kv-row"><span class="kv-key">Risk score</span><span class="kv-val" style="color:var(--sp-red);font-weight:800">'+f.risk+'</span></div>' +
+  '<div class="kv-row"><span class="kv-key">Security domain</span><span class="kv-val">'+f.domain+'</span></div>' +
+  '<div class="kv-row"><span class="kv-key">Source PCI domain</span><span class="kv-val">untrust</span></div>' +
+  '<div class="kv-row"><span class="kv-key">Source expected</span><span class="kv-val">false</span></div>' +
+
+  '<div style="display:flex;gap:6px;margin-top:14px">' +
+    '<button class="btn-action blue" style="flex:1" onclick="saveDrawer()"><i class="fas fa-save"></i> Save Changes</button>' +
+    '<button class="btn-action" style="flex:1" onclick="runSOARPlaybook()"><i class="fas fa-robot"></i> Run Playbook</button>' +
+  '</div>';
+}
+function closeDrawer(){ document.getElementById('detailDrawer').classList.remove('open'); }
+function saveDrawer(){
+  if(!activeFinding) return;
+  activeFinding.owner = document.getElementById('dOwner').value;
+  activeFinding.status = document.getElementById('dStatus').value.toLowerCase();
+  activeFinding.urgency = document.getElementById('dUrgency').value.toLowerCase();
+  activeFinding.disposition = document.getElementById('dDisp').value;
+  alert('Saved properties for ' + activeFinding.id);
+  filterFindings();
+  closeDrawer();
+}
+
+/* ═══ VIEW SWITCHER ═══ */
+function switchView(v){
+  document.getElementById('viewQueue').style.display = (v==='queue'?'flex':'none');
+  document.getElementById('viewInvestigation').classList.toggle('active', v==='investigation');
+  if(v==='investigation') renderInvMap();
+}
+
+function openFullInvestigation(id){
+  var f = FINDINGS.find(function(x){return x.id===id}) || activeFinding;
+  document.getElementById('invBadgeId').textContent = f.id;
+  document.getElementById('invTitle').textContent = f.title;
+  closeDrawer();
+  switchView('investigation');
+}
+
+function switchInvTab(t){
+  document.querySelectorAll('.inv-tab').forEach(function(b){b.classList.remove('active')});
+  event.target.classList.add('active');
+  document.getElementById('invSubOverview').style.display = (t==='overview'?'flex':'none');
+  document.getElementById('invSubIntelligence').style.display = (t==='intelligence'?'grid':'none');
+  if(t==='intelligence') renderIntelligenceTab();
+}
+
+/* ═══ INTELLIGENCE TAB (IMAGE 4) ═══ */
+function renderIntelligenceTab(){
+  var ol = document.getElementById('obsList');
+  ol.innerHTML = OBSERVABLES.map(function(o,i){
+    return '<div class="obs-item '+(i===0?'active':'')+'" onclick="selectObs('+i+')">' +
+      '<div style="display:flex;align-items:center;gap:6px;overflow:hidden">' +
+        '<i class="fas '+(o.type==='hash'?'fa-hashtag':o.type==='ip'?'fa-globe':o.type==='user'?'fa-user':'fa-file-code')+'" style="color:var(--text-muted);font-size:10px"></i>' +
+        '<span class="m" style="font-size:10.5px;color:var(--text);overflow:hidden;text-overflow:ellipsis">'+o.name+'</span>' +
+      '</div>' +
+      '<span class="risk-pill '+o.scoreClass+'" style="font-size:9px;padding:1px 4px">'+o.score+'</span>' +
+    '</div>';
+  }).join('');
+  selectObs(0);
+}
+
+function selectObs(idx){
+  var o = OBSERVABLES[idx];
+  document.querySelectorAll('.obs-item').forEach(function(el,i){el.classList.toggle('active',i===idx)});
+  document.getElementById('odType').textContent = o.type.toUpperCase();
+  document.getElementById('odTime').textContent = o.time;
+  document.getElementById('odTags').innerHTML = o.tags.map(function(t){return '<span class="tag-pill">'+t+'</span>'}).join('');
+  document.getElementById('odSources').innerHTML = '<tr><td><i class="fas fa-shield-alt" style="color:var(--sp-cyan)"></i> Cisco Secure Malware Analytics</td><td><span style="color:var(--sp-red);font-weight:700">high</span></td><td class="m" style="font-weight:700">3</td></tr>' +
+    '<tr><td><i class="fas fa-radar" style="color:var(--sp-amber)"></i> AlienVault OTX Heuristics</td><td><span style="color:var(--sp-red);font-weight:700">high</span></td><td class="m" style="font-weight:700">3</td></tr>';
+}
+
+function addNote(){
+  var inp = document.getElementById('noteInput');
+  var txt = inp.value.trim();
+  if(!txt) return;
+  var stream = document.getElementById('notesStream');
+  var el = document.createElement('div');
+  el.className = 'act-item';
+  el.innerHTML = '<div class="act-meta"><span><b>TDIR Admin</b></span><span>Just now</span></div><div>' + txt + '</div>';
+  stream.insertBefore(el, stream.firstChild);
+  inp.value = '';
+}
+
+/* ═══ HISTOGRAM TIMELINE (IMAGE 2) ═══ */
+var histChart = null;
+function renderHistogram(){
+  var ctx = document.getElementById('cHist');
+  if(histChart) histChart.destroy();
+  histChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['8:00 PM','12:00 AM','4:00 AM','8:00 AM','12:00 PM','4:00 PM','Now'],
+      datasets: [{
+        data: [15, 8, 22, 65, 140, 95, 160],
+        backgroundColor: '#0284c7',
+        borderRadius: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 9 } } },
+        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: { size: 9 } } }
+      }
+    }
+  });
+}
+
+function renderInvMap(){
+  var ctx = document.getElementById('cThreatMap');
+  if(!ctx) return;
+  new Chart(ctx, {
     type: 'line',
     data: {
-      labels: ['00:00','04:00','08:00','12:00','16:00','20:00','Now'],
+      labels: ['18:45','19:30','20:15','21:00','21:45','22:30','23:15'],
       datasets: [
-        { label: 'Critical Threat Volume', data: [8, 14, 28, 42, 65, 38, 52], borderColor: '#f04438', backgroundColor: 'rgba(240,68,56,0.1)', fill: true, tension: 0.3 },
-        { label: 'Mitigated Incidents', data: [6, 12, 24, 38, 59, 35, 48], borderColor: '#10b981', backgroundColor: 'transparent', borderDash: [4,4] }
+        { label: 'Network Outbound Spike (T1030)', data: [10, 15, 25, 80, 95, 85, 90], borderColor: '#f04438', backgroundColor: 'rgba(240,68,56,0.1)', fill: true, tension: 0.3 },
+        { label: 'PowerShell Exec (T1059)', data: [0, 5, 12, 60, 75, 40, 20], borderColor: '#9e59d9', borderDash: [3,3], tension: 0.3 },
+        { label: 'Failed Logins (T1110)', data: [2, 4, 18, 30, 45, 30, 15], borderColor: '#f59e0b', tension: 0.3 }
       ]
     },
-    options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false } }, y: { grid: { color: 'rgba(255,255,255,.05)' } } } }
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#94a3b8', font: { size: 10 } } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 9 } } },
+        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: { size: 9 } } }
+      }
+    }
   });
-
-  var mGrid = [
-    {t:'Initial Access',items:['T1190 Exploit Public App','T1566 Phishing Link','T1133 External Remote']},
-    {t:'Execution',items:['T1059 Command Shell','T1204 User Execution','T1053 Scheduled Task']},
-    {t:'Persistence',items:['T1547 Boot Autostart','T1078 Valid Accounts','T1543 System Process']},
-    {t:'Lateral Movement',items:['T1021 SMB / RDP','T1550 Use Alternate Auth','T1080 Taint Shared']}
-  ];
-  document.getElementById('mitreGrid').innerHTML = mGrid.map(function(c){
-    return '<div class="mitre-box"><h4>'+c.t.toUpperCase()+'</h4>' +
-      c.items.map(function(i){ return '<div class="mitre-item"><span>'+i+'</span><span class="badge '+(Math.random()>.4?'up':'dn')+'">'+(Math.random()>.4?'DETECTED':'ALERT')+'</span></div>'; }).join('') +
-    '</div>';
-  }).join('');
 }
 
-function renderEndpoints(){
-  document.getElementById('endpointTable').innerHTML = '<table><thead><tr><th>Endpoint Name</th><th>IPv4 Address</th><th>OS Version</th><th>EDR Sensor</th><th>Telemetry State</th><th>Risk Attribution</th></tr></thead><tbody>' +
-    ASSETS.slice(0,14).map(function(a){ return '<tr><td style="font-weight:700">'+a.name+'</td><td class="m" style="color:var(--blu)">'+a.ip+'</td><td>'+a.os+'</td><td><span class="badge up">v4.2-sensor</span></td><td><span class="status-pill '+(a.status==='up'?'resolved':'new')+'">'+a.status.toUpperCase()+'</span></td><td class="m" style="color:var(--amb);font-weight:800">'+a.risk+' pts</td></tr>'; }).join('') + '</tbody></table>';
+function toggleTimeline(){
+  var b = document.getElementById('histogramBox');
+  b.style.display = (b.style.display==='none'?'block':'none');
 }
 
-function renderNetwork(){
-  document.getElementById('networkTable').innerHTML = '<table><thead><tr><th>Segment Name</th><th>VLAN ID</th><th>CIDR Space</th><th>Zone</th><th>Firewall Policy Scope</th><th>Active Fleet</th></tr></thead><tbody>' +
-    SEGMENTS.map(function(s){ return '<tr><td style="font-weight:700">'+s.name+'</td><td class="m" style="color:var(--red);font-weight:800">VLAN '+s.vlan+'</td><td class="m" style="color:var(--blu)">'+s.cidr+'</td><td><span class="tag b">'+s.zone+'</span></td><td>Stateful FortiGate Inspection</td><td class="m">'+ASSETS.filter(function(a){return a.seg===s.name}).length+' assets</td></tr>'; }).join('') + '</tbody></table>';
+function assignToMe(){
+  if(activeFinding){
+    activeFinding.owner = 'TDIR Admin';
+    alert('Assigned ' + activeFinding.id + ' to TDIR Admin');
+    filterFindings();
+  }
 }
 
-function renderThreat(){
-  var iocs = [
-    {type:'IPv4 Address',val:'185.220.101.5',source:'AlienVault OTX',conf:'98%',match:'3 Matches in Network logs'},
-    {type:'Domain C2',val:'c2.sxl-threat.net',source:'ShadowXLab Threat Feed',conf:'100%',match:'1 DNS Tunneling Beacon'},
-    {type:'SHA-256 Hash',val:'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',source:'CISA KEV',conf:'95%',match:'0 Fleet Matches'},
-    {type:'User Agent',val:'Mozilla/5.0 (Hydra Brute Force)',source:'Emerging Threats',conf:'90%',match:'14 Attempts logged'}
-  ];
-  document.getElementById('threatTable').innerHTML = '<table><thead><tr><th>Indicator Type</th><th>IOC Value</th><th>Threat Feed Source</th><th>Confidence</th><th>Fleet Matches</th></tr></thead><tbody>' +
-    iocs.map(function(i){ return '<tr><td><span class="tag c">'+i.type+'</span></td><td class="m" style="color:var(--red);font-weight:700">'+i.val+'</td><td>'+i.source+'</td><td class="m" style="color:var(--grn)">'+i.conf+'</td><td style="font-weight:700;color:var(--amb)">'+i.match+'</td></tr>'; }).join('') + '</tbody></table>';
+function runSOARPlaybook(){
+  alert('SOAR Playbook [Playbook: Quarantine & Revoke Tokens] executed successfully on ' + (activeFinding?activeFinding.entity:'fleet'));
 }
 
-function renderRBA(){
-  document.getElementById('rbaTable').innerHTML = '<table><thead><tr><th>Risk Object</th><th>Entity Type</th><th>Aggregate Risk Score</th><th>Primary Threat Driver</th><th>Recommended SOC Action</th></tr></thead><tbody>' +
-    ASSETS.slice(0,10).map(function(a){ return '<tr><td style="font-weight:700">'+a.name+'</td><td><span class="tag b">'+a.type+'</span></td><td class="m" style="color:var(--red);font-size:.9rem;font-weight:900">'+a.risk+'</td><td>Multiple Failed Logins &amp; SYN Sweeps</td><td><button class="btn btn-r btn-s" onclick="triggerSOAR(\'isolate\',\''+a.name+'\')">Execute Quarantine</button></td></tr>'; }).join('') + '</tbody></table>';
+function generateSimulatedFinding(){
+  var newId = 'ES-000' + (FINDINGS.length + 1);
+  FINDINGS.unshift({
+    id: newId,
+    title: 'Ransomware Encryptor Heuristic Detection on srv-db-01',
+    type: 'finding',
+    entity: 'srv-db-01 (10.0.10.12)',
+    entityType: 'server',
+    icon: 'fa-server',
+    risk: 450,
+    fin: 1,
+    intCount: 14,
+    time: 'Just now',
+    disposition: 'Undetermined',
+    owner: 'Unassigned',
+    urgency: 'critical',
+    status: 'new',
+    mitre: 'T1486',
+    domain: 'threat',
+    desc: 'High velocity file encryption attempt blocked by FortiEDR.'
+  });
+  filterFindings();
 }
 
-function renderSOAR(){
-  var pb = [
-    {n:'Playbook: Ransomware Host Micro-Isolation',d:'Immediately changes switchport VLAN to 999 Quarantine and revokes Kerberos tokens.',t:'M26 Incident Response'},
-    {n:'Playbook: FortiGate Dynamic IP Blocklist',d:'Injects malicious source IP into FortiGate dynamic address group drop policy.',t:'M13 Firewalls'},
-    {n:'Playbook: Active Directory Credential Reset',d:'Forces password reset and kills active sessions on compromised accounts.',t:'M25 SOC Operations'},
-    {n:'Playbook: PCAP Automated Frame Forensics',d:'Extracts full payload streams and runs ClamAV + YARA heuristic scans.',t:'M28 Malware Forensics'}
-  ];
-  document.getElementById('soarCards').innerHTML = pb.map(function(p,i){
-    return '<div style="background:var(--panel);border:1px solid var(--line);border-radius:var(--rs);padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">' +
-      '<div><div style="font-weight:800;color:var(--text);font-size:.82rem">'+p.n+'</div><div style="font-size:.7rem;color:var(--g6);margin-top:2px">'+p.d+'</div><span class="tag p" style="margin-top:4px">'+p.t+'</span></div>' +
-      '<button class="btn btn-g" onclick="alert(\'Executed '+p.n+' across all fleet entities!\')"><i class="fas fa-play"></i> Run Playbook</button>' +
-    '</div>';
-  }).join('');
-}
-
-function renderAssetDb(){
-  document.getElementById('assetDbTable').innerHTML = '<table><thead><tr><th>Asset Name</th><th>IPv4</th><th>MAC Address</th><th>OS Platform</th><th>Zone Segment</th><th>Criticality</th></tr></thead><tbody>' +
-    ASSETS.map(function(a){ return '<tr><td style="font-weight:700">'+a.name+'</td><td class="m" style="color:var(--blu)">'+a.ip+'</td><td class="m" style="font-size:.66rem">'+a.mac+'</td><td>'+a.os+'</td><td><span class="tag b">'+a.seg+'</span></td><td><span class="badge '+(a.type==='Server'?'dn':'up')+'">'+(a.type==='Server'?'CRITICAL':'STANDARD')+'</span></td></tr>'; }).join('') + '</tbody></table>';
-}
-
-function renderAccess(){
-  document.getElementById('accessCards').innerHTML = '<table><thead><tr><th>User Principal</th><th>Role / Department</th><th>Assigned Asset</th><th>Authentication State</th><th>MFA Status</th></tr></thead><tbody>' +
-    ASSETS.slice(0,10).map(function(a,i){ return '<tr><td style="font-weight:700">'+a.owner.toLowerCase().replace(/ /g,'.')+'@shadowxlab.com</td><td>'+a.seg+' Team</td><td class="m">'+a.name+'</td><td><span class="status-pill resolved">ACTIVE (KERBEROS)</span></td><td><span class="badge up">FIDO2 ENFORCED</span></td></tr>'; }).join('') + '</tbody></table>';
-}
-
-function exportResults(){
-  alert('Exported Splunk query results to CSV (shadowxlab_splunk_export.csv).');
-}
-
-/* ═══ UNIVERSAL THEME TOGGLE ═══ */
+/* ═══ THEME TOGGLE ═══ */
 function updateThemeIcon(t){
   const el = document.getElementById('themeToggle');
   if(el) el.textContent = t === 'dark' ? '☀️' : '🌙';
@@ -623,8 +822,9 @@ function toggleTheme(){
     document.documentElement.setAttribute('data-theme', saved);
     updateThemeIcon(saved);
   }catch(e){}
-  renderNotablesTable();
-  runSPL();
+  renderTable(FINDINGS);
+  renderHistogram();
+  openDrawer(activeFinding);
 })();
 </script>
 </body>
