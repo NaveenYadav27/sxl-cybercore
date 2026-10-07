@@ -1,7 +1,7 @@
 {
-  "name": "shadowxlab-cybercore",
+  "name": "sxl-cybercore",
   "version": "1.0.0",
-  "description": "ShadowXLab CyberCore - Cyber Visual Platform",
+  "description": "ShadowXLab · 30-Day VAPT Training Curriculum Platform",
   "main": "index.html",
   "scripts": {
     "start": "npx serve . -l 3000",
@@ -10,9 +10,10 @@
   },
   "keywords": [
     "cybersecurity",
+    "vapt",
+    "shadowxlab",
     "cybercore",
-    "visual-platform",
-    "shadowxlab"
+    "curriculum"
   ],
   "author": "ShadowXLab",
   "license": "MIT"

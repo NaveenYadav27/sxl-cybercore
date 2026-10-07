@@ -2,7 +2,7 @@
 title ShadowXLab CyberCore Deployment Tool
 echo ========================================================
 echo Deploying ShadowXLab CyberCore to:
-echo Target Domain: sxl-cybercore.shadowxlab.com
+echo Target Domain: sxl-cybercore.com
 echo ========================================================
 echo.
 echo Select deployment method:

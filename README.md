@@ -1,21 +1,16 @@
-# ShadowXLab · CyberCore · Cyber Visual Platform
+# ShadowXLab · VAPT Training Curriculum (sxl-cybercore.com)
 
-CyberCore transforms cybersecurity concepts into visual, interactive experiences — connecting security fundamentals, systems, networking, cloud, AI security, offensive security, defensive security, risk and engineering into one continuous journey.
+Official web platform for the ShadowXLab 30-Day Beginner-to-Practitioner VAPT & Offensive Security Training Curriculum.
 
-## Features
-- **40 Modules & 200+ Concepts**: Complete curriculum spanning Foundations, Systems, Data, Scripting, Networking, Cloud, AI Security, Cryptography, Offensive, Defensive, GRC, Engineering, Assurance, and Career.
-- **Interactive Visual Atlas**: Dynamic node-link diagrams and real-time simulator models for exploring attack surfaces, risk chains, and security lifecycles.
-- **Live Interactive Simulators**:
-  - Live Risk Model (Module 01)
-  - Security Anatomy Incident Cascade (Module 02)
-  - Framework Mapper (NIST CSF 2.0, ISO/IEC 27001, CIS Controls, SOC 2) (Module 03)
-  - Incident Role Router (Module 04)
-  - Security Decision Simulator (Module 05)
-- **Module 01 Kali Onboarding & Lab (`module-01.html`)**: Terminal simulator, checkpoint quizzes, network path inspection, and evidence record builder.
-- **Dark Mode Support**: Built-in visual theme toggling with persistent settings.
+## Overview
+- **30 Learning Days**: Step-by-step pathway from first principles to full engagement.
+- **7 VAPT Stages**: Plan & Authorize, Reconnaissance, Scanning & Enumeration, Vulnerability Analysis, Controlled Validation, Impact Assessment, Reporting & Retesting.
+- **Isolated Lab Pathway**: Local Dockerized practice with OWASP Juice Shop and Kali Linux workstation.
+- **Evidence-Led Methodology**: Reproducible evidence collection and professional reporting.
+- **Capstone Engagement**: NOVACORP simulated client assessment and portfolio defense.
 
-## Running Locally
-Run `start_server.bat` or use any static web server:
+## Local Development
+Run locally with any static web server:
 ```bash
 # Using Python
 python -m http.server 3000
@@ -23,4 +18,11 @@ python -m http.server 3000
 # Using npx serve
 npx serve . -l 3000
 ```
-Open `http://localhost:3000` in your browser.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Deployment
+Deploy using `deploy.bat` or directly via Cloudflare Pages:
+```bash
+npx wrangler pages deploy . --project-name=sxl-cybercore
+```
+Target Domain: `sxl-cybercore.com`

@@ -1,27 +1,212 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ShadowXLab · Enterprise SOC Analyst Cyber Range Appliance</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script>
-    (function(){
-      try {
-        var t = localStorage.getItem('shadowxlab-theme');
-        var d = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.documentElement.setAttribute('data-theme', t || (d ? 'dark' : 'light'));
-      } catch(e) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-      }
-    })();
-  </script>
-  <script type="module" crossorigin src="/assets/index-DzkPwBda.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-BrTOfmq2.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="ShadowXLab 30-day beginner VAPT curriculum with seven stages, isolated Docker labs and a capstone engagement.">
+<title>ShadowXLab · 30-Day VAPT Training Curriculum</title>
+<style>
+:root{--navy:#071426;--blue:#0d2b4d;--teal:#00c2b8;--ink:#172437;--muted:#617086;--line:#dce4ed;--soft:#f3f7fb;--red:#c73545;--amber:#a96808;--green:#16834b}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#eaf0f6;color:var(--ink);font:14px/1.5 Inter,Arial,sans-serif}
+.shell{max-width:1260px;margin:16px auto;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 12px 45px #10243a18}
+.hero{position:relative;background:radial-gradient(circle at 85% 20%,rgba(0,194,184,0.15),transparent 45%),linear-gradient(125deg,#071426,#0d2b4d 70%,#12616a);color:white;padding:34px 42px}
+.brand{letter-spacing:.16em;text-transform:uppercase;font-size:11px;color:#8fe9e2;font-weight:800}
+.hero h1{font-size:35px;line-height:1.12;margin:13px 0}
+.hero p{color:#d5e2f0;margin:6px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chip{border:1px solid #ffffff45;border-radius:30px;padding:5px 11px;font-size:11px}
+.heroart{background:#081a2d;padding:18px 30px}
+.heroart svg{display:block;width:100%;height:auto;max-height:250px}
+.layout{display:grid;grid-template-columns:225px minmax(0,1fr);gap:0}
+.side{background:#f4f8fb;border-right:1px solid var(--line);padding:20px 14px}
+.side b{display:block;color:#153957;font-size:11px;letter-spacing:.1em;margin:0 8px 10px}
+.side a{display:block;text-decoration:none;color:#42566b;padding:8px 10px;border-radius:7px;font-size:12px;margin:2px 0}
+.side a:hover{background:#e2f4f2;color:#075c58}
+.content{padding:25px 34px 50px;min-width:0}
+h2{font-size:21px;color:#102b49;border-bottom:2px solid var(--teal);padding-bottom:8px;margin:30px 0 13px}
+h3{font-size:16px;color:#12385c;margin:18px 0 8px}
+h4{font-size:14px;margin:12px 0 6px}
+.muted{color:var(--muted)}
+p{margin:6px 0}
+ul,ol{padding-left:21px}
+li{margin:4px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.card{border:1px solid var(--line);border-radius:11px;padding:14px;background:#fff}
+.card.dark{background:#0b2037;color:#eaf4ff;border-color:#24445f}
+.card.dark h3,.card.dark b{color:#8fe9e2}
+.card p,.card li{font-size:12px}
+.eyebrow{font-size:10px;font-weight:800;letter-spacing:.1em;color:#008f88;text-transform:uppercase}
+.tag{display:inline-block;border-radius:20px;padding:3px 8px;background:#e5f5f3;color:#075c58;font-size:10px;font-weight:800}
+.callout{background:#f1f7fb;border-left:4px solid var(--teal);padding:12px 15px;margin:12px 0;border-radius:5px}
+.warning{border-left-color:var(--amber);background:#fff8e9}
+.diagram{border:1px solid var(--line);border-radius:12px;padding:15px;background:#f8fbfe;overflow:auto}
+.flow{display:flex;align-items:stretch;gap:7px;min-width:0;flex-wrap:wrap}
+.flow .node{min-width:125px}
+.flow .arrow{flex:0 0 auto}
+.node{flex:1;text-align:center;padding:14px 9px;border-radius:9px;background:#102b49;color:#fff;font-weight:800;font-size:12px}
+.node small{display:block;color:#c7d8e8;font-weight:400;margin-top:5px}
+.arrow{align-self:center;color:#009e96;font-size:20px;font-weight:900}
+table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0 15px}
+th{background:#102b49;color:#fff;text-align:left}
+th,td{padding:8px 10px;border:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:#f7f9fc}
+.tool{display:flex;gap:11px;align-items:flex-start}
+.tool .glyph{width:37px;height:37px;flex:none;border-radius:9px;background:#e3f5f3;color:#087a74;display:grid;place-items:center;font-size:17px;font-weight:900}
+.tool b{display:block;color:#12385c}
+.tool small{color:var(--muted)}
+details{border:1px solid var(--line);border-radius:9px;margin:8px 0;background:#fbfdff}
+summary{cursor:pointer;padding:11px 13px;color:#12385c;font-weight:800}
+details .inside{padding:0 14px 13px;font-size:12px}
+.interactive{background:#081827;color:#dceafa;border-radius:12px;padding:16px;margin:13px 0}
+.interactive h3{color:#9fe9e1;margin-top:0}
+.interactive label{display:block;background:#102a40;border:1px solid #2b4b63;border-radius:8px;padding:9px 11px;margin:7px 0;font-size:12px;cursor:pointer}
+.interactive input{accent-color:#00c2b8;margin-right:7px}
+.btn{background:#00b9ad;color:#06232c;border:0;border-radius:7px;padding:9px 13px;font-weight:800;cursor:pointer}
+.btn.secondary{background:#203d55;color:#e4f1fa}
+.result{font-size:12px;color:#9fe9e1;min-height:20px;margin-top:8px}
+.timeline{border-left:3px solid #00aaa0;margin:15px 0 15px 10px;padding-left:18px}
+.event{position:relative;margin:13px 0;padding:9px 12px;background:#f4f8fb;border-radius:8px}
+.event:before{content:'';position:absolute;width:10px;height:10px;border-radius:50%;background:#00aaa0;left:-25px;top:14px}
+.event time{font-weight:800;color:#087a74;font-size:11px}
+.progress{height:7px;background:#d9e5ed;border-radius:8px;overflow:hidden}
+.progress span{display:block;height:100%;background:#00a99e;width:0}
+.footer{background:#071426;color:#d8e4ef;padding:23px 40px;font-size:11px}
+@media(max-width:850px){.flow{flex-wrap:wrap}.flow .node{min-width:130px}.layout{grid-template-columns:1fr}.side{display:flex;overflow:auto;gap:5px;border-right:0;border-bottom:1px solid var(--line);padding:8px}.side b{display:none}.side a{white-space:nowrap}.content{padding:20px 17px 35px}.hero{padding:27px 20px}.hero h1{font-size:28px}.grid3{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid,.grid3{grid-template-columns:1fr}.heroart{overflow:auto}.heroart svg{min-width:700px}}
+
+/* Learner-friendly glossary tooltips */
+.tip{position:relative;border-bottom:1px dashed #008f88;color:#075c58;font-weight:700;cursor:help;outline-offset:3px}
+.tip:focus:after,.tip:hover:after{content:attr(data-tip);position:absolute;z-index:50;left:0;bottom:calc(100% + 9px);width:min(300px,80vw);padding:10px 12px;border-radius:8px;background:#071426;color:#eff8ff;border:1px solid #2b6470;box-shadow:0 8px 24px #07142635;font-size:12px;line-height:1.45;font-weight:500;white-space:normal}
+.tip:focus{outline:2px solid #00a99e}
+.toolgallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.shot{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.shot img{display:block;width:100%;height:190px;object-fit:cover;object-position:top;background:#edf2f7}
+.tool-visual svg{display:block;width:100%;height:auto;background:#edf2f7}
+.tool-visual{border-bottom:1px solid var(--line)}
+.shot .shotbody{padding:12px 14px}
+.shot a{color:#007e78;font-weight:800;text-decoration:none}
+.shot a:hover{text-decoration:underline}
+.shot small{color:var(--muted)}
+.glossary{display:flex;flex-wrap:wrap;gap:8px}
+.glossary .tip{display:inline-block;padding:6px 10px;background:#eaf7f5;border:1px solid #c5e8e4;border-radius:20px;font-size:11px}
+@media(max-width:650px){.toolgallery{grid-template-columns:1fr}.flow{display:grid;grid-template-columns:1fr;gap:6px}.flow .node{min-width:0}.flow .arrow{justify-self:center;transform:rotate(90deg);line-height:1}.diagram{padding:10px}.shot img{height:auto;max-height:240px;object-fit:contain}}
+.image-fallback{display:none;min-height:150px;padding:22px;background:#edf2f7;color:#42566b;text-align:center;align-items:center;justify-content:center;font-weight:700;font-size:12px}
+.shot.image-missing img{display:none}
+.shot.image-missing .image-fallback{display:flex}
+
+/* Fresh-student screenshot walkthrough */
+.walkthrough{margin:18px 0 24px;padding:16px;border:1px solid #cfe0ea;border-radius:13px;background:#f7fbfe}
+.walkthrough-intro{font-size:13px;color:#43576c}
+.screen-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:14px}
+.screen-card{border:1px solid #d7e2eb;border-radius:10px;background:#fff;overflow:hidden}
+.screen-card svg{display:block;width:100%;height:auto;background:#edf3f7}
+.screen-copy{padding:12px 14px}
+.screen-copy h4{margin:0 0 6px;color:#12385c}
+.screen-copy p,.screen-copy li{font-size:12px}
+.screen-copy ol{padding-left:18px}
+.stepnum{display:inline-grid;place-items:center;width:23px;height:23px;border-radius:50%;background:#00b9ad;color:#06232c;font-weight:900;margin-right:6px}
+.capture{background:#eaf7f5;border-left:3px solid #00a99e;padding:8px 10px;border-radius:5px;font-size:11px}
+.expected{background:#f2f5f8;border-radius:7px;padding:9px;margin-top:8px;font-size:11px;color:#31485c}
+.beginner-note{border-left:4px solid #397db2;background:#eef6fc;padding:11px 13px;border-radius:5px;margin:10px 0;font-size:12px}
+.cmd{display:block;background:#071426;color:#9fe9e1;border-radius:7px;padding:10px 12px;font:12px/1.6 ui-monospace,Consolas,monospace;overflow-x:auto;margin:7px 0}
+.screen-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#087a74;font-weight:900;margin-bottom:5px}
+@media(max-width:650px){.screen-grid{grid-template-columns:1fr}}
+
+/* Additive stage-to-lab navigation: keeps the existing lesson intact */
+.stage-lab-link{margin-top:9px;padding-top:8px;border-top:1px dashed var(--line);font-size:11px;color:var(--muted)}
+.stage-lab-link a{color:#007e78;font-weight:800;text-decoration:none}
+.stage-lab-link a:hover{text-decoration:underline}
+
+/* Additive home-page components; original ShadowXLab lesson theme retained */
+.home-hero{display:grid;grid-template-columns:1.2fr 0.8fr;gap:24px;align-items:stretch}
+.hero-media-wrapper{display:flex;flex-direction:column;gap:14px}
+.hero-image-frame{position:relative;border-radius:13px;overflow:hidden;border:1px solid #2b5d7d;box-shadow:0 12px 35px rgba(0,0,0,0.45);background:#091b2e}
+.hero-img{display:block;width:100%;height:190px;object-fit:cover;object-position:center;transition:transform .3s ease}
+.hero-image-frame:hover .hero-img{transform:scale(1.02)}
+.hero-badge{position:absolute;bottom:10px;left:10px;background:#071426cc;backdrop-filter:blur(6px);border:1px solid #00c2b870;color:#8fe9e2;font-size:10px;font-weight:800;letter-spacing:.08em;padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:6px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#00c2b8;box-shadow:0 0 8px #00c2b8;display:inline-block;animation:heroPulse 2s infinite}
+@keyframes heroPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.85)}}
+
+.hero-panel{background:#0a2036;border:1px solid #2c536c;border-radius:13px;padding:17px}
+.hero-panel h3{color:#9fe9e1;margin-top:0}
+.metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:15px}
+.metric{background:#ffffff12;border:1px solid #ffffff28;border-radius:9px;padding:10px}
+.metric strong{display:block;font-size:22px;color:#8fe9e2}
+.metric span{font-size:10px;color:#d5e2f0}
+.week{margin:23px 0}
+.week-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:#102b49;color:white;border-radius:10px;margin-bottom:11px}
+.week-head h3{color:#9fe9e1;margin:0}
+.day-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.day-card{border:1px solid var(--line);border-radius:10px;padding:13px;background:#fff;min-width:0}
+.day-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.day-no{font-size:10px;font-weight:900;letter-spacing:.08em;color:#087a74}
+.stage-pill{font-size:9px;border-radius:20px;padding:4px 7px;background:#e5f5f3;color:#075c58;font-weight:800}
+.day-card h4{font-size:14px;color:#12385c;margin:8px 0 5px}
+.day-card p{font-size:11px;color:#526579}
+.day-meta{border-top:1px dashed var(--line);margin-top:9px;padding-top:8px;font-size:10px;color:#53677b}
+.day-meta b{color:#12385c}
+.stage-strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}
+.stage-box{background:#102b49;color:#fff;border-radius:9px;padding:10px 7px;text-align:center;font-size:10px}
+.stage-box strong{display:block;color:#8fe9e2;font-size:15px;margin-bottom:4px}
+.stage-box small{color:#c7d8e8}
+.outcome-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.outcome-list .card{min-height:110px}
+.curriculum-note{font-size:11px;color:var(--muted)}
+.cta-link{display:inline-block;text-decoration:none;background:#00b9ad;color:#06232c;border-radius:7px;padding:9px 13px;font-weight:900;margin-top:8px}
+.cta-link.secondary{background:#203d55;color:#e4f1fa}
+.home-nav{position:sticky;top:0;z-index:10}
+@media(max-width:850px){.home-hero{grid-template-columns:1fr}.stage-strip{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:560px){.day-grid,.outcome-list{grid-template-columns:1fr}.stage-strip{grid-template-columns:repeat(2,1fr)}.metric-row{grid-template-columns:1fr 1fr 1fr}}
+</style>
 </head>
-<body class="bg-[#0b0d12] text-[#e8ecf4] font-sans antialiased selection:bg-red-500 selection:text-white">
-  <div id="root"></div>
-</body>
-</html>
+<body>
+<div class="shell">
+<header class="hero">
+  <div class="brand">SHADOWXLAB · VAPT &amp; OFFENSIVE SECURITY PROGRAM</div>
+  <div class="home-hero">
+    <div>
+      <div class="eyebrow" style="color:#8fe9e2">30-DAY BEGINNER-TO-PRACTITIONER JOURNEY</div>
+      <h1>VAPT Training Program</h1>
+      <p><b>From first principles to a complete, authorized vulnerability assessment and penetration testing engagement.</b></p>
+      <p>Designed for freshers · Step-by-step learning · Isolated Docker labs · Evidence-led practicals · Portfolio capstone</p>
+      <div class="chips">
+        <span class="chip">30 learning days</span>
+        <span class="chip">7 VAPT stages</span>
+        <span class="chip">Hands-on lab pathway</span>
+        <span class="chip">Beginner friendly</span>
+        <span class="chip">ShadowXLab</span>
+      </div>
+      <a class="cta-link" href="#curriculum">Explore the 30-day curriculum ↓</a>
+      <a class="cta-link secondary" href="#lab-environment">View lab environment</a>
+    </div>
+    <div class="hero-media-wrapper">
+      <div class="hero-image-frame">
+        <img src="hero-image.jpg" alt="ShadowXLab VAPT Hands-on Cyber Range & Penetration Testing Command Deck" class="hero-img" onerror="this.src='sxl-cybercore-hero.jpg'" />
+        <div class="hero-badge"><span class="live-dot"></span> DOCKER CYBER RANGE · ACTIVE</div>
+      </div>
+      <div class="hero-panel">
+        <h3>Your learning mission</h3>
+        <p>Learn the purpose behind each testing activity, practise only on authorized training assets, capture evidence and explain findings clearly.</p>
+        <div class="metric-row">
+          <div class="metric"><strong>30</strong><span>Days</span></div>
+          <div class="metric"><strong>7</strong><span>Stages</span></div>
+          <div class="metric"><strong>1</strong><span>Capstone</span></div>
+        </div>
+        <p style="font-size:10px;color:#c7d8e8;margin-top:12px">Learning pace can be adapted by the instructor. Each day includes a concept, guided activity and a tangible student output.</p>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="heroart"><svg viewBox="0 0 1100 185" role="img" aria-label="Seven stages of a VAPT engagement"><rect width="1100" height="185" rx="14" fill="#081a2d"/><text x="28" y="30" fill="#8fe9e2" font-size="13" font-weight="bold" letter-spacing="2">THE COMPLETE VAPT ENGAGEMENT LIFECYCLE</text><g font-family="Arial" text-anchor="middle"><rect x="20" y="58" width="137" height="78" rx="9" fill="#102b49" stroke="#34718d"/><text x="88.5" y="87" fill="#8fe9e2" font-size="17" font-weight="bold">01</text><text x="88.5" y="108" fill="#fff" font-size="11" font-weight="bold">Plan &amp; authorize</text><text x="88.5" y="123" fill="#c7d8e8" font-size="9">Scope · ROE</text><rect x="173" y="58" width="137" height="78" rx="9" fill="#102b49" stroke="#34718d"/><text x="241.5" y="87" fill="#8fe9e2" font-size="17" font-weight="bold">02</text><text x="241.5" y="108" fill="#fff" font-size="11" font-weight="bold">Reconnaissance</text><text x="241.5" y="123" fill="#c7d8e8" font-size="9">Discover</text><rect x="326" y="58" width="137" height="78" rx="9" fill="#102b49" stroke="#34718d"/><text x="394.5" y="87" fill="#8fe9e2" font-size="17" font-weight="bold">03</text><text x="394.5" y="108" fill="#fff" font-size="11" font-weight="bold">Scan &amp; enumerate</text><text x="394.5" y="123" fill="#c7d8e8" font-size="9">Map services</text><rect x="479" y="58" width="137" height="78" rx="9" fill="#102b49" stroke="#34718d"/><text x="547.5" y="87" fill="#8fe9e2" font-size="17" font-weight="bold">04</text><text x="547.5" y="108" fill="#fff" font-size="11" font-weight="bold">Analyze</text><text x="547.5" y="123" fill="#c7d8e8" font-size="9">Assess risk</text><rect x="632" y="58" width="137" height="78" rx="9" fill="#102b49" stroke="#34718d"/><text x="700.5" y="87" fill="#8fe9e2" font-size="17" font-weight="bold">05</text><text x="700.5" y="108" fill="#fff" font-size="11" font-weight="bold">Validate</text><text x="700.5" y="123" fill="#c7d8e8" font-size="9">Safe proof</text><rect x="785" y="58" width="137" height="78" rx="9" fill="#102b49" stroke="#34718d"/><text x="853.5" y="87" fill="#8fe9e2" font-size="17" font-weight="bold">06</text><text x="853.5" y="108" fill="#fff" font-size="11" font-weight="bold">Assess impact</text><text x="853.5" y="123" fill="#c7d8e8" font-size="9">Business context</text><rect x="938" y="58" width="137" height="78" rx="9" fill="#102b49" stroke="#34718d"/><text x="1006.5" y="87" fill="#8fe9e2" font-size="17" font-weight="bold">07</text><text x="1006.5" y="108" fill="#fff" font-size="11" font-weight="bold">Report &amp; retest</text><text x="1006.5" y="123" fill="#c7d8e8" font-size="9">Close findings</text></g><text x="28" y="164" fill="#9eb8cc" font-size="10">Authorization first · Controlled lab practice · Evidence-based conclusions · Remediation and retesting</text></svg></div>
+<div class="layout"><nav class="side home-nav"><b>PROGRAM NAVIGATION</b><a href="#overview">Overview</a><a href="#stages">7 VAPT stages</a><a href="#curriculum">30-day curriculum</a><a href="#lab-environment">Lab environment</a><a href="#outcomes">Graduate outcomes</a><a href="#capstone">Capstone</a><a href="#safety">Safety rules</a></nav><main class="content">
+<section id="overview"><div class="eyebrow">Program overview</div><h2>Start from zero. Learn the complete engagement.</h2><p>This program is designed for learners who are new to VAPT. It builds the technical foundations before introducing reconnaissance, scanning, vulnerability analysis, controlled validation, impact assessment and professional reporting. Students are not expected to know Kali Linux or security tools before Day 1.</p><div class="grid3"><div class="card"><div class="eyebrow">Learn</div><h3>Understand the why</h3><p>Every tool and technique is introduced with its purpose, prerequisites, limitations and safe use.</p></div><div class="card"><div class="eyebrow">Practise</div><h3>Follow guided labs</h3><p>Students follow sequenced screenshots, exact steps, expected outputs and troubleshooting checkpoints.</p></div><div class="card"><div class="eyebrow">Demonstrate</div><h3>Build evidence</h3><p>Each day produces a worksheet, command output, observation, evidence record or report section.</p></div></div></section>
+<section id="stages"><div class="eyebrow">The methodology</div><h2>The seven stages of VAPT</h2><p>These stages are the spine of the full 30-day program. They are taught progressively and revisited during the capstone.</p><div class="stage-strip"><div class="stage-box"><strong>01</strong><b>Plan &amp; authorize</b><br/><small>Scope · ROE</small></div><div class="stage-box"><strong>02</strong><b>Reconnaissance</b><br/><small>Discover</small></div><div class="stage-box"><strong>03</strong><b>Scan &amp; enumerate</b><br/><small>Map services</small></div><div class="stage-box"><strong>04</strong><b>Analyze</b><br/><small>Assess risk</small></div><div class="stage-box"><strong>05</strong><b>Validate</b><br/><small>Safe proof</small></div><div class="stage-box"><strong>06</strong><b>Assess impact</b><br/><small>Business context</small></div><div class="stage-box"><strong>07</strong><b>Report &amp; retest</b><br/><small>Close findings</small></div></div><div class="callout"><b>Important:</b> The seven stages are not seven isolated tool exercises. They form one continuous engagement process. Planning and authorization govern all technical activity; reporting and retesting close the loop.</div></section>
+<section id="curriculum"><div class="eyebrow">Day-by-day learning path</div><h2>30-day VAPT curriculum</h2><p>Each day has a defined learning focus and a tangible student deliverable. The sequence deliberately starts with networking, Linux and web fundamentals before introducing active testing.</p><div class="week"><div class="week-head"><div><div class="eyebrow" style="color:#8fe9e2">WEEK 01</div><h3>Foundations &amp; safe testing</h3><div style="font-size:11px;color:#d5e2f0">Build the mental model and workstation readiness.</div></div><span class="chip">7 days</span></div><div class="day-grid"><article class="day-card"><div class="day-top"><span class="day-no">DAY 01</span><span class="stage-pill">Introduction</span></div><h4>Cybersecurity &amp; VAPT orientation</h4><p>What security testing is, why organizations commission it, and the difference between VA, PT and security audit.</p><div class="day-meta"><b>Student output:</b> Concept map: where VAPT fits in a security program.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 02</span><span class="stage-pill">Foundations</span></div><h4>Networking foundations for testers</h4><p>IPv4, private ranges, subnet basics, gateway, DNS, TCP/UDP, ports and common services.</p><div class="day-meta"><b>Student output:</b> Networking reference sheet and subnet practice.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 03</span><span class="stage-pill">Foundations</span></div><h4>Linux workstation essentials</h4><p>Kali desktop, terminal, filesystem, users, permissions, processes, package management and safe updates.</p><div class="day-meta"><b>Student output:</b> Kali workstation readiness checklist.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 04</span><span class="stage-pill">Foundations</span></div><h4>Web and application foundations</h4><p>HTTP request/response, methods, status codes, headers, cookies, sessions, authentication and authorization.</p><div class="day-meta"><b>Student output:</b> Annotated HTTP request and response.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 05</span><span class="stage-pill">Stage 1 · Planning</span></div><h4>Lab safety, ethics and evidence</h4><p>Authorization, scope boundaries, rules of engagement, stop conditions, evidence handling and reporting etiquette.</p><div class="day-meta"><b>Student output:</b> Signed practice rules and evidence folder structure.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 06</span><span class="stage-pill">Stage 1 · Planning</span></div><h4>Engagement planning &amp; scoping</h4><p>Define objectives, assets, test windows, exclusions, contacts, constraints and success criteria.</p><div class="day-meta"><b>Student output:</b> Completed fictional NOVACORP scope worksheet.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 07</span><span class="stage-pill">Stage 1 · Planning</span></div><h4>Build the isolated Docker lab</h4><p>Prepare Docker, deploy OWASP Juice Shop, understand the private network, verify health and reset safely.</p><div class="day-meta"><b>Student output:</b> Working local target and environment verification.</div></article></div></div><div class="week"><div class="week-head"><div><div class="eyebrow" style="color:#8fe9e2">WEEK 02</div><h3>Reconnaissance &amp; scanning</h3><div style="font-size:11px;color:#d5e2f0">Move from approved scope to a verified map of the lab target.</div></div><span class="chip">7 days</span></div><div class="day-grid"><article class="day-card"><div class="day-top"><span class="day-no">DAY 08</span><span class="stage-pill">Stage 2 · Recon</span></div><h4>Reconnaissance concepts &amp; methodology</h4><p>Passive vs active reconnaissance, source reliability, asset identification and data minimization.</p><div class="day-meta"><b>Student output:</b> Recon plan tied to approved lab scope.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 09</span><span class="stage-pill">Stage 2 · Recon</span></div><h4>Domain and DNS reconnaissance</h4><p>Practice dig, nslookup and host against lab-provided names; read A, AAAA, MX and TXT records.</p><div class="day-meta"><b>Student output:</b> DNS evidence worksheet.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 10</span><span class="stage-pill">Stage 2 · Recon</span></div><h4>Host and service discovery</h4><p>Identify the assigned local target, understand network vantage point and document discovered assets.</p><div class="day-meta"><b>Student output:</b> Verified lab asset inventory.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 11</span><span class="stage-pill">Stage 3 · Scanning</span></div><h4>Nmap fundamentals</h4><p>Understand target syntax, scan purpose, host discovery and common output fields before running approved scans.</p><div class="day-meta"><b>Student output:</b> Annotated host-discovery result.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 12</span><span class="stage-pill">Stage 3 · Scanning</span></div><h4>Ports, states and service enumeration</h4><p>Explore TCP port states, selected-port scanning, service names and why open does not mean vulnerable.</p><div class="day-meta"><b>Student output:</b> Port/service inventory with explanations.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 13</span><span class="stage-pill">Stage 3 · Scanning</span></div><h4>Service version identification</h4><p>Use limited version detection on discovered lab ports; interpret service/version output and uncertainty.</p><div class="day-meta"><b>Student output:</b> Version-detection evidence and notes.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 14</span><span class="stage-pill">Stage 3 · Scanning</span></div><h4>Web technology enumeration</h4><p>Inspect local application routes, response headers, cookies and technology clues using browser tools and curl.</p><div class="day-meta"><b>Student output:</b> Web surface map for Juice Shop.</div></article></div></div><div class="week"><div class="week-head"><div><div class="eyebrow" style="color:#8fe9e2">WEEK 03</div><h3>Enumeration &amp; vulnerability analysis</h3><div style="font-size:11px;color:#d5e2f0">Interpret services and investigate findings rather than trusting scanner labels.</div></div><span class="chip">7 days</span></div><div class="day-grid"><article class="day-card"><div class="day-top"><span class="day-no">DAY 15</span><span class="stage-pill">Stage 3 · Scanning</span></div><h4>Scanning review &amp; evidence quality</h4><p>Compare discovery with enumeration, validate scope, avoid overclaiming and capture reproducible evidence.</p><div class="day-meta"><b>Student output:</b> Stage 3 scan pack and knowledge checkpoint.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 16</span><span class="stage-pill">Stage 4 · Analysis</span></div><h4>Vulnerability concepts &amp; classification</h4><p>CWE, CVE, CVSS, severity vs risk, exploitability, exposure and business context.</p><div class="day-meta"><b>Student output:</b> Vulnerability classification worksheet.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 17</span><span class="stage-pill">Stage 4 · Analysis</span></div><h4>Web vulnerability families</h4><p>Understand injection, broken access control, security misconfiguration, authentication weaknesses and XSS conceptually.</p><div class="day-meta"><b>Student output:</b> Vulnerability family reference map.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 18</span><span class="stage-pill">Stage 4 · Analysis</span></div><h4>OWASP ZAP introduction</h4><p>Launch ZAP, understand sites tree, alerts, passive scanning and safe local proxy workflow.</p><div class="day-meta"><b>Student output:</b> ZAP workspace and passive observation evidence.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 19</span><span class="stage-pill">Stage 4 · Analysis</span></div><h4>Analyze and validate scanner findings</h4><p>Inspect alert evidence, affected URL, parameter, request/response, confidence and false-positive indicators.</p><div class="day-meta"><b>Student output:</b> Two analyzed findings with confidence notes.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 20</span><span class="stage-pill">Stage 4 · Analysis</span></div><h4>Prioritize vulnerabilities</h4><p>Use severity, asset importance, exposure, exploit preconditions and impact to rank remediation.</p><div class="day-meta"><b>Student output:</b> Prioritized finding register.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 21</span><span class="stage-pill">Stage 5 · Validation</span></div><h4>Controlled validation principles</h4><p>Proof of concept vs exploitation, least-impact validation, test accounts, boundaries and abort conditions.</p><div class="day-meta"><b>Student output:</b> Approved validation plan for a training challenge.</div></article></div></div><div class="week"><div class="week-head"><div><div class="eyebrow" style="color:#8fe9e2">WEEK 04</div><h3>Validation, impact &amp; reporting</h3><div style="font-size:11px;color:#d5e2f0">Validate safely, communicate risk and prove remediation.</div></div><span class="chip">7 days</span></div><div class="day-grid"><article class="day-card"><div class="day-top"><span class="day-no">DAY 22</span><span class="stage-pill">Stage 5 · Validation</span></div><h4>Validate a safe web weakness</h4><p>Work through a deliberately selected Juice Shop training challenge; record only the minimum proof needed.</p><div class="day-meta"><b>Student output:</b> Reproducible validation evidence.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 23</span><span class="stage-pill">Stage 5 · Validation</span></div><h4>Authentication &amp; access-control testing concepts</h4><p>Compare roles and permissions using provided training accounts; distinguish authentication from authorization.</p><div class="day-meta"><b>Student output:</b> Role/access test matrix.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 24</span><span class="stage-pill">Stage 6 · Impact</span></div><h4>Impact assessment &amp; attack paths</h4><p>Translate validated observations into realistic confidentiality, integrity and availability consequences.</p><div class="day-meta"><b>Student output:</b> Impact narrative and bounded attack-path diagram.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 25</span><span class="stage-pill">Stage 6 · Impact</span></div><h4>Logs, evidence and cleanup</h4><p>Correlate synthetic application logs with test activity, preserve timestamps and identifiers, clean up test data.</p><div class="day-meta"><b>Student output:</b> Evidence index and cleanup confirmation.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 26</span><span class="stage-pill">Stage 7 · Reporting</span></div><h4>Professional VAPT reporting</h4><p>Write title, summary, affected asset, evidence, reproduction steps, impact, severity and remediation.</p><div class="day-meta"><b>Student output:</b> First complete technical finding.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 27</span><span class="stage-pill">Stage 7 · Reporting</span></div><h4>Remediation recommendations</h4><p>Recommend practical fixes, compensating controls, ownership, priority and verification criteria.</p><div class="day-meta"><b>Student output:</b> Remediation plan with retest criteria.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 28</span><span class="stage-pill">Stage 7 · Retesting</span></div><h4>Retesting &amp; closure</h4><p>Repeat the approved test after a simulated fix; distinguish fixed, partially fixed and still vulnerable.</p><div class="day-meta"><b>Student output:</b> Before/after retest record.</div></article></div></div><div class="week"><div class="week-head"><div><div class="eyebrow" style="color:#8fe9e2">FINAL 2 DAYS</div><h3>Integrated engagement &amp; capstone</h3><div style="font-size:11px;color:#d5e2f0">Bring the seven stages together in a complete beginner-friendly assessment.</div></div><span class="chip">2 days</span></div><div class="day-grid"><article class="day-card"><div class="day-top"><span class="day-no">DAY 29</span><span class="stage-pill">All 7 stages</span></div><h4>Integrated mini engagement</h4><p>Complete a bounded end-to-end assessment of the local training target, from scope review to report.</p><div class="day-meta"><b>Student output:</b> Mini engagement evidence pack and report.</div></article><article class="day-card"><div class="day-top"><span class="day-no">DAY 30</span><span class="stage-pill">Capstone</span></div><h4>Capstone presentation &amp; readiness review</h4><p>Present methodology, findings, limitations, business impact, remediation and lessons learned.</p><div class="day-meta"><b>Student output:</b> Final VAPT portfolio submission and skills review.</div></article></div></div></section>
+<section id="lab-environment"><div class="eyebrow">Practical learning environment</div><h2>Isolated Docker lab environment</h2><p>The initial practical target is OWASP Juice Shop, an intentionally vulnerable web application deployed locally for training. Students use a Kali workstation as their testing environment. The lab is designed for one learner on one local machine.</p><div class="diagram"><div class="flow"><div class="node">Student workstation<small>Kali Linux · terminal · browser</small></div><div class="arrow">↔</div><div class="node">Private Docker network<small>Internal lab communication</small></div><div class="arrow">↔</div><div class="node">OWASP Juice Shop<small>Local training target · port 3000</small></div></div></div><div class="grid"><div class="card"><h3>Student environment</h3><ul><li>Docker Engine / Docker Desktop</li><li>Docker Compose</li><li>Kali Linux workstation container or VM</li><li>Browser for local application access</li></ul></div><div class="card"><h3>Lab operating principles</h3><ul><li>Only the designated local training target is in scope</li><li>No public target scanning or external exploitation</li><li>Health checks and reset instructions for repeatable practice</li><li>Evidence saved by lab and date</li></ul></div></div><p class="curriculum-note">Infrastructure package is developed separately from this curriculum homepage. The homepage does not imply that the Docker environment is already running; deployment and verification must be completed on the student's host.</p></section>
+<section id="outcomes"><div class="eyebrow">Skills and evidence</div><h2>What learners should be able to demonstrate</h2><div class="outcome-list"><div class="card"><h3>Technical foundations</h3><p>Explain IPs, ports, protocols, Linux basics, HTTP and web application behaviour.</p></div><div class="card"><h3>Engagement discipline</h3><p>Read a scope, follow rules of engagement and recognize stop conditions.</p></div><div class="card"><h3>Asset discovery</h3><p>Build a bounded asset and service inventory from approved lab observations.</p></div><div class="card"><h3>Finding analysis</h3><p>Interpret scanner output, validate evidence and recognize false positives.</p></div><div class="card"><h3>Risk communication</h3><p>Explain technical severity and business impact without exaggerating evidence.</p></div><div class="card"><h3>Professional reporting</h3><p>Write a clear finding, propose remediation and document retest results.</p></div></div></section>
+<section id="capstone"><div class="eyebrow">Final assessment</div><h2>Day 29–30 · Integrated VAPT capstone</h2><div class="card dark"><h3> NOVACORP — Local Training Engagement</h3><p>Students receive a fictional engagement brief and assess only the designated local Juice Shop target. They review scope, prepare the lab, collect reconnaissance and scan evidence, analyze selected observations, safely validate an approved training weakness, assess impact and submit a concise report with remediation and retest notes.</p><div class="grid"><div><b>Submission pack</b><ul><li>Scope confirmation</li><li>Asset and service inventory</li><li>Evidence register</li><li>Validated finding report</li></ul></div><div><b>Presentation</b><ul><li>Methodology followed</li><li>What was observed vs proven</li><li>Impact and limitations</li><li>Remediation and retest</li></ul></div></div></div></section>
+<section id="safety"><div class="eyebrow">Non-negotiable lab boundary</div><h2>Authorized testing only</h2><div class="callout warning"><b>Training safety rule:</b> Students may test only the local OWASP Juice Shop instance and other assets explicitly provided and authorized by the instructor. Do not scan public IP addresses, employer systems, campus networks, shared infrastructure or third-party services. Stop if the target differs from the assigned asset, unexpected sensitive data appears, or the environment becomes unstable.</div><p>Tools are introduced for defensive learning and authorized assessment. Students must preserve evidence, avoid unnecessary data access, respect test boundaries and clean up after each exercise.</p></section>
+</main></div><footer class="footer"><b>SHADOWXLAB</b> · VAPT Training Program · 30-Day Curriculum<br/>Learn responsibly. Test only with permission. Prove findings with evidence.</footer></div></body></html>
